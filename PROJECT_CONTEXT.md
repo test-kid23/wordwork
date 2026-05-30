@@ -60,7 +60,8 @@ wordwork/
 ├── openclaw/                   # OpenClaw 开源 LLM 工具链系列
 ├── openhuman/                  # OpenHuman AI 赋能个体能力系列
 ├── llamacpp/                   # llama.cpp 本地部署大模型系列
-└── rag/                        # RAG 私有知识库系列
+├── rag/                        # RAG 私有知识库系列
+└── codebuddy/                  # CodeBuddy 深度使用与能力挖掘系列
 ```
 
 ## 待创作系列（跟随 AI 浪潮持续更新）
@@ -72,4 +73,5 @@ wordwork/
 | `openhuman/` | **OpenHuman 系列** — AI 赋能个体能力 | 📁 目录已建，待创作 |
 | `llamacpp/` | **llama.cpp 系列** — 本地部署大模型 | 📁 目录已建，待创作 |
 | `rag/` | **RAG 系列** — 私有知识库搭建 | 📁 目录已建，待创作 |
+| `codebuddy/` | **CodeBuddy 系列** — CodeBuddy 深度使用与能力挖掘 | 📁 目录已建，待创作 |
 | 待建 | **Claude Code 系列** — Claude Code 深度使用与工作流 | 💡 规划中
