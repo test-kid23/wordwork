@@ -71,7 +71,7 @@
 ```html
 <p style="text-align:center;margin-bottom:8px;">
   <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、章节名</span>
-  <span style="background:#e6ffed;color:#1b7a3d;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、章节名</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、章节名</span>
   ...
 </p>
 ```
@@ -97,12 +97,9 @@
 </p>
 ```
 
-不同章节用不同颜色的 badge 背景：
-- 第1章 `#4A90D9`（蓝）
-- 第2章 `#27ae60`（绿）
-- 第3章 `#8e44ad`（紫）
-- 第4章 `#e67e22`（橙）
-- 第5章 `#e91e63`（粉）
+不同章节用蓝紫交替的 badge 背景：
+- 奇数章 `#4A90D9`（蓝）
+- 偶数章 `#8e44ad`（紫）
 
 ### 3.9 二级标题（带 emoji）
 
@@ -133,9 +130,7 @@
 ```
 
 其他颜色变体：
-- 绿色 `#27ae60` / `#319795`
 - 紫色 `#8e44ad`
-- 粉色 `#e91e63`
 
 ### 3.13 警告/避坑框（红色背景）
 
@@ -147,21 +142,23 @@
 </p>
 ```
 
-### 3.14 提示/建议框（黄色背景）
+### 3.14 提示/建议框（紫色背景）
 
 ```html
-<p style="background:#fff9e6;padding:12px 14px;border-radius:8px;border:1px solid #ffe082;color:#7c6a2e;font-size:14px;margin:12px 0;">
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
   <strong>💡 关键心态：</strong>内容文字
 </p>
 ```
 
-### 3.15 场景标题条（彩色底色白字）
+### 3.15 场景标题条（蓝/紫色底白字）
 
 ```html
 <p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
   ✉️ 场景 1：标题文字
 </p>
 ```
+
+紫色变体：`background:#8e44ad`
 
 再紧跟痛点和实操段落：
 ```html
@@ -181,8 +178,8 @@
 
 ```html
 <p>
-  <span style="background:#d4edda;color:#155724;font-size:11px;padding:2px 8px;border-radius:8px;">⏱ 原本 20 分钟</span>
-  <span style="background:#cce5ff;color:#004085;font-size:11px;padding:2px 8px;border-radius:8px;">→ 2 分钟搞定</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">⏱ 原本 20 分钟</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">→ 2 分钟搞定</span>
 </p>
 ```
 
@@ -198,29 +195,29 @@
 
 颜色变体：
 - 蓝色 `#ebf4ff` / `#2b6cb0`
-- 绿色 `#f0fff4` / `#276749`
+- 紫色 `#f3ebff` / `#6b46c1`
 
 ### 3.19 工具条目（奖牌 + 信息 + 标签）
 
 ```html
 <p>
-  <span style="background:#fff3cd;font-size:12px;padding:1px 6px;border-radius:4px;">🥇</span>
+  <span style="background:#ebf4ff;font-size:12px;padding:1px 6px;border-radius:4px;">🥇</span>
   <strong>工具名</strong> —— 一句话描述<br>
-  <span style="color:#27ae60;font-size:12px;">➜ 网址</span>
+  <span style="color:#4A90D9;font-size:12px;">➜ 网址</span>
 </p>
 ```
 
 附加标签：
 ```html
-<span style="background:#d4edda;color:#155724;font-size:11px;padding:1px 6px;border-radius:4px;">💰 免费</span>
-<span style="background:#ffeeba;color:#856404;font-size:11px;padding:1px 6px;border-radius:4px;">Plus $20/月</span>
-<span style="background:#cce5ff;color:#004085;font-size:11px;padding:1px 6px;border-radius:4px;">🔍 特色</span>
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:1px 6px;border-radius:4px;">💰 免费</span>
+<span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:1px 6px;border-radius:4px;">Plus $20/月</span>
+<span style="background:#e8f4fd;color:#4A90D9;font-size:11px;padding:1px 6px;border-radius:4px;">🔍 特色</span>
 ```
 
 ### 3.20 行动号召
 
 ```html
-<p style="text-align:center;color:#e67e22;font-weight:700;margin:12px 0;">
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
   ⚡ 行动号召文字
 </p>
 ```
@@ -242,7 +239,7 @@
   <strong>🔹 以前</strong><br>旧做法1<br>旧做法2
 </p>
 
-<p style="background:#f0fff4;padding:10px 14px;border-radius:6px;color:#276749;font-size:14px;margin:8px 0;">
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
   <strong>🔹 现在</strong><br>新做法1<br>新做法2
 </p>
 ```
@@ -251,7 +248,7 @@
 
 ```html
 <p><strong><span style="color:#4A90D9;">①</span> 小标题</strong><br>说明文字</p>
-<p><strong><span style="color:#27ae60;">②</span> 小标题</strong><br>说明文字</p>
+<p><strong><span style="color:#8e44ad;">②</span> 小标题</strong><br>说明文字</p>
 ```
 
 ### 3.24 时间计划标签
@@ -265,8 +262,8 @@
 
 颜色递进：
 - 第1周 蓝 `#ebf4ff` / `#2b6cb0`
-- 第2周 绿 `#e6ffed` / `#1b7a3d`
-- 第3周 紫 `#f3ebff` / `#6b46c1`
+- 第2周 紫 `#f3ebff` / `#6b46c1`
+- 第3周 蓝 `#ebf4ff` / `#2b6cb0`
 
 ### 3.25 工具全家福分类小标题
 
@@ -284,7 +281,48 @@
 </p>
 ```
 
-### 3.27 页脚
+结尾 CTA 也可用紫色变体：`background:#8e44ad`
+
+### 3.27 坑位剖析三段式（表现→真相→解法）
+
+适用于踩坑复盘、干货拆解类文章。每个坑位三板斧：
+
+```html
+<!-- 坑位标题（带编号 badge） -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  坑位标题
+</p>
+
+<!-- 表现：普通正文 -->
+<p><strong>表现：</strong>描述现象……</p>
+
+<!-- 真相：蓝色左边框背景框 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>深层原因分析……
+</p>
+
+<!-- 解法：紫色左边框背景框 -->
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>具体可操作步骤……
+</p>
+```
+
+交替 badge 颜色：奇数坑蓝 `#4A90D9`，偶数坑紫 `#8e44ad`。
+
+### 3.28 自查清单（灰色底统一框）
+
+```html
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> 检查项 1<br>
+  <span style="color:#4A90D9;">☐</span> 检查项 2<br>
+  <span style="color:#8e44ad;">☐</span> 检查项 3
+</p>
+```
+
+复选框颜色用蓝紫交替，增强可读节奏。
+
+### 3.29 页脚
 
 ```html
 <p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
@@ -296,24 +334,22 @@
 
 ## 四、配色参考
 
+**核心原则：全篇文章只用蓝、紫两色 + 中性灰，避免五颜六色。**
+
 | 用途 | 色值 | 色名 |
 |------|------|------|
-| 主蓝色（链接/强调） | `#4A90D9` | 蓝 |
-| 主绿色（正向/成功） | `#27ae60` | 绿 |
-| 主紫色（创意/公式） | `#8e44ad` | 紫 |
-| 主橙色（提示/中级） | `#e67e22` | 橙 |
-| 主粉色（感性/收尾） | `#e91e63` | 粉 |
+| **主蓝色**（标题 badge、强调框、关键句） | `#4A90D9` | 蓝 |
+| **主紫色**（偶数 badge、变体框、创意模块） | `#8e44ad` | 紫 |
 | 标题深色 | `#1a1a2e` | 近黑 |
 | 正文灰色 | `#333` | 深灰 |
 | 辅助文字 | `#888` / `#aaa` | 中灰/浅灰 |
-| 引用区背景 | `#f7f8fa` | 极浅灰 |
+| 引用/代码区背景 | `#f7f8fa` | 极浅灰 |
 | 蓝色浅底 | `#e8f4fd` | 浅蓝 |
-| 绿色浅底 | `#f0fff4` / `#e6ffed` | 浅绿 |
-| 红色浅底 | `#fff5f5` | 浅红 |
-| 黄色浅底 | `#fff9e6` | 浅黄 |
 | 蓝色标签底 | `#ebf4ff` | 蓝标签 |
-| 绿色标签底 | `#d4edda` | 绿标签 |
-| 黄色标签底 | `#fff3cd` / `#ffeeba` | 黄标签 |
+| 紫色浅底 | `#f3ebff` | 浅紫 |
+| 蓝色深文 | `#2b6cb0` | 深蓝文 |
+| 紫色深文 | `#6b46c1` | 深紫文 |
+| 红色浅底（仅警告/避坑） | `#fff5f5` | 浅红 |
 
 ---
 
@@ -342,6 +378,7 @@
 
 ## 六、文章结构模板
 
+### 通用文章结构
 ```
 1. 分类标签（3.1）
 2. 大标题（3.2）+ 副标题（3.3）
@@ -356,7 +393,25 @@
    d. 粗分隔线/细分隔线（3.6/3.7）
 8. 结尾标题（3.26）
 9. 结尾正文 + 行动号召
-10. 页脚（3.27）
+10. 页脚（3.29）
+```
+
+### 踩坑复盘类文章结构
+```
+1. 分类标签（3.1）
+2. 大标题（3.2）+ 副标题（3.3）
+3. 写在前面（3.4）
+4. 粗分隔线（3.6）
+5. ─── 各坑位循环 ───
+   a. 坑位标题带badge（3.8）— 蓝紫交替
+   b. 表现：正文段落（3.10）
+   c. 真相：蓝左边框框（3.27）
+   d. 解法：紫左边框框（3.27）
+6. 分隔线（3.6）
+7. 自查清单（3.28）
+8. 结尾标题（3.26）
+9. 结尾正文 + 行动号召（蓝/紫底白字）
+10. 页脚（3.29）
 ```
 
 ---
