@@ -38,9 +38,9 @@
 
 | 任务类型 | 用什么 | 成本比 |
 |---------|--------|-------|
-| 格式转换、标签生成 | Haiku / GPT-4o-mini | 1/10 |
-| 中等分析、Code Review | Qwen2.5-14B / DeepSeek-V2 | 1/3 ~ 1/2 |
-| 深度写作、策略分析 | Claude Sonnet / GPT-4o | 1× |
+| 格式转换、标签生成 | Claude Haiku 4 / Gemini 3 Flash | 1/10 |
+| 中等分析、Code Review | Qwen3.5-32B / DeepSeek-V4 | 1/3 ~ 1/2 |
+| 深度写作、策略分析 | Claude Sonnet 4 / GPT-5 | 1× |
 
 这笔账很简单——你每个月在简单任务上省下的 API 费用，够多付一个月订阅。
 

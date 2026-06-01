@@ -128,8 +128,8 @@ Agent 多了之后，最大的风险不是单个出错——是**错误在 Agent
 | AI 编排平台 | Dify 自部署 | ¥50-150 |
 | 团队协作 | Notion / 飞书 | ¥0-100 |
 | 自动化串联 | Make.com / n8n | ¥0-150 |
-| 核心模型 | Claude API + DeepSeek | ¥200-600 |
-| 图像模型 | DALL·E 3 | ¥100-200 |
+| 核心模型 | Claude Sonnet 4 API + DeepSeek-V4 | ¥200-600 |
+| 图像模型 | GPT-5 图像生成 | ¥100-200 |
 | PPT/文档 | Gamma / Beautiful.ai | ¥80-150 |
 | 数据分析 | 各平台 API + Metabase | ¥0-100 |
 | **合计** | | **¥500-2,500** |
