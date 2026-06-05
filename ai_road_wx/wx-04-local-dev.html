@@ -1,0 +1,414 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 AI 开发实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  不想把代码喂给云端 AI？<br>教你搭一套全本地的开发团队
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  全程代码不出本地，一次 API 费用都没有
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>我在咖啡馆写代码，旁边坐了个做金融 SaaS 的兄弟。他看我屏幕上一堆 PR 自动 Review，问我用什么工具。我说："Ollama + Qwen，全跑本地。"他愣了两秒："本地？不是都用 Claude 或者 Copilot 吗？""金融系统的代码，你敢往云端扔？"他沉默了一会儿，要了我的配置清单。这篇就是写给他的，也写给所有"想让 AI 替你写码，但不想把代码送出去"的人。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、团队能干什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、硬件怎么选</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、四个 Agent</span>
+  
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、Pipeline 搭建</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、两个硬件坑</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、动手试试</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第一章 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  本地 AI 开发团队能干什么
+</p>
+
+<p>先说结果。我现在的开发流程：</p>
+
+<p>早上 9 点，在 GitHub Issue 写需求描述，打上 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">ai-dev</span> 标签。</p>
+
+<p>9 点 15，编码 AI 自动生成了代码，创建了 PR。PR 创建后，三个 Agent 同时干活：审查 AI 在 Review 代码（标志出安全漏洞、性能问题、风格不一致），测试 AI 自动生成测试用例，文档 AI 等合并后自动更新 API 文档。</p>
+
+<p>我只需做一件事：看代码逻辑、看审查报告、看测试覆盖、看安全报告——<strong>5 分钟，决定合并还是打回。</strong></p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>全程代码不出本地。一次 API 费用都没有。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第二章 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  你需要什么硬件
+</p>
+
+<p>不是非要很贵的显卡。三个档位，按预算来：</p>
+
+<!-- 入门方案 -->
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin:8px 0;">
+  <strong style="color:#2b6cb0;">🔹 入门</strong> · Windows PC + RTX 4060 8GB / Mac Mini M4 24GB<br>
+  能跑：Qwen3.5-9B（Q4，~6.5GB 显存）<br>
+  投入：约 ¥5,000-8,000
+</p>
+
+<!-- 进阶方案 -->
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin:8px 0;">
+  <strong style="color:#6b46c1;">🔹 进阶</strong> · 单卡 RTX 4090 24GB<br>
+  能跑：Qwen3.5-27B / Qwen3-Coder-30B（MoE，满血量化）<br>
+  投入：约 ¥18,000
+</p>
+
+<!-- 专业方案 -->
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin:8px 0;">
+  <strong style="color:#2b6cb0;">🔹 专业</strong> · 双卡 RTX 4090 / Mac Studio 192GB<br>
+  能跑：Qwen3.5-397B（量化）/ 多模型并行 Agent 团队<br>
+  投入：约 ¥35,000-55,000
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 MoE 是什么？</strong>Qwen3-Coder-30B 是混合专家架构——30B 参数总量，但每次推理只激活 3.3B。相当于 30B 的知识量，3.3B 的推理速度。但<strong>全部 30B 权重仍需加载到显存</strong>，所以入门 8GB 卡跑不了它，需要 24GB 才行。入门方案用 Qwen3.5-9B 就够了。
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">📝 结论：</strong><strong>入门级就够了。</strong>一块 RTX 4060 8GB 跑 Qwen3.5-9B Q4 量化版，延迟 5-8 秒/响应，日常编码辅助完全够。不需要一上来就上 RTX 4090。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第三章 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  四个 Developer Agent，各自干什么
+</p>
+
+<!-- 3.1 编码 Agent -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 编码 Agent：你的主力程序员</p>
+
+<p>角色设定很简单：你是全栈工程师，精通 TypeScript/Python/Go。每次写代码前，先去本地向量库（ChromaDB）检索项目里相关的代码片段，自动遵循已有的命名规范和架构模式。</p>
+
+<p>不确定的设计决策标注为 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">// TODO: DECISION -</span> 留给你做选择。</p>
+
+<p>用 Qwen3-Coder-30B（MoE 架构，Q4 量化），本地跑，零成本。</p>
+
+<!-- 3.2 审查 Agent -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 审查 Agent：你的 Code Reviewer</p>
+
+<p>自动 Review 每一个 PR。检查清单：SQL 注入、XSS 漏洞、空指针、N+1 查询、硬编码密钥。输出分三档：</p>
+
+<p>
+  <span style="background:#fff5f5;color:#c53030;font-size:13px;padding:4px 10px;border-radius:6px;display:inline-block;margin:2px;">🔴 必须修改</span>
+  <span style="background:#fefce8;color:#b7791f;font-size:13px;padding:4px 10px;border-radius:6px;display:inline-block;margin:2px;">🟡 建议优化</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:4px 10px;border-radius:6px;display:inline-block;margin:2px;">🟢 仅供参考</span>
+</p>
+
+<p>它不能替代你的判断。但有了这份清单，你看代码的时间从 20 分钟降到 5 分钟——因为不需要逐行找问题，只需要确认它找到的问题是否属实。</p>
+
+<!-- 3.3 测试 Agent -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 测试 Agent：自动补测试</p>
+
+<p>根据 PR 的代码变更，自动生成单元测试。每个测试标注设计意图——"测试边界：空数组输入""测试异常：网络超时"——不是 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">assert 1+1==2</span> 这种垃圾用例。</p>
+
+<!-- 3.4 文档 Agent -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 文档 Agent：再也不用手写 API 文档</p>
+
+<p>代码合并后自动更新 API 文档、追加 CHANGELOG、生成架构决策记录。你只管写码，文档它能自己跟上。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第四章：Pipeline -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  怎么让它们跑起来：本地 Agent 服务 + Webhook
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin:12px 0;">
+  <strong>❌ 先说一个踩过的坑：</strong>直接用 GitHub Actions 调 ollama generate，这条路<strong>走不通</strong>。<br><br>
+  <span style="color:#276749;">✅ 为什么？</span>ollama generate 返回的只是纯文本。它不会读项目文件、不知道目录结构、不能操作 git、更别提创建规范的分支和 PR 了。你需要的是一个<strong>能读文件系统、会 git 操作、理解项目上下文</strong>的 Agent 框架。
+</p>
+
+<p>目前最成熟的开源本地方案是 <strong>OpenClaw + Ollama</strong>。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一步：在 Windows 上装 Ollama</p>
+
+<p>去 ollama.com 下载 Windows 安装包，一路下一步就行。装好后打开 PowerShell 验证：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;">PS&gt;</span> ollama --version<br>
+  <span style="color:#888;"># 输出: ollama version 0.17.x</span>
+</p>
+
+<p>拉两个模型——一个主力编码，一个做轻量任务：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;"># 主力：Qwen3-Coder，MoE 架构，30B 参数 / 3.3B 激活</span><br>
+  <span style="color:#888;">PS&gt;</span> ollama pull qwen3-coder:30b<br><br>
+  <span style="color:#888;"># 轻量备选：Qwen3.5 9B，日常问答、文档生成够用</span><br>
+  <span style="color:#888;">PS&gt;</span> ollama pull qwen3.5:9b
+</p>
+
+<p>下载完验证：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;">PS&gt;</span> ollama list<br>
+  <span style="color:#888;"># NAME &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SIZE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFIED</span><br>
+  <span style="color:#888;"># qwen3-coder:30b &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abc123def456 &nbsp;&nbsp;&nbsp;19 GB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 days ago</span><br>
+  <span style="color:#888;"># qwen3.5:9b &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xyz789abc012 &nbsp;&nbsp;&nbsp;5.9 GB &nbsp;&nbsp;&nbsp;&nbsp;2 days ago</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第二步：装 Agent 框架——让模型"能动起来"</p>
+
+<p>模型只会说话，Agent 才会干活。OpenClaw 是目前 Windows 上对 Ollama 支持最好的本地编程 Agent，原生支持文件读写、shell 命令、git 操作、GitHub API。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;"># 安装 OpenClaw（需要先装 Node.js 18+）</span><br>
+  <span style="color:#888;">PS&gt;</span> npm install -g openclaw<br><br>
+  <span style="color:#888;"># 初始化——交互式选择后端为 Ollama</span><br>
+  <span style="color:#888;">PS&gt;</span> openclaw init<br><br>
+  <span style="color:#888;"># 启动 Agent 服务，绑定 Qwen3-Coder</span><br>
+  <span style="color:#888;">PS&gt;</span> openclaw serve --model ollama/qwen3-coder:30b
+</p>
+
+<p>启动后，OpenClaw 会在本机 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">http://localhost:18765</span> 提供一个 REST API。任何程序都可以通过 HTTP 请求来驱动它干活。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第三步：搭 Webhook 桥梁——GitHub Issue → 自动编码</p>
+
+<p>整个链路是这样的：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;margin:8px 0;">
+  GitHub Issue 打标签 → Webhook POST → 本机 Flask 接收 → 调 OpenClaw API → Agent 写码+提 PR
+</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 先写 Webhook 接收器</strong></p>
+
+<p>在你项目里新建一个 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">webhook_server.py</span>：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;"># webhook_server.py</span><br>
+  <strong>from</strong> flask <strong>import</strong> Flask, request<br>
+  <strong>import</strong> requests<br>
+  <br>
+  app = Flask(__name__)<br>
+  AGENT_URL = "http://localhost:18765/api/task"<br>
+  <br>
+  @app.route('/webhook', methods=['POST'])<br>
+  <strong>def</strong> handle_webhook():<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;payload = request.json<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;action = payload.get('action', '')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;issue = payload.get('issue', {})<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;labels = [lb['name'] <strong>for</strong> lb <strong>in</strong> issue.get('labels', [])]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 只响应"刚打上 ai-dev 标签"的事件</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>if</strong> action != 'labeled' <strong>or</strong> 'ai-dev' <strong>not in</strong> labels:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>return</strong> 'skip', 200<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;repo = payload['repository']<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;task_prompt = (<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f"需求标题: {issue['title']}\n需求描述:\n{issue['body']}\n"<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"请实现代码，创建分支并提交 PR"<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;r = requests.post(AGENT_URL, json={<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'prompt': task_prompt,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'repo_url': repo['clone_url']<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}, timeout=5)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;print(f"Agent 已触发: {r.status_code}")<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>return</strong> 'ok', 200<br>
+  <br>
+  <strong>if</strong> __name__ == '__main__':<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;app.run(host='0.0.0.0', port=4567)
+</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 起服务</strong></p>
+
+<p>开三个 PowerShell 窗口：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;"># 窗口1：Ollama（通常开机自启，不用管）</span><br>
+  <span style="color:#888;">PS&gt;</span> ollama serve<br><br>
+  <span style="color:#888;"># 窗口2：OpenClaw Agent</span><br>
+  <span style="color:#888;">PS&gt;</span> openclaw serve --model ollama/qwen3-coder:30b<br><br>
+  <span style="color:#888;"># 窗口3：Webhook 接收器</span><br>
+  <span style="color:#888;">PS&gt;</span> pip install flask requests<br>
+  <span style="color:#888;">PS&gt;</span> python webhook_server.py
+</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 内网穿透（让 GitHub 能调到你本机）</strong></p>
+
+<p>GitHub 的 Webhook 需要公网可达的 URL。用 ngrok 把本机 4567 端口暴露出去：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.7;">
+  <span style="color:#888;"># 去 ngrok.com 注册（免费），下载 ngrok.exe，然后：</span><br>
+  <span style="color:#888;">PS&gt;</span> ngrok http 4567<br>
+  <span style="color:#888;"># 输出一个公网地址：</span><br>
+  <span style="color:#888;"># Forwarding &nbsp;https://xxxx.ngrok-free.app -&gt; http://localhost:4567</span>
+</p>
+
+<p>然后在 GitHub 仓库 Settings → Webhooks → Add webhook：Payload URL 填 ngrok 地址 + /webhook，Content type 选 application/json，Events 勾选 Issues。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 工作流全景回放</p>
+
+<p>现在，你在 GitHub 上创建一个 Issue，打上 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">ai-dev</span> 标签：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span></strong> GitHub 发送 Webhook → ngrok 转发 → 本机 Flask 收到</p>
+<p><strong><span style="color:#8e44ad;">②</span></strong> Flask 提取 Issue 内容 → 拼成任务指令 → POST 到 OpenClaw</p>
+<p><strong><span style="color:#4A90D9;">③</span></strong> OpenClaw 拉取仓库、分析结构、调用 Ollama 推理</p>
+<p><strong><span style="color:#8e44ad;">④</span></strong> OpenClaw 生成代码 → git branch → commit → push</p>
+<p><strong><span style="color:#4A90D9;">⑤</span></strong> OpenClaw 调 GitHub API → 创建 Pull Request</p>
+<p><strong><span style="color:#8e44ad;">⑥</span></strong> PR 创建后，审查/测试/文档 Agent 并行再跑一轮</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 你从头到尾只需要做一件事：</strong>写 Issue 描述，打标签，等 PR。剩下的全自动。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 运维提示：</strong>ngrok 免费版地址每 2 小时会变。生产环境建议用 frp 做内网穿透，或者直接在云服务器上跑 Agent（代码通过 VPN 拉取本地仓库）。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第五章：两个坑 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  两个新手最容易踩的硬件坑
+</p>
+
+<!-- 坑一 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  坑一：显存不够硬跑
+</p>
+
+<p><strong>表现：</strong>模型加载报 OOM，或者生成到一半直接崩掉。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>公式很简单——<strong>模型大小 × 量化系数 + 上下文开销 ≈ 显存需求</strong><br><br>
+  · Qwen3.5-9B @ Q4 → 4.5GB + 2GB 上下文 = <strong>~6.5GB</strong>（8GB 显卡稳稳的）<br>
+  · Qwen3-Coder-30B（MoE）@ Q4 → 15GB + 4GB = <strong>~19GB</strong>（需要 24GB 卡）<br>
+  · Qwen3.5-27B @ Q4 → 13.5GB + 4GB = <strong>~17.5GB</strong><br><br>
+  <strong>⚠️ MoE 模型的坑：</strong>虽然推理时只激活 3.3B 参数，但全部 30B 权重必须加载到显存。显存需求看 30B，不是 3.3B。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>一条铁律——<strong>模型显存占用不超过总显存的 70%</strong>。剩下 30% 给上下文和系统。别在 24GB 卡上跑 Qwen3.5-397B——量化到 Q2 质量变成傻子，不如用 27B 的 Q5。
+</p>
+
+<!-- 坑二 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  坑二：上下文无限拉满
+</p>
+
+<p><strong>表现：</strong>PR diff 塞 10000 行进去，模型直接 OOM，输出截断。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>长上下文是显存杀手。本地推理的上下文窗口越大，显存占用指数级增长。一次性塞入全部 diff，模型根本扛不住。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>截断到 8000 字符，或分层摘要——先用小模型（Qwen3.5-9B）提取变更摘要 + 5 个关键片段，再送给大模型（Qwen3-Coder-30B）。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 第六章 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  这套方案的真正价值
+</p>
+
+<p>不是省钱。Cloud API 一个月也就几百块。</p>
+
+<p>是<strong>控制感</strong>。</p>
+
+<!-- 价值列表 -->
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  ✅ 金融、医疗、政府项目的代码，合规要求不允许出本地
+</p>
+
+<p style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  ✅ 高铁上、客户内网、断网环境，AI 照常干活
+</p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  ✅ 代码审查 Agent 看多了你的 Review 意见，你甚至可以微调它——它越来越像你的判断
+</p>
+
+<p style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  ✅ 没人拿你的代码库去训练模型
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾：写在最后 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">如果你现在就想试</p>
+
+<p>三件事，今晚就能干：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 装好第一个本地模型</strong><br>
+去 ollama.com 下载 Windows 安装包 → 装好 → PowerShell 跑 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">ollama pull qwen3.5:9b</span> → 五分钟用上最新本地编码模型</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 在 IDE 里体验本地推理</strong><br>
+在 VS Code / Cursor 里把 Model 切到 <span style="background:#f7f8fa;color:#555;font-size:13px;padding:1px 5px;border-radius:3px;">ollama/qwen3.5:9b</span>，感受一下本地推理的速度——延迟不到 5 秒</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 随便写个需求描述，看它能出什么</strong><br>
+如果感觉不错，下周搭 Webhook 链路，再下周上 ChromaDB 做代码库 RAG。一步一个脚印，别一上来就追集群方案。</p>
+
+<!-- 行动号召 -->
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一个主题：本地 AI 团队的长期运维</strong>
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;">
+  AI 团队搭起来之后才是真正的开始——怎么监控它有没有退步？什么时候该换模型？Prompt 怎么管才不乱？下一篇写长期运维。
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 你现在本地跑什么模型？遇到过 OOM 吗？评论区聊聊。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写日期：2026 年 6 月 5 日<br>适用对象：全栈开发者 · 关注代码安全与隐私
+</p>
+
+</body>

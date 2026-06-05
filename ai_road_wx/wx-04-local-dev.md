@@ -34,11 +34,13 @@
 
 | 方案 | 配置 | 能跑什么 | 投入 |
 |------|------|---------|------|
-| **入门** | Mac Mini M4 Pro 48GB | Qwen2.5-Coder-14B / DeepSeek-Coder 7B | ¥12,000 |
-| **进阶** | 单卡 RTX 4090 24GB | Qwen2.5-32B / DeepSeek-Coder 33B（量化） | ¥18,000 |
-| **专业** | 双卡 RTX 4090 / Mac Studio 192GB | Qwen2.5-72B / DeepSeek-V3（量化） | ¥35,000-55,000 |
+| **入门** | Windows PC + RTX 4060 8GB / Mac Mini M4 24GB | Qwen3.5-9B（Q4，~6.5GB 显存） | ¥5,000-8,000 |
+| **进阶** | 单卡 RTX 4090 24GB | Qwen3.5-27B / Qwen3-Coder-30B（MoE，满血量化） | ¥18,000 |
+| **专业** | 双卡 RTX 4090 / Mac Studio 192GB | Qwen3.5-397B（量化）/ 多模型并行 Agent 团队 | ¥35,000-55,000 |
 
-**入门级就够了。** Mac Mini 跑 Qwen2.5-Coder-14B Q4 量化版，延迟 10-15 秒/响应，日常编码辅助完全够。不需要一上来就上显卡。我自己就是从 Mac Mini 起步的。
+> **MoE 是什么？** Qwen3-Coder-30B 是混合专家架构——30B 参数总量，但每次推理只激活其中的 3.3B。相当于 30B 模型的知识量，3.3B 模型的推理速度。但注意：**全部 30B 权重仍需加载到显存**，所以入门 8GB 卡跑不了它，需要 24GB 才行。入门方案用 Qwen3.5-9B 就够了。
+
+**入门级就够了。** 一块 RTX 4060 8GB 跑 Qwen3.5-9B Q4 量化版，延迟 5-8 秒/响应，日常编码辅助完全够。不需要一上来就上 RTX 4090。
 
 ---
 
@@ -50,7 +52,7 @@
 
 不确定的设计决策标注为 `// TODO: DECISION -` 留给你做选择。
 
-用 Qwen2.5-Coder-14B（Q4 量化），本地跑，零成本。
+用 Qwen3-Coder-30B（MoE 架构，Q4 量化），本地跑，零成本。
 
 ### 审查 Agent：你的 Code Reviewer
 
@@ -68,38 +70,166 @@
 
 ---
 
-## 怎么让它们跑起来：GitHub Actions + Ollama
+## 怎么让它们跑起来：本地 Agent 服务 + Webhook
 
-整个 Pipeline 靠 GitHub Actions 的 Webhook 驱动。配置不复杂：
+先说一个踩过的坑：**直接用 GitHub Actions 调 ollama generate，这条路走不通。**
 
-```yaml
-# .github/workflows/ai-dev-pipeline.yml
-name: AI Development Pipeline
+为什么？ollama generate 返回的只是纯文本。它不会读项目文件、不知道目录结构、不能操作 git、更别提创建规范的分支和 PR 了。你需要的是一个**能读文件系统、会 git 操作、理解项目上下文**的 Agent 框架。
 
-on:
-  issues:
-    types: [opened, labeled]
+目前最成熟的开源本地方案是 **OpenClaw + Ollama**。
 
-jobs:
-  ai-coding:
-    if: contains(github.event.issue.labels.*.name, 'ai-dev')
-    runs-on: self-hosted  # 有 GPU 的本地机器上跑
-    steps:
-      - name: Coding Agent
-        run: |
-          curl -X POST http://localhost:11434/api/generate \
-            -H "Content-Type: application/json" \
-            -d '{
-              "model": "qwen2.5-coder:14b",
-              "prompt": "${{ github.event.issue.body }}",
-              "stream": false
-            }' > /tmp/output.json
+---
 
-      - name: Create PR
-        run: python3 .github/scripts/create_pr.py /tmp/output.json
+### 第一步：在 Windows 上装 Ollama
+
+去 [ollama.com](https://ollama.com) 下载 Windows 安装包，一路下一步就行。装好后打开 PowerShell 验证：
+
+```powershell
+ollama --version
+# 输出: ollama version 0.17.x
 ```
 
-PR 创建后，三个 Agent（审查+测试+安全）并行自动触发，各自输出报告挂到 PR 底下。你打开 PR 的时候，四份参考材料已经齐了。
+拉两个模型——一个主力编码，一个做轻量任务：
+
+```powershell
+# 主力：Qwen3-Coder，MoE 架构，30B 参数 / 3.3B 激活
+ollama pull qwen3-coder:30b
+
+# 轻量备选：Qwen3.5 9B，日常问答、文档生成够用
+ollama pull qwen3.5:9b
+```
+
+下载完验证一下：
+
+```powershell
+ollama list
+# NAME                  ID              SIZE      MODIFIED
+# qwen3-coder:30b       abc123def456    19 GB     2 days ago
+# qwen3.5:9b            xyz789abc012    5.9 GB    2 days ago
+```
+
+---
+
+### 第二步：装 Agent 框架 —— 让模型"能动起来"
+
+模型只会说话，Agent 才会干活。OpenClaw 是目前 Windows 上对 Ollama 支持最好的本地编程 Agent，原生支持文件读写、shell 命令、git 操作、GitHub API。
+
+```powershell
+# 安装 OpenClaw（需要先装 Node.js 18+）
+npm install -g openclaw
+
+# 初始化 —— 交互式选择后端为 Ollama
+openclaw init
+
+# 启动 Agent 服务，绑定 Qwen3-Coder
+openclaw serve --model ollama/qwen3-coder:30b
+```
+
+启动后，OpenClaw 会在本机 `http://localhost:18765` 提供一个 REST API。任何程序都可以通过 HTTP 请求来驱动它干活。
+
+---
+
+### 第三步：搭 Webhook 桥梁 —— GitHub Issue → 自动编码
+
+整个链路是这样的：
+
+```
+GitHub Issue 打标签 → Webhook POST → 本机 Flask 接收 → 调 OpenClaw API → Agent 写码+提 PR
+```
+
+**① 先写 Webhook 接收器**
+
+在你项目里新建一个 `webhook_server.py`：
+
+```python
+# webhook_server.py
+from flask import Flask, request
+import requests
+import json
+
+app = Flask(__name__)
+AGENT_URL = "http://localhost:18765/api/task"
+
+@app.route('/webhook', methods=['POST'])
+def handle_webhook():
+    payload = request.json
+    action = payload.get('action', '')
+    issue = payload.get('issue', {})
+    labels = [lb['name'] for lb in issue.get('labels', [])]
+
+    # 只响应"刚打上 ai-dev 标签"的事件
+    if action != 'labeled' or 'ai-dev' not in labels:
+        return 'skip', 200
+
+    repo = payload['repository']
+    task_prompt = (
+        f"## 仓库: {repo['full_name']}\n"
+        f"## 需求标题: {issue['title']}\n"
+        f"## 需求描述:\n{issue['body']}\n\n"
+        "请：1. clone 仓库 2. 分析现有代码结构 3. 实现需求 "
+        "4. 创建新分支 5. commit 并 push 6. 通过 GitHub CLI 创建 PR"
+    )
+
+    r = requests.post(AGENT_URL, json={
+        'prompt': task_prompt,
+        'repo_url': repo['clone_url']
+    }, timeout=5)
+
+    print(f"[{issue['title']}] Agent 已触发: {r.status_code}")
+    return 'ok', 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=4567)
+```
+
+**② 起服务**
+
+开三个 PowerShell 窗口：
+
+```powershell
+# 窗口1：Ollama（通常开机自启，不用管）
+ollama serve
+
+# 窗口2：OpenClaw Agent
+openclaw serve --model ollama/qwen3-coder:30b
+
+# 窗口3：Webhook 接收器
+pip install flask requests
+python webhook_server.py
+```
+
+**③ 内网穿透（让 GitHub 能调到你本机）**
+
+GitHub 的 Webhook 需要公网可达的 URL。用 ngrok 把本机 4567 端口暴露出去：
+
+```powershell
+# 去 ngrok.com 注册（免费），下载 ngrok.exe，然后：
+ngrok http 4567
+# 会输出一个公网地址：
+# Forwarding  https://xxxx.ngrok-free.app -> http://localhost:4567
+```
+
+然后在 GitHub 仓库 Settings → Webhooks → Add webhook：
+- Payload URL: `https://xxxx.ngrok-free.app/webhook`
+- Content type: `application/json`
+- Events: 勾选 **Issues**
+
+---
+
+### 工作流全景回放
+
+现在，你在 GitHub 上创建一个 Issue，打上 `ai-dev` 标签：
+
+1.  GitHub 发送 Webhook → ngrok 转发 → 本机 Flask 收到
+2.  Flask 提取 Issue 标题和描述 → 拼成任务指令 → POST 到 OpenClaw
+3.  OpenClaw 拉取仓库代码、分析结构、调用 Ollama 推理
+4.  OpenClaw 生成代码文件 → `git checkout -b` → `git commit` → `git push`
+5.  OpenClaw 调 GitHub API → 创建 Pull Request
+6.  PR 创建后，审查/测试/文档 Agent 可以再并行触发一轮
+
+**你从头到尾只需要做一件事：写 Issue 描述，打标签，等 PR。剩下的全自动。**
+
+> 💡 运维提示：ngrok 免费版地址每 2 小时会变。生产环境建议用 frp 做内网穿透，或者直接在云服务器上跑 Agent（代码通过 VPN 拉取本地仓库）。
 
 ---
 
@@ -109,16 +239,19 @@ PR 创建后，三个 Agent（审查+测试+安全）并行自动触发，各自
 
 公式很简单：**模型大小 × 量化系数 + 上下文开销 ≈ 显存需求**
 
-- Qwen2.5-14B @ Q4 → 14B × 0.5 = 7GB + 上下文 ~2GB = **~9GB**
-- Qwen2.5-32B @ Q4 → 32B × 0.5 = 16GB + 上下文 ~4GB = **~20GB**
+- Qwen3.5-9B @ Q4 → 9B × 0.5 = 4.5GB + 上下文 ~2GB = **~6.5GB**（8GB 显卡稳稳的）
+- Qwen3-Coder-30B（MoE）@ Q4 → 30B × 0.5 = 15GB + 上下文 ~4GB = **~19GB**（需要 24GB 卡）
+- Qwen3.5-27B @ Q4 → 27B × 0.5 = 13.5GB + 上下文 ~4GB = **~17.5GB**
+
+> ⚠️ 注意 MoE 模型的坑：虽然推理时只激活 3.3B 参数，但全部 30B 权重必须加载到显存中。所以 Qwen3-Coder-30B 的显存需求看 30B，不是 3.3B。
 
 一条铁律：**模型显存占用不超过总显存的 70%**。剩下 30% 是给上下文和系统的。
 
-别在 24GB 显卡上跑 70B 模型——量化到 Q2 质量变成傻子，不如用 32B 的 Q5。
+别在 24GB 显卡上跑 Qwen3.5-397B——量化到 Q2 质量变成傻子，不如用 27B 的 Q5。
 
 ### 坑二：上下文无限拉满
 
-PR diff 塞 10000 行进去 → OOM。解法：截断到 8000 字符，或分层摘要——先用小模型（7B）提取变更摘要+5 个关键片段，再送给大模型（14B）。
+PR diff 塞 10000 行进去 → OOM。解法：截断到 8000 字符，或分层摘要——先用小模型（Qwen3.5-9B）提取变更摘要+5 个关键片段，再送给大模型（Qwen3-Coder-30B）。
 
 ---
 
@@ -139,11 +272,11 @@ PR diff 塞 10000 行进去 → OOM。解法：截断到 8000 字符，或分层
 
 三件事，今晚就能干：
 
-1. `brew install ollama` → `ollama pull qwen2.5-coder:14b` → 五分钟装好第一个本地编码模型
-2. 在 Cursor 里把 Model 切到 `ollama/qwen2.5-coder:14b`，感受一下本地推理的速度
-3. 随便写个需求描述，看它能出什么
+1. 去 [ollama.com](https://ollama.com) 下载 Windows 安装包→ 装好 → PowerShell 跑 `ollama pull qwen3.5:9b` → 五分钟用上最新本地编码模型
+2. 在 VS Code / Cursor 里把 Model 切到 `ollama/qwen3.5:9b`，感受一下本地推理的速度——延迟不到 5 秒
+3. 随便写个需求描述，让它在本地生成代码，看质量如何
 
-如果感觉不错，下周搭 GitHub Actions Pipeline，再下周上 ChromaDB 做代码库 RAG。一步一个脚印，别一上来就追集群方案。
+如果感觉不错，下周搭 Webhook 链路，再下周上 ChromaDB 做代码库 RAG。一步一个脚印，别一上来就追集群方案。
 
 ---
 
