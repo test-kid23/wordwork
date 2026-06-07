@@ -2,7 +2,9 @@
 
 ## 项目定位
 
-微信公众号 AI 系列文章，面向 **想学 AI 但不知道怎么学** 的人。
+AI 系列文章多平台写作项目，目前覆盖：
+- **微信公众号**：面向 **想学 AI 但不知道怎么学** 的人（深度长文）
+- **小红书**：面向 **测试工程师 / QA**，分享 AI 辅助测试实战（轻阅读笔记）
 
 ## 目标受众
 
@@ -62,6 +64,9 @@ wordwork/
 ├── llamacpp/                   # llama.cpp 本地部署大模型系列
 ├── rag/                        # RAG 私有知识库系列
 ├── codebuddy/                  # CodeBuddy 深度使用与能力挖掘系列
+├── ai_test_xhs/                # AI + 测试 小红书系列（轻阅读向）
+│   ├── README.md                        # 系列说明与选题规划
+│   └── xhs-01-ai-test-intro.md          # AI 测试入门
 └── claude_code/                # Claude Code 工作流系列
 ```
 
@@ -75,4 +80,12 @@ wordwork/
 | `llamacpp/` | **llama.cpp 系列** — 本地部署大模型 | 📁 目录已建，待创作 |
 | `rag/` | **RAG 系列** — 私有知识库搭建 | 📁 目录已建，待创作 |
 | `codebuddy/` | **CodeBuddy 系列** — CodeBuddy 深度使用与能力挖掘 | 📁 目录已建，大纲已完成 |
-| `claude_code/` | **Claude Code 系列** — Claude Code 深度使用与工作流 | 📁 目录已建，大纲已完成
+| `claude_code/` | **Claude Code 系列** — Claude Code 深度使用与工作流 | 📁 目录已建，大纲已完成 |
+| `ai_test_xhs/` | **AI + 测试 小红书系列** — AI 辅助软件测试实战 | 📁 目录已建，首篇已写 |
+
+## 排版规范
+
+| 平台 | 规范文件 | 说明 |
+|------|---------|------|
+| 微信公众号 | `wx_format_guide.md` | HTML → 微信编辑器，全内联样式，蓝紫配色 |
+| 小红书 | `xhs_format_guide.md` | 纯文本 + emoji 排版，口语化短句，卡片式结构 |
