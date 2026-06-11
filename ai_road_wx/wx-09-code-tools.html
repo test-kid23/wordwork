@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 代码工具入门：一行代码不会写，也能做小工具、改脚本、搭网站</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧰 AI 入门指南 · 工具篇</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  AI 代码工具入门<br>一行代码不会写，也能做小工具、改脚本、搭网站
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  你说人话，它写代码——两类场景 + 四款工具，对号入座
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">上篇回顾：</strong>上篇讲了用 API Key 把 AI 嵌入工作流，马上有朋友来问："你说的那些工具，WorkBuddy，是不是程序员才能用？我连 Python 都没装过。"<br><br>你看，这就是最大的误解。现在的 AI 代码工具，早就不是给程序员用的了——它们更像是<strong>你说人话、它写代码的翻译官</strong>。只要你描述清楚要什么，看不懂代码也没关系，它能看懂就行。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">━━━━━━━━━━━━━━</p>
+
+<!--
+  ============================================================
+  第一节：先看两个场景
+  ============================================================
+-->
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 先看两个场景，感受一下多实用</p>
+
+<!-- 场景 1 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ✉️ 场景 1：做个批量处理文件的小工具
+</p>
+<p style="margin-top:10px;"><strong>痛点：</strong>你手头有 200 张产品图，需要统一加上公司水印。Photoshop 一张张做？一下午没了。找个程序员帮你写脚本？还得请喝奶茶。</p>
+<p><strong>现在：</strong>打开 WorkBuddy，输入"帮我做一个批量给图片加水印的小工具，水印放在右下角，可以调透明度，能选整个文件夹一键处理"——几分钟后，脚本就生成好了，你双击运行，200 张图几分钟搞定。</p>
+
+<!-- 场景 2 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:16px 0 0 0;">
+  🏠 场景 2：想搭个自己的小网站
+</p>
+<p style="margin-top:10px;"><strong>痛点：</strong>你想做个个人博客或者产品展示页，找外包报价 5000 起。自己学 HTML/CSS？两个月起步。</p>
+<p><strong>现在：</strong>打开 Qoder，说"帮我做一个个人博客网站，白色简洁风格，能发文章、显示发布时间、支持分类标签"——它自己拆分任务，自己写代码，自己测试，几十分钟后给你一个能跑的网站。</p>
+
+<p>这两个场景不是科幻，是现在就能做到的事。下面介绍具体用哪些工具。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">━━━━━━━━━━━━━━</p>
+
+<!--
+  ============================================================
+  第二节：工具清单
+  ============================================================
+-->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  工具清单：按你的需求对号入座
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏗️ 想"从想法到成品"——选产品型工具</p>
+
+<p>这类工具的特点是：你说需求，它给你完整可运行的成品，中间过程你不用管。</p>
+
+<!-- WorkBuddy -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 6px 0;">WorkBuddy（腾讯云）</p>
+
+<p>我目前用得最多的一个，国内直接可用，微信登录就能上手。</p>
+
+<p><strong><span style="color:#4A90D9;">▸</span> 怎么用：</strong>网页版、VS Code 插件、终端工具都有</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 能干嘛：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  用大白话描述需求 → 直接生成完整代码，运行即用<br>
+  有 Figma 设计稿 → 一键转前端代码，做网页半天搞定<br>
+  从需求文档到代码到部署，全流程打通
+</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 适合谁：</strong>想做个实际工具但完全不会写代码的朋友</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:1px 6px;border-radius:4px;">💰 免费</span>
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  📸 <strong style="color:#2b6cb0;">WorkBuddy 界面截图：</strong>用中文描述需求 → AI 生成完整代码
+</p>
+
+<!-- 通义灵码 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 6px 0;">通义灵码 / Qoder（阿里巴巴）</p>
+
+<p>阿里系产品，Agent 模式让你感觉在跟一个"全能程序员"合作。</p>
+
+<p><strong><span style="color:#4A90D9;">▸</span> 怎么用：</strong>有独立桌面客户端、网页版，也支持 VS Code / JetBrains 插件</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 能干嘛：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  智能体模式：给它一个大需求，它自己拆任务 → 写代码 → 测试 → 改 bug → 给你成品<br>
+  全局理解：不是只看当前文件，改一处自动联动改其他相关文件<br>
+  代码翻译：比如把一段 Python 转成 JavaScript
+</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 适合谁：</strong>想搞个稍大的项目（个人网站、小应用），全程交给 AI</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:1px 6px;border-radius:4px;">💰 个人免费</span>
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  📸 <strong style="color:#2b6cb0;">通义灵码界面截图：</strong>Agent 模式自动拆解任务
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">· · ·</p>
+
+<!-- 辅助型工具 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🔧 想"读代码、改代码"——选辅助型工具</p>
+
+<p>如果你不需要从零做东西，而是要理解已有的代码、在网上找的脚本上修修改改。</p>
+
+<!-- Cursor -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 6px 0;">Cursor</p>
+
+<p>把 AI 深度嵌入代码编辑器，写代码像聊天一样自然。</p>
+
+<p><strong><span style="color:#4A90D9;">▸</span> 怎么用：</strong>下载 Cursor 客户端（基于 VS Code，上手很快）</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 能干嘛：</strong>用中文指令直接修改代码，"把这段代码的按钮颜色改成蓝色"→ 自动改好；选中报错 → 自动分析原因给修复方案</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 适合谁：</strong>想学编程、或需要频繁小改代码的人</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:1px 6px;border-radius:4px;">💰 有免费额度，国内直接可用</span>
+</p>
+
+<!-- GitHub Copilot -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 6px 0;">GitHub Copilot</p>
+
+<p>AI 代码补全的鼻祖，写代码时像有个副驾驶在旁边。</p>
+
+<p><strong><span style="color:#4A90D9;">▸</span> 怎么用：</strong>VS Code 等编辑器的插件</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 能干嘛：</strong>你写注释它就补全代码，支持几乎所有语言</p>
+<p><strong><span style="color:#4A90D9;">▸</span> 适合谁：</strong>有编程基础、想提升效率的开发者</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:1px 6px;border-radius:4px;">💰 每月约 $10 付费</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">· · ·</p>
+
+<!-- 其他 AI 工具 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📊 顺便一提：其他好用的 AI 工具</p>
+
+<p>除了代码类，还有几个普通人也能受益的工具：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">▸</span> <strong>ChatDOC / PDF.ai</strong> —— 上传 PDF，直接跟文档聊天，"帮我找合同里的违约条款" | 网页版，国内有类似产品，免费<br>
+  <span style="color:#8e44ad;">▸</span> <strong>Gamma / 美图 AI PPT</strong> —— 一句话生成整套 PPT，调整版式方便 | 网页版，美图 AI PPT 完全免费<br>
+  <span style="color:#4A90D9;">▸</span> <strong>对话式 BI 工具</strong> —— 上传 Excel，"北方区 Q2 销量最高的是哪个产品"→ 自动生成图表 | 搜"AI 数据分析"找国产产品
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:28px 0 20px 0;">━━━━━━━━━━━━━━</p>
+
+<!--
+  ============================================================
+  第三节：实战示例
+  ============================================================
+-->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  实战示例：做一个"批量重命名文件"小工具
+</p>
+
+<p>光说不练不好使，我们来走一遍完整流程，用 WorkBuddy 做一个实际能用的小工具。</p>
+
+<p><strong>需求：</strong>你有一个文件夹，里面图片命名乱七八糟（IMG_001.jpg、微信图片_2024xxx.png……），想统一改成"产品图_001、产品图_002……"并按顺序编号。</p>
+
+<p><strong>操作步骤：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 打开 WorkBuddy，输入：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "帮我写一个 Windows 上能用的 Python 小工具，功能如下：<br>
+  - 用户选择一个文件夹<br>
+  - 把文件夹里的所有图片文件（jpg、png、gif）<br>
+  - 统一重命名为'产品图_001、产品图_002……'（保留原扩展名，按文件修改时间排序）<br>
+  - 操作前显示预览，确认后再执行<br>
+  - 打包成 exe，方便没有 Python 的人直接双击运行"
+</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> AI 生成代码</strong><br>你复制保存为 <span style="background:#f7f8fa;padding:1px 6px;border-radius:3px;font-size:13px;">rename_tool.py</span></p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 按 AI 提示安装打包工具</strong><br>一条命令生成 exe</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 发给同事，谁都能用</strong></p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  📸 <strong style="color:#2b6cb0;">WorkBuddy 对话 → 生成完整可运行代码的过程截图：</strong>输入需求 / AI 输出代码 / 运行结果
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>⏱ 耗时：</strong>从描述需求到拿到能用的 exe，不超过 15 分钟。如果你自己从头学 Python 来做，至少要花几天。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:28px 0 20px 0;">━━━━━━━━━━━━━━</p>
+
+<!--
+  ============================================================
+  第四节：选工具指南
+  ============================================================
+-->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  选工具指南：一张表说清楚
+</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">▸</span> <strong>完全不会写代码，想做小工具：</strong>WorkBuddy —— 全流程，从需求到成品，微信登录直接用<br>
+  <span style="color:#8e44ad;">▸</span> <strong>想做个完整的网站/应用：</strong>通义灵码/Qoder —— Agent 模式，自动拆任务、测试、修 bug<br>
+  <span style="color:#4A90D9;">▸</span> <strong>想学编程，边学边用 AI 帮忙：</strong>Cursor —— 写代码像聊天，学习曲线最平滑<br>
+  <span style="color:#8e44ad;">▸</span> <strong>已有编程基础，提效：</strong>GitHub Copilot —— 补全能力强，月付 $10
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:28px 0 20px 0;">━━━━━━━━━━━━━━</p>
+
+<!--
+  ============================================================
+  写在最后
+  ============================================================
+-->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这三篇文章串起来，其实是一条很自然的进阶路径：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">▸</span> <strong>第一站</strong>（wx-07）：用聊天 AI 帮你出主意、写文案<br>
+  <span style="color:#8e44ad;">▸</span> <strong>第二站</strong>（wx-08）：拿 API Key，把 AI 嵌入你的工作流，自动干活<br>
+  <span style="color:#4A90D9;">▸</span> <strong>第三站</strong>（wx-09）：用代码工具，让 AI 帮你做小工具、改脚本、甚至搭网站
+</p>
+
+<p>哪怕你一行代码都不会写，现在的 AI 已经足够让你做到：想做什么工具，说出来就有了。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 今天就可以做的事：</strong>打开 WorkBuddy，随便想一个你平时反复手动做的小任务，告诉 AI，看它能不能帮你搞定。大概率，你会被惊到。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写日期：2025 年 6 月<br>适用对象：零编程基础、想用 AI 做工具/改脚本/搭网站的普通用户
+</p>
+
+</body>
+</html>
