@@ -1,42 +1,73 @@
 # CodeBuddy 系列创作大纲
 
 > CodeBuddy —— AI 编程助手的深度使用与工作流构建
+> 
+> 📅 最后更新：2026 年 6 月 12 日
+
+---
+
+## 🆕 2026年6月大纲更新说明
+
+> 距初版大纲已过去数月，CodeBuddy 经历了重大版本迭代（当前为 4.x IDE + 2.x CLI），核心能力发生显著变化，大纲做以下调整：
+
+| 更新项 | 说明 |
+|--------|------|
+| **三种形态** | CodeBuddy 已实现 插件/IDE/CLI 三端全覆盖，1.1 节需重点介绍 |
+| **三大交互模式** | Ask（对话）/ Craft（Agent 局部编辑）/ Plan（计划+自主执行）是区别于其他工具的核心差异 |
+| **自定义 Agent** | 2026 年新增能力，用户可创建专属 AI 智能体，1.3 节 Skills 可与 Agent 联动讲解 |
+| **NES 代码补全** | "写一补十"的前瞻式编辑，1.1 节核心卖点之一 |
+| **Memory & Rules** | `.codebuddy/rules` + Memory 形成项目级"记忆系统"，3.3 节需要补入 |
+| **Automations** | 定时任务能力在 CodeBuddy IDE 中存在（recurring + once 模式），1.5 节方向不变 |
+
+**结构调整**：整体四部分框架不做大改，但每节内容需融入最新产品能力。对比竞品时加入 **Qoder（通义灵码）** 和 **WindSurf** 等 2026 年新晋选手。
 
 ---
 
 ## 第一部分：入门教程系列
 
-### 1.1 CodeBuddy 是什么？——不只是 AI 写代码
-- CodeBuddy 的定位与核心能力
-- 和 Claude Code、Cursor、Copilot 的对比
-- 不只是编程：写作、自动化、知识管理的潜力
-- 谁适合用：开发者、技术写作者、项目管理者
+### 1.1 CodeBuddy 是什么？——你的 AI 工作搭档
+- 一句话定位：腾讯云出品的 AI 编程助手，插件/IDE/CLI 三种形态全覆盖
+- 三大交互模式：Ask（问）/ Craft（改）/ Plan（做）
+- 核心能力速览：NES 代码补全、智能对话、Skills 技能库、MCP 工具集成、自定义 Agent
+- **和竞品的真实区别**：Claude Code（纯 CLI）、Cursor（编辑器优先）、Copilot（补全优先）、Qoder（阿里系 Agent 路线）、WindSurf（新兴选手）
+- 不只是编程：用 CodeBuddy 写公众号、搭知识库、做自动化任务
+- 谁适合用：开发者、技术写作者、产品经理、不会写代码但想做工具的人
+- **一个真实故事开场**：我是怎么从"试试看"变成"离不开"的
 
-### 1.2 安装与首次使用
-- IDE 集成方式
-- 账号配置与环境变量
-- 第一个任务：让 CodeBuddy 读取并解释一个项目
-- 界面导航与核心概念
+### 1.2 安装与第一次对话——从零到第一个任务
+- 三种安装方式：IDE 安装 / VS Code 插件 / CLI（npm 全局安装）
+- 账号配置：微信登录 / GitHub 登录
+- **三种模式的第一次体验**：Ask 问个问题 → Craft 改段代码 → Plan 做一个完整功能
+- 界面导航：左侧对话 / 右侧代码编辑 / 底部终端
+- 核心概念解释：Context Window、Token、Project Context（用大白话）
+- 第一个完整任务实操：让 CodeBuddy 读取并解释一个陌生项目
 
-### 1.3 Skills 机制：CodeBuddy 的灵魂
-- 什么是 Skills
-- 内置 Skills 一览
+### 1.3 Skills 机制：CodeBuddy 的"专业技能包"
+- 什么是 Skills：给 AI 装的"专业 App"
+- 内置 Skills 一览（按场景分类）
+- Skills 存放位置：用户级 vs 项目级 `.codebuddy/skills/`
 - 如何加载和切换 Skills
-- Skills 如何影响 AI 的工作方式
-- 实操：用不同 Skills 完成同一个任务看差异
+- Skills + 自定义 Agent 的联动玩法
+- 实操：同一个任务（写公众号文章），加载/不加载 Skills 的差异对比
+- 进阶提示：什么时候该写自己的 Skill
 
-### 1.4 MCP 协议与工具集成
-- MCP（Model Context Protocol）简介
-- 内置 MCP 工具
-- 接入外部 MCP 服务
-- 实战：接入自建 MCP Server
+### 1.4 MCP 协议：让 AI 接入真实世界
+- MCP（Model Context Protocol）大白话解释：AI 的"USB 接口"
+- 为什么需要 MCP：AI 不能上网、不能查数据库、不能调 API 的限制
+- 内置 MCP 工具一览
+- 接入第三方 MCP 服务：数据库、搜索、文件系统
+- 实战演示：接入一个天气查询 MCP，让 CodeBuddy 成为"私人气象员"
+- MCP 配置文件 `.mcp.json` 的结构解读
+- 安全提醒：别把公司数据库暴露给公共 MCP
 
-### 1.5 Automations：让 CodeBuddy 定时工作
-- Automations 的概念
-- 创建第一个定时任务
-- 调度规则（RRULE）详解
-- 单次任务 vs 循环任务
-- 工作目录与权限管理
+### 1.5 Automations：让 CodeBuddy 替你定时工作
+- 什么是 Automations：给 AI 设闹钟
+- 两种模式：定时循环（recurring）vs 一次性（once）
+- 调度规则（RRULE）详解，附带常用模板
+- 第一个定时任务实战：每天早上 9 点生成今日工作简报
+- 工作目录（cwds）与权限
+- 有效期限设置（validFrom / validUntil）：防止过期任务误触发
+- 实用场景举例：日报/周报自动生成、代码库定期巡检、投资日历提醒
 
 ---
 

@@ -1,0 +1,268 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 CodeBuddy 入门教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  MCP 协议<br>让 AI 接入真实世界
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  系列：CodeBuddy 入门教程 · 第 4 篇
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能：</strong>理解 MCP 是什么、知道怎么配、看完三个实战场景就能自己试试。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、MCP 是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、内置能力</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、三大实战场景</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、安全红线</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>有天我想让 CodeBuddy 帮我分析一下数据库里上个月的销售数据。</p>
+
+<p>它的回答是："抱歉，我无法访问你的数据库。"</p>
+
+<p>这句话让我愣了两秒。我想起来——它再聪明，也只是一个大模型，知识有截止日期、没有手、没有眼睛、连不了外部系统。它能写操作数据库的代码，但它自己没法"真的去查"。</p>
+
+<p>这就是 AI 的"信息围墙"。Skills 解决的是"怎么做得好"的问题。但如果你需要 AI 真正动手——访问数据库、上网查东西、操作浏览器——你需要这个：<strong>MCP。</strong></p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  MCP 是什么——史上最接地气的解释
+</p>
+
+<p><strong>MCP</strong>，全称 Model Context Protocol（模型上下文协议）。</p>
+
+<p>我知道，这名字听着就想关页面。别。</p>
+
+<p>最准确的类比：<strong>MCP 是 AI 的 USB 接口。</strong></p>
+
+<p>你插 U 盘 → 电脑能读文件。插打印机 → 电脑能打印。插麦克风 → 电脑能录音。MCP 就是一样的道理：你接入数据库 → AI 能查数据。接入搜索引擎 → AI 能上网。接入文件系统 → AI 能直接读你的本地文件。</p>
+
+<p>这个协议是 Anthropic（Claude 的母公司）在 2024 年底提出来的，现在已经成了 AI 工具的"行规"——Cursor、Claude Code、CodeBuddy 都在用。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  内置能力：不需要配就能用的部分
+</p>
+
+<p>在讲怎么接入外部 MCP 之前，先说 CodeBuddy 已经自带的能力——这些不需要你配任何东西：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>📁 文件系统</strong><br>
+  读你项目里的文件、搜索代码、写入修改<br>
+  <span style="color:#c53030;">写入需要确认</span><br><br>
+  <strong>💻 Shell 终端</strong><br>
+  执行终端命令（npm install、pip install 等）<br>
+  <span style="color:#c53030;">需要确认</span><br><br>
+  <strong>🌐 Web 搜索</strong><br>
+  实时搜索互联网信息<br>
+  <span style="color:#276749;">自动执行</span><br><br>
+  <strong>🖼️ 图片生成</strong><br>
+  根据文字描述生成图片<br>
+  <span style="color:#276749;">自动执行</span>
+</p>
+
+<p>这些能力已经够你玩一阵子了。但真正的"开挂"，是从接入外部 MCP 开始的。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  接入外部 MCP——三大实战场景
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  🗄️ 场景 1：接入数据库，让 AI 帮你查数据
+</p>
+
+<p style="margin-top:10px;">你有一个业务数据库，经常需要临时查点东西——"上周哪个产品的退货率最高""这个月新增了多少用户"。以前你要么自己写 SQL，要么找数据分析同事。</p>
+
+<p>接入数据库 MCP 之后，在 CodeBuddy 里直接问就好。</p>
+
+<p><strong>配置方法（以 PostgreSQL 为例）：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span></strong> 在项目根目录找到或新建 .mcp.json 文件</p>
+<p><strong><span style="color:#8e44ad;">②</span></strong> 写入配置：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  {<br>
+  &nbsp;&nbsp;"mcpServers": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"postgres": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;}<br>
+  }
+</p>
+
+<p><strong><span style="color:#4A90D9;">③</span></strong> 重启 CodeBuddy，AI 就多了一个"数据库工具"</p>
+
+<p>然后你就可以这么问：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "查一下 orders 表里上个月的订单总额，按产品分类汇总，列出 Top 5。"
+</p>
+
+<p>CodeBuddy 会自己写 SQL → 自己执行 → 自己整理结果。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin:12px 0;">
+  ❌ <strong>安全问题说在前头：</strong>上面的连接字符串里直接写了密码，很危险。<br>
+  <span style="color:#276749;">✅ 正确做法：用环境变量 ${DATABASE_URL} 代替明文密码。</span><br>
+  <span style="color:#276749;">✅ 不要把 .mcp.json 提交到 GitHub，尤其里面写了密码的话。</span>
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  🌐 场景 2：接入浏览器，让 AI 自动操作网页
+</p>
+
+<p style="margin-top:10px;">这是我踩过坑之后才真正弄明白的能力。</p>
+
+<p>你装上 Playwright MCP（浏览器自动化工具）之后，AI 能打开浏览器、浏览网页、点击按钮、提取内容。</p>
+
+<p><strong>什么时候用：</strong>你需要从某个网页上批量抓数据、自动填表单、或者测试某个网页功能。</p>
+
+<p><strong>配置方法：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  {<br>
+  &nbsp;&nbsp;"mcpServers": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"playwright": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@anthropic-ai/mcp-playwright"]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;}<br>
+  }
+</p>
+
+<p><strong>实操演示：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "打开 https://example.com/reports，把页面上的所有表格数据整理成 Markdown 格式。"
+</p>
+
+<p>AI 的实际执行过程：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span></strong> 打开浏览器（后台，你看不到窗口）</p>
+<p><strong><span style="color:#8e44ad;">②</span></strong> 访问目标网址</p>
+<p><strong><span style="color:#4A90D9;">③</span></strong> 用选择器定位表格元素</p>
+<p><strong><span style="color:#8e44ad;">④</span></strong> 提取数据</p>
+<p><strong><span style="color:#4A90D9;">⑤</span></strong> 把结果输出为 Markdown 表格</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 这个能力的真正价值：</strong>你不需要学爬虫、不需要学 Selenium、不需要处理反爬。把需求描述清楚就行。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 局限：</strong>涉及到登录的网页会比较麻烦（需要输密码或验证码），不是所有网站都适合这种操作。
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  📚 场景 3：接入知识库，让 AI 变成"内部通"
+</p>
+
+<p style="margin-top:10px;">你们公司肯定有一些散落在各个地方的知识——飞书文档里的报销流程、Confluence 上的技术方案、钉钉里的通知。</p>
+
+<p>这些信息 AI 本来完全不知道。但如果你把公司的知识库通过 MCP 接入，AI 就能直接搜了。</p>
+
+<p><strong>实际体验：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "公司最新的差旅报销标准是多少？"
+</p>
+
+<p>接入内部知识库 MCP 之后，AI 会检索飞书文档 → 找到最新的报销政策 → 返回格式化的答案。</p>
+
+<p>这不是"AI 记住了"，是"AI 能实时检索你们的知识库"。信息更新了，AI 的答案也跟着更新。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  配置文件就长这样——复制即用
+</p>
+
+<p>所有 MCP 配置都写在项目根目录的 .mcp.json 里。文件结构长这样：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  {<br>
+  &nbsp;&nbsp;"mcpServers": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"服务器名1": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "运行的命令",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["参数1", "参数2"]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"服务器名2": {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "python",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-m", "my_mcp_server"]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;}<br>
+  }
+</p>
+
+<p><strong>全局 MCP vs 项目 MCP：</strong></p>
+<p>放在项目目录（.mcp.json）→ 只在这个项目里生效</p>
+<p>放在用户目录（~/.codebuddy/.mcp.json）→ 所有项目通用</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 建议：</strong>通用的（比如 Web 搜索、数据库连接）放全局。跟具体项目相关的（比如公司内部 API）放项目目录。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  四条安全红线
+</p>
+
+<p>MCP 是 AI 的"手"，既然有手了，就要管住它。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ <strong>红线 1：</strong>永远不要在配置文件里写明文密码。<br>
+  <span style="color:#276749;">✅ 用环境变量代替。</span>
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin-top:12px;">
+  ❌ <strong>红线 2：</strong>不要把包含内网地址或密钥的 .mcp.json 提交到公开仓库。<br>
+  <span style="color:#276749;">✅ 加到 .gitignore 里。</span>
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin-top:12px;">
+  ❌ <strong>红线 3：</strong>只接入你了解和信任的 MCP Server。<br>
+  <span style="color:#276749;">✅ 第三方 MCP 可能比你想象的"权限大"——它也许能读你电脑上的任意文件。</span>
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin-top:12px;">
+  ❌ <strong>红线 4：</strong>涉及到生产数据库时，给 MCP 用的数据库账号只给只读权限。<br>
+  <span style="color:#276749;">✅ 别让 AI 有删库的"手"。</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🚀 一句话：</strong>Skills 让 AI 更聪明，MCP 让 AI 有手脚。两者结合，它才能从"会想"变成"会做"。
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 下一篇：Automations 定时任务——最"懒人"的功能，设一次，让 AI 每天自己起来干活
+</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  本文 MCP 配置示例基于 CodeBuddy IDE 4.x 及 MCP 协议标准<br>真实的 MCP Server 名称、命令和参数可能随版本变化
+</p>
+
+</body>

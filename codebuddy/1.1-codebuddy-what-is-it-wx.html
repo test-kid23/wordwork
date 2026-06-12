@@ -1,0 +1,238 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 CodeBuddy 入门教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  CodeBuddy 是什么？<br>你的 AI 工作搭档
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  系列：CodeBuddy 入门教程 · 第 1 篇
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能搞清楚：</strong>CodeBuddy 到底是个啥、和别的工具有什么不一样、你适不适合用。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、一句话定义</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、三大模式</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、适用场景</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、竞品对比</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>去年冬天，我在做一个 side project，用了四个不同的 AI 编程工具。每次切换，都像换了个搭档——习惯要重来、痛点不一样、连说话的方式都得调整。</p>
+
+<p>我试过 Cursor，它的编辑器体验确实舒服，但碰到复杂任务还得靠我手动拆解。试过 Claude Code，脑力最强，可你要是不习惯纯命令行，光学习怎么跟它对话就够喝一壶的。GitHub Copilot？补全王者，但你要它"接个大活"——比如从头搭一个项目——它就不太好使了。</p>
+
+<p>后来我试了 CodeBuddy。说实话，第一印象是"还行，但没觉得特别"。</p>
+
+<p>真正让我留下来的，是用了大概两周之后的一个瞬间：我早上起床，看到它昨晚自动生成的项目日报已经躺在文件夹里——我之前设了一个定时任务，自己都忘了。那一刻我在想：<strong>这东西不只是一个工具，它会替你干活。</strong></p>
+
+<p>所以这篇不是产品说明书，而是我用到现在、踩了无数坑之后的真实认知。我会告诉你它到底是什么、能干什么、跟别家有什么不一样、以及——什么样的人用了会骂娘，什么样的人用了会离不开。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  一句话：腾讯云出品的 AI 开发搭档
+</p>
+
+<p>CodeBuddy 是腾讯云做的 AI 编程助手。但 "AI 编程助手" 这几个字太窄了——我觉得更准确的说法是：<strong>它是一个能读代码、写代码、执行任务、接入外部工具的 AI 工作搭档。</strong></p>
+
+<p>它有三个形态：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> IDE（集成开发环境）</strong><br>独立的桌面软件，打开就能用。你把代码、文档、图片扔进去，它都能理解。适合从零开始做项目、或者你不想折腾 VS Code 配置的情况。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> VS Code 插件</strong><br>在你现有的 VS Code 里装个扩展，侧边栏多一个 AI 对话窗口。适合已经习惯 VS Code、不想换环境的人。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> CLI（CodeBuddy Code）</strong><br>命令行里的 AI 搭档。我给它的定位是"最硬核也最自由"——你可以在终端里让它改代码、跑测试、部署上线，全程不用离开键盘。</p>
+
+<p>我三个都在用，但用得最多的是 IDE 版 + CLI。IDE 用来做日常开发和写作，CLI 用来做快速任务——比如"帮我把这个 SQL 脚本优化一下"，在终端敲一句话，它就干完了。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 个人经验：</strong>如果你不确定用哪个，直接下 IDE 版。安装包大点，但省心。CLI 版等你习惯了 CodeBuddy 的对话方式之后再试，不然很容易被命令行劝退。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  三大模式：不是所有 AI 工具都这么设计
+</p>
+
+<p>CodeBuddy 最核心的设计，是把"你跟 AI 怎么配合"分成了三种模式。这是它和大多数竞品拉开差距的地方。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Ask 模式：问就完事了</p>
+
+<p>你要理解一段代码是干什么的、想学一个新技术、或者需要一个技术方案的思路——用 Ask。</p>
+
+<p>比如说，你接手了一个同事留下的 Node.js 项目，满屏的回调地狱看得头皮发麻。打开 CodeBuddy，切到 Ask 模式，把项目文件夹拖进去，问它："帮我用大白话解释一下这个项目是干嘛的，核心逻辑是什么。"</p>
+
+<p>它会通读整个项目的文件结构，然后给你一份跟人说话一样好懂的总结。</p>
+
+<p>我第一次用这个功能的时候，真实的心理活动是："卧槽，它真的看懂了。"</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Craft 模式：指哪改哪</p>
+
+<p>你有一段代码要改、一个文案要润色、一个 bug 要修——用 Craft。</p>
+
+<p>切到这个模式，你在编辑器里选中一段代码，旁边对话窗口说"把这段的按钮颜色改成深蓝"，它就只改这一段。改完之后会给你看对比，你可以接受也可以拒绝。</p>
+
+<p>Craft 模式最实用的场景其实是<strong>局部微调</strong>。比如你写公众号文章，觉得某一段写得不够好，选中它，告诉 CodeBuddy "这段太啰嗦了，精简一下但保留原来的意思"，几秒钟出结果。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>注意：</strong>Craft 模式下，它只改你让它改的地方，不会顺手把别的东西也动一遍。这是它和 Plan 模式最大的区别。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Plan 模式：你说目标，它自己干</p>
+
+<p>这是 CodeBuddy 真正厉害的模式。</p>
+
+<p>你给一个目标——比如"帮我做一个每日待办事项的网页工具，能在浏览器里用"——它不会直接动手写代码，而是先给你列一份计划：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  1. 创建 HTML 页面结构<br>
+  2. 写 CSS 样式<br>
+  3. 写 JavaScript 交互逻辑<br>
+  4. 添加本地存储功能<br>
+  5. 测试能不能跑
+</p>
+
+<p>你确认之后，它就开始干活——一个一个文件地创建、写代码、检查能不能跑。整个过程你只需要看着，偶尔点个"确认"就行。</p>
+
+<p>Plan 模式最像什么？像你是一个老板，AI 是你的全栈开发。你把需求说清楚，它自己规划、自己执行、自己验收。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  说点别人不敢说的：它不是万能的
+</p>
+
+<p>我在用 CodeBuddy 的几个月里，翻了不止一次车。把这些说出来，比吹它有多好更有价值。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">✅ 哪些场景 CodeBuddy 好用</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> Web 开发</strong><br>前端页面、后端 API、全栈项目：这是它的舒适区，Plan 模式尤其适合。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 脚本工具</strong><br>Python 数据处理、自动化脚本、批量文件操作：这些任务边界清晰，AI 天然擅长。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 文档写作</strong><br>技术文章、项目文档、日报周报：对，CodeBuddy 不只是写代码的，我就是用它来写公众号的。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 代码审查和重构</strong><br>把一段老代码扔给它，"帮我重构一下，提高可读性顺便加注释"，出来的结果比很多初级程序员写得好。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❌ 哪些场景 CodeBuddy 不太行</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 超大型项目</strong><br>代码量 10 万行以上的单体项目：不是说不支持，而是上下文窗口有限，它记不住那么大的项目全貌。解决方式是拆成模块，一个一个来。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 精确计算类需求</strong><br>金融计算、复杂数学推导：所有大模型在这方面都不靠谱，不是 CodeBuddy 的问题。别让它帮你算年终奖。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 游戏开发</strong><br>这是我踩的坑。让它用 Unity 做一个简单 2D 游戏，结果代码能跑、逻辑也对，但整个项目的工程结构一团糟。游戏开发涉及的东西太多（场景、资源、物理引擎），AI 暂时 hold 不住。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 态度要对：</strong>别把它当神，把它当人——一个脑子很快、任劳任怨、但偶尔会犯糊涂的同事。你当老板，它当员工。任务说清楚，结果要检查。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  跟竞品比，到底差在哪
+</p>
+
+<p>我不回避这个问题，因为我选工具的时候最想看的也是对比。以下基于我本人 2025 年到 2026 年对多款产品的长期使用体验。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>Claude Code</strong> — CLI 纯命令行<br>
+  <span style="color:#2b6cb0;">✅ 核心优势：</span>AI 脑力最强，复杂推理甩开别人一截<br>
+  <span style="color:#c53030;">❌ 核心短板：</span>纯 CLI，没图形界面，学习曲线陡<br><br>
+  <strong>Cursor</strong> — AI 增强编辑器<br>
+  <span style="color:#2b6cb0;">✅ 核心优势：</span>编辑器体验丝滑，Tab 补全很舒服<br>
+  <span style="color:#c53030;">❌ 核心短板：</span>AI 能力依赖接入的模型，不能"接大活"<br><br>
+  <strong>GitHub Copilot</strong> — 代码补全工具<br>
+  <span style="color:#2b6cb0;">✅ 核心优势：</span>补全领域毫无争议的第一<br>
+  <span style="color:#c53030;">❌ 核心短板：</span>局限在写代码，不擅长接管整个任务流程<br><br>
+  <strong>通义灵码/Qoder</strong> — AI 编程 Agent<br>
+  <span style="color:#2b6cb0;">✅ 核心优势：</span>中文语境好，阿里生态对接顺<br>
+  <span style="color:#c53030;">❌ 核心短板：</span>独立生态，和 CodeBuddy 路线不同<br><br>
+  <strong>CodeBuddy</strong> — 全形态 AI 搭档<br>
+  <span style="color:#2b6cb0;">✅ 核心优势：</span>形态最全 + Plan 模式 + 腾讯云免费额度<br>
+  <span style="color:#c53030;">❌ 核心短板：</span>CLI 版成熟度不如 Claude Code
+</p>
+
+<p>还有一个没列在上面但提一嘴的——<strong>WindSurf</strong>，2026 年冒出来的新玩家，主打"AI 驱动的项目工作流"，方向有意思但还太早期。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 所以 CodeBuddy 适合谁？</p>
+
+<p><strong><span style="color:#4A90D9;">①</span></strong> 你不想为了一句话的功能在不同工具之间切来切去</p>
+
+<p><strong><span style="color:#8e44ad;">②</span></strong> 你需要一个"从想法到成品"的全流程搭档，而不只是一个代码补全器</p>
+
+<p><strong><span style="color:#4A90D9;">③</span></strong> 你可能会用到腾讯云的服务（CloudBase 数据库、CloudStudio 部署），CodeBuddy 跟这些天然打通</p>
+
+<p><strong><span style="color:#8e44ad;">④</span></strong> 你在乎免费额度——目前个人用完全够，不需要掏钱</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  顺便说一句：CodeBuddy 和 WorkBuddy 是什么关系
+</p>
+
+<p>这个问题问的人太多了，单独说清楚。</p>
+
+<p>WorkBuddy 也是腾讯云出的，定位是"自然语言编程工具"——你说大白话，它直接给你成品。不用懂代码，不用装环境，打开就能用。</p>
+
+<p>看起来很像？其实差很远。我用过一个不太严谨但很好懂的类比：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>WorkBuddy</strong><br>
+  <span style="color:#4A90D9;">目标用户：</span>完全不会写代码的人<br>
+  <span style="color:#4A90D9;">核心场景：</span>"帮我做一个XX工具"<br>
+  <span style="color:#4A90D9;">使用方式：</span>网页打开，说需求，拿成品<br>
+  <span style="color:#4A90D9;">事后能改吗：</span>能，但改起来不太灵活<br>
+  <span style="color:#4A90D9;">接入外部工具：</span>不支持<br>
+  <span style="color:#4A90D9;">定时自动化：</span>不支持<br>
+  <span style="color:#4A90D9;">最适合：</span>一次性小工具<br><br>
+  <strong>CodeBuddy</strong><br>
+  <span style="color:#8e44ad;">目标用户：</span>会写一点代码，或愿意学的人<br>
+  <span style="color:#8e44ad;">核心场景：</span>"帮我维护/开发这个项目"<br>
+  <span style="color:#8e44ad;">使用方式：</span>IDE/插件/CLI，深度嵌入工作流<br>
+  <span style="color:#8e44ad;">事后能改吗：</span>能，而且是它的强项<br>
+  <span style="color:#8e44ad;">接入外部工具：</span>支持（MCP）<br>
+  <span style="color:#8e44ad;">定时自动化：</span>支持（Automations）<br>
+  <span style="color:#8e44ad;">最适合：</span>持续迭代的项目
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>WorkBuddy 是"出门吃碗面"——快、省事、不用学。<br>CodeBuddy 是"置办一套厨房"——前期多花点时间，但你能做的菜多了去了。</strong>
+</p>
+
+<p>我两个都在用。想做个小工具快速交差？开 WorkBuddy，5 分钟搞定。要长期维护一个项目、需要 Skills 和 MCP 加持？开 CodeBuddy。两者不互斥，更像手电钻和瑞士军刀的区别。</p>
+
+<p>但如果你只选一个，就看你对自己的定位：<strong>你是只想"用 AI 做东西"，还是想"让 AI 成为你的长期工作搭档"。</strong>前者选 WorkBuddy，后者选 CodeBuddy。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🚀 一句话总结：</strong>CodeBuddy 不是最强的也不是最快的，但它是最均衡的那个——像一台三合一洗衣机，洗衣、烘干、熨烫一条龙。你不用在多个工具之间切来切去，一个就够了。
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 下一篇：第一次安装和第一个任务——从零到一个能跑的小工具，15 分钟搞定
+</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  本文基于作者 2025-2026 年使用 CodeBuddy（IDE 4.x / CLI 2.x 版本）及竞品产品的实际体验撰写<br>产品功能随版本更新可能发生变化
+</p>
+
+</body>

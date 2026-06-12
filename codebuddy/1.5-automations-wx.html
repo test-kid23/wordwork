@@ -1,0 +1,249 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 CodeBuddy 入门教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Automations<br>让 CodeBuddy 替你定时工作
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  系列：CodeBuddy 入门教程 · 第 5 篇
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能：</strong>创建自己的定时任务、看懂调度规则、把每天重复的事都交给 AI。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、第一个任务</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、调度规则</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、6 个实战</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、进阶技巧</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>每天早上我到工位，第一件事不是写代码，是打开 CodeBuddy 看昨晚的结果。</p>
+
+<p>日报草稿已经生成了，代码库巡检报告躺在那，今天要发的公众号推文初稿都写好了。我睡着的 8 个小时里，一个我设置的定时任务一直在干活。</p>
+
+<p>Automations 是那种功能——用之前你觉得"还好吧，手动做也不麻烦"，用之后你觉得"我之前是怎么办到的"。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  一句话：给 AI 设个闹钟
+</p>
+
+<p>Automations 就是定时任务。到了你指定的时间，CodeBuddy 自动执行你设好的指令。</p>
+
+<p>两种模式：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🔄 <strong>循环任务（Recurring）：</strong>每天、每周、每几小时——一直跑下去
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ⏰ <strong>一次性任务（Once）：</strong>在指定的时间跑一次
+  </span>
+</p>
+
+<p>和 Skills、MCP 的关系，一句话说清楚：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>Skills</strong> → AI "做得好不好"<br>
+  <strong>MCP</strong> &nbsp;&nbsp;&nbsp;→ AI "能操作什么"<br>
+  <strong>Automations</strong> → AI "什么时候干"
+</p>
+
+<p>三者合起来，你才真的有了一支 AI 团队。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  创建第一个 Automation——每天早上 8 点生成工作简报
+</p>
+
+<p>我带你走一遍：</p>
+
+<p><strong><span style="color:#4A90D9;">第 1 步：</span></strong>打开 CodeBuddy，在对话面板找到 Automations（通常在设置或扩展面板里）。</p>
+
+<p><strong><span style="color:#8e44ad;">第 2 步：</span></strong>点击"新建 Automation"，填下面的内容：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>名称：</strong>每日工作简报<br>
+  <strong>提示词：</strong>扫描当前项目的变更记录，总结今天的工作重点，列出 3-5 件优先级最高的事。如果发现任何代码问题（lint 错误、测试失败、未提交的变更），单独列出来。<br>
+  <strong>调度类型：</strong>循环（Recurring）<br>
+  <strong>调度规则：</strong>FREQ=DAILY;BYHOUR=8;BYMINUTE=0<br>
+  <strong>工作目录：</strong>选你当前的项目文件夹<br>
+  <strong>状态：</strong>激活（ACTIVE）
+</p>
+
+<p><strong><span style="color:#4A90D9;">第 3 步：</span></strong>保存。它会立刻按调度开始排队。</p>
+
+<p>第二天早上 8 点整，打开 CodeBuddy，你会看到一条新的对话记录——就是它自动生成的简报。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 第一次看到这个结果是什么感觉？</strong>我的感受是："这个功能居然不要钱。"
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  调度规则速查——5 个你直接复制就行的模板
+</p>
+
+<p>调度规则用的是 RRULE 格式（iCalendar 标准，跟日历的重复规则一样）。你不用学，复制粘贴改参数就行。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>📅 每天早上 9 点</strong><br>
+  FREQ=DAILY;BYHOUR=9;BYMINUTE=0<br><br>
+  <strong>📅 每周一上午 10 点</strong><br>
+  FREQ=WEEKLY;BYDAY=MO;BYHOUR=10;BYMINUTE=0<br><br>
+  <strong>📅 每周一三五下午 3 点</strong><br>
+  FREQ=WEEKLY;BYDAY=MO,WE,FR;BYHOUR=15;BYMINUTE=0<br><br>
+  <strong>📅 每 2 小时跑一次</strong><br>
+  FREQ=HOURLY;INTERVAL=2<br><br>
+  <strong>📅 一次性：明天下午 2 点</strong><br>
+  scheduledAt: 2026-06-13T14:00（不用 RRULE）
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 注意：</strong>BYHOUR 和 BYMINUTE 用你本地的时区，不用换算成 UTC。CodeBuddy 会自动处理。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  6 个我真实在用的 Automation
+</p>
+
+<p>不跟你整虚的，下面是我现在在跑的真实任务。每个都附上提示词和调度，你可以直接改改就上。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1. 每日日报草稿</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>扫描今天项目里所有的 git 改动，按功能模块分类汇总。每条改动用一句话说清楚做了什么。最后总结今天完成了什么、还有什么没做、明天的计划。<br>
+  <strong>调度：</strong>FREQ=DAILY;BYHOUR=8;BYMINUTE=30
+</p>
+
+<p>每天早上到公司，昨天干的活已经被整理成日报了，稍微润色就能发。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2. 每周一生成周报初稿</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>汇总本周的所有日报，提炼成周报格式：本周完成项、进行中项、下周计划、遇到的问题。语气简洁，用 bullet points。<br>
+  <strong>调度：</strong>FREQ=WEEKLY;BYDAY=FR;BYHOUR=17;BYMINUTE=0
+</p>
+
+<p>周五下午 5 点自动生成，下班前我改改就发了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3. 每周代码库质量巡检</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>扫描项目的所有代码文件，检查：1) 是否有 TODO 标记超过 2 周未处理 2) 是否有被注释掉的大段代码 3) 依赖包是否有已知安全漏洞 4) 测试覆盖率是否有明显下降。输出巡检报告。<br>
+  <strong>调度：</strong>FREQ=WEEKLY;BYDAY=MO;BYHOUR=9;BYMINUTE=0
+</p>
+
+<p>这个任务我会加载 security-checklist Skill 和 MCP 搜索能力，两个配合检查安全问题。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4. 每天早上行业新闻摘要</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>用 Web 搜索功能，搜索"AI 编程工具 最新动态"，整理今天最重要的 5 条行业新闻。每条包括标题、一句话摘要、来源链接。<br>
+  <strong>调度：</strong>FREQ=DAILY;BYHOUR=7;BYMINUTE=30
+</p>
+
+<p>这个需要配合 MCP 的 Web 搜索能力。早上一看就知道行业发生了什么。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5. 每隔 4 小时检查服务是否正常</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>用 curl 检查 [你的服务 URL] 的 /health 接口是否返回 200。如果不正常，立即生成告警信息。<br>
+  <strong>调度：</strong>FREQ=HOURLY;INTERVAL=4
+</p>
+
+<p>配合 MCP 终端命令执行，相当于一个轻量级的监控。免费的。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6. 写文章时的进度推进助手</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>提示词：</strong>检查本系列文章的进度。列出每篇的状态（已完成/草稿/未开始），估算整体完成百分比，给出接下来应该优先写哪一篇的建议。<br>
+  <strong>调度：</strong>FREQ=DAILY;BYHOUR=21;BYMINUTE=0
+</p>
+
+<p>我在写这个 CodeBuddy 系列的时候设的。每天睡前看一眼，知道进度到哪了。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  三个进阶技巧——设得好和设得烂的区别
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 技巧 1：给任务设有效期</p>
+
+<p>有些临时任务跑完就该停，一直跑着浪费资源。用 validFrom 和 validUntil：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  validFrom: "2026-06-12" —— 从 6 月 12 号开始有效<br>
+  validUntil: "2026-06-30" —— 到 6 月 30 号自动失效
+</p>
+
+<p>过了有效期任务不会触发。适合临时项目、短期冲刺。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 技巧 2：限制运行时长</p>
+
+<p>有时候 AI 会跑偏，一个任务跑十几分钟没结果。加个 maxDurationMinutes：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  maxDurationMinutes: 15 —— 最多跑 15 分钟，超时就停
+</p>
+
+<p>我在大多数任务上设 15-30 分钟。日常任务不可能需要更久。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 技巧 3：控制同时运行的数量</p>
+
+<p>别开太多同时跑的定时任务。CodeBuddy 的 AI 线程有上限，太多了会排队甚至失败。我的经验：<strong>3-5 个是甜区</strong>。超过了就看看能不能合并——比如三个日报相关的合成一个。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>五篇文章写到这里，我想说的其实就一句：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 Skills + MCP + Automations，三件套集齐之后，CodeBuddy 就不再是"一个工具"，而是"一个同事"。</strong>
+</p>
+
+<p>Skills 让它懂你的规矩。MCP 让它能碰你的系统。Automations 让它不用你催。你在睡觉的时候它在干活，你在开会的时候它在巡检，你在摸鱼的时候它在写报告。</p>
+
+<p>但话说回来——<strong>前提是你得配好。</strong>配得乱七八糟的 Automations 比没有还糟，因为你会被一堆自动生成的半成品淹掉。</p>
+
+<p>所以这篇的真正价值不在那几条规则和模板，在于告诉你：<strong>想清楚"什么事是重复的、无聊的、但每天都得做的"，然后让 AI 去干。</strong></p>
+
+<p>比如我这个系列的文章，第一稿是它帮我写的框架，我负责"加人味"——加吐槽、加故事、加真实体验。没有它我可能两周写一篇，有了它我三天出一篇。</p>
+
+<p>工具是放大镜，不是魔法棒。你懒，它帮你勤快。你乱，它帮你更乱。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 CodeBuddy 入门系列（全 5 篇）已完结</strong><br><br>
+  下一篇系列预告：实战场景系列——用 CodeBuddy 加速日常开发、搭建自动化写作流水线、接管项目管理与文档维护
+</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  本文 Automations 配置基于 CodeBuddy IDE 4.x 版本<br>调度规则遵循 iCalendar RRULE 标准（RFC 5545）
+</p>
+
+</body>

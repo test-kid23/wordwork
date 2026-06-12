@@ -1,6 +1,6 @@
 # wordwork · AI 系列文章写作项目
 
-> 微信公众号 AI 深度内容创作，面向**想学 AI 但不知道怎么学**的人。
+> 多平台知识写作工程，面向**想学 AI 但不知道怎么学**的人，以及**想提升职业能力的软件测试工程师**。
 
 ---
 
@@ -21,7 +21,7 @@
 
 ## 目标受众
 
-职场人 · 自由职业者 · 自媒体博主 · 小型创业者 · 技术从业者
+职场人 · 自由职业者 · 自媒体博主 · 小型创业者 · 技术从业者 · 软件测试工程师
 
 ---
 
@@ -32,36 +32,21 @@ wordwork/
 ├── README.md                    # 本文件
 ├── PROJECT_CONTEXT.md           # 项目上下文（供 AI 辅助创作使用）
 │
-├── ai_learning/                 # AI 学习系列（入门向）
-│   ├── ai-beginner-guide.md
-│   ├── advanced-ai-team-building-guide.md
-│   ├── llama_cpp_deploy_guide.md
-│   └── local-llm-gpu-guide.md
+├── ai_learning/                 # AI 学习系列（入门向）✅ 4 篇
+├── ai_road/                     # AI 进阶之路（深度版）✅ 7 章
+├── ai_road_wx/                  # AI 进阶之路（公众号适配版）✅ 6 篇
 │
-├── ai_road/                     # AI 进阶之路系列（深度版，7 章）
-│   ├── chapter-01-cognitive-upgrade.md
-│   ├── chapter-02-core-principles.md
-│   ├── chapter-03-team-architectures.md
-│   ├── chapter-04-workflow-engine.md
-│   ├── chapter-05-advanced-ops.md
-│   ├── chapter-06-pitfalls.md
-│   └── chapter-07-summary-action.md
+├── codebuddy/                   # CodeBuddy 深度使用系列 🔥 连载中 5 篇
+├── rag/                         # RAG 私有知识库系列 🔥 连载中 4 篇
+├── claude_code/                 # Claude Code 工作流系列 🔥 连载中 1 篇
+├── ai_test_xhs/                 # AI + 测试 小红书系列 🔥 连载中 3 篇
+├── testengineer/                # 软件测试工程师技能与职业发展 🆕 新建
+├── personal_skill/              # 个人技术备忘
 │
-├── ai_road_wx/                  # AI 进阶之路（公众号适配版，6 篇）
-│   ├── wx-01-pitfalls.md
-│   ├── wx-02-main.md
-│   ├── wx-03-studio.md
-│   ├── wx-04-local-dev.md
-│   ├── wx-05-ops.md
-│   └── wx-06-action.md
-│
-├── hermes/                      # Hermes 智能 Agent 框架系列
-├── openclaw/                    # OpenClaw 开源 LLM 工具链系列
-├── openhuman/                   # OpenHuman AI 赋能个体系列
-├── llamacpp/                    # llama.cpp 本地部署大模型系列
-├── rag/                         # RAG 私有知识库系列
-├── codebuddy/                   # CodeBuddy 深度使用系列
-└── claude_code/                 # Claude Code 工作流系列
+├── hermes/                      # Hermes 智能 Agent 框架系列（待创作）
+├── openclaw/                    # OpenClaw 开源 LLM 工具链系列（待创作）
+├── openhuman/                   # OpenHuman AI 赋能个体系列（待创作）
+└── llamacpp/                    # llama.cpp 本地部署大模型系列（待创作）
 ```
 
 ---
@@ -76,23 +61,30 @@ wordwork/
 | 进阶之路（深度版） | `ai_road/` | 7 章 | 体系化 AI 协作方法论 |
 | 进阶之路（公众号版） | `ai_road_wx/` | 6 篇 | 面向公众号读者的精编版 |
 
-### 规划中系列（大纲已就绪）
+### 连载中系列
+
+| 系列 | 目录 | 进度 | 核心主题 |
+|------|------|------|---------|
+| CodeBuddy | `codebuddy/` | 5/19 篇 | CodeBuddy 深度使用与工作流构建 |
+| RAG | `rag/` | 4/19 篇 | 私有知识库从原理到企业级平台 |
+| Claude Code | `claude_code/` | 1/17 篇 | Claude Code 从入门到项目级应用 |
+| AI + 测试（小红书） | `ai_test_xhs/` | 3/13 篇 | AI 辅助软件测试实战 |
+
+### 规划中系列
 
 | 系列 | 目录 | 规划篇数 | 核心主题 |
 |------|------|---------|---------|
+| 测试工程师 | `testengineer/` | 待定 | 软件测试技能与职业发展 |
 | Hermes | `hermes/` | 16 篇 | 智能 Agent 框架入门→生产部署 |
 | OpenClaw | `openclaw/` | 16 篇 | 开源 LLM 工具链全流程实战 |
 | OpenHuman | `openhuman/` | 17 篇 | AI 赋能个人效率与能力提升 |
 | llama.cpp | `llamacpp/` | 19 篇 | 本地大模型部署从编译到工作站 |
-| RAG | `rag/` | 19 篇 | 私有知识库从原理到企业级平台 |
-| CodeBuddy | `codebuddy/` | 19 篇 | CodeBuddy 深度使用与工作流构建 |
-| Claude Code | `claude_code/` | 17 篇 | Claude Code 从入门到项目级应用 |
 
 ---
 
 ## 内容深度关键词
 
-多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化
+多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化 · 软件测试 · 职业发展
 
 ---
 
@@ -100,7 +92,7 @@ wordwork/
 
 1. **不追热点，建体系** — 每篇文章服务于整体知识框架
 2. **可操作，不空谈** — 每一步读者都能跟着做
-3. **有场景，接地气** — 从职场人、自由职业者的真实需求出发
+3. **有场景，接地气** — 从职场人、自由职业者、测试工程师的真实需求出发
 4. **持续迭代** — 跟随 AI 浪潮更新内容，大纲不是死的
 
 ---

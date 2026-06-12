@@ -1,0 +1,267 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 CodeBuddy 入门教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Skills 机制<br>给 AI 装上"专业技能包"
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  系列：CodeBuddy 入门教程 · 第 3 篇
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能：</strong>理解 Skills 是什么、知道怎么加载、看完 A/B 对比之后自己会选。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、三个比喻</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、存放位置</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、TOP 5 推荐</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、A/B 对比</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、避坑规则</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>我用了差不多三个月 CodeBuddy 之后，才发现自己一直在"裸奔"。</p>
+
+<p>之前我就是把它当成一个高级版 ChatGPT 嵌在代码编辑器里——聊天、改代码、生成文件。用着还行，但没觉得跟 Cursor 有啥本质区别。</p>
+
+<p>直到有一次，我随手加载了一个叫 <strong>python-best-practices</strong> 的 Skill。然后做了个测试：把同一个需求——"写一个 REST API 接口，带参数校验和错误处理"——让它在加载 Skill 和没加载的情况下各写一遍。</p>
+
+<p>结果让我心里一沉。</p>
+
+<p>没加载 Skill 的那个版本，功能上能用，但代码像实习生写的：函数名随意、没有类型标注、异常处理只糊了一层 try-catch、连 request body 都没校验。</p>
+
+<p>加载了 Skill 的版本，完全变了个样——分层架构（Router → Service → Repository）、Pydantic v2 数据模型校验、异步 async/await、所有异常分支都有对应的 HTTP 状态码返回，甚至主动写了单元测试。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 同样的模型，同样的需求，出来的东西天差地别。不是 AI 变聪明了，是 Skill 给它"上了规矩"。</strong>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  Skill 到底是个啥——三个比喻讲清楚
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 比喻1：给 AI 安装 App</p>
+
+<p>你手机不装 App 的时候只能打电话发短信。装了地图 App → 能导航，装了支付宝 → 能付款。Skill 也一样——不装的时候 AI 就是个通用助手，装了特定 Skill → 它在那个领域突然变"专业"了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 比喻2：给新同事发工作手册</p>
+
+<p>你招了个新同事，不告诉他公司流程、命名规范、技术栈偏好，他只能按自己习惯来，出来的结果五花八门。你给他发一份"内部开发规范"——他马上就按规矩办事了。Skill 就是这份"工作手册"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 比喻3：足球队的战术板</p>
+
+<p>没有战术板就是野球——大家各跑各的。摆了战术板，每个人知道什么时候该跑位、什么时候该回防。Skill 就是 AI 的战术板。</p>
+
+<p>技术上讲，Skill 是一组<strong>预定义的提示词 + 工具调用规则 + 领域知识</strong>的打包文件，放在 .codebuddy/skills/ 目录下。当你在对话中加载某个 Skill，CodeBuddy 会把这组指令注入到 AI 的"系统提示"里——相当于在 AI 干活之前，先给它读一遍"工作规范"。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  Skills 藏在哪里——两层存储，用法不同
+</p>
+
+<p>Skill 有两个存放位置，它们的作用范围不一样：</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  📁 用户级 Skills（~/.codebuddy/skills/）
+</p>
+<p style="margin-top:10px;">在你电脑上<strong>所有项目通用</strong>。适合放"通用型"技能：比如 article-writing（文章写作）、brainstorm（头脑风暴）。装一次，所有项目都能用。</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  📁 项目级 Skills（项目根目录/.codebuddy/skills/）
+</p>
+<p style="margin-top:10px;"><strong>只在这个项目里生效</strong>。适合放"项目专属"技能：比如团队内的代码规范、特定框架的最佳实践。跟项目代码一起提交到 Git，团队共享。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 简单原则：</strong>能用项目级的就用项目级。因为用户级 Skills 越积越多之后会拖慢 AI 响应速度——每次对话都要把所有用户 Skills 加载进上下文，即使你用不上。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  值得一试的内置 Skills——我的 TOP 5 排名
+</p>
+
+<p>CodeBuddy 内置了几十个 Skills，不用全部学，先试试这几个。这是我的真实使用频率排名，从高到低：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥇 brainstorm —— 头脑风暴</p>
+
+<p>用得最多。每次遇到"不知道该怎么做"的问题，直接加载它。</p>
+
+<p><strong>适合场景：</strong>想不清技术方案、不确定功能怎么设计、需要有人跟你讨论产品方向。</p>
+
+<p><strong>实操一句：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "我现在要做一个 XXX，帮我 brainstorm 一下技术选型和架构方案。"
+</p>
+
+<p>它的回答不是糊弄的"你可以用 A 也可以用 B"——它会真的追问你约束条件（用户量多少？预算多少？团队几个人？），然后给你结构化的分析。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥈 diagnose —— Bug 诊断</p>
+
+<p>碰到 bug 不知道怎么排查的时候，它是救星。</p>
+
+<p><strong>适合场景：</strong>程序报错但看不懂错误信息、性能变慢找不到原因、线上出问题需要快速定位。</p>
+
+<p><strong>实操一句：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "这个项目跑起来之后内存一直在涨，帮我诊断一下是不是有内存泄漏。"
+</p>
+
+<p>它会引导你：先复现 → 缩小范围 → 提出假设 → 验证 → 修复。不是一次性给答案，而是带着你找到答案。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥉 article-writing —— 写文章</p>
+
+<p>说实话，我写公众号的时候一定会加载它。</p>
+
+<p><strong>适合场景：</strong>写技术文章、教程、产品文档、公众号推文。</p>
+
+<p>如果你只用它写作，质感会很 AI——我的做法是让它出框架和草稿，然后我自己改语气、换例子、加真实体验。它负责"不出错"，我负责"有人味"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 python-api-endpoint-creator —— API 开发</p>
+
+<p>写 Python 后端必备。加载之后，它会自动采用 Controller → Manager → Repository 的分层架构，每个层只做自己该做的事。</p>
+
+<p>如果不加载这个 Skill，你可能得到的是一个把所有逻辑塞在一个函数里的"意大利面"代码。这个 Skill 的价值不是让你写得快，是让你的代码以后改得动。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 to-issues —— 需求拆解</p>
+
+<p>把一个大计划拆成可以独立开工的 Issue。我在做复杂项目的时候，先用 brainstorm 想方案，再用 to-issues 拆任务。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  A/B 对比：同一个需求，有 Skill 和没 Skill 天差地别
+</p>
+
+<p>说得再多不如看代码。我拿一个真实需求来演示。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>需求：</strong>"用 Python 写一个用户注册的 API 接口，包含用户名、邮箱、密码三个字段，邮箱要校验格式，密码至少 8 位。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🔴 没加载 Skill 的版本</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from flask import Flask, request, jsonify<br>
+  import re<br><br>
+  app = Flask(__name__)<br><br>
+  @app.route('/register', methods=['POST'])<br>
+  def register():<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;data = request.get_json()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;username = data.get('username')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;email = data.get('email')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;password = data.get('password')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return jsonify({"error": "invalid email"})<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;if not password or len(password) &lt; 8:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return jsonify({"error": "password too short"})<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;return jsonify({"msg": "ok"})
+</p>
+
+<p>能用，但问题很明显：每个函数开头的 data.get() 重复了三次、错误信息不统一、没有类型定义、框架用了没人维护的 Flask。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🟢 加载 Skill 的版本</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # routers/user_router.py<br>
+  from fastapi import APIRouter, Depends<br>
+  from pydantic import BaseModel, EmailStr, Field<br>
+  from services.user_service import UserService<br><br>
+  router = APIRouter(prefix="/users", tags=["users"])<br><br>
+  class RegisterRequest(BaseModel):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;username: str = Field(..., min_length=2, max_length=50)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;email: EmailStr<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;password: str = Field(..., min_length=8, max_length=128)<br><br>
+  @router.post("/register")<br>
+  async def register(req: RegisterRequest, service: UserService = Depends()):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"""Register a new user account."""<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;user = await service.create_user(req)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;return {"id": user.id, "username": user.username, "email": user.email}
+</p>
+
+<p>区别立竿见影：Pydantic 模型统一管理输入校验、FastAPI 的 async/await、依赖注入（Depends）、docstring 注释、分层结构清晰。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 这不是"写法不同"的问题，是工程质量的代差。</strong>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  两个你必须知道的避坑规则
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ <strong>规则1：同时加载的 Skill 别超过 3 个</strong><br>
+  每个 Skill 都会消耗 AI 的"上下文预算"（你可以理解为 AI 的短期记忆力）。加载太多 Skill，AI 记不住你的项目细节，反而变笨。<br>
+  <span style="color:#276749;">✅ 写代码时加载 1 个编程 Skill + 如果涉及测试就加 1 个测试 Skill。写作时只加载 article-writing。别贪多。</span>
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;margin-top:12px;">
+  ❌ <strong>规则2：不要同时加载冲突的 Skill</strong><br>
+  比如 python-best-practices 和 kotlin-best-practices——同时加载会让 AI 搞混应该用哪套规范。<br>
+  <span style="color:#276749;">✅ 写 Python 就只加载 Python 相关的，写 Kotlin 就只加载 Kotlin 的。</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  Skills + 自定义 Agent = 真正的 AI 团队
+</p>
+
+<p>2026 年 CodeBuddy 新增了自定义 Agent 功能，你可以创建专属于你的 AI 智能体。</p>
+
+<p>最实用的玩法：给每个 Agent 预设不同的 Skills 组合，像一个团队里不同分工的成员：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🔍 <strong>代码审查员 Agent：</strong>security-checklist + testing-strategies
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ⚡ <strong>API 开发 Agent：</strong>python-api-endpoint-creator + python-best-practices
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✍️ <strong>写作助理 Agent：</strong>article-writing + brainstorm
+  </span>
+</p>
+
+<p>切换 Agent = 切换角色，不用每次都手动加载 Skill。这是入门到进阶的转折点——别急着学，但记住有这条路。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🚀 一句话：</strong>Skills 是 CodeBuddy 从"能用"到"好用"的那道门槛。没跨过去之前，你觉得它就是个大模型聊天框。跨过去之后，你会发现自己多了好几个"专业副手"。
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 下一篇：MCP——听起来吓人但其实很好玩的东西，它能拆掉 AI 的"信息围墙"
+</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  本文 Skills 体验基于 CodeBuddy IDE 4.x 版本<br>内置 Skills 列表随产品迭代会更新，以你实际看到的为准
+</p>
+
+</body>
