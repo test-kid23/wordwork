@@ -1,0 +1,320 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 RAG 入门教程</span>
+</p>
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  嵌入模型的选择与使用<br>选对嵌入模型，检索效果翻倍
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  你的知识库能不能"找到对的内容"，全看这个组件
+</p>
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>这是 RAG 入门教程系列的第 4 篇——第一期的收官之作。前面讲了原理、搭建、向量数据库，这篇聚焦 RAG 最重要的"翻译官"——嵌入模型。选对它，你的知识库检索效果直接翻倍。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">嵌入原理</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">开源vs商业</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">中文模型推荐</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">多语言实践</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">维度权衡</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">实战切换</span>
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ====== 章节 1 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  开篇：嵌入模型，RAG 的"翻译官"
+</p>
+<p>前两篇文章，我们搭了 RAG 系统，选了向量数据库。但还有一个关键的组件，直接决定你知识库的检索效果——<strong>嵌入模型（Embedding Model）。</strong></p>
+<p>它做的事很简单，但影响巨大：<strong>把文字变成向量。</strong></p>
+<pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;text-align:center;">
+"公司年假5天" → [0.23, -0.67, 0.89, ..., 0.12, -0.45]
+</pre>
+<p>如果这个"翻译"不准确，"公司年假 5 天"可能被误解为"公司年会 5 天"——那后面的检索、生成全歪了。</p>
+<p style="background:#f0f7ff;padding:14px 16px;border-radius:8px;border:1px solid #b8d4f0;color:#3a5a7e;font-size:14px;margin:12px 0;line-height:2;">
+  <strong>🎯 一句话：</strong>嵌入模型决定了你的知识库能不能"找到对的内容"。它好，检索就准；它差，再好的 LLM 也救不回来。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 2 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  嵌入模型是怎么工作的？
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 核心概念：语义向量</p>
+<p style="background:#f5f0ff;padding:12px 16px;border-radius:8px;border:1px solid #c8b8f0;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>意思相近的文字，向量距离也相近；意思不同的文字，向量距离很远。</strong>
+</p>
+<pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;">
+<span style="color:#98c379;">距离近 = 语义相似</span>
+"年假怎么申请" ≈ "申请年假流程"  <span style="color:#5c6370;">← 近了！</span>
+"年假怎么申请" ≠ "加班怎么算"      <span style="color:#5c6370;">← 远了！</span>
+</pre>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 嵌入模型 ≠ 大语言模型</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">维度</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">嵌入模型</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">大语言模型（LLM）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">输入</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">文字</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">文字（prompt）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">输出</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">固定长度的向量（如768维）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">自然语言文本</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">任务</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">把意思"压缩"成向量</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">理解并生成文字</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">大小</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">较小（几十MB到几GB）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">很大（几GB到几百GB）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">运行方式</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">无状态，每次独立</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">有上下文，连续生成</td></tr>
+</table>
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 你在 RAG 里需要两个模型：</strong>嵌入模型负责"找我想要的内容"，LLM 负责"基于内容写出回答"。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 3 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  开源 vs 商业：全景对比
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 8px 0;">🔹 商业（API）嵌入模型</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">模型</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">MTEB 检索</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">维度</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">成本/百万Token</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">OpenAI text-embedding-3-large</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.64</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">1536（可缩）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">$0.13</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Cohere Embed v4</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.65</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">1024</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">$0.10</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Voyage-4 Large</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.66</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">1024</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">$0.12</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Jina Embeddings v5</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.62</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">512-2048 可变</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">$0.10</td></tr>
+</table>
+</p>
+<p>✅ <strong>优势：</strong>开箱即用，持续更新，准确率领先</p>
+<p>❌ <strong>劣势：</strong>数据要上传到服务商，合规受限；大规模成本高</p>
+
+<p style="font-size:16px;font-weight:700;color:#2e7d32;margin:16px 0 8px 0;">🔹 开源（本地部署）嵌入模型</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">模型</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">MTEB 检索</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">维度</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">硬件需求</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">BGE-M3 ⭐</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.61</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">1024</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">2-4GB 显存 / CPU可跑</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Qwen3-Embedding-8B</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.68</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">4096</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">16GB+ 显存</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">NV-Embed-v2</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.70</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">4096</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">16GB+ 显存</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Harrier-OSS-v1</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.71</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">4096</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">16GB+ 显存</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">Nomic Embed v2</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">0.62</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">768</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">CPU 可跑</td></tr>
+</table>
+</p>
+<p>✅ <strong>优势：</strong>数据不出本地，零 API 成本，完全可控，批量成本极低</p>
+<p>❌ <strong>劣势：</strong>需要自己部署，大模型（8B）需要好显卡</p>
+<p style="background:#f5f5f5;padding:10px 14px;border-radius:8px;color:#888;font-size:13px;margin:12px 0;">
+  📖 以上数据综合参考 MTEB 官方排行（2026.4）、Markaicode 2026.5 实测报告、以及 AIHubPlus 嵌入模型指南。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 4 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  2026 年中文嵌入模型推荐
+</p>
+
+<!-- BGE-M3 -->
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 6px 0;">⭐ 首选推荐：BGE-M3</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#ebf4ff;"><td style="border:1px solid #e0e0e0;padding:6px 10px;font-weight:700;width:80px;">产商</td><td style="border:1px solid #e0e0e0;padding:6px 10px;">智源研究院（BAAI）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:6px 10px;font-weight:700;">协议</td><td style="border:1px solid #e0e0e0;padding:6px 10px;color:#2e7d32;font-weight:700;">MIT（最宽松，商用无限制）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:6px 10px;font-weight:700;">参数</td><td style="border:1px solid #e0e0e0;padding:6px 10px;">568M（轻量级）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:6px 10px;font-weight:700;">维度</td><td style="border:1px solid #e0e0e0;padding:6px 10px;">1024</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:6px 10px;font-weight:700;">硬件</td><td style="border:1px solid #e0e0e0;padding:6px 10px;">2-4GB显存即可，纯CPU也能跑</td></tr>
+</table>
+</p>
+<p><strong>为什么是首选？</strong></p>
+<p>1. <strong>中文能力极强</strong>——CMTEB 中文基准上位列前茅</p>
+<p>2. <strong>三合一混合检索</strong>——稠密向量（语义）+ 稀疏向量（关键词）+ 多向量，一个模型搞定</p>
+<p>3. <strong>轻量高效</strong>——568M 参数，低端硬件流畅运行，批量吞吐量 55+ emb/s</p>
+<p>4. <strong>100+ 语言</strong>——中英文混合文档完美覆盖</p>
+<p>5. <strong>生态完善</strong>——Ollama、LangChain、LlamaIndex 全部原生支持</p>
+
+<pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;">
+<span style="color:#5c6370;"># Ollama 一键安装</span>
+<span style="color:#e5c07b;">ollama</span> pull bge-m3
+
+<span style="color:#5c6370;"># LangChain 中使用</span>
+<span style="color:#c678dd;">from</span> <span style="color:#e5c07b;">langchain_ollama</span> <span style="color:#c678dd;">import</span> <span style="color:#e5c07b;">OllamaEmbeddings</span>
+<span style="color:#e06c75;">embeddings</span> = <span style="color:#e5c07b;">OllamaEmbeddings</span>(<span style="color:#e06c75;">model</span>=<span style="color:#98c379;">"bge-m3"</span>)
+</pre>
+
+<!-- Qwen3 -->
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 6px 0;">🥇 最强中文（需GPU）：Qwen3-Embedding-8B</p>
+<p>阿里巴巴出品，CMTEB 中文排名第一，32K 超长上下文。8B 参数，建议 16GB+ 显存。如果你的业务对中文语义理解有极高要求且你有 GPU 服务器，它是终极选择。</p>
+
+<!-- Nomic -->
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 6px 0;">🥈 轻量备用：nomic-embed-text</p>
+<p>Nomic AI 出品，137M 参数，任何电脑都能跑。第 2 篇文章的教程用的就是这个。中文能力一般，适合快速原型和过渡使用。</p>
+
+<!-- Cohere -->
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 6px 0;">🥉 全能 API：Cohere Embed v4</p>
+<p>128K 超长上下文（远超 OpenAI 的 8K），多语言无衰减，MTEB Retrieval 0.65，延迟仅约 15ms。需要联网 API 调用，数据合规需提前确认。</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 5 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  多语言嵌入的最佳实践
+</p>
+<p>很多知识库是"混合语言"的——中文文档、英文文档、中英混杂。这给嵌入模型带来了挑战：如果一个模型只训练过中文，"machine learning"和"机器学习"的向量可能距离很远。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 三种方案</p>
+
+<p><strong>方案一：用真正的多语言模型（推荐 ⭐）</strong></p>
+<p>BGE-M3、Cohere Embed v4、Jina Embeddings v5——这些在 100+ 语言上训练，不同语言的相同语义被"拉到"向量空间的相近位置。</p>
+
+<p><strong>方案二：翻译统一（不推荐）</strong></p>
+<p>把所有文档翻成中文再用中文模型。翻译质量影响检索质量，且多了翻译成本。</p>
+
+<p><strong>方案三：分库处理（不推荐初期）</strong></p>
+<p>中英文各建一个向量库，多路召回后合并。增加了系统复杂度。</p>
+
+<p style="background:#f0f7ff;padding:12px 14px;border-radius:8px;border:1px solid #b8d4f0;color:#3a5a7e;font-size:14px;margin:12px 0;">
+  <strong>💡 最佳实践：</strong>用一个多语言模型覆盖所有文档。BGE-M3 在 2026 年是性价比最高的方案。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 6 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  嵌入维度与检索质量的权衡
+</p>
+<p>一个容易被忽视但很重要的决策：<strong>嵌入向量的维度选择。<!--  --></strong></p>
+
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">维度</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">存储（每百万条）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">搜索速度</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">语义精度</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">384</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">~1.5GB</td><td style="border:1px solid #e0e0e0;padding:8px 10px;color:#2e7d32;">最快</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">基本可用</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">768</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">~3GB</td><td style="border:1px solid #e0e0e0;padding:8px 10px;color:#2e7d32;">快</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">不错</td></tr>
+<tr style="background:#f0f7ff;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">1024</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">~4GB</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;color:#2e7d32;">较快</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;color:#2b6cb0;">好（生产推荐）</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">1536</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">~6GB</td><td style="border:1px solid #e0e0e0;padding:8px 10px;color:#e6a817;">中等</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">很好</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">4096</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">~16GB</td><td style="border:1px solid #e0e0e0;padding:8px 10px;color:#c0392b;">较慢</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">极好</td></tr>
+</table>
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 关键取舍：</strong>BGE-M3 的 1024 维 vs OpenAI 的 1536 维，在大多数 RAG 场景中差异不明显。更应该关注模型的中文能力（BGE-M3更强）和数据合规（BGE-M3本地跑），而不是纠结这 512 维的差异。对绝大多数 RAG 场景而言，<strong>1024 维已经足够好</strong>。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 7 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  实战：在你的 RAG 中切换嵌入模型
+</p>
+<p>回到第 2 篇文章的代码，切换嵌入模型极其简单——<strong>改一行参数。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 从 nomic-embed-text 切换到 BGE-M3</p>
+<p><strong>① 拉取模型：</strong><span style="font-family:monospace;background:#f0f0f0;font-size:13px;">ollama pull bge-m3</span></p>
+<p><strong>② 改一行配置：</strong></p>
+<pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;">
+<span style="color:#5c6370;"># 之前</span>
+<span style="color:#e06c75;">EMBED_MODEL</span> = <span style="color:#98c379;">"nomic-embed-text"</span>
+
+<span style="color:#5c6370;"># 现在</span>
+<span style="color:#e06c75;">EMBED_MODEL</span> = <span style="color:#98c379;">"bge-m3"</span>
+</pre>
+<p><strong>③ 清旧向量库，重建：</strong>删除 <span style="font-family:monospace;background:#f0f0f0;font-size:13px;">chroma_db</span> 文件夹后重新运行。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 从本地切换到 OpenAI API</p>
+<pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;">
+<span style="color:#c678dd;">from</span> <span style="color:#e5c07b;">langchain_openai</span> <span style="color:#c678dd;">import</span> <span style="color:#e5c07b;">OpenAIEmbeddings</span>
+
+<span style="color:#e06c75;">embeddings</span> = <span style="color:#e5c07b;">OpenAIEmbeddings</span>(
+    <span style="color:#e06c75;">model</span>=<span style="color:#98c379;">"text-embedding-3-large"</span>,
+    <span style="color:#e06c75;">dimensions</span>=<span style="color:#d19a66;">1024</span>,  <span style="color:#5c6370;"># 降维到1024节省存储</span>
+)
+</pre>
+
+<p style="background:#fffbf0;padding:12px 14px;border-radius:8px;border:1px solid #e8d5a3;color:#8a6d3b;font-size:14px;margin:12px 0;">
+  <strong>⚠️ 注意事项：</strong><br>
+  • 不同嵌入模型生成的向量<strong>不兼容</strong>——切换后必须重新生成所有向量<br>
+  • 先小范围测试，确认效果符合预期再全量重建<br>
+  • 用 API 的话锁定模型版本，避免静默更新导致向量不兼容
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 章节 8 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  选型决策指南
+</p>
+
+<p style="background:#fffbf0;padding:14px 16px;border-radius:8px;border:1px solid #e8d5a3;color:#6b5a2e;font-size:14px;line-height:2;margin:12px 0;">
+  <strong>决策树：你需要多语言嵌入能力吗？</strong><br>
+  <br>
+  ├─ ❌ <strong>纯中文场景</strong><br>
+  │&nbsp;&nbsp;&nbsp;├─ 数据必须本地？→ ✅ → 有 GPU 吗？<br>
+  │&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ 有（16GB+）→ <strong>Qwen3-Embedding-8B</strong>（中文最强）<br>
+  │&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└─ 没有/只有CPU → <strong>BGE-M3 ⭐</strong><br>
+  │&nbsp;&nbsp;&nbsp;└─ 数据可上云？→ 预算充足？→ <strong>OpenAI text-embedding-3-large</strong><br>
+  │<br>
+  └─ ✅ <strong>多语言混合场景</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─ 数据必须本地？→ <strong>BGE-M3 ⭐</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─ 数据可上云 + 长文档？→ <strong>Cohere Embed v4</strong>（128K上下文）<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;└─ 需要代码/领域专精？→ <strong>Voyage-4 Large</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一句话推荐</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">场景</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">推荐</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">一句话理由</td></tr>
+<tr style="background:#f0f7ff;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">中文RAG（本地）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;color:#2b6cb0;">BGE-M3 ⭐</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">中文最强开源，轻量，MIT协议，混合检索</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">中文RAG（GPU）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">Qwen3-Embedding-8B</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">CMTEB中文第一，32K长上下文</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">英文RAG（本地）</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">NV-Embed-v2</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">MTEB开源第一</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">多语言+最快上手</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">OpenAI text-embedding-3-large</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">生态最成熟，精度高</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">多语言+长文档</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">Cohere Embed v4</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">128K上下文+100+语言</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">快速原型/轻量</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">nomic-embed-text</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">137M参数，任何电脑都能跑</td></tr>
+</table>
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ====== 写在最后 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">★</span>
+  写在最后
+</p>
+<p>嵌入模型的选择可以浓缩成两句话：</p>
+
+<p style="background:#f0f7ff;padding:14px 16px;border-radius:8px;border:1px solid #b8d4f0;color:#3a5a7e;font-size:14px;line-height:2;margin:12px 0;">
+  <strong>对 90% 的中文 RAG 用户：用 BGE-M3。</strong><br>
+  它有最好的中文开源效果、最低的硬件门槛、最宽松的协议（MIT）、和最完善的生态支持。本地跑，不要钱，数据不出门。
+</p>
+
+<p><strong>对那 10% 的用户</strong>——如果你需要 MTEB 第一的英文精度，选 NV-Embed-v2；如果你有 GPU 服务器且追求极致中文效果，选 Qwen3-Embedding-8B；如果完全不想管运维，选 OpenAI text-embedding-3-large。</p>
+
+<p>好消息是：<strong>用 LangChain 的抽象层写代码，切换嵌入模型只需要改一行。</strong>你现在可以从 nomic-embed-text 起步，未来随时升级。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:16px;font-weight:700;color:#2b6cb0;margin:16px 0 8px 0;">📦 第一期完结 · 四篇回顾</p>
+<p style="margin:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table style="border-collapse:collapse;width:100%;font-size:14px;border:1px solid #e0e0e0;">
+<tr style="background:#f7f7f7;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">篇目</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">主题</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">核心收获</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">1.1</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">RAG是什么？</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">理解RAG原理、三大硬伤、vs微调、2026趋势</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">1.2</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">搭建最小可用知识库</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">30分钟跑通本地RAG，完整可运行代码</td></tr>
+<tr><td style="border:1px solid #e0e0e0;padding:8px 10px;">1.3</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">向量数据库选型</td><td style="border:1px solid #e0e0e0;padding:8px 10px;">六大对比、决策树、选Qdrant的勇敢建议</td></tr>
+<tr style="background:#f0f7ff;"><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">1.4</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">嵌入模型选择</td><td style="border:1px solid #e0e0e0;padding:8px 10px;font-weight:700;">90%的人选BGE-M3就够了</td></tr>
+</table>
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:2;margin:12px 0;">
+  <strong>🚀 第一期完结：</strong>四篇文章覆盖了 RAG 的核心认知、实战搭建、向量数据库选型、嵌入模型选型。现在你已经有完整的理论和实践基础，可以自信地搭建和优化自己的 RAG 知识库了。<br><br>
+  <strong>下一期预告：</strong>实战场景系列——从"个人第二大脑"到"企业文档问答系统"，把 RAG 用在真实场景里。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:20px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;line-height:2;">
+编写年份：2026年<br>
+适用对象：正在为RAG知识库选择嵌入模型的开发者<br>
+系列：RAG入门教程系列 · 第4篇（第一期完结）
+</p>
+
+<p style="text-align:center;color:#bbb;font-size:11px;margin-top:20px;line-height:1.8;">
+参考资料：MTEB（2026.4）、AIHubPlus（2026.4）、<br>Markaicode（2026.5）、HolySheep AI（2026.4）、鲁宁琦（2026.3）
+</p>
+</body>

@@ -1,0 +1,454 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 RAG 入门教程</span>
+</p>
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  搭建最小可用知识库<br>从零到跑通，全程实操指南
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  30 分钟，零成本，在你的电脑上跑通第一个 RAG 问答系统
+</p>
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>这是 RAG 入门教程系列的第 2 篇。上一篇讲了"RAG 是什么"，这篇我们<strong>直接动手</strong>。不需要 GPU，不需要付费 API，不需要折腾 Docker——一台普通电脑，30 分钟就能跑通一个完全可用的本地 RAG 问答系统。所有代码复制即用，零基础也能跟做。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">准备工作</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">环境搭建</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五步代码</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">完整代码</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">效果实测</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">调优方向</span>
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 1 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  开篇：30 分钟，从零到跑通
+</p>
+<p>上一篇文章我们讲清楚了 RAG 是什么。但"知道"和"做到"之间，隔着一整条鸿沟。</p>
+<p>这篇文章就是填平鸿沟的——<strong>你不需要 GPU，不需要付费 API，不需要折腾 Docker</strong>。一台普通的 Windows 或 Mac 电脑，30 分钟，就能跑通一个完全可用的 RAG 问答系统。</p>
+<p>我们会用到的技术栈（全部免费、全部本地）：</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 四大组件一览</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>🤖 大模型：</strong>Ollama + Qwen2.5:7B / DeepSeek-R1 &nbsp;|&nbsp; 免费、本地运行、中文能力强
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>🧩 嵌入模型：</strong>nomic-embed-text / BGE &nbsp;|&nbsp; 轻量、免费、效果够用
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>🗄️ 向量数据库：</strong>ChromaDB &nbsp;|&nbsp; 零配置、Python 原生、持久化简单
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>🔗 应用框架：</strong>LangChain &nbsp;|&nbsp; 把以上组件串起来，代码量最小
+  </span>
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 2026 年 6 月语境：</strong>这套本地全链路方案（Ollama + ChromaDB + LangChain）已成为入门 RAG 的事实标准。过去跑 RAG 要搞定 Docker、Kubernetes、云向量库、付费 API，现在一台笔记本全搞定。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+<!-- ====== 章节 2 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  准备工作：你需要什么
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 硬件要求</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>内存：</strong>最低 8GB，推荐 16GB+
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>硬盘：</strong>10GB 空闲（存模型），推荐 20GB+
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>显卡：</strong>不需要！有 NVIDIA 更流畅，没有也能跑
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>系统：</strong>Windows 10/11 / macOS / Ubuntu 都可以
+  </span>
+</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>小提示：</strong>如果内存只有 8GB，选 1.5B 参数的轻量模型（如 deepseek-r1:1.5b），照样能跑。
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 你需要有的前置知识</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ 能在终端 / CMD 里敲命令
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ 电脑上装了 Python（建议 3.10 或 3.11）
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ 会用 pip 安装 Python 包
+  </span>
+</p>
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 不会 Python 编程？没关系。</strong>本文所有代码复制粘贴即可运行，改一两处配置就行。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+<!-- ====== 章节 3 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  环境搭建：三步就绪
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一步：安装 Ollama</p>
+<p>Ollama 是一个本地大模型运行工具，相当于<strong>"你电脑上的大模型服务器"</strong>。</p>
+<p>去 <strong>ollama.com</strong> 下载安装包，双击安装。然后打开终端，拉取两个模型：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong># 对话模型（回答问题用）</strong><br>
+  ollama pull qwen2.5:7b<br><br>
+  <strong># 嵌入模型（把文字转成向量用）</strong><br>
+  ollama pull nomic-embed-text
+</p>
+<p>两个模型约 5GB，首次下载需要几分钟。之后<strong>全离线运行，不花一分钱</strong>。</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 验证安装</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ollama list<br>
+  <span style="color:#888;"># 应该看到 qwen2.5:7b 和 nomic-embed-text</span><br><br>
+  ollama run qwen2.5:7b "你好"<br>
+  <span style="color:#888;"># 能正常回复就说明 OK</span>
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第二步：安装 Python 依赖包</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  pip install langchain langchain-community langchain-ollama \<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chromadb langchain-chroma pypdf python-docx \<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unstructured
+</p>
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ Windows 用户注意：</strong>安装 chromadb 如果报错缺少 C++ 编译工具，改用：<br>
+  <span style="color:#276749;">✅ pip install chromadb --only-binary=:all:</span><br>
+  国内用户下载慢，加 <span style="color:#276749;">-i https://pypi.tuna.tsinghua.edu.cn/simple</span> 换清华镜像
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第三步：创建项目目录</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  mkdir my-rag<br>
+  cd my-rag<br>
+  mkdir docs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 用来放你的文档</span>
+</p>
+<p>把你要检索的文档（PDF、Word、TXT）放到 <strong>docs</strong> 文件夹里。</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 4 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  准备文档：你的知识原料
+</p>
+<p>RAG 的效果取决于你喂给它什么。几条建议：</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 格式支持</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    📝 .txt — 最可靠，推荐优先用
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    📄 .pdf — 支持，但复杂排版（双栏、表格）可能解析不好
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    📃 .docx — 支持
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    📋 .md — 重命名为 .txt 使用
+  </span>
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 文档质量建议</p>
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  ✅ 每篇文档聚焦一个主题<br>
+  ✅ 确保文档是 UTF-8 编码（特别是中文 TXT）<br>
+  ✅ 图文混排的 PDF 建议先提取纯文本再放入
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 快速测试用：</strong>创建一个 docs/公司制度.txt，随便粘贴几段规则文字，或者用本文第六节的示例内容。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 5 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  核心代码：五步搭建 RAG
+</p>
+<p>现在开始写代码。创建一个 <strong>rag.py</strong> 文件，逐步往里加。</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 步骤 1：加载文档</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from langchain_community.document_loaders import DirectoryLoader, TextLoader<br><br>
+  <span style="color:#888;"># 自动加载 docs 目录下所有 .txt 文件</span><br>
+  loader = DirectoryLoader("./docs", glob="**/*.txt", loader_cls=TextLoader)<br>
+  documents = loader.load()<br><br>
+  print(f"✅ 加载了 {len(documents)} 个文档")<br>
+  for doc in documents:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;print(f"   📄 {doc.metadata['source']} — {len(doc.page_content)} 字符")
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 步骤 2：文本分块（Chunking）</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from langchain.text_splitter import RecursiveCharacterTextSplitter<br><br>
+  text_splitter = RecursiveCharacterTextSplitter(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;chunk_size=500,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 每个块 500 字符</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;chunk_overlap=50,&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 块与块之间重叠 50 字符</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;separators=["\n\n", "\n", "。", "！", "？", "，", " ", ""]<br>
+  )<br><br>
+  chunks = text_splitter.split_documents(documents)<br>
+  print(f"✅ 切成了 {len(chunks)} 个文本块")
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 为什么要分块？</strong>大模型一次能处理的文字有限，且太长的块会掺杂无关信息。500 字符 ≈ 一个中等段落，是实测效果最好的值。重叠 50 字符保证跨块信息不丢失。
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 步骤 3：向量化并存入 ChromaDB</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from langchain_ollama import OllamaEmbeddings<br>
+  from langchain_chroma import Chroma<br><br>
+  embeddings = OllamaEmbeddings(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;model="nomic-embed-text",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;base_url="http://localhost:11434"<br>
+  )<br><br>
+  <span style="color:#888;"># 创建向量数据库并持久化到磁盘</span><br>
+  vector_store = Chroma.from_documents(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;documents=chunks,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;embedding=embeddings,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;persist_directory="./chroma_db"<br>
+  )<br><br>
+  print(f"✅ 向量数据库已创建，共 {vector_store._collection.count()} 条记录")
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 首次运行会慢一些</strong>——每条文本都要转成向量。第二次运行直接加载 chroma_db 目录里的数据，秒级启动。
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 步骤 4：构建检索器</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  retriever = vector_store.as_retriever(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;search_type="similarity",&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 语义相似度搜索</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;search_kwargs={"k": 4}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 每次返回最相关的 4 个文本块</span><br>
+  )
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 步骤 5：接入 LLM 完成问答</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from langchain_ollama import ChatOllama<br>
+  from langchain_core.prompts import ChatPromptTemplate<br>
+  from langchain_core.output_parsers import StrOutputParser<br>
+  from langchain_core.runnables import RunnablePassthrough<br><br>
+  llm = ChatOllama(model="qwen2.5:7b", temperature=0.3, base_url="http://localhost:11434")<br><br>
+  prompt = ChatPromptTemplate.from_messages([<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;("system", "你是一个专业的知识库助手。请严格根据以下参考资料回答问题..."),<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;("human", "{question}")<br>
+  ])<br><br>
+  <span style="color:#888;"># 组装 RAG 链</span><br>
+  rag_chain = (<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;{"context": retriever | format_docs, "question": RunnablePassthrough()}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;| prompt | llm | StrOutputParser()<br>
+  )
+</p>
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 五步全链路：</strong>加载 → 分块 → 向量化 → 检索 → LLM 生成。这就是 RAG 的核心流水线。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 6 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  完整代码：复制即用
+</p>
+<p>把所有代码合并成一个完整的 <strong>rag.py</strong> 文件，以下是可直接运行的完整版：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>"""</strong><br>
+  <strong>最小可用 RAG 知识库</strong><br>
+  Ollama + ChromaDB + LangChain<br>
+  保存为 rag.py，放在 my-rag/ 目录下运行<br>
+  <strong>"""</strong><br><br>
+  import os<br>
+  from langchain_community.document_loaders import DirectoryLoader, TextLoader<br>
+  from langchain.text_splitter import RecursiveCharacterTextSplitter<br>
+  from langchain_ollama import OllamaEmbeddings, ChatOllama<br>
+  from langchain_chroma import Chroma<br>
+  from langchain_core.prompts import ChatPromptTemplate<br>
+  from langchain_core.output_parsers import StrOutputParser<br>
+  from langchain_core.runnables import RunnablePassthrough<br><br>
+  <span style="color:#888;"># ========== 配置区 ==========</span><br>
+  DOCS_DIR = "./docs"<br>
+  CHROMA_DIR = "./chroma_db"<br>
+  CHUNK_SIZE = 500<br>
+  CHUNK_OVERLAP = 50<br>
+  TOP_K = 4<br>
+  EMBED_MODEL = "nomic-embed-text"<br>
+  CHAT_MODEL = "qwen2.5:7b"<br>
+  OLLAMA_URL = "http://localhost:11434"<br>
+  <span style="color:#888;"># =============================</span><br><br>
+  def load_documents(docs_dir):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;">"""加载文档目录"""</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...(省略，详见上方步骤1)<br><br>
+  def split_documents(docs):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;">"""文本分块"""</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...(省略，详见上方步骤2)<br><br>
+  def build_or_load_vectorstore(chunks):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;">"""构建或加载向量数据库——首次构建，之后加载"""</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...(省略，详见上方步骤3)<br><br>
+  def create_rag_chain(vector_store):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;">"""创建 RAG 问答链"""</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...(省略，详见上方步骤4-5)<br><br>
+  if __name__ == "__main__":<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;main()
+</p>
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 完整可运行代码</strong>请参考本文配套的 MD 文件（1.2-rag-build-minimal-kb.md），所有代码复制即用。
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 运行方式</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cd my-rag<br>
+  python rag.py
+</p>
+<p><strong>首次运行：</strong>自动 加载文档 → 切块 → 向量化 → 存入 ChromaDB。</p>
+<p><strong>第二次起：</strong>直接加载已有向量库，秒级启动。</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 7 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  效果实测
+</p>
+<p>在 <strong>docs/</strong> 下放一个测试文档。新建 <strong>docs/员工手册.txt</strong>，写入：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  公司考勤制度<br><br>
+  <strong>第一条：工作时间</strong><br>
+  公司实行弹性工作制，核心工作时间为上午 10:00 至下午 4:00。<br>
+  员工每日工作时间不少于 8 小时。<br><br>
+  <strong>第二条：请假流程</strong><br>
+  员工请假需提前一天在 OA 系统提交申请。<br>
+  1天以内由直属上级审批，1-3天需部门负责人审批，3天以上需 HR 总监审批。<br><br>
+  <strong>第三条：年假政策</strong><br>
+  入职满 1 年享受 5 天带薪年假。入职满 3 年增加至 10 天。入职满 5 年增加至 15 天。<br>
+  年假可累积至次年 3 月 31 日。<br><br>
+  <strong>第四条：加班与调休</strong><br>
+  工作日加班按 1.5 倍调休。休息日加班按 2 倍调休。法定节假日加班按 3 倍调休并给予补贴。
+</p>
+<p>运行 <strong>python rag.py</strong> 后对话效果：</p>
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">🙋 问：</strong>公司年假怎么算？<br><br>
+  <strong style="color:#2b6cb0;">🤖 答：</strong>根据《员工手册》第三条：入职满1年享受5天带薪年假，满3年增加至10天，满5年增加至15天。年假可累积至次年3月31日。
+</p>
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">🙋 问：</strong>请假需要谁审批？<br><br>
+  <strong style="color:#2b6cb0;">🤖 答：</strong>1天以内由直属上级审批。1-3天需部门负责人审批。3天以上需HR总监审批。
+</p>
+<p style="background:#fff5f5;padding:12px 14px;border-left:3px solid #e53e3e;color:#9b2c2c;font-size:14px;margin:10px 0;">
+  <strong style="color:#c53030;">🙋 问：</strong>公司食堂在哪？<br><br>
+  <strong style="color:#c53030;">🤖 答：</strong>知识库中未找到相关信息。<br>
+  <span style="color:#888;">——不知道就说不知道，绝不瞎编！</span>
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 三个关键效果</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>有知识的内容</strong> → 精准回答，带出处
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>没有的内容</strong> → 老实说"不知道"，不编造
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>语义搜索</strong> → 问"年假怎么算"能找到"年假政策"
+  </span>
+</p>
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 这个简陋的系统，已经是一个真正的 RAG 了。</strong>你在本地成功跑通了"检索增强生成"完整链路。
+</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 章节 8 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  调优方向
+</p>
+<p>跑通只是第一步。根据实际效果，你可以在几个方向调整：</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 分块策略</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>FAQ / 规章制度：</strong>chunk_size=300-500 &nbsp;|&nbsp; 短文本，精确匹配
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>技术文档 / 长文：</strong>chunk_size=500-800 &nbsp;|&nbsp; 保留更多上下文
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>法律合同 / 学术论文：</strong>chunk_size=800-1200 &nbsp;|&nbsp; 需要完整逻辑链
+  </span>
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 检索数量</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;width:100%;box-sizing:border-box;">
+    <strong>k=3：</strong>简单事实问答 &nbsp;|&nbsp; <strong>k=4-6：</strong>一般场景（推荐）&nbsp;|&nbsp; <strong>k=8+：</strong>复杂推理，可能引入噪声
+  </span>
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 模型选择建议</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>💻 8GB 内存：</strong>对话用 qwen2.5:1.5b / deepseek-r1:1.5b &nbsp;|&nbsp; 嵌入始终用 nomic-embed-text（仅 269MB）<br><br>
+  <strong>💻 16GB 内存：</strong>对话用 qwen2.5:7b / deepseek-r1:7b（推理能力强，适合复杂分析）<br><br>
+  <strong>💻 32GB+ 内存：</strong>对话用 qwen2.5:14b &nbsp;|&nbsp; 嵌入升级为 bge-m3（多语言更优）
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 支持更多文档格式</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader<br><br>
+  pdf_docs = PyPDFLoader("report.pdf").load()<br>
+  docx_docs = Docx2txtLoader("memo.docx").load()
+</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进阶：走向混合检索</p>
+<p>当你的知识库超过 100 篇文档后，纯向量检索可能不够精准。这时可以加入 <strong>BM25 关键词匹配 + RRF 融合</strong>——这个我们在后续文章里展开。</p>
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+<!-- ====== 结尾 ====== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+<p>这篇文章的目标不是让你"看懂"RAG，而是让你<strong>"跑通"</strong>RAG。</p>
+<p>你现在拥有的是一个<strong>完全本地运行、无需联网、你的数据始终留在你电脑上</strong>的 RAG 知识库。它很小，但它是一个正确的起点。</p>
+<p>回顾你学到了什么：</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>1.</strong> Ollama — 在本地运行大模型，零成本
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>2.</strong> ChromaDB — 本地向量数据库，存储和检索文档
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>3.</strong> LangChain — 把加载→分块→向量化→检索→生成串成流水线
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>4.</strong> RAG 核心链路 — 加载→分块→向量化→检索→LLM生成
+  </span>
+</p>
+<p style="margin-top:12px;">更重要的是，你现在<strong>有了一份可以不断改进的代码基</strong>。后续的文章——向量数据库选型、Chunk 策略深度优化、混合检索、Agentic RAG——都将在这份代码的基础上展开。</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>💡 动手建议：</strong>先跑通，再调优。不要一开始就追求完美。把你的文档放进去，问几个问题，感受一下它有多靠谱——然后根据"第八章"继续改进。
+</p>
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一个目标：</strong>理解了向量数据库，下一步是知道该选哪一个——Chroma、FAISS、Milvus、Qdrant？
+</p>
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 下一篇预告：[1.3 向量数据库选型指南] —— 一篇文章讲清楚到底该选哪个。
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写年份：2026 年<br>适用对象：想动手搭建第一个 RAG 系统的学习者<br>系列：RAG 入门教程系列 · 第 2 篇
+</p>
+</body>
