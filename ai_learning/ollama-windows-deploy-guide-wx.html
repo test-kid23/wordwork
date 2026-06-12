@@ -1,0 +1,551 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 顶部分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 AI 入门指南</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  没显卡也能跑！<br>Ollama 本地部署大模型完全指南
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  30 分钟在 Windows 上跑起你自己的私有大模型
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>你有没有想过——你现在每天用的 ChatGPT、Kimi、DeepSeek，"免费"的服务真的会一直免费下去吗？更隐蔽的风险是<strong>数据隐私</strong>：你丢给云端 AI 的每一段话，都经过了别人的服务器。<br><br>好消息是：把大模型部署到本地，没你想的那么难。这篇教程教你两套方案——<strong>没显卡的跑 1B 小模型</strong>，<strong>8G 显卡的跑 7B 量化模型</strong>——不管什么配置，都能拥有"属于自己"的 AI。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、为什么部署</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、代价与局限</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、认识 Ollama</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、安装 Ollama</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、1B 模型实战</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、7B 量化实战</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、模型速查表</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">八、进阶玩法</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 一、为什么本地部署 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  为什么要本地部署大模型？5 个无法拒绝的理由
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1.1 数据隐私——你的秘密，只有你的硬盘知道</p>
+
+<p>这是最重要的理由，没有之一。</p>
+
+<p>云端 AI 的原理是：你的输入 → 传到别人服务器 → 模型处理 → 返回结果。整个过程中，<strong>你的数据在别人手里</strong>。</p>
+
+<p>本地部署后：所有数据在你自己电脑上流转，不经过任何第三方服务器；断网了也能用，物理隔离；适合处理商业方案、法律文书、医疗记录、个人隐私等敏感信息。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>用别人的 AI，等于把你的秘密交给一个陌生人保管。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1.2 离线可用——飞机上、地下室、台风天，AI 不下线</p>
+
+<p>云端 AI 需要联网。但你有没有遇到过：出差高铁上信号断断续续、公司网络限流连 ChatGPT 都打不开、服务器宕机全公司干等着？</p>
+
+<p>本地模型<strong>不需要网络</strong>。只要电脑有电，AI 就随时在线——对经常出差、网络不稳定、或需要在安全隔离环境工作的人来说，这是刚需。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1.3 零边际成本——用一万次也不多花一分钱</p>
+
+<p>云端 API 按 token 计费。如果你每天和 AI 聊几万字、做大量代码生成——月底账单会让你肉疼。</p>
+
+<p>本地部署：<strong>一次性硬件投入</strong>（你本来就有电脑）、<strong>零使用成本</strong>（爱用多少次用多少次）、<strong>无 QPS 限制</strong>（不会触发"请求过于频繁"）、<strong>无内容审查</strong>（不用看"作为 AI 助手，我无法……"的脸色）。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1.4 完全可定制——你的 AI，你做主</p>
+
+<p>云端 AI 是"一锅端"的通用模型，没法针对你的需求微调。本地模型可以选编程专用、写作专用、翻译专用模型；喂自己的知识库做 RAG；调整参数控制 AI 的"性格"；甚至用你的数据做微调，打造专属 AI 助手。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1.5 学习 AI 的最好方式</p>
+
+<p>想真正理解大模型怎么工作？最好的方法不是看教程，是<strong>亲手部署一个</strong>。跑一次本地部署，你会直观理解：模型参数和显存/内存的关系、量化为什么能让 7B 模型装进 8G 显存、token 生成速度如何受硬件制约。</p>
+
+<p><strong>这比读 10 篇科普文章管用。</strong></p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ==================== 二、代价与局限 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  清醒认识——本地部署也有代价
+</p>
+
+<p>吹完优点，必须把丑话说在前头。本地部署不是万能的。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.1 硬件门槛——模型越强，要求越高</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>4-8 GB 内存，无独显</strong> → 1B-3B 小模型，CPU 推理，速度较慢，可以日用<br><br>
+  <strong>16 GB 内存，无独显</strong> → 1B-7B 模型，7B 用 CPU 跑很慢，3B 以内还行<br><br>
+  <strong>8 GB 显存（RTX 4060 等）</strong> → 7B-8B 量化模型，GPU 推理，流畅 40-60 token/s<br><br>
+  <strong>16 GB 显存</strong> → 14B 量化模型，接近云端中级模型体验<br><br>
+  <strong>24 GB 显存</strong> → 32B 量化模型，接近 GPT-4 级别体验
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.2 能力差距——本地模型 ≠ 云端旗舰</p>
+
+<p>实话实说：本地跑的 1B 或 7B 模型，和 ChatGPT-4、Claude 3.5 Sonnet 比，能力上有差距。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>1B 模型</strong>：能做基本问答、翻译、摘要，复杂推理会翻车<br><br>
+  <strong>7B 量化模型</strong>：日常对话、写作辅助、简单编程够用，复杂任务吃力<br><br>
+  <strong>14B+ 模型</strong>：大部分场景很能打，但需要更好的显卡
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 关键心态：</strong>对 80% 的日常使用场景，7B 模型已经足够好了。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.3 需要一点动手能力</p>
+
+<p>虽然这篇教程已经尽量傻瓜化，但你还是需要：会用命令行（就是那个黑窗口，别怕）、会下载文件、大概知道自己的电脑配置。如果你完全不会这些——学一下也不亏，这是 AI 时代的必备技能。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.4 维护成本</p>
+
+<p>模型会更新，Ollama 会升级，可能会遇到兼容性问题。但相比云端服务突然涨价或关停，这点维护成本微不足道。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 三、认识 Ollama ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Ollama 是什么？为什么选它？
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一句话解释</p>
+
+<p><strong>Ollama 是一个让你在本地电脑上一键运行大模型的工具。</strong></p>
+
+<p>它的设计哲学是：<strong>把复杂留给自己，把简单留给用户。</strong>不需要懂 Python、不需要配 CUDA 环境、不需要手动下载模型文件——Ollama 帮你把一切都搞定了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 为什么选 Ollama 而不是其他工具？</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Ollama</strong> ⭐ —— 所有人，尤其是新手，一行命令下载运行，自动管理模型<br><br>
+  <strong>LM Studio</strong> —— 喜欢图形界面，可视化操作，功能不如 Ollama 灵活<br><br>
+  <strong>llama.cpp</strong> —— 进阶用户，性能极致，参数精细控制<br><br>
+  <strong>vLLM</strong> —— 开发者，生产级部署，高并发
+</p>
+
+<p><strong>对于 95% 的个人用户，Ollama 就是最佳选择。</strong></p>
+
+<p>优点：跨平台（Windows/macOS/Linux 全支持）、模型库丰富（Qwen、Llama、DeepSeek、Gemma 等主流开源模型）、自动处理量化（默认下载 Q4_K_M 版本，性价比最优）、提供 REST API（可对接各种前端工具）、活跃社区（问题容易搜到答案）。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 四、安装 Ollama ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  第一步：在 Windows 上安装 Ollama
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.1 下载安装</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 下载</strong><br>打开浏览器，访问 Ollama 官网：<strong>https://ollama.com</strong>，点击首页"Download for Windows"按钮。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 安装</strong><br>下载完成后，双击 <strong>OllamaSetup.exe</strong> 安装，一路点"下一步"即可。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 验证</strong><br>安装完毕后，任务栏右下角会出现一个小羊驼图标 🦙。按 <strong>Win + R</strong>，输入 <strong>cmd</strong> 回车，打开命令提示符，输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ollama --version
+</p>
+
+<p>如果显示版本号（如 <strong>ollama version is 0.x.x</strong>），说明安装成功。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.2 ⚠️ 重要：修改模型存储路径（别装C盘）</p>
+
+<p>Ollama 默认把模型下载到 C 盘。一个 7B 模型大概 4–5 GB，多下几个 C 盘就爆了。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ 不修改的话，模型全塞在 C 盘，空间很快不够用<br>
+  <span style="color:#276749;">✅ 改到 D 盘或其他空间充裕的盘</span>
+</p>
+
+<p><strong>修改步骤：</strong></p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">第 1 步</span>
+  任务栏右下角 Ollama 图标 → 右键 → <strong>Quit Ollama</strong>（退出）
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">第 2 步</span>
+  按 <strong>Win + R</strong>，输入 <strong>sysdm.cpl</strong> 回车 → 打开系统属性
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">第 3 步</span>
+  点击 <strong>"高级"</strong> 标签页 → <strong>"环境变量"</strong>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">第 4 步</span>
+  在"用户变量"区域，点击 <strong>"新建"</strong>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">第 5 步</span>
+  变量名填：<strong>OLLAMA_MODELS</strong>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">第 6 步</span>
+  变量值填路径，比如 <strong>D:\OllamaModels</strong>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">第 7 步</span>
+  确定保存，重新启动 Ollama（Win 键搜 "Ollama" 点开）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.3 基础命令速成</p>
+
+<p>以下命令在命令提示符（cmd）或 PowerShell 中运行：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  查看已安装的模型：<strong>ollama list</strong><br><br>
+  下载并运行模型：<strong>ollama run qwen2.5:1.5b</strong><br><br>
+  只下载不运行：<strong>ollama pull qwen2.5:7b</strong><br><br>
+  删除模型：<strong>ollama rm qwen2.5:1.5b</strong><br><br>
+  查看帮助：<strong>ollama help</strong>
+</p>
+
+<p>好了，基本功学会，下面进入实战。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 五、1B 小模型实战 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  实战一：1B 小模型——零显卡用户的 AI 入口
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;">
+  <strong style="color:#2b6cb0;">🎯 适合人群：</strong>没有独立显卡，只有集成显卡，或者电脑配置比较老旧（4–8 GB 内存即可）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.1 推荐模型：Qwen2.5:1.5b</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>模型名称</strong>：Qwen2.5:1.5b（通义千问 2.5，15 亿参数）<br>
+  <strong>开发者</strong>：阿里巴巴<br>
+  <strong>模型大小</strong>：约 0.9 GB<br>
+  <strong>中文能力</strong>：★★★★★ 一流<br>
+  <strong>内存需求</strong>：最低 4 GB，推荐 8 GB<br>
+  <strong>显卡需求</strong>：<strong>不需要独显</strong>，纯 CPU 运行<br>
+  <strong>推理速度</strong>：15-30 token/s（现代 CPU）
+</p>
+
+<p>备选：<strong>Llama 3.2:1b</strong>（Meta，约 0.8 GB，英文更佳）；<strong>Qwen2.5:3b</strong>（3B 参数，约 1.8 GB，体验更好）。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 为什么首推 Qwen2.5？</strong>因为中文支持是目前开源模型里数一数二的，比 Llama、Gemma 等更懂中文语境。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.2 部署步骤——只需一行命令</p>
+
+<p>打开命令提示符（cmd），输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>ollama run qwen2.5:1.5b</strong>
+</p>
+
+<p>然后你会看到下载进度条：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  pulling manifest<br>
+  pulling 8b2a0a... 100% ▕█████████████████▏ 986 MB<br>
+  verifying sha256 digest<br>
+  writing manifest<br>
+  success
+</p>
+
+<p>等待下载完成（网速正常两三分钟），自动进入对话模式：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  &gt;&gt;&gt; 你好，请介绍一下你自己
+</p>
+
+<p>现在就可以和你的本地 AI 聊天了！试试：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  &gt;&gt;&gt; 用一句话解释什么是人工智能<br>
+  &gt;&gt;&gt; 帮我把这段话翻译成英文：今天天气真好<br>
+  &gt;&gt;&gt; 写一首关于夏天的五言绝句
+</p>
+
+<p>退出对话：输入 <strong>/bye</strong> 按回车。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.3 它能做什么，不能做什么</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>✅ 能做的</strong><br>
+  日常问答、中英翻译、文本摘要、简单文案邮件撰写、基础代码解释、起名字写对联讲笑话
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>❌ 做不好的</strong><br>
+  复杂逻辑推理（数学证明、法律分析）、长文生成（500 字以上质量下降）、专业编程任务、多轮深度对话（容易忘上下文）、需要最新知识的问题
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.4 实际体验</p>
+
+<p>说实话，1.5B 的模型能力有限。它就像一个<strong>知识面还行但脑子不太够用的实习生</strong>——简单的事能帮你，难的别指望。</p>
+
+<p>但别小看它！它证明了：<strong>你不需要昂贵的硬件，也能拥有"属于自己"的 AI。</strong></p>
+
+<p>如果你有 16 GB 以上内存，可以升级到 Qwen2.5:3b：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>ollama run qwen2.5:3b</strong>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 六、7B 量化模型实战 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  实战二：7B 量化模型——8G 显卡性能全开
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;">
+  <strong style="color:#6b46c1;">🎯 适合人群：</strong>拥有 8 GB 及以上显存的 NVIDIA 显卡（RTX 2060 / 3060 / 4060 / 3070 / 2080 等）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.1 什么是"4bit 量化"？——一文秒懂</p>
+
+<p>一个 7B 参数的模型，如果按原始 FP16 存储，需要 <strong>约 14 GB 显存</strong>。一张 8 GB 的显卡根本装不下。</p>
+
+<p>但研究发现：把模型参数从 16 位"压缩"到 4 位（精度从 65536 级降到 16 级），<strong>输出质量损失极小，体积却能缩到原来的 1/4</strong>。这就是 <strong>Q4_K_M 量化</strong>——性价比之王。</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;">
+  <strong style="color:#2b6cb0;">📝 类比：</strong>就像一张照片，PNG 原图 20 MB，转成高质量 JPEG 只要 2 MB，肉眼几乎看不出区别。<strong>量化就是大模型的"高质量 JPEG 压缩"。</strong>
+</p>
+
+<p>Ollama 默认下载的就是 Q4_K_M 量化版本，你什么都不用操心。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.2 推荐模型：Qwen2.5:7b</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>模型名称</strong>：Qwen2.5:7b（通义千问 2.5，70 亿参数，Q4_K_M 量化）<br>
+  <strong>开发者</strong>：阿里巴巴<br>
+  <strong>模型文件大小</strong>：约 4.4 GB<br>
+  <strong>运行时显存占用</strong>：约 5.3 GB<br>
+  <strong>剩余显存（8G 卡）</strong>：约 2.7 GB，可支持 8K-16K 上下文<br>
+  <strong>中文能力</strong>：★★★★★ 顶级开源水平<br>
+  <strong>推理速度</strong>：40-60 token/s（RTX 4060）<br>
+  <strong>显卡要求</strong>：NVIDIA 8 GB 显存及以上
+</p>
+
+<p>备选升级：<strong>Qwen3:8b</strong>（更新更强，约 4.9 GB）；<strong>Qwen2.5:14b</strong>（14B 参数，约 8.3 GB，需 12-16 GB 显存）。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.3 部署步骤——同样只需一行命令</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>ollama run qwen2.5:7b</strong>
+</p>
+
+<p>首次下载 5-15 分钟（模型约 4.4 GB，建议 WiFi 环境）。下载完后进入对话模式，试试它的"真功夫"：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  &gt;&gt;&gt; 请你扮演一个资深产品经理，帮我分析一下：我想做一款面向小商家的进销存 SaaS 产品，国内市场还有机会吗？请给出分析框架。<br><br>
+  &gt;&gt;&gt; 用 Python 写一个函数，输入一个字符串，判断它是不是有效的 IPv4 地址。要求处理边界情况并加上注释。<br><br>
+  &gt;&gt;&gt; 把以下会议记录整理成结构化的会议纪要，包含：会议主题、讨论要点、决议事项和待办事项。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.4 性能实测（RTX 4060 8GB）</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>日常聊天（短问答）</strong> → 秒回，几乎无等待感<br>
+  <strong>文案写作（800 字）</strong> → 约 15-20 秒<br>
+  <strong>Python 代码（50 行）</strong> → 约 10-15 秒<br>
+  <strong>中译英（1000 字）</strong> → 约 25 秒<br>
+  <strong>文本摘要（3000 字）</strong> → 约 30 秒
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 体感总结：</strong>日常使用完全跟手，不会让你想摔键盘。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.5 它能做什么？</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>✅ 做得很好的</strong><br>
+  日常对话知识问答、中英文写作（文章/邮件/报告/方案）、文本润色改写翻译、代码生成与解释（Python/JS/SQL 等）、头脑风暴创意发散、角色扮演模拟面试、长文档理解与摘要、配合知识库做 RAG 问答
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>⚠️ 勉强能做 / ❌ 做不了</strong><br>
+  复杂算法设计与数学证明 ⚠️ / 超长代码（200 行以上）一次性生成 ⚠️ / 多文档联合分析 ⚠️<br>
+  图像识别（纯文本模型）❌ / 联网搜索最新信息 ❌ / GPT-4 级别的顶级推理 ❌
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.6 小技巧：检查是否在用 GPU</p>
+
+<p>运行模型后，开一个新的命令行窗口，输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ollama ps
+</p>
+
+<p>看到 <strong>100% GPU</strong> 就说明显卡全力工作中。如果显示 <strong>100% CPU</strong>，需要检查 NVIDIA 驱动和 CUDA 是否正常。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 七、模型推荐速查表 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  模型推荐速查表——按配置一图搞定
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  <strong>🖥️ 4-8 GB 内存，无独显</strong><br>
+  → <strong>Qwen2.5:1.5b</strong> | 0.9 GB | ★★☆ 基础够用<br>
+  → <strong>ollama run qwen2.5:1.5b</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin-top:6px;">
+  <strong>🖥️ 8-16 GB 内存，无独显</strong><br>
+  → <strong>Qwen2.5:3b</strong> | 1.8 GB | ★★★ 明显更好<br>
+  → <strong>ollama run qwen2.5:3b</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin-top:6px;">
+  <strong>🎮 6-8 GB 显存</strong><br>
+  → <strong>Qwen2.5:7b</strong> | 4.4 GB | ★★★★ 甜点选择<br>
+  → <strong>ollama run qwen2.5:7b</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin-top:6px;">
+  <strong>🎮 6-8 GB 显存（最新推荐）</strong><br>
+  → <strong>Qwen3:8b</strong> | 4.9 GB | ★★★★☆<br>
+  → <strong>ollama run qwen3:8b</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin-top:6px;">
+  <strong>🎮 12-16 GB 显存</strong><br>
+  → <strong>Qwen2.5:14b</strong> | 8.3 GB | ★★★★★ 接近旗舰<br>
+  → <strong>ollama run qwen2.5:14b</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin-top:6px;">
+  <strong>🎮 16-24 GB 显存</strong><br>
+  → <strong>Qwen3:30b-a3b</strong> | ~17 GB | ★★★★★ 旗舰体验<br>
+  → <strong>ollama run qwen3:30b-a3b</strong>
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin-top:12px;">
+  <strong style="color:#2b6cb0;">📝 特别说明：</strong>所有显存档位默认下载的都是 Q4_K_M 量化版本，无需手动指定。Ollama 已帮你选了性价比最优的。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 八、进阶玩法 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  进阶玩法——这只是起点
+</p>
+
+<p>跑通命令行对话只是第一步。Ollama 还支持更强大的玩法：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 8.1 Open WebUI——像 ChatGPT 一样用本地模型</p>
+
+<p>命令行聊天太硬核了？装个 Open WebUI，就能拥有一个<strong>长得跟 ChatGPT 几乎一模一样的本地聊天界面</strong>。支持多轮对话、Markdown 渲染、代码高亮、多模型切换、上传文档做 RAG 问答。</p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  📚 具体教程见后续系列文章，敬请关注
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 8.2 对接编程工具</p>
+
+<p>如果你写代码，可以把 Ollama 接到 IDE 里：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>Continue</strong>（VS Code / JetBrains 插件）——本地代码补全 + 对话
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>Cursor</strong>——在设置中配置 Ollama API（http://localhost:11434）
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>Cline</strong>——VS Code 的 AI 编程 Agent
+  </span>
+</p>
+
+<p>API 地址统一是：<strong>http://localhost:11434/v1</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 8.3 搭建本地知识库</p>
+
+<p>用 Ollama + AnythingLLM / Dify，把你的公司文档、个人笔记喂给本地模型，打造一个<strong>只属于你的私有知识库问答系统</strong>。这是本地部署最核心的落地场景之一，后续文章会详细展开。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 写在最后 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这篇文章的核心信息其实很简单：</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:12px 0;">
+  <strong style="font-size:16px;">🎯 本地部署大模型，没有你想象的那么难</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> 没显卡？<strong>Qwen2.5:1.5b</strong> 照样跑，CPU 就够了<br>
+  <span style="color:#8e44ad;">☐</span> 8G 显卡？<strong>Qwen2.5:7b</strong> 装进去，日常使用完全够用<br>
+  <span style="color:#4A90D9;">☐</span> 整件事只需要你<strong>打开命令行，输入一行代码</strong>
+</p>
+
+<p>如果你问我，花半小时折腾这个值不值得？</p>
+
+<p><strong>太值了。</strong>一旦你有了自己的本地大模型，你就拥有了一个<strong>完全属于你、不受任何人限制、不会突然收费也不会偷看你数据的 AI 助手。</strong></p>
+
+<p>而且——这是 AI 时代最核心的能力之一：<strong>把 AI 变成你自己的基础设施，而不是租用别人的服务。</strong></p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇文章</strong>：教你给 Ollama 装上 Open WebUI，拥有漂亮的聊天界面，以及搭建私有知识库。<strong>关注我，别错过。</strong>
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin:12px 0;">
+  如果这篇文章对你有帮助，欢迎<strong>点赞、在看、分享</strong>给身边想学 AI 的朋友。<br>有任何问题，欢迎在评论区留言，我会尽量解答。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写日期：2026 年 6 月 12 日<br>适用对象：Windows 用户 / AI 初学者 / 职场人 / 自由职业者 / 创业者 / 技术从业者<br>平台：微信公众号 @ 你的公众号名称
+</p>
+
+</body>

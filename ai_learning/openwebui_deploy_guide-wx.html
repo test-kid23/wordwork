@@ -1,0 +1,663 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🏠 本地大模型部署 · 实战篇</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Open WebUI 本地部署实战：给本地模型配上 ChatGPT 同款界面
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  一条 Docker 命令，让你的 Ollama / llama.cpp 模型<br>拥有类 ChatGPT 的 Web 界面 + 知识库 + 联网搜索
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  <strong style="color:#2b6cb0;">📝 写在前面：</strong>如果你已经用 Ollama 或 llama.cpp 跑起了本地大模型，那恭喜你——你已经有了引擎，但还缺一个驾驶舱。Ollama 和 llama.cpp 都是命令行交互，而 <strong>Open WebUI</strong> 给它们配上一个和 ChatGPT 几乎一模一样的 Web 界面，完全运行在你自己的电脑上，数据零泄露。<br><br>
+  更新日期：2026-06-12 · 前置阅读：<strong>Ollama 部署教程</strong> / <strong>llama.cpp 部署教程</strong>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">1. 为什么用</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">2. 环境要求</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">3. Docker 安装</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">4. Python 安装</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">5. 连接后端</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">6. 界面导览</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">7. 功能实战</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">8. 团队部署</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">9. 报错排查</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">10. 总结</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第1章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  为什么要用 Open WebUI？
+</p>
+
+<p>如果你已经用 Ollama 或 llama.cpp 跑起了本地大模型，那恭喜你——你已经有了引擎，但还缺一个驾驶舱。</p>
+
+<p>Ollama 和 llama.cpp 的默认交互方式都是<strong>命令行</strong>：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Ollama：</strong>ollama run qwen2.5:7b → 黑底白字的终端对话<br>
+  <strong>llama.cpp：</strong>./llama-cli -m model.gguf -p "你好" → 更原始的 CLI
+</p>
+
+<p>命令行没问题，但<strong>不像一个现代 AI 产品</strong>——没有对话历史管理、没有 Markdown 渲染、没有图片识别、没法上传 PDF 让 AI 帮你读。<strong>Open WebUI 就是来解决这个问题的。</strong></p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>Open WebUI 给你的本地大模型配上一个和 ChatGPT 几乎一模一样的 Web 界面，但完全运行在你自己的电脑上，数据不离本地，零成本、零隐私泄露。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Open WebUI 的核心能力</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">🗣️ 类 ChatGPT 对话</strong> — Markdown 渲染 + 代码高亮 + 深色模式<br>
+  <strong style="color:#6b46c1;">📚 知识库（RAG）</strong> — 上传 PDF/Word/Excel，AI 基于你的文档回答<br>
+  <strong style="color:#2b6cb0;">🔍 联网搜索</strong> — 集成 Google/DuckDuckGo，本地模型也能上网查资料<br>
+  <strong style="color:#6b46c1;">🔀 多模型并发</strong> — 一个窗口同时和两个模型对话，实时对比效果<br>
+  <strong style="color:#2b6cb0;">🖼️ 图像识别</strong> — 上传图片，让多模态模型（如 Llava、Qwen-VL）看图说话<br>
+  <strong style="color:#6b46c1;">👥 多用户管理</strong> — 建账号、分权限、按角色分配模型，团队共享<br>
+  <strong style="color:#2b6cb0;">🔌 插件生态</strong> — Pipelines、MCP 协议、第三方工具接入
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 小知识：</strong>Open WebUI 原名 Ollama WebUI，虽然名字变了，但它连接 Ollama 依然是最丝滑的场景。同时也支持连接 OpenAI API、llama.cpp server、vLLM 等任何 OpenAI 兼容后端。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第2章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  环境要求
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Docker</strong> — Docker Engine 24+（推荐 Docker Desktop 26+）<br>
+  <strong style="color:#6b46c1;">内存（仅 Open WebUI）</strong> — 最低 2 GB · 推荐 4 GB RAM<br>
+  <strong style="color:#2b6cb0;">磁盘</strong> — 5 GB 可用空间（推荐 20 GB+，含模型）<br>
+  <strong style="color:#6b46c1;">推理引擎</strong> — Ollama 或 llama.cpp server 已安装且正常运行<br>
+  <strong style="color:#2b6cb0;">浏览器</strong> — Chrome / Edge / Firefox 最新版
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>⚡ 不需要 GPU！</strong>Open WebUI 本身只是界面层，不需要显卡。GPU 需求取决于你用的推理引擎（Ollama / llama.cpp）。
+</p>
+
+<p><strong>Windows 用户注意：</strong></p>
+<p>① Windows 10 版本 ≥ 21H2，或 Windows 11<br>② 在 BIOS 中开启虚拟化（VT-x / AMD-V）<br>③ WSL 2 已正确安装（Docker Desktop 会自动帮你装）</p>
+
+<p><strong>Linux 用户：</strong>直接安装 Docker Engine 即可，比 Windows 更精简。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第3章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Docker 安装（强烈推荐）
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 Docker 是官方强烈推荐的方式，也是最省心的方式——</strong>一条命令跑起来，升级也只需要重新拉镜像。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.1 Windows 环境</p>
+
+<p><strong>Step 1：安装 Docker Desktop</strong></p>
+<p>① 访问 Docker Desktop 下载页<br>② 下载 Windows 版安装包<br>③ 双击安装，保持默认选项，中间会自动安装 WSL 2（如果还没有的话）<br>④ 安装完成后<strong>重启电脑</strong><br>⑤ 重启后 Docker Desktop 会自动启动，任务栏右下角看到 Docker 鲸鱼图标即为成功</p>
+
+<p><strong>验证：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  docker version<br>
+  docker run hello-world<br>
+  <span style="color:#888;"># 看到 "Hello from Docker!" 就说明 Docker 已经可以正常使用了</span>
+</p>
+
+<p><strong>Step 2：拉取并启动 Open WebUI</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 拉取镜像</span><br>
+  docker pull ghcr.io/open-webui/open-webui:main<br><br>
+  <span style="color:#888;"># 启动容器（关键参数说明见下方）</span><br>
+  docker run -d `<br>
+  &nbsp;&nbsp;-p 3000:8080 `<br>
+  &nbsp;&nbsp;--add-host=host.docker.internal:host-gateway `<br>
+  &nbsp;&nbsp;-v open-webui:/app/backend/data `<br>
+  &nbsp;&nbsp;--name open-webui `<br>
+  &nbsp;&nbsp;--restart always `<br>
+  &nbsp;&nbsp;ghcr.io/open-webui/open-webui:main
+</p>
+
+<p><strong>参数详解：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">-d</strong> — 后台运行容器<br>
+  <strong style="color:#2b6cb0;">-p 3000:8080</strong> — 把容器的 8080 端口映射到本机的 3000 端口<br>
+  <strong style="color:#c53030;">--add-host=...</strong> — <strong>最关键的参数！</strong>让 Docker 容器能访问宿主机上运行的 Ollama<br>
+  <strong style="color:#2b6cb0;">-v open-webui:...</strong> — 数据持久化，聊天记录、配置都存在这里<br>
+  <strong style="color:#2b6cb0;">--name open-webui</strong> — 给容器起个名字<br>
+  <strong style="color:#2b6cb0;">--restart always</strong> — Docker 重启后自动启动容器
+</p>
+
+<p><strong>Step 3：打开浏览器</strong></p>
+<p>访问 <strong>http://localhost:3000</strong>，你应该看到 Open WebUI 的注册页面。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 注意：</strong>第一个注册的用户自动成为管理员，后续注册的用户需要你审批后才能登录。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.2 Linux 环境</p>
+
+<p><strong>Step 1：安装 Docker Engine</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  curl -fsSL https://get.docker.com | sh<br>
+  sudo usermod -aG docker $USER<br>
+  newgrp docker<br>
+  docker version
+</p>
+
+<p><strong>Step 2：启动 Open WebUI</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  docker run -d \<br>
+  &nbsp;&nbsp;-p 3000:8080 \<br>
+  &nbsp;&nbsp;--add-host=host.docker.internal:host-gateway \<br>
+  &nbsp;&nbsp;-v open-webui:/app/backend/data \<br>
+  &nbsp;&nbsp;--name open-webui \<br>
+  &nbsp;&nbsp;--restart always \<br>
+  &nbsp;&nbsp;ghcr.io/open-webui/open-webui:main
+</p>
+
+<p><strong>GPU 加速版本（NVIDIA 显卡，可选）：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 先装 NVIDIA Container Toolkit</span><br>
+  docker run -d \<br>
+  &nbsp;&nbsp;-p 3000:8080 \<br>
+  &nbsp;&nbsp;--gpus all \<br>
+  &nbsp;&nbsp;--add-host=host.docker.internal:host-gateway \<br>
+  &nbsp;&nbsp;-v open-webui:/app/backend/data \<br>
+  &nbsp;&nbsp;--name open-webui \<br>
+  &nbsp;&nbsp;--restart always \<br>
+  &nbsp;&nbsp;ghcr.io/open-webui/open-webui:cuda
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 注意这里用 open-webui:cuda 标签而不是 :main。</strong>普通用户不需要这一行，"无 GPU"版本完全够用。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.3 Docker Compose 方式</p>
+
+<p>如果你更喜欢用配置文件管理，创建 <strong>docker-compose.yml</strong>：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  services:<br>
+  &nbsp;&nbsp;openwebui:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;image: ghcr.io/open-webui/open-webui:main<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;container_name: open-webui<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;ports:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "3000:8080"<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;extra_hosts:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "host.docker.internal:host-gateway"<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- open-webui:/app/backend/data<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;restart: always<br><br>
+  volumes:<br>
+  &nbsp;&nbsp;open-webui:
+</p>
+
+<p>启动：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  docker compose up -d
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 镜像更新</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 拉取最新镜像</span><br>
+  docker pull ghcr.io/open-webui/open-webui:main<br><br>
+  <span style="color:#888;"># 删除旧容器</span><br>
+  docker rm -f open-webui<br><br>
+  <span style="color:#888;"># 用同样的命令重新创建容器（数据在 Volume 中不会丢失）</span><br>
+  docker run -d ... <span style="color:#888;"># 和上面一样的参数</span>
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>⚡ 生产环境建议固定版本号</strong>，比如用 open-webui:v0.9.6 而不是 :main，避免自动更新导致不兼容。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第4章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  Python 安装（备选方案）
+</p>
+
+<p>如果你不想装 Docker（比如电脑配置低、公司限制安装容器软件），可以用 pip 直接安装。</p>
+
+<p><strong>前置条件</strong>：Python 3.11（不支持 3.13 及以上版本）</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 推荐用虚拟环境隔离</span><br>
+  python -m venv openwebui-env<br>
+  source openwebui-env/bin/activate &nbsp;<span style="color:#888;"># Windows: openwebui-env\Scripts\activate</span><br><br>
+  <span style="color:#888;"># 安装</span><br>
+  pip install open-webui<br><br>
+  <span style="color:#888;"># 启动（默认监听 8080 端口）</span><br>
+  open-webui serve<br><br>
+  <span style="color:#888;"># 或指定端口</span><br>
+  open-webui serve --port 3000
+</p>
+
+<p>访问 <strong>http://localhost:8080</strong>（或你指定的端口）。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ Python 方式的限制：</strong><br>
+  · 不提供自动重启功能（需要手动配合 systemd 或任务计划程序）<br>
+  · 依赖 Python 3.11，版本管理稍微麻烦<br>
+  · 不如 Docker 稳定，偶尔会有 Python 环境冲突<br><br>
+  <strong style="color:#276749;">总之：能 Docker 就 Docker，实在不行再用 Python。</strong>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第5章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  连接模型后端
+</p>
+
+<p>Open WebUI 本身不带推理引擎，它需要连接一个或多个"模型后端"。最常见的是连接本地 Ollama。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.1 连接本地 Ollama</p>
+
+<p>如果你按照之前的教程装好了 Ollama，那么 Open WebUI <strong>默认就会自动检测到本机的 Ollama</strong>——前提是你启动 Docker 时加了 <strong>--add-host</strong> 参数。</p>
+
+<p><strong>验证方法：</strong>打开 Open WebUI → 左上角选择模型 → 应该能看到你 Ollama 中已下载的模型列表。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ 如果看不到模型：</strong>确保 Ollama 监听所有网络接口<br><br>
+  <span style="color:#555;">Windows：打开系统环境变量，添加 OLLAMA_HOST=0.0.0.0<br>
+  Linux：sudo systemctl edit ollama → 添加 Environment="OLLAMA_HOST=0.0.0.0" → sudo systemctl restart ollama</span>
+</p>
+
+<p>然后在 Open WebUI 的 <strong>Settings → Connections</strong> 中，确保 Ollama Base URL 是：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  http://host.docker.internal:11434
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.2 连接 llama.cpp server</p>
+
+<p>如果你用的是 llama.cpp 的 llama-server（参考上一篇文章），Open WebUI 也能对接！llama.cpp server 提供了 OpenAI 兼容 API。</p>
+
+<p><strong>① 先确保 llama-server 正在运行：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ./build/bin/llama-server \<br>
+  &nbsp;&nbsp;-m ./models/qwen2.5-7b-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;--n-gpu-layers -1 \<br>
+  &nbsp;&nbsp;--ctx-size 8192 \<br>
+  &nbsp;&nbsp;--host 0.0.0.0 \<br>
+  &nbsp;&nbsp;--port 8081
+</p>
+
+<p><strong>② 在 Open WebUI 中添加：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  Settings → Admin Settings → Connections → OpenAI API<br><br>
+  <strong style="color:#2b6cb0;">URL：</strong>http://host.docker.internal:8081/v1<br>
+  <strong style="color:#2b6cb0;">Key：</strong>not-needed（llama-server 默认不需要 key）<br>
+  <strong style="color:#2b6cb0;">Prefix ID：</strong>llamacpp（可选，用于区分模型来源）
+</p>
+
+<p>③ 点击"刷新模型列表"，你的 llama.cpp 模型就会出现在模型选择器中。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.3 同时连接多个后端</p>
+
+<p>Open WebUI 支持<strong>同时连接多个后端</strong>：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">✅ 本地 Ollama</strong> — 自动检测<br>
+  <strong style="color:#6b46c1;">✅ 本地 llama.cpp server</strong> — 手动配置 OpenAI 格式<br>
+  <strong style="color:#2b6cb0;">✅ 远程 OpenAI API</strong> — 填入 API Key 即可<br>
+  <strong style="color:#6b46c1;">✅ 其他兼容 OpenAI 格式的服务</strong> — vLLM、LocalAI 等
+</p>
+<p>所有模型会统一出现在模型选择器中，用标签区分来源，切换无缝。</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第6章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  首次配置与界面导览
+</p>
+
+<p>打开 <strong>http://localhost:3000</strong> 后：</p>
+
+<p><strong>注册/登录：</strong></p>
+<p>· 第一次访问会要求你<strong>注册管理员账号</strong><br>· 输入用户名、邮箱、密码<br>· <strong>第一个注册的用户自动成为管理员</strong>，后续用户注册需要你审批</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 主要界面布局</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:13px;line-height:1.8;margin:10px 0;">
+  ┌──────────────────────────────────────────┐<br>
+  │&nbsp;&nbsp;<strong>侧边栏</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>主聊天区域</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;📝 新建对话&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;你好！我是 Qwen2.5...&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;──────────&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;💬 对话历史&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;┌ 用户消息 ┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;· 昨天的讨论&nbsp;&nbsp;│&nbsp;&nbsp;└──────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;· 翻译任务&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;┌ AI 回复 ────┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;· ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│ Markdown 渲染&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│ 代码高亮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;📚 知识库&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;└──────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;🔌 工作空间&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;┌──────────────┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;⚙️ 设置&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│ 输入框&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ 发送&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;└──────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  └──────────────────────────────────────────┘
+</p>
+
+<p><strong>关键区域：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">左上角模型选择器</strong> — 切换当前使用的模型<br>
+  <strong style="color:#6b46c1;">对话历史</strong> — 自动保存、可搜索<br>
+  <strong style="color:#2b6cb0;">输入框</strong> — 支持粘贴图片（多模态模型）、上传文件（RAG）<br>
+  <strong style="color:#6b46c1;">知识库</strong> — 管理文档集合，RAG 功能入口<br>
+  <strong style="color:#2b6cb0;">工作空间</strong> — 可接入 Pipelines 和外部工具<br>
+  <strong style="color:#6b46c1;">设置</strong> — 通用设置 + 管理员设置
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第7章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  核心功能实战
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 7.1 基础对话</p>
+
+<p>和 ChatGPT 一样的体验：</p>
+<p>· 选择模型 → 输入问题 → 回车发送<br>· 支持 Markdown 排版、代码块高亮、数学公式（LaTeX）<br>· 对话历史自动保存，左侧可搜索<br>· 支持<strong>编辑已发送的消息</strong>，重新生成 AI 回复<br>· 支持<strong>对话重命名</strong>、<strong>归档</strong>、<strong>导出</strong></p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 暗藏功能：</strong>在聊天中随时切模型。比如先用 Qwen2.5-7B 聊了几轮，觉得质量不够，直接把模型选择器切换到 DeepSeek-R1-32B，<strong>对话上下文不丢失</strong>，继续聊。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 7.2 知识库（RAG）——让模型读你的文档</p>
+
+<p>这是 Open WebUI <strong>最杀手级的本地功能</strong>——让 AI 基于你自己的私有文档回答。</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  Step 1：创建知识库
+</p>
+<p style="margin-top:10px;">侧边栏 → 📚 知识库 → 点击"创建知识库"<br>输入名称，例如"公司手册"、"论文资料"、"技术文档"</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  Step 2：上传文档
+</p>
+<p style="margin-top:10px;">· 支持格式：PDF、Word（.docx）、Excel（.xlsx）、PPT（.pptx）、.txt、.md、.csv、.html、.xml 等<br>· 拖拽或点击上传<br>· 自动分块（Chunking）并向量化<br>· 可以上传多个文件，也可以导入网页链接</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  Step 3：在对话中使用
+</p>
+<p style="margin-top:10px;">在聊天输入框中输入 <strong>#</strong>，会弹出你的知识库列表，选择一个后：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  #公司手册 今年的年假政策是什么？
+</p>
+<p>模型就会基于你上传的员工手册来回答，而不是用通用知识瞎编。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 效果示意</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">你：</strong>#技术文档 这个 API 接口的超时时间是多久？<br><br>
+  <strong style="color:#6b46c1;">模型：</strong>根据《后端 API 文档 v2.3》第 3.2 节，默认超时时间为 30 秒，可通过 timeout 参数调整，最大 120 秒。<br><br>
+  <span style="color:#888;">（来源：后端 API 文档 v2.3.pdf，第 3.2 节）</span>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 这对职场人来说是生产力神器——</strong>把公司所有的 SOP、产品文档、历史邮件丢进去，AI 变成你最靠谱的内部顾问。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 7.3 联网搜索——让本地模型也能上网</p>
+
+<p>本地模型的知识停留在训练截止日期，2026 年 7 月发生的事它肯定不知道。<strong>解决：开启联网搜索功能。</strong></p>
+
+<p><strong>设置步骤：</strong></p>
+<p>① 进入 Settings → Admin Settings → Web Search<br>② 开启 Web Search<br>③ 选择搜索引擎：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">DuckDuckGo</strong> — 免费、无需 API Key — <strong>⭐ 极简（推荐新手）</strong><br>
+  <strong style="color:#6b46c1;">Google PSE</strong> — 结果更精准 — ⭐⭐ 需申请 API Key<br>
+  <strong style="color:#2b6cb0;">SearXNG</strong> — 自托管、隐私最佳 — ⭐⭐⭐ 需自己搭服务
+</p>
+
+<p>DuckDuckGo 配置最简单——直接选择，不需要任何 Key，保存即可。</p>
+
+<p><strong>使用方式：</strong>在聊天时打开输入框旁边的"联网搜索"开关，输入问题。模型会自动判断"需要联网" → 检索 → 注入搜索结果 → 综合回答 → 附上来源链接。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">注意：</strong>联网搜索会增加响应时间 5-15 秒，因为它要先搜再读再回答。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 7.4 多模型并发对比</p>
+
+<p>当你纠结"这个问题让 Qwen3 回答还是 DeepSeek-R1 回答更好"时，不用反复切换模型测试——<strong>两个模型同时上</strong>。</p>
+
+<p><strong>使用方法：</strong></p>
+<p>① 创建新对话<br>② 在输入框右上角，找到"多模型"图标（两个重叠的圆圈）<br>③ 选择两个（或多个）模型<br>④ 输入问题后，两个模型的回复会<strong>左右并排显示</strong></p>
+
+<p><strong>典型场景：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">翻译对比</strong> — 左边 Qwen2.5，右边 DeepSeek-R1，看谁翻得更地道<br>
+  <strong style="color:#6b46c1;">代码对比</strong> — 左边 CodeQwen，右边 DeepSeek-Coder，看谁的方案更优<br>
+  <strong style="color:#2b6cb0;">质量检查</strong> — 一个模型生成内容，另一个模型做审核<br>
+  <strong style="color:#6b46c1;">模型选型</strong> — 不知道升级到新模型值不值得 → 直接 A/B 对比
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 7.5 图像识别与生成</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  🖼️ 图像识别
+</p>
+<p style="margin-top:10px;">支持的模型（需要你自己下载对应的多模态版本）：Llava 系列、Qwen-VL 系列、Llama 4（原生支持视觉）等。<br><strong>使用方法：</strong>在输入框中直接粘贴或拖入图片，输入"描述这张图片里有什么"，模型就会看图回答。</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  🎨 图像生成
+</p>
+<p style="margin-top:10px;">Open WebUI 本身不生成图像，但可以对接外部图像生成后端：ComfyUI、Automatic1111 / SD WebUI、DALL-E。配置路径：Admin Settings → Images → 启用图像生成 → 填入后端 URL。</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第8章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  进阶：团队部署与多用户管理
+</p>
+
+<p>如果你想把部署的 Open WebUI 分享给同事或朋友，而不仅仅是自己用，就需要了解多用户功能。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 用户管理</p>
+
+<p><strong>Admin Settings → Users：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">注册审批</strong> — 开启后，新用户注册需要你手动批准<br>
+  <strong style="color:#6b46c1;">角色分配</strong> — Admin（管理员）/ User（普通用户）<br>
+  <strong style="color:#2b6cb0;">模型权限</strong> — 按用户组分配可用模型——比如实习生只能用 7B 小模型<br>
+  <strong style="color:#6b46c1;">对话审计</strong> — （需用户同意）查看用户的对话内容<br>
+  <strong style="color:#2b6cb0;">禁用/删除</strong> — 管理不活跃或有问题的账号<br>
+  <strong style="color:#6b46c1;">邮箱白名单</strong> — 只允许特定域名（如 @company.com）注册
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 部署架构建议</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:13px;line-height:1.8;margin:10px 0;">
+  ┌───────────────────────────────────────────┐<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>公司内网 / 同一台机器</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;Ollama / llama.cpp server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;(GPU 推理, 端口 11434)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ 模型推理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;Open WebUI (Docker, 端口 3000)&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;┌────┼────┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;用户A&nbsp;&nbsp;用户B&nbsp;&nbsp;用户C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;(浏览器访问 192.168.x.x:3000)&nbsp;&nbsp;│<br>
+  └───────────────────────────────────────────┘
+</p>
+
+<p>一台机器上的 GPU 可以共享给全团队使用，每个人有自己的账户和对话历史，互不干扰。</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第9章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">9</span>
+  常见报错排查
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#c53030;">① 打开 http://localhost:3000 什么也没有</strong><br>
+  → Docker 容器可能没有正确启动。执行 docker ps 查看容器是否在运行，docker logs open-webui 查看日志。<br><br>
+
+  <strong style="color:#c53030;">② "Ollama connection failed" / 看不到模型</strong><br>
+  → <strong>90% 的情况是因为没有加 --add-host 参数！</strong> 删除旧容器：docker rm -f open-webui，重新创建时务必包含 --add-host=host.docker.internal:host-gateway<br><br>
+
+  <strong style="color:#c53030;">③ 上传 PDF 后 RAG 没效果</strong><br>
+  → 检查嵌入模型是否已下载。在 Admin Settings → Documents 中确认默认嵌入模型（如 nomic-embed-text）已存在。如果用的 Ollama，执行：ollama pull nomic-embed-text<br><br>
+
+  <strong style="color:#c53030;">④ 网页搜索无法使用（DuckDuckGo）</strong><br>
+  → 网络问题。DuckDuckGo 的默认 API 在国内可能被墙或速度慢。可尝试：配置 HTTP_PROXY 环境变量、切换到 Google PSE（需申请 Key）、搭 SearXNG 自托管<br><br>
+
+  <strong style="color:#c53030;">⑤ Docker Desktop 启动失败（Windows）</strong><br>
+  → 检查：BIOS 中虚拟化是否开启（VT-x / AMD-V）、WSL 2 是否正常（wsl --version）、是否安装其他虚拟化软件（VirtualBox 可能冲突）、Windows 版本是否低于 21H2<br><br>
+
+  <strong style="color:#c53030;">⑥ 容器重启后聊天记录丢失</strong><br>
+  → 没有挂载数据卷（-v open-webui:/app/backend/data）。数据卷是持久化的关键，务必包含此参数。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第10章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">10</span>
+  总结：你的本地 AI 工作站
+</p>
+
+<p>恭喜你，现在你已经拥有了一个<strong>完全本地化、和 ChatGPT 体验一致、但数据零泄露的 AI 工作站</strong>。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 完整技术栈</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:13px;line-height:1.8;margin:10px 0;">
+  ┌───────────────────────────────────────────┐<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>浏览器 (你的电脑)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://localhost:3000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Open WebUI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;类 ChatGPT 界面·RAG·联网搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  └────────────────┬──────────────────────────┘<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ OpenAI 兼容 API<br>
+  ┌────────────────▼──────────────────────────┐<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>推理引擎 (同一台或另一台电脑)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;┌──────────┐&nbsp;&nbsp;┌────────────────┐&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;│&nbsp;&nbsp;Ollama&nbsp;&nbsp;│&nbsp;&nbsp;│ llama.cpp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;│(易用入门) │&nbsp;&nbsp;│ server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│ (高性能推理)&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;└──────────┘&nbsp;&nbsp;└────────────────┘&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GGUF 模型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Qwen3 · DeepSeek · Llama 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  └────────────────┬──────────────────────────┘<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  ┌────────────────▼──────────────────────────┐<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>你的 GPU / CPU</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTX 4090 / RTX 3060 / M2 Ultra&nbsp;&nbsp;&nbsp;│<br>
+  └───────────────────────────────────────────┘
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 三篇文章的完整学习路径</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">🟢 入门</strong> Ollama 部署教程 — 5 分钟跑起本地大模型<br>
+  <strong style="color:#6b46c1;">🟡 进阶</strong> llama.cpp 部署教程 — 从源码编译，深度掌控推理引擎<br>
+  <strong style="color:#2b6cb0;">🔴 实战</strong> <strong>本文 ← 你在这里</strong> — 给本地模型配上 ChatGPT 同款界面 + RAG + 联网
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 下一步可以做什么</p>
+
+<p>· 搭一个知识库，把你的笔记/文档/合同都丢进去<br>· 开联网搜索，让本地模型也能回答实时问题<br>· 试试多模型对比，找到最适合你场景的模型<br>· 分享给同事，一起用一台 GPU 机器<br>· 探索 Pipelines 插件，写自定义的中转逻辑</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:16px;">🎯 一句话总结</strong><br><br>
+  <strong style="font-size:18px;">Ollama 是引擎，Open WebUI 就是驾驶舱。</strong><br><br>
+  <span style="font-size:13px;opacity:0.9;">两者结合，你就拥有了一个零成本、零隐私泄露的个人 ChatGPT。<br>下一步：把多个 AI 工具串联成自动化的 AI Agent 工作流。敬请期待！</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 快速上手 Checklist ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">快速上手 Checklist</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☑</span> 安装 Docker Desktop（Windows）/ Docker Engine（Linux）<br>
+  <span style="color:#8e44ad;">☑</span> 确保 Ollama 或 llama.cpp server 正在运行<br>
+  <span style="color:#4A90D9;">☑</span> docker pull ghcr.io/open-webui/open-webui:main<br>
+  <span style="color:#8e44ad;">☑</span> 启动容器（务必带 --add-host 参数！）<br>
+  <span style="color:#4A90D9;">☑</span> 浏览器访问 http://localhost:3000<br>
+  <span style="color:#8e44ad;">☑</span> 注册管理员账号<br>
+  <span style="color:#4A90D9;">☑</span> 确认能看到本地模型<br>
+  <span style="color:#8e44ad;">☑</span> 试一个简单对话<br>
+  <span style="color:#4A90D9;">☑</span> 上传一份 PDF 创建知识库，试试 RAG<br>
+  <span style="color:#8e44ad;">☑</span> 打开联网搜索，问一个实时问题<br>
+  <span style="color:#4A90D9;">☑</span> （可选）拉同事注册账号，体验多用户模式
+</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>如果你一路从 Ollama → llama.cpp → Open WebUI 走到了这里，你已经完成了从"玩玩 AI"到"搭建完整本地 AI 工作站"的蜕变。</p>
+
+<p>Docker 部署一条命令，界面和 ChatGPT 一模一样，还有知识库、联网搜索、多模型对比这些 ChatGPT 免费版都没有的功能——<strong>你自己的 AI 工作站，比大多数 SaaS 服务更好用。</strong></p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 现在打开浏览器，把你的第一个知识库搭起来！</strong>
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 关注我们，下一期：多模型协同 AI Agent 工作流实战
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写日期：2026-06-12<br>适用对象：已部署 Ollama / llama.cpp，想拥有 ChatGPT 同款界面的用户<br>Open WebUI 官网：docs.openwebui.com
+</p>
+
+</body>

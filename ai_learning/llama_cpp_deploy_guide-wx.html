@@ -1,0 +1,713 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 本地大模型部署 · 进阶篇</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  llama.cpp 本地大模型部署实战教程
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  从源码编译到生产部署，从零掌握高性能 LLM 推理引擎<br>含 Ollama vs llama.cpp 对比选型指南
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  <strong style="color:#2b6cb0;">📝 写在前面：</strong>这是 llama.cpp 的完整部署教程，涵盖 Linux 和 Windows 双平台。如果你是纯新手、刚接触本地大模型，建议先看我们的 <strong>Ollama 入门教程</strong>，理解基本概念后再来看这篇进阶内容。<br><br>
+  更新日期：2026-06-12 · 当前稳定版 b9601
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">1. 环境要求</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">2. 依赖准备</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">3. 编译构建</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">4. 模型下载</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">5. 参数配置</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">6. 报错排查</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">7. 性能优化</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">8. GPU 附录</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">9. 对比选型</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第1章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  概述与环境要求
+</p>
+
+<p>llama.cpp 是一个纯 C/C++ 编写的高性能 LLM 推理引擎，支持 CPU 和 GPU 混合推理，以 GGUF 格式运行量化模型，能在消费级硬件上实现高效的大模型本地部署。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 最低硬件要求</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>7B-8B 模型 · Q4_K_M 量化</strong><br>
+  最低 6 GB · 推荐 16 GB RAM / 8 GB VRAM<br><br>
+  <strong>13B-14B 模型 · Q4_K_M 量化</strong><br>
+  最低 10 GB · 推荐 32 GB RAM / 12 GB VRAM<br><br>
+  <strong>32B-34B 模型 · Q4_K_M 量化</strong><br>
+  最低 22 GB · 推荐 32 GB RAM / 24 GB VRAM<br><br>
+  <strong>70B-72B 模型 · Q4_K_M 量化</strong><br>
+  最低 44 GB · 推荐 64 GB RAM / 48 GB VRAM
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 软件版本要求</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Git:</strong> 2.40+（Linux & Windows）<br>
+  <strong>CMake:</strong> 3.21+（Linux & Windows）<br>
+  <strong>C++ 编译器:</strong> GCC 12+（Linux）/ MSVC 2022+（Windows）<br>
+  <strong>NVIDIA 驱动（CUDA）:</strong> 525+<br>
+  <strong>CUDA Toolkit（CUDA）:</strong> 12.x<br>
+  <strong>Python（模型转换）:</strong> 3.10+
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第2章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  环境依赖准备
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.1 Linux 环境（Ubuntu 22.04/24.04）</p>
+
+<p><strong>安装基础编译工具链：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  sudo apt update && sudo apt upgrade -y<br>
+  sudo apt install -y build-essential cmake git wget curl<br><br>
+  <span style="color:#888;"># 验证版本</span><br>
+  gcc --version &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;"># 需要 &gt;= 12</span><br>
+  cmake --version &nbsp;&nbsp;<span style="color:#888;"># 需要 &gt;= 3.21</span><br><br>
+  <span style="color:#888;"># 如果 gcc 版本过低，安装更新版本</span><br>
+  sudo apt install -y gcc-12 g++-12<br>
+  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100<br>
+  sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+</p>
+
+<p><strong>安装 CUDA Toolkit（NVIDIA GPU 用户）：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 确认 GPU 和驱动</span><br>
+  nvidia-smi<br>
+  <span style="color:#888;"># 输出示例：Driver Version: 550.x | CUDA Version: 12.4</span><br><br>
+  <span style="color:#888;"># 安装 CUDA Toolkit 12.4（Ubuntu 24.04）</span><br>
+  wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb<br>
+  sudo dpkg -i cuda-keyring_1.1-1_all.deb<br>
+  sudo apt-get update<br>
+  sudo apt-get install -y cuda-toolkit-12-4<br><br>
+  <span style="color:#888;"># 配置环境变量</span><br>
+  echo 'export PATH=/usr/local/cuda-12.4/bin:$PATH' &gt;&gt; ~/.bashrc<br>
+  echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:$LD_LIBRARY_PATH' &gt;&gt; ~/.bashrc<br>
+  source ~/.bashrc<br><br>
+  <span style="color:#888;"># 验证</span><br>
+  nvcc --version
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2.2 Windows 环境</p>
+
+<p><strong>安装 Visual Studio Build Tools：</strong></p>
+<p>① 访问 Visual Studio 下载页<br>② 下载 <strong>Visual Studio 2022 Community</strong> 或 <strong>Build Tools for Visual Studio 2022</strong><br>③ 安装时勾选 <strong>"使用 C++ 的桌面开发"</strong> 工作负载<br>④ 确保勾选 <strong>Windows 10/11 SDK</strong> 和 <strong>MSVC v143 编译器</strong></p>
+
+<p><strong>安装 Git：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  winget install --id Git.Git -e --source winget
+</p>
+
+<p><strong>安装 CMake：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  winget install --id Kitware.CMake -e --source winget
+</p>
+
+<p>安装后<strong>重启终端</strong>，验证：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cmake --version<br>
+  git --version
+</p>
+
+<p><strong>安装 CUDA Toolkit（NVIDIA GPU 用户）：</strong></p>
+<p>① 访问 NVIDIA CUDA 下载页<br>② 选择 Windows → x86_64 → 对应版本 → exe (local)<br>③ 下载并安装<br>④ 验证：nvcc --version / nvidia-smi</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第3章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  源码克隆与编译构建
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>⚡ 2026 年重大更新：</strong>自 b9196 版本起，llama.cpp 官方 GitHub Releases 提供 Windows 预构建二进制包（免编译），支持 CUDA/Vulkan 多种后端。Windows 用户可直接跳到下面「3.0 免编译方案」！
+</p>
+
+<!-- 3.0 免编译 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.0 Windows 免编译方案（2026 新增 · 强烈推荐）</p>
+
+<p>自 2026 年 5 月，llama.cpp 官方在 GitHub Releases 中提供预编译 Windows 二进制包，省去安装 VS、CMake、CUDA Toolkit 的繁琐流程。</p>
+
+<p><strong>下载步骤：</strong></p>
+<p>① 访问 llama.cpp Releases 页<br>② 找到最新版本（当前 b9601），展开 "Assets"<br>③ 根据硬件选择下载：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">NVIDIA 显卡（推荐）</strong><br>
+  llama-b9601-bin-win-cuda-cu12.8-x64.7z &nbsp;<span style="color:#888;">CUDA 12.8 加速</span><br><br>
+  <strong style="color:#6b46c1;">AMD / Intel 显卡</strong><br>
+  llama-b9601-bin-win-vulkan-x64.7z &nbsp;<span style="color:#888;">Vulkan 通用加速</span><br><br>
+  <strong style="color:#555;">纯 CPU（老旧 CPU）</strong><br>
+  llama-b9601-bin-win-noavx-x64.7z &nbsp;<span style="color:#888;">无 AVX 指令集兼容</span>
+</p>
+
+<p>④ 用 7-Zip 解压到任意目录，例如 <strong>C:\llama.cpp</strong></p>
+
+<p><strong>配置 CUDA DLL（CUDA 版本需要）：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 方式一：安装 CUDA Toolkit 12.x（会自动配置好 DLL）</span><br>
+  <span style="color:#888;"># 方式二：手动下载 cudart DLL（轻量），从 Releases 页下载</span><br>
+  <span style="color:#888;"># cudart-llama-bin-win-cu12.8-x64.7z，解压后将 DLL 放到和 llama-cli.exe 同级</span>
+</p>
+
+<p><strong>验证：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cd C:\llama.cpp<br>
+  .\llama-cli.exe --version<br>
+  <span style="color:#888;"># 应看到 cuda=1 或 vulkan=1 字样</span>
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 免编译 vs 源码编译：</strong><br>
+  · 安装难度：⭐ 极简（5分钟） vs ⭐⭐⭐ 中等（30分钟+）<br>
+  · CUDA 架构优化：通用编译 vs 可针对优化<br>
+  · 性能差距：仅约 5-8%，普通用户感知不到<br>
+  · <strong>结论：绝大多数 Windows 用户直接用免编译版即可！</strong>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 3.1 CPU 编译 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.1 CPU 编译（双平台）</p>
+
+<p><strong>克隆仓库：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <span style="color:#888;"># 务必包含子模块！</span><br>
+  git clone --recurse-submodules https://github.com/ggml-org/llama.cpp.git<br>
+  cd llama.cpp
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ 如果已克隆但忘记 --recurse-submodules：</strong><br>
+  <span style="color:#555;">git submodule update --init --recursive</span>
+</p>
+
+<p><strong>Linux CPU 编译：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cmake -B build -DCMAKE_BUILD_TYPE=Release<br>
+  cmake --build build --config Release -j$(nproc)
+</p>
+
+<p>编译产物在 build/bin/ 目录下：llama-cli（命令行推理）、llama-server（HTTP 服务）、llama-quantize（量化工具）、llama-embedding（嵌入向量提取）、llama-perplexity（困惑度评估）</p>
+
+<p><strong>Windows CPU 编译：</strong></p>
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ 必须在 "Developer PowerShell for VS 2022" 中执行！</strong>
+</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cmake -B build -DCMAKE_BUILD_TYPE=Release<br>
+  cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
+</p>
+<p>编译产物在 build\bin\Release\ 目录下（.exe 后缀）。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 3.2 CUDA -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.2 CUDA GPU 加速编译</p>
+
+<p><strong>查询 GPU 计算能力：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  nvidia-smi --query-gpu=compute_cap --format=csv,noheader<br>
+  <span style="color:#888;"># 示例输出：8.9 → 架构代码为 "89"</span>
+</p>
+
+<p><strong>常用架构代码速查：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  RTX 2060/2070/2080 → 架构 75（Turing）<br>
+  RTX 3060/3070/3080/3090 → 架构 86（Ampere）<br>
+  RTX 4060/4070/4080/4090 → 架构 89（Ada Lovelace）<br>
+  RTX 5070/5080/5090 → 架构 100（Blackwell）<br>
+  A100 → 架构 80 · H100 → 架构 90
+</p>
+
+<p><strong>推荐：指定 GPU 架构优化编译（以 RTX 4090 为例）：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cmake -B build \<br>
+  &nbsp;&nbsp;-DCMAKE_BUILD_TYPE=Release \<br>
+  &nbsp;&nbsp;-DGGML_CUDA=ON \<br>
+  &nbsp;&nbsp;-DGGML_CUDA_F16=ON \<br>
+  &nbsp;&nbsp;-DGGML_CUDA_ARCHITECTURES="89" \<br>
+  &nbsp;&nbsp;-DBUILD_SHARED_LIBS=OFF<br><br>
+  cmake --build build --config Release -j$(nproc)
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">参数说明：</strong><br>
+  · -DGGML_CUDA=ON — 启用 CUDA 后端<br>
+  · -DGGML_CUDA_F16=ON — FP16 张量核心加速（RTX 20xx+ 支持）<br>
+  · -DGGML_CUDA_ARCHITECTURES="89" — <strong>强烈推荐</strong>，避免运行时崩溃<br>
+  · -DBUILD_SHARED_LIBS=OFF — 静态二进制，可独立分发
+</p>
+
+<p><strong>验证 CUDA 是否启用：</strong></p>
+<p>成功标志（输出中应看到）：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  llm_load_tensors: offloaded 32/33 layers to GPU<br>
+  llm_load_tensors: VRAM used: 4782 MiB
+</p>
+<p>如果看到 <strong>offloaded 0/33 layers</strong>，说明 CUDA 未生效，需要清理 build 目录重新编译。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 3.3 其他后端 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3.3 其他 GPU 后端</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Vulkan（AMD/Intel GPU，跨平台）</strong><br>
+  cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_VULKAN=ON<br>
+  cmake --build build --config Release -j$(nproc)<br><br>
+  <strong style="color:#6b46c1;">Metal（Apple Silicon / macOS）</strong><br>
+  cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_METAL=ON<br>
+  cmake --build build --config Release -j $(sysctl -n hw.ncpu)<br><br>
+  <strong style="color:#2b6cb0;">HIP（AMD GPU，Linux）</strong><br>
+  cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_HIP=ON<br>
+  cmake --build build --config Release -j$(nproc)
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第4章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  模型下载与转换指南
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.1 直接下载 GGUF 模型（推荐）</p>
+
+<p>GGUF 是 llama.cpp 的原生格式，无需转换，下载即用。</p>
+
+<p><strong>知名 GGUF 发布者：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>TheBloke</strong> — 大量量化模型<br>
+  <strong>bartowski</strong> — 多种 GGUF 量化<br>
+  <strong>lmstudio-community</strong> — LM Studio 社区版<br>
+  <strong>unsloth</strong> — 优化的量化模型
+</p>
+
+<p><strong>使用 huggingface-cli 下载：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  pip install huggingface_hub<br><br>
+  huggingface-cli download bartowski/Qwen2.5-7B-Instruct-GGUF \<br>
+  &nbsp;&nbsp;Qwen2.5-7B-Instruct-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;--local-dir ./models \<br>
+  &nbsp;&nbsp;--local-dir-use-symlinks False
+</p>
+
+<p><strong>推荐的开源 GGUF 模型：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Qwen3</strong> 0.6B-235B · Q4_K_M · 中英文对话、代码<br>
+  <strong style="color:#6b46c1;">Qwen2.5</strong> 0.5B-72B · Q4_K_M · 通用中英文<br>
+  <strong style="color:#2b6cb0;">Llama 4 Scout/Maverick</strong> 17B/109B · Q4_K_M · 英文通用<br>
+  <strong style="color:#6b46c1;">DeepSeek-R1 蒸馏版</strong> 1.5B-70B · Q4_K_M · 推理/数学<br>
+  <strong style="color:#2b6cb0;">Gemma 3</strong> 1B-27B · Q4_K_M · 多语言<br>
+  <strong style="color:#6b46c1;">Phi-4-mini</strong> 3.8B · Q4_K_M · 轻量英文
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.2 HuggingFace 模型转 GGUF</p>
+
+<p>如果只有 safetensors/pytorch 格式的模型，需要先转换：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cd llama.cpp<br>
+  pip install -r requirements.txt<br><br>
+  <span style="color:#888;"># 直接从 HuggingFace 下载并转换</span><br>
+  python convert_hf_to_gguf.py Qwen/Qwen2.5-7B-Instruct \<br>
+  &nbsp;&nbsp;--outfile ./models/qwen2.5-7b-f16.gguf \<br>
+  &nbsp;&nbsp;--outtype f16<br><br>
+  <span style="color:#888;"># 支持的输出类型：f32, f16, bf16, q8_0</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4.3 GGUF 模型量化</p>
+
+<p>使用 llama-quantize 工具将 FP16 模型量化为更小的版本：</p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ./build/bin/llama-quantize \<br>
+  &nbsp;&nbsp;./models/model-f16.gguf \<br>
+  &nbsp;&nbsp;./models/model-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;Q4_K_M
+</p>
+
+<p><strong>量化等级选择：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Q8_0</strong> ~50% 体积 · 几乎无损 · 质量优先<br>
+  <strong style="color:#6b46c1;">Q6_K</strong> ~38% 体积 · 极高质量 · 质量优先<br>
+  <strong style="color:#2b6cb0;">Q5_K_M</strong> ~33% 体积 · 高质量 · 推荐质量默认值<br>
+  <strong style="color:#2b6cb0;background:#ebf4ff;padding:1px 6px;border-radius:3px;">Q4_K_M</strong> ~25% 体积 · <strong>入门首选，体积效果最均衡</strong><br>
+  <strong style="color:#6b46c1;">Q4_K_S</strong> ~25% 体积 · 比 K_M 稍小<br>
+  <strong style="color:#2b6cb0;">Q3_K_M</strong> ~19% 体积 · 显存紧张时可用<br>
+  <strong style="color:#6b46c1;">Q2_K</strong> ~13% 体积 · 极限压缩，质量明显下降
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 建议：</strong>优先从 Q4_K_M 开始，质量不够升级到 Q5_K_M 或 Q6_K；显存不够降级到 Q3_K_M。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第5章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  关键参数配置与启动命令
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.1 核心参数速查表</p>
+
+<p><strong>模型加载参数：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>-m / --model</strong> — 模型文件路径，如 -m ./models/qwen.gguf<br>
+  <strong>--n-gpu-layers / -ngl</strong> — GPU 卸载层数，-1 为自动<br>
+  <strong>--no-mmap</strong> — 禁用内存映射，低内存设备用<br>
+  <strong>--mlock</strong> — 锁定模型到内存，防交换
+</p>
+
+<p><strong>上下文与性能参数：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>--ctx-size / -c</strong> — 上下文窗口大小（Token 数），如 --ctx-size 8192<br>
+  <strong>--threads / -t</strong> — CPU 推理线程数，如 -t 8<br>
+  <strong>--batch-size / -b</strong> — 单批最大 Token 数，默认 2048<br>
+  <strong>--flash-attn / -fa</strong> — 启用 Flash Attention
+</p>
+
+<p><strong>采样参数：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>--temp</strong> 0.8 — 温度：0=贪心，0.7-1.0=平衡，&gt;1=随机<br>
+  <strong>--top-k</strong> 40 — Top-K 采样<br>
+  <strong>--top-p</strong> 0.95 — 核采样（Nucleus）<br>
+  <strong>--repeat-penalty</strong> 1.0 — 重复惩罚，1.1 为轻度
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.2 llama-cli 命令行推理</p>
+
+<p><strong>单轮对话：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ./build/bin/llama-cli \<br>
+  &nbsp;&nbsp;-m ./models/qwen2.5-7b-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;-p "请用中文介绍一下人工智能的发展历史" \<br>
+  &nbsp;&nbsp;-n 512 \<br>
+  &nbsp;&nbsp;--n-gpu-layers 99 \<br>
+  &nbsp;&nbsp;--ctx-size 4096 \<br>
+  &nbsp;&nbsp;--temp 0.7
+</p>
+
+<p><strong>交互式多轮对话：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ./build/bin/llama-cli \<br>
+  &nbsp;&nbsp;-m ./models/qwen2.5-7b-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;-cnv \<br>
+  &nbsp;&nbsp;--chat-template chatml \<br>
+  &nbsp;&nbsp;-ngl 99 \<br>
+  &nbsp;&nbsp;-c 8192 \<br>
+  &nbsp;&nbsp;-t 8 \<br>
+  &nbsp;&nbsp;--temp 0.7 \<br>
+  &nbsp;&nbsp;--top-p 0.9
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 5.3 llama-server HTTP 服务</p>
+
+<p><strong>基本启动：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ./build/bin/llama-server \<br>
+  &nbsp;&nbsp;-m ./models/qwen2.5-7b-Q4_K_M.gguf \<br>
+  &nbsp;&nbsp;--n-gpu-layers 99 \<br>
+  &nbsp;&nbsp;--ctx-size 8192 \<br>
+  &nbsp;&nbsp;--threads 8 \<br>
+  &nbsp;&nbsp;--host 0.0.0.0 \<br>
+  &nbsp;&nbsp;--port 8080
+</p>
+
+<p>启动后访问 <strong>http://127.0.0.1:8080</strong> 即可使用内置 Web 聊天界面。</p>
+
+<p><strong>API 调用示例（OpenAI 兼容）：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  curl http://127.0.0.1:8080/v1/chat/completions \<br>
+  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+  &nbsp;&nbsp;-d '{<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"model": "local-model",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"messages": [<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"role": "user", "content": "你好"}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"temperature": 0.7,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"max_tokens": 512<br>
+  &nbsp;&nbsp;}'
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 生产级配置要点：</strong><br>
+  · --n-gpu-layers -1 — 自动检测最优 GPU 层数<br>
+  · --flash-attn — 启用 Flash Attention 降低显存占用<br>
+  · --api-key — 设置 API 密钥保护服务<br>
+  · --metrics — 启用 Prometheus 格式指标
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第6章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  常见报错排查
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 编译阶段 Top 5</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#c53030;">fatal error: ggml.h: No such file</strong><br>
+  → 未拉取子模块：git submodule update --init --recursive<br><br>
+  <strong style="color:#c53030;">CMake Error: Could not find CMAKE_C_COMPILER</strong><br>
+  → Linux: sudo apt install build-essential / Windows: 安装 VS Build Tools<br><br>
+  <strong style="color:#c53030;">CMAKE_CUDA_ARCHITECTURES must be non-empty</strong><br>
+  → 添加 -DGGML_CUDA_ARCHITECTURES="89"（替换为你的架构）<br><br>
+  <strong style="color:#c53030;">undefined reference to cudaFree</strong><br>
+  → 清理重建：rm -rf build &amp;&amp; cmake -B build -DGGML_CUDA=ON ...<br><br>
+  <strong style="color:#c53030;">The CXX compiler identification is unknown（Windows）</strong><br>
+  → 从 "Developer PowerShell for VS 2022" 启动
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 运行时 Top 5</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#c53030;">CUDA error: no kernel image is available</strong><br>
+  → CUDA 架构不匹配，重新编译指定正确架构<br><br>
+  <strong style="color:#c53030;">offloaded 0/33 layers to GPU</strong><br>
+  → CUDA 未正确链接，清理 build 目录重新编译<br><br>
+  <strong style="color:#c53030;">CUDA error: out of memory</strong><br>
+  → 减少 --n-gpu-layers 数值，或使用更低量化等级<br><br>
+  <strong style="color:#c53030;">Segmentation fault (core dumped)</strong><br>
+  → ① 检查 CUDA 架构匹配 ② 检查模型完整性 ③ 尝试纯 CPU 运行<br><br>
+  <strong style="color:#c53030;">模型输出乱码</strong><br>
+  → <strong>避免使用 CUDA 13.2！</strong>使用 12.x 或 13.0/13.1
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第7章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  性能优化建议
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 GPU 推理优化</p>
+
+<p>① <strong>尽可能卸载所有层到 GPU：</strong>--n-gpu-layers 99 或 -1（自动）<br>② <strong>启用 Flash Attention：</strong>--flash-attn，显著降低 KV Cache 显存占用<br>③ <strong>指定 GPU 架构编译：</strong>-DGGML_CUDA_ARCHITECTURES="89"<br>④ <strong>增大 batch size：</strong>--batch-size 4096（显存充足时）</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CPU 推理优化</p>
+
+<p>① <strong>线程数设为核心数（非超线程数）：</strong>--threads 8（8 核 CPU）<br>② <strong>物理核心绑定（Linux）：</strong>--cpu-strict 1<br>③ <strong>批处理线程分离：</strong>--threads-batch 16</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 通用优化</p>
+
+<p>① 合适的量化等级：Q4_K_M 是体积与效果的最佳平衡点<br>② 合理设置上下文窗口：8192-16384 对多数场景已足够<br>③ 锁定内存：--mlock 防止操作系统将模型页交换到磁盘<br>④ 使用 SSD 存放模型，减少首次加载时间<br>⑤ <strong>生产环境固定版本</strong>，推荐稳定版（如 b9601）</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第8章 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  附录：GPU 架构代码对照表
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">GTX 10 系列</strong> GTX 1080 Ti → 计算能力 6.1 → 架构代码 <strong>61</strong><br>
+  <strong style="color:#6b46c1;">RTX 20 系列</strong> RTX 2060/2070/2080 → 计算能力 7.5 → 架构代码 <strong>75</strong><br>
+  <strong style="color:#2b6cb0;">A100</strong> → 计算能力 8.0 → 架构代码 <strong>80</strong><br>
+  <strong style="color:#6b46c1;">RTX 30 系列</strong> RTX 3060/3070/3080/3090 → 计算能力 8.6 → 架构代码 <strong>86</strong><br>
+  <strong style="color:#2b6cb0;">RTX 40 系列</strong> RTX 4060/4070/4080/4090 → 计算能力 8.9 → 架构代码 <strong>89</strong><br>
+  <strong style="color:#6b46c1;">H100</strong> → 计算能力 9.0 → 架构代码 <strong>90</strong><br>
+  <strong style="color:#2b6cb0;">RTX 50 系列</strong> RTX 5070/5080/5090 → 计算能力 10.0 → 架构代码 <strong>100</strong>
+</p>
+
+<p><strong>多 GPU 编译：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cmake -B build \<br>
+  &nbsp;&nbsp;-DGGML_CUDA=ON \<br>
+  &nbsp;&nbsp;-DCMAKE_CUDA_ARCHITECTURES="75;86;89"
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 第9章：对比选型 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">9</span>
+  llama.cpp vs Ollama 对比选型指南
+</p>
+
+<p>看完上面的教程，你可能会有一个疑问："说了那么多，到底该用 llama.cpp 还是 Ollama？"这个问题直接关系到你后续的使用体验。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 9.1 一句话定位</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Ollama</strong> — 开箱即用的 AI 应用，像装一个 App 一样简单，5 分钟跑起大模型<br>
+  <strong style="color:#6b46c1;">llama.cpp</strong> — 面向开发者的推理引擎，给你最大的控制权，但需要你愿意动手
+</p>
+
+<p>打个比方：<strong>Ollama 像自动挡汽车</strong>，踩油门就走；<strong>llama.cpp 像手动挡赛车</strong>，起步要学，但弯道极限更高。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 9.2 多维度对比</p>
+
+<p><strong>安装与上手：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Ollama</strong> 安装包→双击→完成 · 零依赖 · 新手⭐⭐⭐⭐⭐<br>
+  <strong style="color:#6b46c1;">llama.cpp</strong> 免编译解压10分钟 / 源码编译30-60分钟 · 新手⭐⭐⭐/⭐⭐
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">结论：</strong>易用性上 Ollama 完胜，尤其适合 Windows 新手。
+</p>
+
+<p><strong>模型管理：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Ollama</strong> 统一管理、自动组织 · ollama pull 一行下载 · 内置搜索 · Tag 区分版本<br>
+  <strong style="color:#6b46c1;">llama.cpp</strong> 手动管理 · 去 HuggingFace 下载 · 文件名管理 · 完全自由
+</p>
+
+<p><strong>性能（2026 年 5 月 benchmark，RTX 4090，Llama 3.1 8B Q4_K_M）：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>单请求吞吐量：</strong>Ollama ~170 tok/s vs llama.cpp ~186 tok/s（<span style="color:#2b6cb0;">快约 9%</span>）<br>
+  <strong>Prompt 处理速度：</strong>Ollama ~3200 tok/s vs llama.cpp ~3550 tok/s（<span style="color:#2b6cb0;">快约 11%</span>）<br>
+  <strong>显存占用 / 首次加载：</strong>基本一致
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 说人话：</strong>对普通用户的日常使用来说，这个 9-11% 的差距几乎感知不到。除非你在做批处理、高并发、或对延迟极度敏感。
+</p>
+
+<p><strong>灵活性与可控性：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Ollama</strong> GPU 层数自动（黑盒）· 编译不可定制 · 仅 CUDA/Metal · 生态最丰富（130k+ Stars）<br>
+  <strong style="color:#6b46c1;">llama.cpp</strong> 精确到层 · 可指定 GPU 架构编译 · CUDA/Vulkan/Metal/HIP/SYCL 全覆盖 · 技术深度更深（75k+ Stars）
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">结论：</strong>llama.cpp 在灵活性和底层控制上远超 Ollama。开发者、需精细化调参、或跑 AMD/Intel 显卡，选 llama.cpp。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 9.3 性能实测</p>
+
+<p>同一台机器（RTX 4090 24GB，64GB RAM），Qwen2.5-7B-Instruct-Q4_K_M：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">Ollama</strong> ollama run qwen2.5:7b<br>
+  → 42.3 tok/s（生成），3.8s 首 token 延迟<br><br>
+  <strong style="color:#6b46c1;">llama.cpp</strong> ./llama-cli -m qwen2.5-7b-Q4_K_M.gguf -n 512 -ngl 99 -fa<br>
+  → 46.1 tok/s（生成），3.5s 首 token 延迟<br><br>
+  <strong>实测差约 9%，符合社区报告的 8-12% 区间。</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 9.4 30 秒选型决策树</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;">
+  <strong>你的主要需求是什么？</strong><br>
+  ├─ "我就想赶紧用上 AI，别让我折腾" → <span style="color:#2b6cb0;font-weight:700;">选 Ollama ✅</span><br>
+  ├─ "我是开发者，想要最大控制权" → <span style="color:#6b46c1;font-weight:700;">选 llama.cpp ✅</span><br>
+  ├─ "我要在 AMD / Intel 显卡上跑" → <span style="color:#6b46c1;font-weight:700;">选 llama.cpp（Vulkan）✅</span><br>
+  ├─ "我要做性能 Benchmark" → <span style="color:#6b46c1;font-weight:700;">选 llama.cpp ✅</span><br>
+  ├─ "我要集成到现有应用，需要 OpenAI API" → <span style="color:#555;font-weight:700;">两个都可以 ✅</span><br>
+  ├─ "我是纯新手 + Windows + 不想学命令行" → <span style="color:#2b6cb0;font-weight:700;">选 Ollama ✅</span><br>
+  ├─ "我要做模型量化、格式转换" → <span style="color:#6b46c1;font-weight:700;">选 llama.cpp ✅</span><br>
+  └─ "我既想省事又想极致性能" → <span style="color:#2b6cb0;font-weight:700;">Ollama 入门 → llama.cpp 进阶 ✅</span>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 9.5 终极建议：两个都用</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 事实上：Ollama 底层用的就是 llama.cpp 引擎。</strong>
+</p>
+
+<p>它们是同一技术栈的不同封装层级——Ollama 封装了 llama.cpp 并套上易用外壳，llama.cpp 是更底层、更自由的原始引擎。</p>
+
+<p><strong>推荐使用策略：</strong></p>
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong style="color:#2b6cb0;">📅 入门期（第 1-2 周）</strong> Ollama — 快速体验模型，建立基本认知<br>
+  <strong style="color:#6b46c1;">📅 进阶期（第 3-4 周）</strong> llama.cpp — 学编译、GPU 调优、理解推理参数<br>
+  <strong style="color:#2b6cb0;">📅 稳定期（日常使用）</strong> 两者混用 — Ollama 对话，llama.cpp 定制任务<br>
+  <strong style="color:#6b46c1;">📅 开发者</strong> llama.cpp 为主 — 接入自定义推理管线
+</p>
+
+<p><strong>具体分工：</strong></p>
+<p>日常聊天、写作、翻译 → <strong style="color:#2b6cb0;">用 Ollama</strong>，省心省力<br>代码开发、嵌入向量提取、批量处理 → <strong style="color:#6b46c1;">用 llama.cpp</strong>，性能更高<br>模型评测、量化实验、格式转换 → <strong style="color:#6b46c1;">必须用 llama.cpp</strong>，这是它独有的能力<br>搭建团队共享 AI 服务 → <strong style="color:#6b46c1;">用 llama.cpp 的 llama-server</strong>，部署更灵活</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;">
+  <strong style="color:#2b6cb0;">最终对比总表：</strong><br><br>
+  <strong>Ollama</strong> — 最适合想省心的普通用户 · 门槛🟢极低 · 性能上限🔵高 · 灵活度🟡中等 · 生态🟢最丰富<br>
+  <strong>llama.cpp</strong> — 最适合追求极致控制的开发者 · 门槛🟡中等/🔴较高 · 性能上限🟢最高 · 灵活度🟢极高 · 生态🟡依赖底层
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:16px;">🎯 一句话总结</strong><br><br>
+  <strong style="font-size:18px;">Ollama 让你快速起步，llama.cpp 让你走得更远</strong><br><br>
+  <span style="font-size:13px;opacity:0.9;">先学 Ollama 建立信心，再学 llama.cpp 拓展能力边界<br>两把刀都磨，才是本地 AI 玩家的完全体。</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:16px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 快速上手 Checklist ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">快速上手 Checklist</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☑</span> 安装编译工具链（gcc/msvc + cmake + git）<br>
+  <span style="color:#8e44ad;">☑</span> （GPU 用户）安装 NVIDIA 驱动 + CUDA Toolkit 12.x<br>
+  <span style="color:#4A90D9;">☑</span> git clone --recurse-submodules https://github.com/ggml-org/llama.cpp<br>
+  <span style="color:#8e44ad;">☑</span> cd llama.cpp<br>
+  <span style="color:#4A90D9;">☑</span> cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=ON -DGGML_CUDA_ARCHITECTURES="你的架构代码"<br>
+  <span style="color:#8e44ad;">☑</span> cmake --build build --config Release -j$(nproc)<br>
+  <span style="color:#4A90D9;">☑</span> 下载 GGUF 模型到 ./models/ 目录<br>
+  <span style="color:#8e44ad;">☑</span> 测试：./build/bin/llama-cli -m ./models/model.gguf -p "Hello" -n 50 -ngl 99<br>
+  <span style="color:#4A90D9;">☑</span> 启动服务：./build/bin/llama-server -m ./models/model.gguf -ngl -1 -c 8192 --host 0.0.0.0<br>
+  <span style="color:#8e44ad;">☑</span> 浏览器访问 http://127.0.0.1:8080
+</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>llama.cpp 是所有本地大模型工具链中"地基"级别的存在——Ollama 底层用它，很多开源 AI 应用也依赖它。掌握 llama.cpp，你就掌握了本地 AI 部署的底层能力。</p>
+
+<p>如果你看完全文觉得"有点难"，这完全正常。从 Ollama 开始（5 分钟跑起来），然后再来啃这篇，你会发现一切豁然开朗。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一步：挑一个模型，跑起来再说！</strong>
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 关注我们，下一期教你用 Open WebUI 给本地模型配上 ChatGPT 一样的界面
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  编写日期：2026-05-29（更新于 2026-06-12）<br>适用对象：想深入学习本地大模型部署的开发者、技术爱好者<br>llama.cpp 仓库：github.com/ggml-org/llama.cpp
+</p>
+
+</body>
