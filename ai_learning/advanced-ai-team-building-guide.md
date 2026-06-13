@@ -1011,6 +1011,6 @@ models:
 
 ---
 
-*编写日期：2026 年 5 月 29 日*
+*编写日期：2026 年 6 月*
 *适用对象：具备基础开发能力，熟悉 Python 和 Linux 命令行的开发者*
 *配套文档：[AI 零基础入门指南](./ai-beginner-guide.md) | [llama.cpp 部署教程](./llama_cpp_deploy_guide.md)*
