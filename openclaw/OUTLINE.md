@@ -1,6 +1,6 @@
 # OpenClaw 系列创作大纲
 
-> OpenClaw —— 开源 LLM 工具链的体系化实战指南
+> OpenClaw（小龙虾）—— 开源 AI Agent 框架的体系化实战指南
 
 ---
 
