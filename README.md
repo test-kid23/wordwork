@@ -44,7 +44,7 @@ wordwork/
 ├── personal_skill/              # 个人技术备忘
 │
 ├── hermes/                      # Hermes 智能 Agent 框架系列（待创作）
-├── openclaw/                    # OpenClaw 开源 LLM 工具链系列（待创作）
+├── openclaw/                    # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
 ├── openhuman/                   # OpenHuman AI 赋能个体系列（待创作）
 └── llamacpp/                    # llama.cpp 本地部署大模型系列（待创作）
 ```
@@ -76,7 +76,7 @@ wordwork/
 |------|------|---------|---------|
 | 测试工程师 | `testengineer/` | 待定 | 软件测试技能与职业发展 |
 | Hermes | `hermes/` | 16 篇 | 智能 Agent 框架入门→生产部署 |
-| OpenClaw | `openclaw/` | 16 篇 | 开源 LLM 工具链全流程实战 |
+| OpenClaw | `openclaw/` | 待定 | 本地优先个人 AI 助手全流程实战 🦞 |
 | OpenHuman | `openhuman/` | 17 篇 | AI 赋能个人效率与能力提升 |
 | llama.cpp | `llamacpp/` | 19 篇 | 本地大模型部署从编译到工作站 |
 

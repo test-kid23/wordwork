@@ -77,10 +77,11 @@ wordwork/
 │   ├── rednote_account_plan.md # 账号规划
 │   ├── xhs-01~03 已写 3 篇
 │   └── xhs-04~13 规划 10 篇
-├── hermes/                     # Hermes 智能 Agent 框架系列（待创作）
-├── openclaw/                   # OpenClaw 开源 LLM 工具链系列（待创作）
-├── openhuman/                  # OpenHuman AI 赋能个体能力系列（待创作）
-└── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
+├── hermes/                     # Hermes Agent 自我进化 AI 代理系列（待创作）
+├── openclaw/                   # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
+├── openhuman/                  # OpenHuman 个人 AI 超级智能系列（待创作）
+├── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
+└── comfyui/                    # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
 ```
 
 ## 各系列创作进度（跟随 AI 浪潮持续更新）
@@ -96,10 +97,11 @@ wordwork/
 | `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
 | `testengineer/` | 软件测试工程师技能与职业发展 | 📁 目录已建，待创作 |
 | `personal_skill/` | 个人技术备忘 | 📝 积累中（2 篇） |
-| `hermes/` | Hermes 智能 Agent 框架 | 📁 目录已建，待创作 |
-| `openclaw/` | OpenClaw 开源 LLM 工具链 | 📁 目录已建，待创作 |
-| `openhuman/` | OpenHuman AI 赋能个体能力 | 📁 目录已建，待创作 |
+| `hermes/` | Hermes Agent 自我进化 AI 代理 | 📁 目录已建，待创作 |
+| `openclaw/` | OpenClaw 本地优先个人 AI 助手 🦞 | 📁 目录已建，待创作 |
+| `openhuman/` | OpenHuman 个人 AI 超级智能 | 📁 目录已建，待创作 |
 | `llamacpp/` | llama.cpp 本地部署大模型 | 📁 目录已建，待创作 |
+| `comfyui/` | ComfyUI 节点化 AI 视觉生成 🎨 | 📁 目录已建，待创作 |
 
 ## 排版规范
 
