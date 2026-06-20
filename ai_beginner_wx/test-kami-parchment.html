@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>还问"AI怎么用"？</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { font-size:16px; }
+  body {
+    font-family: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif;
+    background: #f5f4ed;
+    color: #2d2d2d;
+    line-height: 2;
+    padding: 48px 24px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .article-header {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 1px solid rgba(45,45,45,0.12);
+    margin-bottom: 48px;
+  }
+  .article-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+  .article-header .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #8c7b6b;
+    font-weight: 400;
+  }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #2c5282;
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(44,82,130,0.15);
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 32px 0 12px;
+  }
+  p {
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    color: #3d3d3d;
+  }
+  blockquote {
+    background: #faf8f2;
+    border-left: 4px solid #2c5282;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #5a4a3a;
+  }
+  .highlight-box {
+    background: #e8f0fe;
+    color: #2c5282;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 24px 0;
+    font-weight: 600;
+  }
+  .compare-bad {
+    background: #fef2f2;
+    padding: 12px 16px;
+    border-radius: 6px;
+    color: #991b1b;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  .compare-good {
+    background: #f0fdf4;
+    padding: 12px 16px;
+    border-radius: 6px;
+    color: #166534;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  ol {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+  ol li {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    color: #3d3d3d;
+  }
+  ol li strong {
+    color: #2c5282;
+  }
+  .cta {
+    text-align: center;
+    background: #2c5282;
+    color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    margin: 48px 0 24px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .footer-note {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    padding-top: 24px;
+    border-top: 1px solid rgba(45,45,45,0.1);
+    margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+
+<div class="article-header">
+  <h1>还问"AI怎么用"？<br>一个公式就够了</h1>
+  <div class="subtitle">html-anything 测试输出 · doc-kami-parchment 模板 · 2026.06.20</div>
+</div>
+
+<p>你是不是打开AI之后，盯着对话框不知道说什么？或者说了半天，AI给你的答案像废话？</p>
+
+<p>你不是一个人。<strong>90%的人第一次用AI都会遇到这个问题。</strong></p>
+
+<h2>万能公式：角色 + 任务 + 要求</h2>
+
+<p>跟AI说话不需要学编程，只需要记住一个公式：</p>
+
+<blockquote>
+  "你是一个[什么角色]，请帮我[做什么事]，要求[什么标准]。"
+</blockquote>
+
+<p>举个例子：</p>
+
+<div class="compare-bad">
+  <strong>❌ 不好的说法：</strong>"帮我写个通知。"
+</div>
+
+<div class="compare-good">
+  <strong>✅ 好的说法：</strong>"你是一个行政主管，请帮我写一份公司团建活动通知，发给全体员工。要求：语气轻松活泼、说清楚时间地点注意事项、200字以内。"
+</div>
+
+<h2>三个原则</h2>
+
+<ol>
+  <li><strong>说清楚，别含糊</strong> —— "帮我写个东西" ✗ → "帮我写一份300字的活动通知，面向客户" ✓</li>
+  <li><strong>不满意就让它改</strong> —— AI有无限耐心，可以改一百遍</li>
+  <li><strong>多轮对话</strong> —— AI记得上下文，像聊天一样自然</li>
+</ol>
+
+<h2>从今天开始</h2>
+
+<p>关掉这篇文章，打开Kimi或豆包，用这个公式对它说第一句话。哪怕只是"你好，帮我写一个今天的工作计划"。</p>
+
+<div class="cta">
+  🚀 迈出第一步，你就已经超过了90%还在观望的人。
+</div>
+
+<div class="footer-note">
+  排版工具：html-anything · 模板：doc-kami-parchment<br>
+  适用平台：微信公众号 / Web 阅读
+</div>
+
+</body>
+</html>

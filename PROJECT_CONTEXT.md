@@ -39,6 +39,14 @@
 ```
 wordwork/
 ├── PROJECT_CONTEXT.md          # 本文件
+├── ai_beginner_wx/             # AI 小白入门系列（微信公众号）✅ 5篇完成
+│   ├── PLAN.md                         # 系列选题规划
+│   ├── README.md                       # 使用说明
+│   ├── wx-beginner-01-scenarios.html   # 第1篇：5个打工人必备AI场景
+│   ├── wx-beginner-02-prompt.html      # 第2篇：普通人Prompt炼金术
+│   ├── wx-beginner-03-tools.html       # 第3篇：7个免费AI工具全景
+│   ├── wx-beginner-04-mindset.html     # 第4篇：AI时代不被替代的能力
+│   └── wx-beginner-05-nextstep.html    # 第5篇：从聊天到干活（进阶过渡）
 ├── ai_learning/                # AI 学习系列（入门向）
 │   ├── ai-beginner-guide.md           # AI 入门指南
 │   ├── advanced-ai-team-building-guide.md  # 进阶：AI 团队搭建
@@ -88,6 +96,7 @@ wordwork/
 
 | 目录 | 系列主题 | 状态 |
 |------|---------|------|
+| `ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 5/5 篇 |
 | `ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
 | `ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
 | `ai_road_wx/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
@@ -168,3 +177,21 @@ wordwork/
 - 总字数控制在 **15-25 字**
 - 优先使用 `[场景钩子/痛点] + [技术名词（可选）]` 公式
 - 技术名词可以作为搜索锚点，但必须搭配场景钩子，不要名词单独做标题
+
+### 内容漏斗策略（2026.06 新增）
+
+基于微信搜一搜数据分析，"AI怎么用"是第二大搜索词，"AI零基础入门指南"是点击最高的文章。大量小白用户涌入，但现有内容在入门之后直接跳到了技术深度，存在明显断层。
+
+**漏斗模型：**
+
+```
+流量层：小白入门系列（ai_beginner_wx/）
+  ↓ 文末挂进阶文章链接
+粘性层：工具深度系列（codebuddy/、rag/、claude_code/）
+  ↓ 文末挂体系化内容链接
+壁垒层：进阶之路系列（ai_road/、ai_road_wx/）
+  ↓ 文末挂技术深度内容链接
+深度层：技术系列（hermes/、openclaw/、llamacpp/）
+```
+
+**关键原则**：流量在入门，粘性在深度。用入门内容扩大受众基数，用专业内容筛选和留住核心用户。
