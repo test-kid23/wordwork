@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每次环境切换就是一场灾难 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  /* 封面卡 */
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 90px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 10px 28px;
+    border-radius: 24px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 48px;
+  }
+  .card-cover h1 {
+    font-size: 62px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .card-cover .subtitle {
+    font-size: 30px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 48px;
+    right: 72px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  /* ===== 内容卡通用 ===== */
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section {
+    margin-bottom: 0;
+  }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 故事场景 */
+  .card-content .story-box {
+    background: #f0f4ff;
+    padding: 22px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #374151;
+    line-height: 1.8;
+  }
+  .card-content .story-box .em { color: #dc2626; font-weight: 700; }
+  .card-content .story-box .hl { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  /* 踩坑清单 */
+  .card-content .pitfall-list { display: flex; flex-direction: column; gap: 12px; }
+  .card-content .pitfall-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: #fff;
+    border: 1.5px solid #fee2e2;
+    padding: 18px 24px;
+    border-radius: 12px;
+    border-left: 4px solid #ef4444;
+  }
+  .card-content .pitfall-item .pi-icon { font-size: 30px; flex-shrink: 0; }
+  .card-content .pitfall-item .pi-body { font-size: 22px; color: #4b5563; line-height: 1.7; }
+  .card-content .pitfall-item .pi-body strong { color: #dc2626; }
+  .card-content .pitfall-summary {
+    background: rgba(239,68,68,0.07);
+    border: 1.5px dashed #f87171;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 24px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  /* 反模式 */
+  .card-content .anti-pattern {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    padding: 24px 28px;
+    border-radius: 14px;
+    font-size: 23px;
+    color: #4b5563;
+    line-height: 2;
+  }
+  .card-content .anti-pattern strong { color: #dc2626; }
+  .card-content .anti-pattern .tagline {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #fca5a5;
+    font-size: 24px;
+    color: #991b1b;
+    font-weight: 700;
+    text-align: center;
+  }
+  /* 配置卡片 */
+  .card-content .config-cols {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .config-col {
+    flex: 1;
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 20px 18px;
+  }
+  .card-content .config-col .cc-env {
+    font-size: 22px;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 12px;
+  }
+  .card-content .config-col .cc-line {
+    font-size: 20px;
+    color: #374151;
+    font-family: 'Courier New','Noto Sans SC',monospace;
+    line-height: 2;
+    padding-left: 12px;
+  }
+  .card-content .config-col.purple { background: #f5f3ff; border-color: #c4b5fd; }
+  .card-content .config-col.purple .cc-env { color: #7c3aed; }
+  .card-content .config-col.amber { background: #fffbeb; border-color: #fde68a; }
+  .card-content .config-col.amber .cc-env { color: #d97706; }
+  .card-content .cmd-box {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 20px 32px;
+    border-radius: 14px;
+    font-size: 26px;
+    color: #4338ca;
+    font-weight: 700;
+    text-align: center;
+    line-height: 2;
+    font-family: 'Courier New','Noto Sans SC',monospace;
+  }
+  /* 密钥三档 */
+  .card-content .sec-row {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .sec-item {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px 18px;
+    text-align: center;
+    border-top: 3px solid #818cf8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .card-content .sec-item .sec-icon { font-size: 32px; margin-bottom: 8px; }
+  .card-content .sec-item .sec-label { font-size: 21px; font-weight: 700; color: #1e1b4b; margin-bottom: 10px; }
+  .card-content .sec-item .sec-desc { font-size: 19px; color: #6b7280; line-height: 1.7; }
+  .card-content .sec-note {
+    background: #eff6ff;
+    padding: 18px 24px;
+    border-radius: 12px;
+    font-size: 22px;
+    color: #4338ca;
+    text-align: center;
+    line-height: 1.8;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  /* CTA卡 */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .card-closing .golden {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 40px;
+    border-radius: 18px;
+    font-size: 28px;
+    color: #4338ca;
+    margin-bottom: 28px;
+    line-height: 1.7;
+    font-weight: 700;
+  }
+  .card-closing .cta-ask {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  .card-closing .save-tip {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  /* 下载按钮 */
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">🤯 测试人的日常 · 切过就懂</div>
+    <h1>每次环境切换<br>就是一场<br>灾难！</h1>
+    <div class="subtitle">周五下午4点半 · 领导说切staging<br>半小时过去了，测试还没开始跑</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实故事 + 踩坑清单 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😮‍💨 周五下午的"切环境"</div>
+      <div class="story-box">
+        领导：「把 staging 自动化跑一遍，没问题就上线」<br><br>
+        我改了代码里的 <span class="hl">base_url</span>，点运行——<br><br>
+        然后：<span class="em">❌ 连接超时</span> · <span class="em">❌ 404</span> · <span class="em">❌ token验证失败</span> · <span class="em">❌ 数据库连不上</span><br><br>
+        <span style="font-weight:700;">半个小时过去了，测试还没开始</span><br>
+        开发和运维已经在群里 @我了
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🔀 一换环境，遍地踩坑</div>
+      <div class="pitfall-list">
+        <div class="pitfall-item">
+          <div class="pi-icon">🔗</div>
+          <div class="pi-body"><strong>base_url 没改</strong> — dev是localhost:8080，staging是 staging-api.xx.com，忘改了请求打到 dev 上，数据不对</div>
+        </div>
+        <div class="pitfall-item">
+          <div class="pi-icon">🗄️</div>
+          <div class="pi-body"><strong>数据库连接串搞混</strong> — 测试跑了半天，查的是 dev 的库，还以为 staging 没问题</div>
+        </div>
+        <div class="pitfall-item">
+          <div class="pi-icon">🔐</div>
+          <div class="pi-body"><strong>认证 token 不一样</strong> — dev 用固定 token，staging 要 OA 登录，生产更复杂</div>
+        </div>
+        <div class="pitfall-item">
+          <div class="pi-icon">⏱️</div>
+          <div class="pi-body"><strong>超时配置不对</strong> — 本地 30 秒够用，生产负载高要 60 秒，没改直接超时报错</div>
+        </div>
+        <div class="pitfall-item">
+          <div class="pi-icon">📲</div>
+          <div class="pi-body"><strong>第三方回调地址没改</strong> — 支付、短信回调 URL，环境一变就收不到回调了</div>
+        </div>
+      </div>
+      <div class="pitfall-summary">
+        ⚠️ 这不是在测试，这是在玩扫雷
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：反模式 + 正确姿势 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">💀 换环境 = 改代码？这是反模式</div>
+      <div class="anti-pattern">
+        🔸 代码里写死 <strong>BASE_URL = localhost:8080</strong><br>
+        🔸 代码里写死 <strong>DB_HOST = 127.0.0.1</strong><br>
+        🔸 代码里写死 <strong>API_KEY = dev-key-123</strong><br>
+        🔸 切环境 → 改代码 → <strong>可能误提交到 Git</strong><br>
+        🔸 别人拉下来跑不通 → 开始互相甩锅
+        <div class="tagline">
+          💢 测试代码里出现环境信息<br>就像衣服上沾了饭粒——不专业
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">✅ 正确姿势：配置与代码分离</div>
+      <div class="config-cols">
+        <div class="config-col">
+          <div class="cc-env">🔹 dev 环境</div>
+          <div class="cc-line">base_url: localhost:8080</div>
+          <div class="cc-line">db_host: 127.0.0.1</div>
+        </div>
+        <div class="config-col purple">
+          <div class="cc-env">🔹 staging 环境</div>
+          <div class="cc-line">base_url: staging-api.xx.com</div>
+          <div class="cc-line">db_host: staging-db.internal</div>
+        </div>
+        <div class="config-col amber">
+          <div class="cc-env">🔹 production 环境</div>
+          <div class="cc-line">base_url: api.xx.com</div>
+          <div class="cc-line">db_host: prod-db.internal</div>
+        </div>
+      </div>
+      <div class="cmd-box" style="margin-top:18px;">
+        🌟 pytest --env=staging → 切到预发布<br>
+        🌟 pytest --env=dev → 切回开发<br><br>
+        <span style="font-size:22px;font-weight:400;">不需要改代码 · 不需要重新部署 · 不用担心误提交</span>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：密钥管理 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">🔐 密钥和敏感信息怎么管</div>
+      <div class="sec-row">
+        <div class="sec-item">
+          <div class="sec-icon">💻</div>
+          <div class="sec-label">本地开发</div>
+          <div class="sec-desc">放到本地配置文件<br><br>（加入 .gitignore）<br><br>提交时不会被上传</div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-icon">🔄</div>
+          <div class="sec-label">CI/CD 环境</div>
+          <div class="sec-desc">用环境变量注入<br><br>统一前缀自动读取<br><br>不硬编码任何密钥</div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-icon">🏭</div>
+          <div class="sec-label">生产环境</div>
+          <div class="sec-desc">走密钥管理服务<br><br>配置中只引用 key<br><br>密码永不出现在代码中</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-note">
+        🔒 记住最小的安全原则：<br>
+        该看到的人能看到<br>
+        不该看到的人永远看不到
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>配置和代码分离<br>不是"最佳实践"<br>而是"基操"</h2>
+    <div class="golden">🎯 一句话记住</div>
+    <div class="cta-ask">
+      💬 你切环境翻过什么车？<br>
+      有没有改完配置忘记改回来<br>
+      提交到 Git 搞得全组跑不通？
+    </div>
+    <div class="save-tip">⭐ 学会这一招，切环境 10 秒搞定 · 先收藏！</div>
+    <div class="hashtags">
+      #环境管理 #DevOps #测试环境 #配置管理 #程序员日常
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '环境切换灾难';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

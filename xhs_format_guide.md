@@ -581,7 +581,227 @@ def login(user, pwd):
 
 ---
 
-## 十一、从 Markdown 转换到小红书实操流程
+## 十一、HTML 卡片生成规范（画布笔记专用）
+
+> 用 HTML 生成小红书画布笔记（图片轮播），截图为 1080×1440 的 PNG 发布。
+> 以下为固定规范，每次生成时严格遵守。
+
+### 11.1 卡片尺寸
+
+| 参数 | 值 |
+|------|-----|
+| 宽度 | 1080px |
+| 高度 | 1440px |
+| 比例 | 3:4 |
+| 圆角 | 24px |
+| 字体 | Noto Sans SC（Google Fonts CDN） |
+| 输出格式 | 2x 高清 PNG（html2canvas, scale: 2） |
+
+### 11.2 配色方案（科技蓝）
+
+> 统一配色，所有卡片使用此方案。
+
+```
+封面渐变：  #dbeafe → #bfdbfe → #a5b4fc → #818cf8 → #6366f1
+内容卡底色： #fafafd
+备用底色：   #ffffff
+CTA卡渐变：  #eef2ff → #e0e7ff → #c7d2fe
+
+标题色：     #1e1b4b
+主题色：     #6366f1 / #4338ca
+section标题：#4338ca + 左边框 4px solid #6366f1
+链条按钮：   linear-gradient(135deg, #6366f1, #818cf8)
+
+✅ 正确/优点：#ecfdf5 + #059669
+❌ 错误/缺点：#fef2f2 + #dc2626
+⚠️ 警告/根源：rgba(239,68,68,0.06) + 1.5px dashed #fca5a5
+
+下载按钮：   background: rgba(0,0,0,0.35), 悬浮 rgba(0,0,0,0.55)
+工具栏按钮： background: #6366f1, 悬浮 #4f46e5
+```
+
+### 11.3 卡片结构
+
+每篇文章生成 4-5 张卡片：
+
+| 序号 | 类型 | 用途 |
+|------|------|------|
+| 1 | 封面卡 `card-cover` | 标题 + 副标题 + 标签，居中大字 |
+| 2-N | 内容卡 `card-content` | section 分区，标题用左边框装饰 |
+| N+1 | 收尾卡 `card-closing` | CTA 互动引导 + 话题标签 |
+
+### 11.4 内容卡排版铁律
+
+> **核心原则：整张卡上下均匀分布，禁止上半密集下半空。**
+
+```css
+.card-content {
+  padding: 60px 72px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;  /* ← 关键：均匀撑满 */
+}
+
+.card-content .section {
+  margin-bottom: 0;  /* space-evenly 自动处理间距 */
+}
+```
+
+**布局模式**：
+- 内容少时（1-2 个 section）：加大 padding，内容居中
+- 内容多时（3+ 个 section）：space-evenly 自动分配间距
+- section 内元素紧凑排列，section 之间均匀拉开
+
+### 11.5 下载按钮（必须）
+
+> **每次生成的 HTML 必须包含下载功能。**
+
+**HTML 结构**：
+```html
+<!-- 顶部工具栏 -->
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<!-- 脚本：需引入 html2canvas CDN -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '文章名称';
+  document.querySelectorAll('.card').forEach((card, i) => { /* ... */ });
+  async function downloadAll() { /* ... */ }
+</script>
+```
+
+**按钮样式**：
+```css
+.dl-btn {
+  position: absolute; top: 20px; right: 20px; z-index: 10;
+  background: rgba(0,0,0,0.35); color: #fff;
+  padding: 10px 20px; border-radius: 20px;
+  font-size: 22px; cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+```
+
+### 11.6 文件命名规则
+
+下载文件名格式：`文章名-序号.png`
+
+```
+✅ 接口测试永远写不完-1.png
+✅ 换了3个测试框架-3.png
+✅ 手写断言写到吐-5.png
+
+❌ testkid-01.png       （无文章名，无法区分）
+❌ card1.png            （无文章名）
+```
+
+### 11.7 水印规范
+
+所有卡片右下角统一水印：`@Testkid`
+
+| 卡片类型 | 水印格式 |
+|----------|----------|
+| 封面 | `@Testkid · 2026` |
+| 内容卡 | `@Testkid` |
+| 收尾卡 | `@Testkid · 2026` |
+
+```css
+.card-cover .watermark  { color: rgba(30,27,75,0.2); }
+.card-content .watermark { color: rgba(0,0,0,0.1); }
+.card-closing .watermark { color: rgba(0,0,0,0.12); }
+```
+
+### 11.8 完整 HTML 模板骨架
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[文章标题] · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+  .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+  .card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+  /* 封面卡 */
+  .card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 90px;text-align:center}
+  /* 内容卡 */
+  .card-content{background:#fafafd;padding:60px 72px 60px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+  /* CTA卡 */
+  .card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+  /* 下载按钮 */
+  .dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(0,0,0,0.35);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:22px;cursor:pointer;font-family:'Noto Sans SC',sans-serif}
+  .toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center}
+  .toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 32px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif}
+  /* ... 具体内容样式按需添加 ... */
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+<div class="cards">
+  <!-- 卡片区域 -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '[文章标题]';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>
+```
+
+### 11.9 生成 Checklist
+
+- [ ] 卡片尺寸 1080×1440、24px 圆角
+- [ ] 配色使用科技蓝渐变，未使用其他色系
+- [ ] 内容卡使用 `justify-content: space-evenly`
+- [ ] 内容上下均匀分布，无上半密集下半空白
+- [ ] 顶部有「📥 一键下载全部卡片」工具栏按钮
+- [ ] 每张卡右上角有独立下载按钮
+- [ ] 下载文件名格式：`文章名-序号.png`
+- [ ] 所有卡片右下角水印 `@Testkid`
+- [ ] html2canvas scale:2 输出 2x 高清
+- [ ] Noto Sans SC 字体 CDN 已引入
+
+---
+
+## 十二、从 Markdown 转换到小红书实操流程
 
 1. **清代码**：所有 ``` 包裹的内容 → 截图或描述改写
 2. **清表格**：所有 | 表格 → ✅/❌ 对比卡片或列表
@@ -589,3 +809,4 @@ def login(user, pwd):
 4. **删分隔线**：长 ━━━ 替换为 --- 或空行
 5. **加空行**：每 2-3 行一个空行，制造呼吸感
 6. **检查行内代码**：超过 15 字符的全部改为描述
+7. **HTML 卡片**：如需画布笔记，按第十一章规范生成 1080×1440 HTML 卡片

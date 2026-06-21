@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>接口测试永远写不完？· 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  /* 封面卡 - 科技蓝渐变 */
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 90px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 10px 28px;
+    border-radius: 24px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 48px;
+  }
+  .card-cover h1 {
+    font-size: 64px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .card-cover .subtitle {
+    font-size: 30px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 48px;
+    right: 72px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  /* ===== 内容卡通用 ===== */
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  /* 区块分隔 */
+  .card-content .section {
+    margin-bottom: 0;
+  }
+  .card-content .section:last-child { margin-bottom: 0; }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 16px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 场景故事行 */
+  .card-content .scene-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f0f4ff;
+    padding: 18px 24px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .card-content .scene-row .icon {
+    font-size: 36px;
+  }
+  .card-content .scene-row .text {
+    font-size: 25px;
+    color: #374151;
+    line-height: 1.7;
+  }
+  .card-content .scene-row .hl {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  /* 链条 - 横向紧凑 */
+  .card-content .chain-h {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .card-content .chain-h .step {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .card-content .chain-h .arr {
+    font-size: 24px;
+    color: #a5b4fc;
+  }
+  .card-content .root-cause {
+    background: rgba(239,68,68,0.07);
+    border: 1.5px dashed #f87171;
+    padding: 20px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #991b1b;
+    text-align: center;
+    line-height: 1.8;
+  }
+  /* 双栏对比 */
+  .card-content .col2 {
+    display: flex;
+    gap: 20px;
+  }
+  .card-content .col2 > div {
+    flex: 1;
+    padding: 22px 20px;
+    border-radius: 14px;
+  }
+  .card-content .col2 .bad {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+  }
+  .card-content .col2 .good {
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+  }
+  .card-content .col2 h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .card-content .col2 .bad h3 { color: #dc2626; }
+  .card-content .col2 .good h3 { color: #059669; }
+  .card-content .col2 p {
+    font-size: 22px;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+  .card-content .metaphor {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-size: 24px;
+    color: #4338ca;
+    text-align: center;
+    line-height: 1.7;
+    margin-top: 14px;
+  }
+  /* 表格紧凑 */
+  .card-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card-content th {
+    background: #6366f1;
+    color: #fff;
+    padding: 16px 20px;
+    font-size: 23px;
+    font-weight: 700;
+  }
+  .card-content td {
+    background: #fff;
+    padding: 16px 20px;
+    font-size: 22px;
+    color: #374151;
+    line-height: 1.5;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .card-content tr:last-child td { border-bottom: none; }
+  .card-content td:first-child { font-weight: 700; color: #4338ca; width: 160px; }
+  /* 收尾卡 */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .card-closing .preview {
+    background: rgba(255,255,255,0.65);
+    padding: 22px 44px;
+    border-radius: 18px;
+    font-size: 28px;
+    color: #4338ca;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .card-closing .cta {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.45);
+    margin-top: 24px;
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  /* 下载按钮 */
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.65); }
+  /* 顶部工具条 */
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<!-- 顶部下载条 -->
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">🔧 测试打工人 · 建议收藏</div>
+    <h1>为什么你的<br>接口测试<br>永远写不完？</h1>
+    <div class="subtitle">一个字段改名 → N个用例崩溃 → 恶性循环<br>根源不是你不努力</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实故事 + 恶性循环 + 根源（合并为高密度卡） -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <!-- 块1：真实故事 -->
+    <div class="section">
+      <div class="section-title">😤 一个真实的故事</div>
+      <div class="scene-row">
+        <div class="icon">🔀</div>
+        <div class="text">字段从 <span class="hl">user_name</span> 改成 <span class="hl">username</span>，就一个下划线的事</div>
+      </div>
+      <div class="scene-row">
+        <div class="icon">💥</div>
+        <div class="text">3 个用例挂了，改了2个漏了1个 → 上线爆Bug → <span style="color:#dc2626;font-weight:700;">连夜回滚</span></div>
+      </div>
+    </div>
+
+    <!-- 块2：恶性循环链 -->
+    <div class="section">
+      <div class="section-title">🔄 这个循环你肯定见过</div>
+      <div class="chain-h">
+        <div class="step">一个字段改了</div><div class="arr">→</div>
+        <div class="step">N个用例要改</div><div class="arr">→</div>
+        <div class="step">总有一个改漏</div><div class="arr">→</div>
+        <div class="step">线上Bug</div><div class="arr">→</div>
+        <div class="step">被问责</div><div class="arr">→</div>
+        <div class="step">恶性循环</div>
+      </div>
+    </div>
+
+    <!-- 块3：根源 -->
+    <div class="section">
+      <div class="section-title">🎯 根源在哪？</div>
+      <div class="root-cause">
+        <strong>你把测试逻辑硬编码在 Python 脚本里了</strong><br>
+        测一个接口 30 行起步，10 个接口 300 行<br>
+        一个字段变了 → 所有地方都要改<br>
+        <span style="font-size:22px; color:#dc2626;">这不是写测试，这是在给自己挖坟</span>
+      </div>
+    </div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：命令式vs声明式 + 对比表（合并） -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <!-- 块1：对比 -->
+    <div class="section">
+      <div class="section-title">🧠 换个脑子：命令式 vs 声明式</div>
+      <div class="col2">
+        <div class="bad">
+          <h3>❌ 命令式（你现在做的）</h3>
+          <p>告诉框架"怎么做"<br>
+          <span style="font-size:20px; color:#9ca3af;">导入库→发请求→解析JSON→挨个判断</span></p>
+        </div>
+        <div class="good">
+          <h3>✅ 声明式（应该试的）</h3>
+          <p>告诉框架"要什么"<br>
+          <span style="font-size:20px; color:#9ca3af;">定义URL→定义断言→跑</span></p>
+        </div>
+      </div>
+      <div class="metaphor">
+        💡 就像点菜 — 命令式："去冰箱拿鸡蛋、打散、热油、下锅、翻面"<br>
+        声明式："来一份番茄炒蛋"
+      </div>
+    </div>
+
+    <!-- 块2：表格 -->
+    <div class="section">
+      <div class="section-title">📊 一张表看懂差距</div>
+      <table>
+        <tr>
+          <th>场景</th>
+          <th>❌ 命令式</th>
+          <th>✅ 声明式</th>
+        </tr>
+        <tr>
+          <td>写一个接口测试</td>
+          <td>30+ 行代码</td>
+          <td>10 行配置</td>
+        </tr>
+        <tr>
+          <td>加一个字段</td>
+          <td>改 N 个文件</td>
+          <td>改 1 个配置</td>
+        </tr>
+        <tr>
+          <td>换测试环境</td>
+          <td>改代码</td>
+          <td>换一个参数</td>
+        </tr>
+        <tr>
+          <td>团队协作</td>
+          <td>只有开发看得懂</td>
+          <td>产品经理都懂</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：收尾 -->
+  <div class="card card-closing">
+    <h2>有没有一种方式——<br>改接口只改一行配置就行？</h2>
+    <div class="preview">
+      有的<br>
+      <span style="font-size:26px;">下一篇展开聊 😉</span>
+    </div>
+    <div class="cta">
+      💬 你现在写接口测试用的是什么方式？<br>
+      遇到过"改一路崩全盘"的崩溃现场吗？<br>
+      评论区聊聊～
+    </div>
+    <div class="hashtags">
+      #接口测试 #软件测试 #自动化测试 #测试用例 #职场干货 #API测试
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  // 给每张卡加上下载按钮
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: null
+      });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `接口测试永远写不完-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+
+  // 一键下载全部
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `接口测试永远写不完-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

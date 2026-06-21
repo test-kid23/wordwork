@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测试报告领导说看不懂 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  /* 封面卡 */
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 90px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 10px 28px;
+    border-radius: 24px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 48px;
+  }
+  .card-cover h1 {
+    font-size: 58px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .card-cover .subtitle {
+    font-size: 30px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 48px;
+    right: 72px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  /* ===== 内容卡通用 ===== */
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section {
+    margin-bottom: 0;
+  }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 故事对话 */
+  .card-content .dialog-box {
+    background: #f0f4ff;
+    padding: 28px 32px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  .card-content .dialog-box .you-say {
+    font-size: 23px;
+    color: #6b7280;
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+  .card-content .dialog-box .boss-say {
+    background: #fff;
+    border-left: 4px solid #ef4444;
+    padding: 18px 24px;
+    border-radius: 10px;
+    font-size: 26px;
+    color: #dc2626;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+  .card-content .dialog-box .aha {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed #c7d2fe;
+    font-size: 24px;
+    color: #4338ca;
+    text-align: center;
+    line-height: 1.8;
+  }
+  /* 对比：你给的 vs 领导看到的 */
+  .card-content .vs-row {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .card-content .vs-you {
+    flex: 1;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 14px;
+    padding: 24px 22px;
+    text-align: center;
+  }
+  .card-content .vs-boss {
+    flex: 1;
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 14px;
+    padding: 24px 22px;
+    text-align: center;
+  }
+  .card-content .vs-you .vs-label { font-size: 22px; color: #dc2626; font-weight: 700; margin-bottom: 12px; }
+  .card-content .vs-boss .vs-label { font-size: 22px; color: #2563eb; font-weight: 700; margin-bottom: 12px; }
+  .card-content .vs-you .vs-content { font-size: 22px; color: #4b5563; line-height: 1.8; }
+  .card-content .vs-boss .vs-content { font-size: 22px; color: #1e3a5f; line-height: 1.8; }
+  .card-content .vs-boss .vs-content .boss-q { font-size: 24px; color: #dc2626; font-weight: 700; margin-top: 10px; line-height: 1.6; }
+  .card-content .insight-box {
+    background: rgba(239,68,68,0.06);
+    border: 1.5px dashed #fca5a5;
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-size: 23px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.8;
+  }
+  /* 领导想看什么 */
+  .card-content .boss-want {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .card-content .boss-want .want-item {
+    flex: 0 0 calc(50% - 6px);
+    background: #fff;
+    border: 1.5px solid #e0e7ff;
+    padding: 20px 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .card-content .boss-want .want-item .wi-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .card-content .boss-want .want-item .wi-body {
+    font-size: 21px;
+    color: #1e1b4b;
+    line-height: 1.6;
+  }
+  .card-content .boss-want .want-item .wi-body strong {
+    display: block;
+    font-size: 22px;
+    color: #4338ca;
+    margin-bottom: 4px;
+  }
+  .card-content .boss-want-summary {
+    font-size: 23px;
+    color: #dc2626;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.8;
+    margin-top: 8px;
+    background: #fef2f2;
+    padding: 14px 24px;
+    border-radius: 12px;
+  }
+  /* Allure 特征 */
+  .card-content .allure-cols {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .allure-col {
+    flex: 1;
+    background: #ffffff;
+    border: 1.5px solid #e0e7ff;
+    border-radius: 14px;
+    padding: 24px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .card-content .allure-col .ac-icon { font-size: 36px; text-align: center; margin-bottom: 10px; }
+  .card-content .allure-col .ac-title { font-size: 23px; font-weight: 700; color: #4338ca; text-align: center; margin-bottom: 14px; }
+  .card-content .allure-col .ac-item { font-size: 20px; color: #4b5563; line-height: 1.8; padding-left: 8px; }
+  .card-content .allure-col .ac-item::before { content: '• '; color: #818cf8; font-weight: 700; }
+  .card-content .allure-tip {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-size: 23px;
+    color: #4338ca;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+  /* 三件事 */
+  .card-content .three-row {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .three-item {
+    flex: 1;
+    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .card-content .three-item .tnum {
+    font-size: 52px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.15);
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .card-content .three-item .tlabel {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e1b4b;
+    margin-bottom: 10px;
+  }
+  .card-content .three-item .tdesc {
+    font-size: 19px;
+    color: #6b7280;
+    line-height: 1.7;
+  }
+  .card-content .sec-note {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 28px 36px;
+    border-radius: 16px;
+  }
+  /* CTA卡 */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 44px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .card-closing .golden {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 44px;
+    border-radius: 18px;
+    font-size: 28px;
+    color: #4338ca;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-weight: 700;
+  }
+  .card-closing .cta-ask {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .card-closing .save-tip {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  /* 下载按钮 */
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">📊 测试人的痛 · 向上汇报</div>
+    <h1>测试报告发给领导<br>领导说<br>"看不懂"！</h1>
+    <div class="subtitle">一张 Excel · 200行PASS 3行FAIL<br>领导看了3秒："所以呢？能不能上线？"</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实场景 + 你给的 vs 领导看到的 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😭 上个月绩效 review</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          我整理了一下午的测试报告发给领导<br>
+          一张 Excel 表，200 行 PASS，3 行 FAIL<br>
+          还贴心配了颜色……
+        </div>
+        <div class="boss-say">
+          领导看了 3 秒，抬头说：<br>
+          "所以呢？质量到底怎么样？<br>下周一能不能上线？"
+        </div>
+        <div class="aha">
+          💡 那一刻我才明白——<br>
+          <strong>你关心的东西，和你领导关心的东西<br>根本不在一个频道上</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📟 你给的 vs 领导看到的</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">😤 你精心准备的</div>
+          <div class="vs-content">
+            ✅ test_login …… PASS<br>
+            ✅ test_logout …… PASS<br>
+            ✅ test_create_user …… PASS<br>
+            ❌ test_delete_user …… FAIL<br>
+            ✅ test_update_user …… PASS<br><br>
+            总结：45通过 3失败 120秒
+          </div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">👔 领导看到的</div>
+          <div class="vs-content">
+            这堆 PASS FAIL<br>
+            能告诉我什么？<br>
+            <div class="boss-q">
+              "所以呢？"
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="insight-box">
+        ⚠️ 你用测试工程师的语言在汇报<br>但领导需要的是产品经理的语言
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：领导真正想看什么 + Allure 报告 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">👔 领导真正想看什么</div>
+      <div class="boss-want">
+        <div class="want-item">
+          <div class="wi-icon">📈</div>
+          <div class="wi-body">
+            <strong>趋势图</strong>
+            这周通过率和上周比<br>是涨了还是跌了？
+          </div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">🎯</div>
+          <div class="wi-body">
+            <strong>失败分布</strong>
+            哪个模块 Bug 最多？<br>是不是集中在前端？
+          </div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">⚠️</div>
+          <div class="wi-body">
+            <strong>严重程度</strong>
+            失败的是核心流程<br>还是边缘功能？
+          </div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">📊</div>
+          <div class="wi-body">
+            <strong>执行力</strong>
+            多少用例跑了？<br>覆盖率是多少？
+          </div>
+        </div>
+      </div>
+      <div class="boss-want-summary">
+        🔴 测试报告不是给自己看的 debug 日志<br>是向上汇报的质量仪表盘
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">✨ Allure 报告长什么样</div>
+      <div class="allure-cols">
+        <div class="allure-col">
+          <div class="ac-icon">📊</div>
+          <div class="ac-title">首页仪表盘</div>
+          <div class="ac-item">饼图：通过/跳过/失败比例</div>
+          <div class="ac-item">折线图：7天通过率趋势</div>
+          <div class="ac-item">柱状图：模块耗时排名</div>
+        </div>
+        <div class="allure-col">
+          <div class="ac-icon">🔍</div>
+          <div class="ac-title">失败用例详情</div>
+          <div class="ac-item">请求URL+Method+Headers</div>
+          <div class="ac-item">期望值 vs 实际值</div>
+          <div class="ac-item">完整响应体</div>
+        </div>
+        <div class="allure-col">
+          <div class="ac-icon">🌐</div>
+          <div class="ac-title">环境信息自动附上</div>
+          <div class="ac-item">测试环境：staging</div>
+          <div class="ac-item">执行时间、耗时</div>
+          <div class="ac-item">并发数</div>
+        </div>
+      </div>
+      <div class="allure-tip">
+        💡 一张图能说清楚的事<br>不要用 200 行终端输出去解释
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：测试报告是你的向上武器 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">📈 测试报告是你的"向上武器"</div>
+      <div class="three-row">
+        <div class="three-item">
+          <div class="tnum">1</div>
+          <div class="tlabel">证明工作量</div>
+          <div class="tdesc">不是"感觉做了很多"<br>而是<br>"数据证明做了多少"</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">2</div>
+          <div class="tlabel">争取资源</div>
+          <div class="tdesc">哪个模块 Bug 多一目了然<br>加人的理由<br>就有数据支撑</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">3</div>
+          <div class="tlabel">建立信任</div>
+          <div class="tdesc">领导看得懂报告<br>→ 信你的判断<br>→ 升职加薪的先决条件</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:20px;">
+      <div class="sec-note">
+        <span style="font-size:24px;font-weight:700;color:#4338ca;">💎 测试人的价值</span><br><br>
+        <span style="font-size:22px;color:#4b5563;line-height:1.8;">
+          有一半体现在"让别人看得见"<br>
+          终端里的 PASS/FAIL 是你的工作记录<br>
+          <strong style="color:#dc2626;">Allure 报告是你的价值证明</strong>
+        </span>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>终端里的 PASS/FAIL<br>是你的工作记录</h2>
+    <div class="golden">
+      📊 Allure 报告<br>是你的价值证明
+    </div>
+    <div class="cta-ask">
+      💬 你给领导看测试报告时<br>被问过最难回答的问题是什么？<br>
+      评论区含泪交流～
+    </div>
+    <div class="save-tip">⭐ 下次做汇报前翻出来看看 · 别再用终端糊弄领导了！</div>
+    <div class="hashtags">
+      #测试报告 #Allure #职场沟通 #测试管理 #质量保障
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '测试报告领导看不懂';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

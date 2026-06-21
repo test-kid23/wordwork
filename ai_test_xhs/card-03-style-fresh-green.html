@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手写断言写到吐 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  /* 封面卡 */
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 90px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 10px 28px;
+    border-radius: 24px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 48px;
+  }
+  .card-cover h1 {
+    font-size: 62px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .card-cover .subtitle {
+    font-size: 30px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 48px;
+    right: 72px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  /* ===== 内容卡通用 ===== */
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section {
+    margin-bottom: 0;
+  }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 数值大卡 */
+  .card-content .big-stat {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 24px 32px;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .card-content .big-stat .big-num {
+    font-size: 52px;
+    font-weight: 900;
+    color: #4338ca;
+    line-height: 1.1;
+  }
+  .card-content .big-stat .big-label {
+    font-size: 23px;
+    color: #4b5563;
+    margin-top: 10px;
+  }
+  .card-content .story-line {
+    font-size: 24px;
+    color: #4b5563;
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+  .card-content .story-line .red { color: #dc2626; font-weight: 700; }
+  /* 步骤 */
+  .card-content .step-sm {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .card-content .step-sm .sn {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    font-size: 21px;
+    font-weight: 900;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-content .step-sm .st {
+    font-size: 23px;
+    color: #374151;
+    line-height: 1.7;
+  }
+  .card-content .step-summary {
+    background: #eff6ff;
+    padding: 18px 24px;
+    border-radius: 12px;
+    font-size: 22px;
+    color: #4338ca;
+    text-align: center;
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  /* 嵌套路径 */
+  .card-content .nest-path {
+    background: #f3f4f6;
+    padding: 20px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    font-family: 'Courier New','Noto Sans SC',monospace;
+    color: #374151;
+    line-height: 2;
+    margin-bottom: 18px;
+    border-left: 4px solid #f59e0b;
+  }
+  .card-content .nest-path span { color: #6366f1; font-weight: 700; }
+  .card-content .danger-box {
+    background: rgba(239,68,68,0.06);
+    border: 1.5px dashed #fca5a5;
+    padding: 18px 28px;
+    border-radius: 14px;
+    font-size: 23px;
+    color: #991b1b;
+    line-height: 1.8;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  /* 雷区 */
+  .card-content .mine-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 16px 22px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+  .card-content .mine-item .mi { font-size: 26px; flex-shrink: 0; }
+  /* 双栏方案 */
+  .card-content .sol-row {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .card-content .sol-row .bad {
+    flex: 1;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    padding: 24px 22px;
+    border-radius: 14px;
+    text-align: center;
+  }
+  .card-content .sol-row .good {
+    flex: 1;
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    padding: 24px 22px;
+    border-radius: 14px;
+    text-align: center;
+  }
+  .card-content .sol-row h3 { font-size: 24px; margin-bottom: 10px; }
+  .card-content .sol-row .bad h3 { color: #dc2626; }
+  .card-content .sol-row .good h3 { color: #059669; }
+  .card-content .sol-row p { font-size: 22px; color: #4b5563; line-height: 1.7; }
+  .card-content .diff-box {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 22px 28px;
+    border-radius: 14px;
+    font-size: 23px;
+    color: #4338ca;
+    line-height: 1.8;
+    text-align: center;
+  }
+  /* CTA卡 */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .card-closing .tip {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 40px;
+    border-radius: 18px;
+    font-size: 26px;
+    color: #4338ca;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+  .card-closing .ask {
+    font-size: 24px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  .card-closing .save {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    margin-top: 24px;
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  /* 下载按钮 */
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">💢 测试人请坐 · 今天聊断言</div>
+    <h1>手写断言写到吐<br>每次都是<br>copy/paste</h1>
+    <div class="subtitle">12字段 × 50用例 = 600个assert<br>改一次漏两处，漏了就上线爆Bug</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实故事 + 三段式恶梦 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😮‍💨 一个真实的事</div>
+      <div class="big-stat">
+        <div class="big-num">600</div>
+        <div class="big-label">12 个字段 × 50 个用例 = 600 个 assert</div>
+      </div>
+      <div class="story-line">
+        全是 copy/paste，改一次漏两处<br>
+        <span class="red">手写断言 — 测试界的体力活天花板</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📋 写一个登录测试，你做了多少事？</div>
+      <div class="step-sm"><div class="sn">1</div><div class="st">发 POST 请求</div></div>
+      <div class="step-sm"><div class="sn">2</div><div class="st">解析 JSON 返回值</div></div>
+      <div class="step-sm"><div class="sn">3</div><div class="st">断言 code 是不是 200</div></div>
+      <div class="step-sm"><div class="sn">4</div><div class="st">断言 message 是不是 success</div></div>
+      <div class="step-sm"><div class="sn">5</div><div class="st">断言 user_id 不为空</div></div>
+      <div class="step-sm"><div class="sn">6</div><div class="st">断言 token 不为空</div></div>
+      <div class="step-sm"><div class="sn">7</div><div class="st">断言权限列表长度 ＞ 0</div></div>
+      <div class="step-summary">
+        一个接口5个断言 → 10个接口50个 → 手指发麻<br>
+        产品："加个返回字段 login_time"<br>
+        → 50个文件里加一行 → 漏一个 → 线上Bug 😱
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：嵌套JSON + copy/paste隐患 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">💀 遇到这种返回体，想死的心都有</div>
+      <div class="nest-path">
+        <span>data</span><br>
+        &nbsp;&nbsp;└─ <span>list</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span>order</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span>user</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span>profile</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span>name / email</span>
+      </div>
+      <div class="danger-box">
+        ⚠️ 断言一行超80字符，PEP8报警告<br>
+        任一层字段名改了 → 这一行就废了<br>
+        <strong>你根本不知道哪一层出了问题</strong>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">💣 copy/paste = 埋了一地雷</div>
+      <div class="mine-item">
+        <div class="mi">💣</div>
+        <div>改了用例A的断言，忘了用例B</div>
+      </div>
+      <div class="mine-item">
+        <div class="mi">💣</div>
+        <div>改了字段名漏了一个地方 → 断言永远pass（没匹配到就不报错）</div>
+      </div>
+      <div class="mine-item">
+        <div class="mi">💣</div>
+        <div>一个Bug改了以为全改好 → 一个月后被翻出来</div>
+      </div>
+      <div class="danger-box" style="font-weight:700;font-size:24px;">
+        ⚡ 你以为在保障质量<br>实际上在制造新的质量盲区
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：解决方案 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">🧠 把"要检查什么"和"怎么检查"分开</div>
+      <div class="sol-row">
+        <div class="bad">
+          <h3>❌ 现在你在做</h3>
+          <p>手写 resp.json()["code"]==200<br>
+          <span style="font-size:20px;color:#9ca3af;">又要管取什么，又要管怎么写代码</span></p>
+        </div>
+        <div class="good">
+          <h3>✅ 应该这么做</h3>
+          <p>字段路径：$.code<br>比较方式：等于<br>期望值：200<br>
+          <span style="font-size:20px;color:#9ca3af;">框架自动去查</span></p>
+        </div>
+      </div>
+      <div class="diff-box">
+        💡 区别在哪？<br>
+        前者：要什么 + 怎么写 → 两手抓<br>
+        后者：只要"要什么" → 框架负责查<br>
+        改一个断言 — 前者大海捞针，后者改一行配置 ✅
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：CTA -->
+  <div class="card card-closing">
+    <h2>把 80% 写 assert 的时间<br>省下来</h2>
+    <div class="tip">用在设计更有价值的测试场景上</div>
+    <div class="ask">
+      💬 你写过最长的 assert 语句是几层嵌套？<br>
+      评论区比比惨～
+    </div>
+    <div class="save">⭐ 收藏防身 · 下次断言崩溃时回来看看</div>
+    <div class="hashtags">
+      #测试断言 #自动化测试 #Python测试 #软件测试 #测试技巧
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '手写断言写到吐';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>
