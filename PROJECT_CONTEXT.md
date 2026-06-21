@@ -44,9 +44,9 @@ wordwork/
 │   ├── README.md                       # 使用说明
 │   ├── wx-beginner-01-scenarios.html   # 第1篇：5个打工人必备AI场景
 │   ├── wx-beginner-02-prompt.html      # 第2篇：普通人Prompt炼金术
-│   ├── wx-beginner-03-tools.html       # 第3篇：7个免费AI工具全景
+│   ├── wx-beginner-03-tools.html       # 第3篇：这些AI工具全是免费的
 │   ├── wx-beginner-04-mindset.html     # 第4篇：AI时代不被替代的能力
-│   └── wx-beginner-05-nextstep.html    # 第5篇：从聊天到干活（进阶过渡）
+│   └── wx-beginner-05-nextstep.html    # 第5篇：用熟了Kimi和豆包，然后呢？
 ├── ai_learning/                # AI 学习系列（入门向）
 │   ├── ai-beginner-guide.md           # AI 入门指南
 │   ├── advanced-ai-team-building-guide.md  # 进阶：AI 团队搭建

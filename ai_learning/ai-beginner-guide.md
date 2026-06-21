@@ -221,7 +221,7 @@ AI 会给你一份完整的大纲。你还可以继续追问："第 5 页能不�
 | 🖼️ 做图/设计 | Midjourney、Stable Diffusion、Canva AI |
 | 🎬 做视频 | Runway、剪映 AI、可灵 |
 | 🔍 AI 搜索 | Perplexity、秘塔 AI 搜索、天工 AI |
-| 📝 会议纪要 | 通义听悟、飞书妙记、讯飞听见 |
+| 📝 会议纪要 | 通义听悟/千问、飞书妙记、讯飞听见 |
 | 📚 读论文 | Scholar PDF、ChatPDF、Kimi |
 
 ---

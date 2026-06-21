@@ -16,7 +16,7 @@
 | `PLAN.md` | 系列规划 | 5篇选题 + 漏斗策略 |
 | `wx-beginner-01-scenarios.html` | 还问"AI怎么用"？5个打工人必备场景 | 周报、PPT、读报告、做表格、会议纪要 |
 | `wx-beginner-02-prompt.html` | 同样的问题，同事3分钟搞定，你要半小时 | 角色+任务+要求+不断修正 |
-| `wx-beginner-03-tools.html` | 这些AI工具全是免费的 | Kimi/豆包/Gamma/即梦/Canva/通义听悟/秘塔 |
+| `wx-beginner-03-tools.html` | 这些AI工具全是免费的 | Kimi/豆包/Gamma/即梦/Canva/千问(通义听悟)/秘塔 |
 | `wx-beginner-04-mindset.html` | AI时代最值钱的能力不是编程 | 判断力、共情力、整合力 |
 | `wx-beginner-05-nextstep.html` | 用熟了Kimi和豆包，然后呢？ | Coze工作流、IMA知识库、CodeBuddy专业搭档 |
 
