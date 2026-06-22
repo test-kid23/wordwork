@@ -630,7 +630,46 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 | 2-N | 内容卡 `card-content` | section 分区，标题用左边框装饰 |
 | N+1 | 收尾卡 `card-closing` | CTA 互动引导 + 话题标签 |
 
-### 11.4 内容卡排版铁律
+### 11.4 封面卡字号规范
+
+> 封面是小红书的"第一眼"，缩略图模式下主标题必须足够大才能看清。
+> 以下为覆盖面卡片的 CSS 固定值，每次生成严格遵守。
+
+| 元素 | 属性 | 值 |
+|------|------|-----|
+| 主标题 `h1` | font-size / font-weight / line-height | **88px** / 900 / 1.25 |
+| 副标题 `.subtitle` | font-size / line-height | **38px** / 1.5 |
+| 标签 `.tag` | font-size / padding / border-radius | **36px** / 12px 32px / 28px |
+| 卡片内边距 | padding | **48px 56px** |
+| 水印 `.watermark` | 位置 | bottom: 36px, right: 56px |
+
+**CSS 参考**：
+```css
+.card-cover {
+  padding: 48px 56px;
+  /* 渐变等其他属性不变 */
+}
+.card-cover .tag {
+  font-size: 36px;
+  padding: 12px 32px;
+  border-radius: 28px;
+  margin-bottom: 44px;
+}
+.card-cover h1 {
+  font-size: 88px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 24px;
+}
+.card-cover .subtitle {
+  font-size: 38px;
+  line-height: 1.5;
+}
+```
+
+> ⚠️ 主标题 88px 是在 1080px 宽卡片上的尺寸。主标题通常占卡片宽度的 60-70%，确保在小红书信息流缩略图中仍可辨识。
+
+### 11.5 内容卡排版铁律
 
 > **核心原则：整张卡上下均匀分布，禁止上半密集下半空。**
 
@@ -652,7 +691,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 - 内容多时（3+ 个 section）：space-evenly 自动分配间距
 - section 内元素紧凑排列，section 之间均匀拉开
 
-### 11.5 下载按钮（必须）
+### 11.6 下载按钮（必须）
 
 > **每次生成的 HTML 必须包含下载功能。**
 
@@ -683,7 +722,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 }
 ```
 
-### 11.6 文件命名规则
+### 11.7 文件命名规则
 
 下载文件名格式：`文章名-序号.png`
 
@@ -696,7 +735,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 ❌ card1.png            （无文章名）
 ```
 
-### 11.7 水印规范
+### 11.8 水印规范
 
 所有卡片右下角统一水印：`@Testkid`
 
@@ -712,7 +751,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 .card-closing .watermark { color: rgba(0,0,0,0.12); }
 ```
 
-### 11.8 完整 HTML 模板骨架
+### 11.9 完整 HTML 模板骨架
 
 ```html
 <!DOCTYPE html>
@@ -728,7 +767,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
   .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
   .card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
   /* 封面卡 */
-  .card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 90px;text-align:center}
+  .card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center}
   /* 内容卡 */
   .card-content{background:#fafafd;padding:60px 72px 60px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
   /* CTA卡 */
@@ -786,7 +825,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 </html>
 ```
 
-### 11.9 生成 Checklist
+### 11.10 生成 Checklist
 
 - [ ] 卡片尺寸 1080×1440、24px 圆角
 - [ ] 配色使用科技蓝渐变，未使用其他色系

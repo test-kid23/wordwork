@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周五下午4点上线测试还没跑完 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  /* 封面卡 */
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 56px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 12px 32px;
+    border-radius: 28px;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 44px;
+  }
+  .card-cover h1 {
+    font-size: 88px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.25;
+    margin-bottom: 24px;
+  }
+  .card-cover .subtitle {
+    font-size: 38px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 56px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  /* ===== 内容卡通用 ===== */
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section { margin-bottom: 0; }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 故事 */
+  .card-content .story-box {
+    background: #f0f4ff;
+    padding: 22px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #374151;
+    line-height: 1.8;
+  }
+  .card-content .story-box .red { color: #dc2626; font-weight: 700; }
+  /* 算账 */
+  .card-content .calc-box {
+    background: #fff;
+    border: 1.5px solid #e0e7ff;
+    border-radius: 14px;
+    padding: 22px 28px;
+    font-size: 23px;
+    color: #4b5563;
+    line-height: 2;
+  }
+  .card-content .calc-box span { font-weight: 700; color: #4338ca; }
+  .card-content .calc-box .result {
+    display: block;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 900;
+    color: #dc2626;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px dashed #e5e7eb;
+  }
+  /* 并行 */
+  .card-content .parallel-row {
+    display: flex;
+    gap: 10px;
+  }
+  .card-content .parallel-row .pw {
+    flex: 1;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    padding: 18px 10px;
+    border-radius: 10px;
+    font-size: 19px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .card-content .speed-result {
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    padding: 20px 28px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 28px;
+    color: #059669;
+    font-weight: 900;
+    line-height: 1.6;
+  }
+  .card-content .speed-result .big { font-size: 40px; }
+  .card-content .perks {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .card-content .perks .perk {
+    flex: 1;
+    background: #f0fdf4;
+    padding: 16px 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: #374151;
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  .card-content .perks .perk .picon { font-size: 28px; display: block; margin-bottom: 4px; }
+  /* Docker */
+  .card-content .env-compare {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .env-compare .env-bad {
+    flex: 1;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    padding: 22px 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .card-content .env-compare .env-good {
+    flex: 1;
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    padding: 22px 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .card-content .env-compare .el { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .card-content .env-compare .env-bad .el { color: #dc2626; }
+  .card-content .env-compare .env-good .el { color: #059669; }
+  .card-content .env-compare .ed { font-size: 20px; color: #4b5563; line-height: 1.8; }
+  /* 因果链 */
+  .card-content .cause-chain {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card-content .cause-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1.5px solid #fecaca;
+    border-left: 4px solid #ef4444;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-size: 22px;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+  .card-content .cause-item .ci { font-size: 28px; flex-shrink: 0; }
+  .card-content .bold-conclusion {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 20px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #4338ca;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.8;
+  }
+  /* CTA卡 */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .card-closing .golden {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 40px;
+    border-radius: 18px;
+    font-size: 28px;
+    color: #4338ca;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-weight: 700;
+  }
+  .card-closing .cta-ask {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  .card-closing .save-tip {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  /* 下载按钮 */
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">⏰ 测试人的噩梦 · 上线倒计时</div>
+    <h1>周五下午4点上线<br>测试还没<br>跑完！</h1>
+    <div class="subtitle">50个用例跑到第23个，27个在排队<br>全组等你一个人，懂的人都懂</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：串行执行的账 + 并行方案 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😱 周五下午 3:50 — 一个真实场景</div>
+      <div class="story-box">
+        领导：「没问题的话 4 点上线吧」<br><br>
+        我看了眼屏幕——<span class="red">自动化刚跑到第 23 个</span>，总共 50 个<br>
+        27 个在排队，进度条每走 1% 都心惊肉跳<br><br>
+        <span class="red">测试没跑完 = 不敢说能上线 = 全组等你一个人</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🐢 串行执行：时间刺客</div>
+      <div class="calc-box">
+        <span>50 个用例</span> × 每个 <span>12 秒</span><br>
+        + setup/teardown 每个 <span>3 秒</span><br>
+        = (12+3) × 50 = <span>750 秒 = 12.5 分钟</span><br>
+        <span class="result">+ 环境切换 + 数据准备 + 排查失败 → 半小时起步</span>
+      </div>
+      <div class="perks" style="margin-top:12px;">
+        <div class="perk" style="background:#fef2f2;">
+          <span class="picon">😤</span>不能做别的事<br>随时盯报错
+        </div>
+        <div class="perk" style="background:#fef2f2;">
+          <span class="picon">🚫</span>不能走开<br>失败要立刻停
+        </div>
+        <div class="perk" style="background:#fef2f2;">
+          <span class="picon">💀</span>串行+人工盯屏<br>双倍时间浪费
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⚡ 并行执行：1/4 的时间</div>
+      <div class="parallel-row">
+        <div class="pw">Worker 1<br>用例 1～13</div>
+        <div class="pw">Worker 2<br>用例 14～26</div>
+        <div class="pw">Worker 3<br>用例 27～39</div>
+        <div class="pw">Worker 4<br>用例 40～50</div>
+      </div>
+      <div class="speed-result" style="margin-top:12px;">
+        750 秒 ÷ 4 ≈ <span class="big">188 秒 = 3 分钟</span><br>
+        <span style="font-size:24px;">12.5 分钟 → 3 分钟 🚀</span>
+      </div>
+      <div class="perks" style="margin-top:8px;">
+        <div class="perk">
+          <span class="picon">☕</span>喝杯咖啡
+        </div>
+        <div class="perk">
+          <span class="picon">📝</span>写完报告
+        </div>
+        <div class="perk">
+          <span class="picon">✅</span>优雅说"可以上线"
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:12px;font-size:28px;font-weight:700;color:#6366f1;font-family:'Courier New','Noto Sans SC',monospace;">
+        pytest -n 4 --env=staging
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：Docker环境 + 测试速度因果 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🐳 别让本地环境变成隐藏杀手</div>
+      <div class="env-compare">
+        <div class="env-bad">
+          <div class="el">❌ 没有 Docker</div>
+          <div class="ed">你 Python 3.12<br>CI 跑 3.10 → 莫名报错<br><br>你装新版本库<br>同事旧版本 → 结果不同<br><br>排查半小时 → 开会撕逼</div>
+        </div>
+        <div class="env-good">
+          <div class="el">✅ Docker 一键环境</div>
+          <div class="ed">一条 docker run 命令<br>管你本地装了什么乱七八糟<br>Docker 里就是标准环境<br><br>在你机器和同事机器跑<br>结果一模一样 ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎯 测试速度 = 上线速度</div>
+      <div class="cause-chain">
+        <div class="cause-item">
+          <div class="ci">☢️</div>
+          <div>测试慢 → 不敢频繁跑 → 代码合入到测试间隔长 → <strong style="color:#dc2626;">Bug 堆积</strong></div>
+        </div>
+        <div class="cause-item">
+          <div class="ci">☢️</div>
+          <div>测试慢 → 上线前最后一刻才跑 → 来不及修 → <strong style="color:#dc2626;">延期或带病上线</strong></div>
+        </div>
+        <div class="cause-item">
+          <div class="ci">☢️</div>
+          <div>测试慢 → 跑不完就停 → 覆盖率不够 → <strong style="color:#dc2626;">漏测试</strong></div>
+        </div>
+      </div>
+      <div class="bold-conclusion" style="margin-top:12px;">
+        ⚡ 测试速度快了，上线就有底气<br>
+        💀 测试速度慢了，上线就要靠勇气
+      </div>
+      <div style="text-align:center;font-size:22px;color:#6b7280;line-height:1.8;margin-top:14px;">
+        每次测试省下来的那几分钟<br>
+        最后都会变成<br>
+        你敢点"可以上线"的那份从容
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>让机器并行跑<br>别让人干等着</h2>
+    <div class="golden">🎯 一句话记住</div>
+    <div class="cta-ask">
+      💬 你经历过最崩溃的上线前等待是多久？<br>
+      跑了几百个用例等了半小时？<br>
+      评论区说说你的故事～
+    </div>
+    <div class="save-tip">⭐ 收藏防身 · 下次被催的时候记得用并行！</div>
+    <div class="hashtags">
+      #持续集成 #自动化测试 #效率提升 #Docker #并行测试
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '测试还没跑完';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

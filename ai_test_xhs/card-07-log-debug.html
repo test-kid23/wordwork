@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>接口出Bug看日志半小时 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 56px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 12px 32px;
+    border-radius: 28px;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 44px;
+  }
+  .card-cover h1 {
+    font-size: 88px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.25;
+    margin-bottom: 24px;
+  }
+  .card-cover .subtitle {
+    font-size: 38px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 56px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section { margin-bottom: 0; }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 故事 */
+  .card-content .story-box {
+    background: #f0f4ff;
+    padding: 22px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #374151;
+    line-height: 1.8;
+  }
+  .card-content .story-box .red { color: #dc2626; font-weight: 700; }
+  .card-content .story-box .punchline {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #c7d2fe;
+    font-size: 23px;
+    color: #4338ca;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  /* print 步骤 */
+  .card-content .print-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .card-content .print-steps .ps {
+    background: #f3f4f6;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 19px;
+    color: #6b7280;
+    font-family: 'Courier New','Noto Sans SC',monospace;
+  }
+  .card-content .print-problems {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .card-content .print-problems .pp {
+    flex: 1;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    padding: 16px 14px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #991b1b;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .card-content .print-problems .pp .ppi { font-size: 28px; display: block; margin-bottom: 6px; }
+  .card-content .print-verdict {
+    background: rgba(239,68,68,0.07);
+    border: 1.5px dashed #f87171;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 23px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+  /* trace_id 日志卡片 */
+  .card-content .trace-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-content .trace-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1.5px solid #e0e7ff;
+    border-left: 4px solid #6366f1;
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 21px;
+    color: #374151;
+    line-height: 1.6;
+  }
+  .card-content .trace-card .tcid {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    font-family: 'Courier New',monospace;
+  }
+  .card-content .trace-card.fail {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+  }
+  .card-content .trace-power {
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    padding: 18px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #059669;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  /* 日志对比 */
+  .card-content .log-cmp {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .log-cmp .lc {
+    flex: 1;
+    border-radius: 12px;
+    padding: 20px 18px;
+  }
+  .card-content .log-cmp .lc-bad {
+    background: #f3f4f6;
+    border: 1.5px solid #e5e7eb;
+  }
+  .card-content .log-cmp .lc-good {
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+  }
+  .card-content .log-cmp .lc h4 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .card-content .log-cmp .lc-bad h4 { color: #6b7280; }
+  .card-content .log-cmp .lc-good h4 { color: #2563eb; }
+  .card-content .log-cmp .lc p {
+    font-size: 20px;
+    color: #4b5563;
+    line-height: 1.8;
+    font-family: 'Courier New','Noto Sans SC',monospace;
+  }
+  .card-content .struct-feats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .card-content .struct-feats .sf {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 19px;
+    color: #2563eb;
+    font-weight: 600;
+  }
+  /* 红线 */
+  .card-content .redline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fef2f2;
+    border: 2px solid #f87171;
+    padding: 24px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #991b1b;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.6;
+    justify-content: center;
+  }
+  .card-content .redline .rl { font-size: 44px; }
+  .card-content .dos-donts {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .card-content .dos-donts .dd {
+    flex: 1;
+    padding: 18px 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .card-content .dos-donts .dont { background: #fef2f2; border: 1.5px solid #fecaca; }
+  .card-content .dos-donts .do { background: #ecfdf5; border: 1.5px solid #a7f3d0; }
+  .card-content .dos-donts .dd h4 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .card-content .dos-donts .dont h4 { color: #dc2626; }
+  .card-content .dos-donts .do h4 { color: #059669; }
+  .card-content .dos-donts .dd p { font-size: 20px; color: #4b5563; line-height: 1.7; }
+  .card-content .sec-warn {
+    background: rgba(239,68,68,0.05);
+    border: 1.5px dashed #fca5a5;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 22px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-top: 8px;
+  }
+  /* CTA */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 46px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .card-closing .golden {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 40px;
+    border-radius: 18px;
+    font-size: 26px;
+    color: #4338ca;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-weight: 700;
+  }
+  .card-closing .cta-ask {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  .card-closing .save-tip {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">🔍 排查Bug · 谁看谁知道</div>
+    <h1>接口出Bug了<br>看日志看了<br>半小时！</h1>
+    <div class="subtitle">线上报Bug → 打开日志3000行 → 肉眼扫<br>半小时过去，眼都瞎了还没找到问题</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实故事 + print大法 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😱 一个真实的线上 Bug</div>
+      <div class="story-box">
+        用户下单成功、扣了款<br>
+        但订单状态显示 <span class="red">"待支付"</span><br><br>
+        打开日志——<span class="red">3000 行</span><br>
+        肉眼从上往下扫 → 找查询接口 → 找返回 → 找下一步<br><br>
+        <span class="red">半小时过去了，眼睛都快瞎了<br>还没找到问题出在哪一步</span>
+        <span class="punchline">我到底是测试工程师<br>还是人肉 grep？</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📝 print 大法：最简单也最没用的调试</div>
+      <div class="print-steps">
+        <div class="ps">=== 开始登录 ===</div>
+        <div class="ps">print(response)</div>
+        <div class="ps">print(status_code)</div>
+        <div class="ps">print(token)</div>
+        <div class="ps">=== 开始查询用户 ===</div>
+        <div class="ps">...</div>
+      </div>
+      <div class="print-problems">
+        <div class="pp">
+          <span class="ppi">🌀</span>
+          50个用例同时跑<br>print 全搅在一起<br>分不清谁是谁
+        </div>
+        <div class="pp">
+          <span class="ppi">📂</span>
+          日志文件 10MB<br>找关键信息<br>像大海捞针
+        </div>
+        <div class="pp">
+          <span class="ppi">😰</span>
+          开发问 trace 是什么<br>你：<br>什么 trace？
+        </div>
+      </div>
+      <div class="print-verdict">
+        ⚠️ print 能帮你 debug 一个用例<br>但救不了你排查一个复杂链路的 Bug
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：trace_id + 结构化日志 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🔗 一个 trace_id 串起所有</div>
+      <div class="trace-cards">
+        <div class="trace-card">
+          <div class="tcid">abc</div>
+          <div>🔸 请求发出 — POST /api/orders</div>
+        </div>
+        <div class="trace-card">
+          <div class="tcid">abc</div>
+          <div>🔸 请求完成 — 状态码=200 耗时=234ms</div>
+        </div>
+        <div class="trace-card">
+          <div class="tcid">abc</div>
+          <div>✅ 断言通过 — $.code 期望=200</div>
+        </div>
+        <div class="trace-card fail">
+          <div class="tcid" style="background:linear-gradient(135deg,#ef4444,#f87171);">abc</div>
+          <div>❌ 断言失败 — $.data.status 期望=paid 实际=pending</div>
+        </div>
+      </div>
+      <div class="trace-power" style="margin-top:12px;">
+        💡 一个 trace_id → 3 秒内定位完整链路<br>
+        一条 grep 命令搞定，不需要从 3000 行里肉眼搜索
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📊 结构化日志 vs 普通日志</div>
+      <div class="log-cmp">
+        <div class="lc lc-bad">
+          <h4>❌ 普通日志</h4>
+          <p>2026-06-13 16:30:01<br>INFO<br>Login success</p>
+          <p style="margin-top:10px;text-align:center;color:#9ca3af;">只能肉眼扫</p>
+        </div>
+        <div class="lc lc-good">
+          <h4>✅ 结构化日志</h4>
+          <p>时间: 16:30:01<br>事件: login_success<br>用户ID: 123<br>耗时: 87ms</p>
+          <p style="margin-top:10px;text-align:center;color:#2563eb;font-weight:700;">可以搜索/过滤</p>
+        </div>
+      </div>
+      <div class="struct-feats">
+        <div class="sf">🔹 按事件类型过滤</div>
+        <div class="sf">🔹 按时间范围过滤</div>
+        <div class="sf">🔹 按字段搜索</div>
+        <div class="sf">🔹 接入 ELK/Grafana</div>
+      </div>
+      <div style="text-align:center;font-size:23px;color:#4338ca;font-weight:700;margin-top:12px;line-height:1.6;">
+        💡 让机器帮你找问题<br>而不是你当人肉扫描仪
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：生产日志红线 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">⚠️ 生产环境日志红线</div>
+      <div class="redline">
+        <div class="rl">🔴</div>
+        <div>千万别把密码和 Token<br>打到日志里！</div>
+      </div>
+      <div class="dos-donts">
+        <div class="dd dont">
+          <h4>❌ 灾难</h4>
+          <p>print 直接把密码打出来<br><br>日志里明文泄露<br>密码 / Token / API Key</p>
+        </div>
+        <div class="dd do">
+          <h4>✅ 正确</h4>
+          <p>只记录用户 ID<br>不记录密码<br><br>敏感字段自动脱敏<br>一律显示为 ****</p>
+        </div>
+      </div>
+      <div class="sec-warn">
+        🔴 生产日志如果泄漏了 Token<br>比接口 Bug 严重一百倍
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：CTA 收尾 -->
+  <div class="card card-closing">
+    <h2>好的日志不是<br>"把一切都印出来"</h2>
+    <div class="golden">
+      而是"在问题发生的一刻<br>一眼能看到原因"
+    </div>
+    <div class="cta-ask">
+      💬 你面试时被问过"怎么看日志排 bug"吗？<br>
+      评论区说说你用的是什么方法～
+    </div>
+    <div class="save-tip">⭐ 先收藏 · 下次被说"日志像猫抓的"时回来看看</div>
+    <div class="hashtags">
+      #日志分析 #可观测性 #调试技巧 #软件测试 #自动化测试
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '看日志半小时';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

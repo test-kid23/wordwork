@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测试数据残留被开发追着骂 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8ecf1;
+    padding: 24px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .card {
+    width: 1080px;
+    height: 1440px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .card-cover {
+    background: linear-gradient(150deg, #dbeafe 0%, #bfdbfe 25%, #a5b4fc 55%, #818cf8 85%, #6366f1 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 56px;
+    text-align: center;
+  }
+  .card-cover .tag {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    color: #4338ca;
+    padding: 12px 32px;
+    border-radius: 28px;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 44px;
+  }
+  .card-cover h1 {
+    font-size: 88px;
+    font-weight: 900;
+    color: #1e1b4b;
+    line-height: 1.25;
+    margin-bottom: 24px;
+  }
+  .card-cover .subtitle {
+    font-size: 38px;
+    color: #4338ca;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .card-cover .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 56px;
+    font-size: 24px;
+    color: rgba(30,27,75,0.2);
+  }
+  .card-content {
+    background: #fafafd;
+    padding: 60px 72px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-evenly;
+  }
+  .card-content .num {
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.1);
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    line-height: 1;
+  }
+  .card-content .watermark {
+    position: absolute;
+    bottom: 36px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.1);
+  }
+  .card-content .section { margin-bottom: 0; }
+  .card-content .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 18px;
+    padding-left: 16px;
+    border-left: 4px solid #6366f1;
+  }
+  /* 故事 */
+  .card-content .story-box {
+    background: #f0f4ff;
+    padding: 22px 28px;
+    border-radius: 14px;
+    font-size: 24px;
+    color: #374151;
+    line-height: 1.8;
+  }
+  .card-content .story-box .red { color: #dc2626; font-weight: 700; }
+  .card-content .story-box .shout {
+    background: #fff;
+    border-left: 4px solid #ef4444;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 22px;
+    color: #dc2626;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+  .card-content .story-box .lesson {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #c7d2fe;
+    font-size: 23px;
+    color: #4338ca;
+    font-weight: 700;
+  }
+  /* 脏数据连锁反应 */
+  .card-content .dirty-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-content .dirty-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fff;
+    border: 1.5px solid #fee2e2;
+    border-left: 4px solid #ef4444;
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 21px;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+  .card-content .dirty-item .di { font-size: 28px; flex-shrink: 0; }
+  .card-content .dirty-item strong { color: #dc2626; }
+  .card-content .dirty-bottom {
+    background: rgba(239,68,68,0.07);
+    border: 1.5px dashed #f87171;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 22px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+  /* 完整周期 */
+  .card-content .cycle-formula {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 20px 32px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 900;
+    color: #4338ca;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .card-content .phase-row {
+    display: flex;
+    gap: 12px;
+  }
+  .card-content .phase-col {
+    flex: 1;
+    border-radius: 12px;
+    padding: 22px 16px;
+    text-align: center;
+  }
+  .card-content .phase-setup { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .card-content .phase-main { background: #f5f3ff; border: 1.5px solid #c4b5fd; }
+  .card-content .phase-down { background: #ecfdf5; border: 1.5px solid #a7f3d0; }
+  .card-content .phase-col .ph-icon { font-size: 32px; margin-bottom: 6px; }
+  .card-content .phase-col .ph-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .card-content .phase-setup .ph-title { color: #2563eb; }
+  .card-content .phase-main .ph-title { color: #7c3aed; }
+  .card-content .phase-down .ph-title { color: #059669; }
+  .card-content .phase-col .ph-item { font-size: 19px; color: #4b5563; line-height: 1.8; }
+  .card-content .phase-result {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #059669;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  /* 黄金法则 */
+  .card-content .rule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-content .rule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #fff;
+    border: 1.5px solid #e0e7ff;
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 21px;
+    color: #374151;
+    line-height: 1.7;
+  }
+  .card-content .rule-item .ri { font-size: 26px; flex-shrink: 0; }
+  .card-content .auto-ideal {
+    display: flex;
+    gap: 14px;
+  }
+  .card-content .auto-ideal .ai-col {
+    flex: 1;
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 22px 18px;
+    text-align: center;
+  }
+  .card-content .auto-ideal .ai-col .aicon { font-size: 32px; margin-bottom: 8px; }
+  .card-content .auto-ideal .ai-col .alabel { font-size: 21px; color: #059669; font-weight: 700; line-height: 1.7; }
+  .card-content .auto-takeaway {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    padding: 18px 28px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 24px;
+    color: #4338ca;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+  /* CTA */
+  .card-closing {
+    background: linear-gradient(150deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 72px;
+    text-align: center;
+    position: relative;
+  }
+  .card-closing h2 {
+    font-size: 44px;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .card-closing .golden {
+    background: rgba(255,255,255,0.65);
+    padding: 20px 40px;
+    border-radius: 18px;
+    font-size: 28px;
+    color: #4338ca;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-weight: 700;
+  }
+  .card-closing .cta-ask {
+    font-size: 25px;
+    color: #6366f1;
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+  .card-closing .save-tip {
+    font-size: 26px;
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .card-closing .hashtags {
+    font-size: 21px;
+    color: rgba(67,56,202,0.4);
+    line-height: 2;
+  }
+  .card-closing .watermark {
+    position: absolute;
+    bottom: 40px;
+    right: 64px;
+    font-size: 20px;
+    color: rgba(0,0,0,0.12);
+  }
+  .dl-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    backdrop-filter: blur(4px);
+  }
+  .dl-btn:hover { background: rgba(0,0,0,0.55); }
+  .toolbar {
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    max-width: 1080px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .toolbar button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .toolbar button:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">🧹 测试人的血泪 · 数据灾难</div>
+    <h1>测试数据残留<br>被开发<br>追着骂</h1>
+    <div class="subtitle">测完100个用户 → 忘了清理 → 第二天<br>开发在群里："我的统计脚本全废了！！"</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：真实故事 + 脏数据连锁反应 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😭 一个至今不敢忘的真实故事</div>
+      <div class="story-box">
+        那天测试用户批量导入功能<br>
+        在测试环境创建了 <span class="red">100 个用户</span>来验证<br>
+        测完，没问题 → 关电脑，下班 ✌️
+        <div class="shout">
+          "测试库 users 表多了 100 条脏数据<br>我的统计脚本全废了<br>你能不能跑完测试清理一下？？？"
+        </div>
+        — 第二天早上，开发在群里 @我<br>
+        声音大到整个楼层都听到了
+        <span class="lesson">
+          💡 测试完不清理数据<br>跟用完厕所不冲水是一个性质
+        </span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">💣 脏数据的连锁反应</div>
+      <div class="dirty-list">
+        <div class="dirty-item">
+          <div class="di">🧨</div>
+          <div><strong>下次测试直接跑挂</strong> — test_user_001 还在库里 → 同名创建 → 唯一约束冲突 → 你以为是 Bug → 排查半天发现是自己的锅</div>
+        </div>
+        <div class="dirty-item">
+          <div class="di">📊</div>
+          <div><strong>统计脚本全歪了</strong> — "昨天新增 150 个用户" → 里面 100 个是你测试建的 → 数据全废</div>
+        </div>
+        <div class="dirty-item">
+          <div class="di">💾</div>
+          <div><strong>数据库备份越来越大</strong> — 每次不清理 → 记录数指数级增长 → 备份时间越来越长 → DBA 来找你</div>
+        </div>
+        <div class="dirty-item">
+          <div class="di">🔓</div>
+          <div><strong>敏感数据风险</strong> — 创建了测试用户忘了删 → 真实邮箱格式 → 被外部爬虫扫到……</div>
+        </div>
+      </div>
+      <div class="dirty-bottom">
+        ⚠️ 脏数据 — 测试界最常见、最容易被忽略<br>但杀伤力最大的技术债
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：完整测试周期 + 黄金法则 -->
+  <div class="card card-content" style="background:#ffffff;">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🧪 一个完整的测试 = 四个阶段</div>
+      <div class="cycle-formula">
+        🛠 准备数据 + 🧪 执行测试 + ✅ 验证结果 + 🧹 清理数据
+      </div>
+      <div class="phase-row">
+        <div class="phase-col phase-setup">
+          <div class="ph-icon">🛠</div>
+          <div class="ph-title">准备阶段 setup</div>
+          <div class="ph-item">🔹 创建测试用户<br>🔹 创建测试订单</div>
+        </div>
+        <div class="phase-col phase-main">
+          <div class="ph-icon">🧪</div>
+          <div class="ph-title">执行阶段 main</div>
+          <div class="ph-item">🔹 查询订单<br>🔹 验证返回字段</div>
+        </div>
+        <div class="phase-col phase-down">
+          <div class="ph-icon">🧹</div>
+          <div class="ph-title">清理阶段 teardown</div>
+          <div class="ph-item">🔹 删除测试订单<br>🔹 删除测试用户</div>
+        </div>
+      </div>
+      <div class="phase-result">
+        ✅ 跑完后数据库像没跑过一样干净<br>这才是专业
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">✅ Setup & Teardown 黄金法则</div>
+      <div class="rule-list">
+        <div class="rule-item">
+          <div class="ri">1️⃣</div>
+          <div><strong>setup 只做"测试能跑的最小准备"</strong> — 需要什么就准备什么，不要顺手多创建不相关的数据</div>
+        </div>
+        <div class="rule-item">
+          <div class="ri">2️⃣</div>
+          <div><strong>teardown 做到"比测试前还干净"</strong> — 删除所有创建的数据，恢复被修改的状态</div>
+        </div>
+        <div class="rule-item">
+          <div class="ri">3️⃣</div>
+          <div><strong>套件级清理兜底</strong> — 每个用例清理自己 + 套件结束时全量清理（双重保险）</div>
+        </div>
+        <div class="rule-item">
+          <div class="ri">4️⃣</div>
+          <div><strong>失败也要清理！</strong> — 不要把清理放在"只有通过才执行"的逻辑里，失败时的残留更危险</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：自动清理的理想 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">🤖 你希望框架自动帮你清理吗？</div>
+      <div class="auto-ideal" style="margin-bottom:16px;">
+        <div class="ai-col">
+          <div class="aicon">📝</div>
+          <div class="alabel">你在配置里声明<br>setup 和 teardown</div>
+        </div>
+        <div class="ai-col">
+          <div class="aicon">🔒</div>
+          <div class="alabel">框架保证<br>无论成功失败<br>teardown 一定执行</div>
+        </div>
+        <div class="ai-col">
+          <div class="aicon">🧹</div>
+          <div class="alabel">套件跑完<br>自动全局清理<br>保证零残留</div>
+        </div>
+      </div>
+      <div class="auto-takeaway">
+        💡 清理这件事<br>不应该靠"记得"<br>应该靠"自动"
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>测完比测前<br>还干净</h2>
+    <div class="golden">
+      🎯 这是测试人的专业尊严
+    </div>
+    <div class="cta-ask">
+      💬 你有没有因为脏数据被开发/DBA 找过？<br>
+      最惨的一次是什么后果？<br>
+      评论区含泪分享 · 我不信只有我一个人～
+    </div>
+    <div class="save-tip">⭐ 收藏一下 · 下次代码里加上 teardown！</div>
+    <div class="hashtags">
+      #测试数据 #数据清理 #测试设计 #软件质量 #测试管理
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '测试数据残留';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>
