@@ -2,7 +2,7 @@
 
 > **更新日期**: 2026 年 5 月  
 > **适用工具**: Ollama / LM Studio / llama.cpp / vLLM  
-> **覆盖系列**: Qwen3 / Qwen3.5 / Qwen3-Coder / Qwen2.5-VL / DeepSeek-R1-Distill / Gemma 3 等  
+> **覆盖系列**: Qwen3 / Qwen3.5 / Qwen3-Coder / Qwen2.5-VL / DeepSeek-R1-Distill / Gemma 3（仅供对比，国内网络不可用）等  
 > **显卡参考**: RTX 4060 (8GB) / RTX 3060 12GB / RTX 4070 Ti Super (16GB) / RTX 3090 / 4090 (24GB)
 
 ---
@@ -41,7 +41,7 @@
 
 | 显存 | 代表显卡 | 主力模型 | 量化级别 | 推荐上下文 | 核心能力 |
 |------|---------|---------|---------|-----------|---------|
-| **8GB** | RTX 4060 / 3070 / 2080 | Qwen3-8B / Gemma 3 12B | Q4_K_M | 8K–16K | 日常对话、写作、轻量编程 |
+| **8GB** | RTX 4060 / 3070 / 2080 | Qwen3-8B（Gemma 3 12B 仅作对比） | Q4_K_M | 8K–16K | 日常对话、写作、轻量编程 |
 | **16GB** | RTX 4070 Ti Super / 4080 Super | Qwen3-14B / DeepSeek-R1-Distill-Qwen-14B | Q4_K_M / Q5_K_M | 16K–32K | 深度推理、代码生成、长文处理 |
 | **24GB** | RTX 3090 / 4090 | Qwen3-32B / Qwen3-30B-A3B / Qwen3-Coder-30B | Q4_K_M / Q5_K_M | 32K–64K | 接近云端旗舰、复杂 Agent、专业编程 |
 
@@ -60,7 +60,7 @@
 | **Qwen3-8B-Instruct** | Q4_K_M | ~4.6 GB | ~5.5 GB | ~2.5 GB |
 | **Qwen3-8B-Instruct** | Q5_K_M | ~5.6 GB | ~6.5 GB | ~1.5 GB |
 | **Qwen2.5-7B-Instruct** | Q4_K_M | ~4.4 GB | ~5.3 GB | ~2.7 GB |
-| **Gemma 3 12B-Instruct** | Q4_K_M | ~7.0 GB | ~8.0 GB | 临界（需压缩上下文） |
+| **Gemma 3 12B-Instruct** * | Q4_K_M | ~7.0 GB | ~8.0 GB | 临界（需压缩上下文） |
 | **DeepSeek-R1-Distill-Llama-8B** | Q4_K_M | ~4.9 GB | ~5.8 GB | ~2.2 GB |
 | **Llama 3.1 8B-Instruct** | Q4_K_M | ~4.9 GB | ~5.8 GB | ~2.2 GB |
 
@@ -72,8 +72,11 @@
 **DeepSeek-R1-Distill-Llama-8B**  
 如果你需要的是「慢思考」型推理——比如解数学题、分析逻辑谜题、做复杂规划——这是一个很好的补充。R1 蒸馏版继承了 DeepSeek-R1 的思维链推理风格，回答会先展示推理过程再给出结论。代价是推理速度比 Qwen3 慢一些。
 
-**Gemma 3 12B-Instruct**  
-Google 的 12B 模型，128K 原生上下文，多语言能力出色。Q4_K_M 量化后约 7GB，刚好能塞进 8GB 显存，但上下文长度需要控制在 4K–8K 以内，否则容易 OOM。适合需要更大参数量但场景较短的情况。
+**Gemma 3 12B-Instruct（仅供技术对比）**  
+Google 的 12B 模型，128K 原生上下文，多语言能力出色。Q4_K_M 量化后约 7GB，刚好能塞进 8GB 显存，但上下文长度需要控制在 4K–8K 以内，否则容易 OOM。
+
+
+> ⚠️ **国内用户注意：** Gemma 是 Google 旗下模型，国内网络无法直接访问 Google 服务下载模型文件。此处列出仅作技术参数对比，**实际使用请选 Qwen 或 DeepSeek 系列**，它们在国内网络环境下可正常下载部署。
 
 **Llama 3.1 8B-Instruct**  
 Meta 的经典之作，生态最成熟，各种工具链支持最好。能力上与 Qwen3-8B 有来有回，但中文能力不如 Qwen 系列。如果你的工作流以英文为主，或依赖大量 Llama 生态工具，可以考虑它。
@@ -94,7 +97,7 @@ Meta 的经典之作，生态最成熟，各种工具链支持最好。能力上
 | 轻量编程辅助 | Qwen3-8B Q4_K_M | 代码补全、简单脚本编写、Bug 分析 |
 | 文档写作润色 | Qwen3-8B Q5_K_M | 长文润色、改写、风格调整 |
 | 数学推理 | DeepSeek-R1-Distill-Llama-8B Q4_K_M | 解题、公式推导 |
-| 多语言翻译 | Gemma 3 12B Q4_K_M | 支持 140+ 语言 |
+| 多语言翻译 | Qwen3-8B Q4_K_M | 中英日韩等多语言支持（国内可直接下载） |
 | 本地 RAG 知识库 | Qwen3-8B Q4_K_M | 搭配 AnythingLLM / Dify 使用 |
 
 ---
@@ -115,7 +118,7 @@ Meta 的经典之作，生态最成熟，各种工具链支持最好。能力上
 | **DeepSeek-R1-Distill-Qwen-14B** | Q5_K_M | ~11.0 GB | ~12.0 GB | ~4.0 GB |
 | **Qwen2.5-14B-Instruct** | Q5_K_M | ~10.5 GB | ~11.5 GB | ~4.5 GB |
 | **Qwen3-8B-Instruct** | Q8_0 | ~8.5 GB | ~9.5 GB | ~6.5 GB |
-| **Gemma 3 12B-Instruct** | Q6_K | ~9.0 GB | ~10.0 GB | ~6.0 GB |
+| **Gemma 3 12B-Instruct** * | Q6_K | ~9.0 GB | ~10.0 GB | ~6.0 GB |
 
 ### 适用场景与核心能力评估
 
@@ -294,3 +297,5 @@ Qwen3.5（2026 年发布）是阿里首个**原生多模态**系列，通过 Ear
 ---
 
 *本指南基于 2026 年 5 月社区实测数据和各模型官方文档整理。模型更新迭代快，建议定期关注 Qwen 官方 GitHub（QwenLM）和 Ollama 模型库获取最新信息。*
+
+> **\* 标注说明：** 带 \* 号的 Gemma 系列模型属于 Google，国内网络无法直接访问 Google 服务下载模型文件。文中列出其技术参数仅供横向对比参考，**实际部署请优先选择 Qwen / DeepSeek 等国内可直接访问的开源模型**。

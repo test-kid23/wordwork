@@ -989,7 +989,7 @@ models:
 | DeepSeek-V3 | 671B MoE | 推理/代码/数学 | `deepseek-ai/DeepSeek-V3` |
 | DeepSeek-Coder-V2 | 16B-236B | 代码生成 | `deepseek-ai/DeepSeek-Coder-V2` |
 | Llama 4 | 17B-109B | 英文通用 | `meta-llama/Llama-4-Maverick-17B` |
-| Gemma 3 | 1B-27B | 多语言轻量 | `google/gemma-3-12b-it` |
+| Gemma 3 | 1B-27B | 多语言轻量（Google 模型，国内需镜像） | `google/gemma-3-12b-it` |
 | BGE-M3 | 0.5B | 多语言嵌入 | `BAAI/bge-m3` |
 | BGE-Large-zh | 0.3B | 中文嵌入 | `BAAI/bge-large-zh-v1.5` |
 | Qwen2.5-VL | 3B-72B | 多模态理解 | `Qwen/Qwen2.5-VL-7B-Instruct` |

@@ -464,7 +464,7 @@ export LLAMA_CACHE=/path/to/model/cache
 | Qwen2.5 | 0.5B-72B | Q4_K_M | 通用中英文 |
 | Llama 4 Scout/Maverick | 17B/109B | Q4_K_M | 英文通用 |
 | DeepSeek-R1 蒸馏版 | 1.5B-70B | Q4_K_M | 推理/数学 |
-| Gemma 3 | 1B-27B | Q4_K_M | 多语言 |
+| Gemma 3 | 1B-27B | Q4_K_M | 多语言（Google 模型，国内需镜像） |
 | Phi-4-mini | 3.8B | Q4_K_M | 轻量英文 |
 
 ---
@@ -860,7 +860,7 @@ pause
 | `Segmentation fault (core dumped)` | 多个可能原因 | ① 检查 CUDA 架构是否匹配；② 检查模型完整性；③ 尝试只用 CPU 运行 |
 | `libcuda.so.1: cannot open shared object file` | 找不到 CUDA 运行时库 | Linux: `sudo ldconfig` 或设置 `LD_LIBRARY_PATH` |
 | 模型输出乱码 | CUDA 13.2 已知 Bug | **避免使用 CUDA 13.2**，使用 12.x 或 13.0/13.1 |
-| Gemma 4 输出到 reasoning_content | 模型特性 | 添加 `--jinja --chat-template-kwargs '{"enable_thinking":false}'` |
+| Gemma 4 输出到 reasoning_content | 模型特性，Google 模型国内不可用 | 使用 Qwen3 替代，添加 `--jinja --chat-template-kwargs '{"enable_thinking":false}'` |
 | Qwen 3.6 模板参数失效 | 空格敏感 | 使用 `'{"enable_thinking":false}'`（冒号旁无空格） |
 
 ### 6.3 性能问题
