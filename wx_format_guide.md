@@ -381,9 +381,11 @@
 
 ```html
 <p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
-  编写日期：YYYY 年 M 月 D 日<br>适用对象：描述
+  系列名 · 分类标签<br>适用对象：描述<br>本系列更多文章可在公众号合集「合集名」中查看
 </p>
 ```
+
+> ⚠️ **严禁出现日期：** 正文中和页脚中一律不写编写日期 / 发布日期 / 更新日期。发布时间不确定，日期只保留在项目元数据（PLAN.md）中自己参考。
 
 ---
 

@@ -39,9 +39,10 @@
 ```
 wordwork/
 ├── PROJECT_CONTEXT.md          # 本文件
-├── ai_beginner_wx/             # AI 小白入门系列（微信公众号）✅ 5篇完成
+├── ai_beginner_wx/             # AI 小白入门系列（微信公众号）✅ 6篇完成
 │   ├── PLAN.md                         # 系列选题规划
 │   ├── README.md                       # 使用说明
+│   ├── wx-beginner-00-concepts.html    # 第0篇：大模型基础概念介绍
 │   ├── wx-beginner-01-scenarios.html   # 第1篇：5个打工人必备AI场景
 │   ├── wx-beginner-02-prompt.html      # 第2篇：普通人Prompt炼金术
 │   ├── wx-beginner-03-tools.html       # 第3篇：这些AI工具全是免费的
@@ -96,7 +97,7 @@ wordwork/
 
 | 目录 | 系列主题 | 状态 |
 |------|---------|------|
-| `ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 5/5 篇 |
+| `ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 6/6 篇 |
 | `ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
 | `ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
 | `ai_road_wx/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
