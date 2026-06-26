@@ -1,6 +1,6 @@
 # wordwork · AI 系列文章写作项目
 
-> 多平台知识写作工程，面向**想学 AI 但不知道怎么学**的人，以及**想提升职业能力的软件测试工程师**。
+> 多平台知识写作工程，面向**想学 AI 但不知道怎么学**的人、**想提升职业能力的软件测试工程师**，以及**想用 AI 一个人干一个团队的事的一人公司探索者**。
 > 现在是2026年6月，不要引用太旧的知识和内容，保持文章实时性，真实性
 ---
 
@@ -36,10 +36,12 @@ wordwork/
 ├── ai_road/                     # AI 进阶之路（深度版）✅ 7 章
 ├── ai_road_wx/                  # AI 进阶之路（公众号适配版）✅ 6 篇
 │
+├── ai_test/                     # AI 测试技术分享（CSDN 深度长文）🔥 连载中 3 篇
+├── ai_test_xhs/                 # AI + 测试 小红书系列 🔥 连载中 3 篇
 ├── codebuddy/                   # CodeBuddy 深度使用系列 🔥 连载中 5 篇
 ├── rag/                         # RAG 私有知识库系列 🔥 连载中 4 篇
 ├── claude_code/                 # Claude Code 工作流系列 🔥 连载中 1 篇
-├── ai_test_xhs/                 # AI + 测试 小红书系列 🔥 连载中 3 篇
+├── scene_ocp/                   # 一人公司 OCP 系列 🔥 连载中 7 篇
 ├── testengineer/                # 软件测试工程师技能与职业发展 🆕 新建
 ├── personal_skill/              # 个人技术备忘
 │
@@ -65,10 +67,12 @@ wordwork/
 
 | 系列 | 目录 | 进度 | 核心主题 |
 |------|------|------|---------|
+| AI 测试（CSDN） | `ai_test/` | 3/15 篇 | API/Web/平台三条主线，技术深度长文 |
+| AI + 测试（小红书） | `ai_test_xhs/` | 3/13 篇 | AI 辅助软件测试实战 |
 | CodeBuddy | `codebuddy/` | 5/19 篇 | CodeBuddy 深度使用与工作流构建 |
 | RAG | `rag/` | 4/19 篇 | 私有知识库从原理到企业级平台 |
 | Claude Code | `claude_code/` | 1/17 篇 | Claude Code 从入门到项目级应用 |
-| AI + 测试（小红书） | `ai_test_xhs/` | 3/13 篇 | AI 辅助软件测试实战 |
+| 一人公司 OCP | `scene_ocp/` | 1/7 篇 | AI 时代一人公司的认知、工具、实战与反思 |
 
 ### 规划中系列
 
@@ -84,7 +88,7 @@ wordwork/
 
 ## 内容深度关键词
 
-多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化 · 软件测试 · 职业发展
+多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化 · 软件测试 · 职业发展 · 一人公司 · AI 自动化测试 · API/Web 测试 · Playwright · pytest
 
 ---
 
