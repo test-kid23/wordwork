@@ -6,6 +6,7 @@
 - **微信公众号**：面向 **想学 AI 但不知道怎么学** 的人（深度长文）
 - **小红书**：面向 **测试工程师 / QA**，分享 AI 辅助测试实战（轻阅读笔记）
 - **公众号**：面向 **软件测试工程师**，分享测试技能与职业发展知识
+- **一人公司 OPC**：面向 **想用 AI 一个人干一个团队的事** 的创业/自由职业者
 
 ## 目标受众
 
@@ -90,6 +91,13 @@ wordwork/
 ├── openclaw/                   # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
 ├── openhuman/                  # OpenHuman 个人 AI 超级智能系列（待创作）
 ├── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
+├── scene_ocp/                  # 一人公司 OPC 系列（新建）🏢
+│   ├── README.md               # 系列概览
+│   ├── PLAN.md                 # 详细选题规划（7 篇）
+│   ├── ocp-knowledge-01-trend-data.md  # 知识库：趋势与数据
+│   ├── ocp-knowledge-02-cases.md       # 知识库：案例拆解
+│   ├── ocp-knowledge-03-tools.md       # 知识库：AI 工具链
+│   └── ocp-knowledge-04-painpoints.md  # 知识库：陷阱与痛点
 └── comfyui/                    # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
 ```
 
@@ -105,6 +113,7 @@ wordwork/
 | `rag/` | RAG 私有知识库搭建 | 🔥 连载中，已写 4 篇 |
 | `claude_code/` | Claude Code 深度使用与工作流 | 🔥 连载中，已写 1 篇 |
 | `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
+| `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库已建，规划 7 篇待创作 |
 | `testengineer/` | 软件测试工程师技能与职业发展 | 📁 目录已建，待创作 |
 | `personal_skill/` | 个人技术备忘 | 📝 积累中（2 篇） |
 | `hermes/` | Hermes Agent 自我进化 AI 代理 | 📁 目录已建，待创作 |
