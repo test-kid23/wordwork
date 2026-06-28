@@ -1,0 +1,391 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 CodeBuddy 实战教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  2026 微信小程序怎么开发？<br>零代码 + CodeBuddy，3 小时从 0 到上架
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  保姆级教程 · 从注册到上架，一步不漏
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能：</strong>用 CodeBuddy 从零开发一个微信小程序，走完注册→开发→审核→上架全部流程。不要求懂代码，只要求会打字、会复制粘贴、有耐心跟着做。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、准备</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、搭建骨架</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、调界面</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、接后端</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、修 bug</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、审核上线</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、避坑</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>去年有个朋友问我："我想做一个记账小程序，但完全没写过代码，是不是没戏了？"</p>
+
+<p>我说："你试过用 AI 吗？"</p>
+
+<p>他愣了一下："AI 还能做小程序？"</p>
+
+<p>三个月后，他的记账小程序审核通过、正式上线。他本人从头到尾没有亲手写过一行 JavaScript。</p>
+
+<p>这不是什么魔法。就是一个正常人 + CodeBuddy + 微信开发者工具，按部就班走下来的结果。</p>
+
+<p>这篇教程，我把这个过程完整拆出来。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  开工前要准备好什么
+</p>
+
+<p>开始之前，你需要搞定三样东西。花半小时，后面就不用回头了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1. 注册微信小程序账号</p>
+
+<p>打开 mp.weixin.qq.com，点"立即注册"，选"小程序"。按提示填信息。注意几件事：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    📧 <strong>邮箱：</strong>用一个没注册过微信公众号/小程序的邮箱
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🏢 <strong>主体类型：</strong>个人选"个人"，公司选"企业"。个人主体能做大部分功能，但微信支付需要企业资质
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🆔 <strong>实名认证：</strong>个人主体扫个脸就行
+  </span>
+</p>
+
+<p>注册完成后，去「开发 → 开发管理 → 开发设置」里找到你的 <strong>AppID</strong>。记下来，后面要用。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 小提示：</strong>实名认证审核可能要等几分钟到几小时。建议这一步先做，审核期间看下一步。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2. 下载微信开发者工具</p>
+
+<p>去微信开放文档的下载页，下你系统对应的版本。安装好之后先别打开，等 CodeBuddy 把代码写好了再说。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3. 下载安装 CodeBuddy</p>
+
+<p>去 codebuddy.ai 下载 IDE 版。安装后用微信扫码登录。</p>
+
+<p>这三个准备好之后，把 AppID 放在手边，我们就可以开始了。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  用 CodeBuddy 搭项目骨架
+</p>
+
+<p>打开 CodeBuddy，切到 <strong>Plan 模式</strong>。</p>
+
+<p>在对话栏里输入以下指令：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "帮我创建一个微信小程序项目，功能是每日记账。<br><br>
+  要求：<br>
+  1. 首页显示今天的支出和收入汇总<br>
+  2. 一个记一笔的页面，可以选支出/收入、填金额、选分类、写备注<br>
+  3. 一个明细页，按天分组显示所有记录<br>
+  4. 数据存在本地存储里，不需要后端<br>
+  5. 用微信小程序的框架，生成完整的项目文件结构"
+</p>
+
+<p>敲回车。它会先给你列一个计划，告诉你准备创建哪些文件、每个文件做什么。看一眼没问题，点确认。</p>
+
+<p>然后你就能看到它一个文件一个文件地创建、写入代码。<strong>你什么都不用干，看着就行。</strong></p>
+
+<p>大概 5 到 10 分钟，它会告诉你"项目创建完成"。</p>
+
+<p>这时候打开微信开发者工具，选"导入项目"，目录指向 CodeBuddy 刚创建的文件夹，AppID 填你刚才记下来的那个。点确定。</p>
+
+<p>如果一切正常，你会看到模拟器里出现一个小程序界面。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ⚠️ <strong>如果报错了怎么办：</strong>把报错信息复制给 CodeBuddy，它会帮你修。这一步可能会反复几次，正常。AI 写的代码不一定一次就完全兼容微信的校验规则。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  把界面调到你想要的样子
+</p>
+
+<p>骨架跑起来了，但大概率界面比较朴素。这时候用 <strong>Craft 模式</strong>。</p>
+
+<p>比如你觉得颜色不好看，在对话里说：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "首页的颜色太素了，帮我换成暖色系配色，类似薄荷记账的风格。按钮圆角大一点，字体也稍微调大一些。"
+</p>
+
+<p>它会精准定位到样式文件、修改 CSS，然后给你看改了什么。你可以接受，也可以拒绝让它重改。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操技巧</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 一次说 2-3 个点就够了</strong><br>别说一大堆，AI 容易改漏。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 改完立刻看效果</strong><br>回到微信开发者工具点"编译"，实时预览。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 不满意继续对话</strong><br>像跟前端开发说话一样："刚才的按钮颜色再深一点，字体加粗"。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 可以直接拖截图</strong><br>如果你有参考图，直接把截图拖进 CodeBuddy 的对话框，说"帮我把界面做成类似这样"。</p>
+
+<p>Craft 模式改界面的效率，比你自己调 CSS 快 10 倍——哪怕你是前端。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  接入后端和数据库
+</p>
+
+<p>到这一步，你的小程序还只是个"离线版"——数据存在用户手机上，换台手机就没了。</p>
+
+<p>如果你想做真正的上线产品，需要后端和数据库。这就是 CodeBuddy 的另一个核心优势：<strong>它和腾讯云 CloudBase 无缝打通。</strong></p>
+
+<p>在 CodeBuddy IDE模式界面右下角对话输入框找到「配置集成图标」，点 CloudBase，登录授权。</p>
+
+<p>然后回到对话，跟 CodeBuddy 说：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "帮我把这个记账小程序接入 CloudBase：<br><br>
+  1. 把本地存储改成 CloudBase 云数据库<br>
+  2. 加上微信登录（用 CloudBase 的 wx auth）<br>
+  3. 数据按用户隔离，每个人只能看到自己的账目<br>
+  4. 数据库集合叫 bills，字段包括：分类、金额、类型、备注、时间、用户 openid"
+</p>
+
+<p>它会自己读写 CloudBase 的数据库配置、生成云函数、改小程序端的调用代码。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">你不用理解什么是 SDK、什么是鉴权、什么是集合。</strong>CodeBuddy 对 CloudBase 的原生理解很深，这些细节它都替你包了。
+</p>
+
+<p>这一点很重要：市面上其他 AI 编程工具也能写代码，但到"接入云服务"这一步就卡住了——需要你手动看文档、配 SDK。CodeBuddy + CloudBase 的组合在这一步的优势非常明显。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  调试和修 bug
+</p>
+
+<p>代码写完了、后端接好了，打开微信开发者工具的模拟器，点一点各个按钮，看看有没有报错。</p>
+
+<p><strong>常见的问题和怎么让 CodeBuddy 修：</strong></p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  🐛 <strong>点按钮没反应</strong> —— "记账页面点保存按钮没反应，控制台报错是 XXX，帮我排查"
+</p>
+<p></p>
+<p style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  📊 <strong>数据没存进去</strong> —— "明细页没有数据显示，我怀疑数据库写入没成功，帮我加一些调试日志"
+</p>
+<p></p>
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  📱 <strong>样式错乱</strong> —— "在 iPhone 13 模拟器上首页的卡片超出了屏幕宽度，帮我修复响应式布局"
+</p>
+<p></p>
+<p style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  🔐 <strong>授权不弹</strong> —— "微信登录授权弹窗没弹出来，检查一下 cloudbase 的初始化配置"
+</p>
+
+<p>每次 CodeBuddy 改完，回微信开发者工具点编译、再试。这个过程一般是"对话→修改→编译→测试→再对话"，来回三四轮就差不多了。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 关键心态：</strong>这时候不要急。AI 写的代码第一次大概率有坑，这不代表你做错了什么。把报错喂给它，就像把 bug 交给手下的程序员修一样。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  上传代码和提交审核
+</p>
+
+<p>小程序在本地跑通了，接下来就是上线。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.1 完善小程序基本信息</p>
+
+<p>在 mp.weixin.qq.com 管理后台，先搞定这几件事：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 小程序名称</strong><br>取好就不能随便改了（一年只能改 2 次），想清楚再提交。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 小程序头像</strong><br>180×180，简洁清晰。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 小程序介绍</strong><br>一句话说清楚这个工具是干嘛的。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 服务类目</strong><br>记账工具一般选"工具 → 记账"。类目决定了你能用哪些接口，选错了有些功能审核过不了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.2 上传代码</p>
+
+<p>在微信开发者工具里，点右上角的"上传"，填好版本号（比如 1.0.0）和备注（比如"首次提交：记账基础功能"）。</p>
+
+<p>上传之后，代码就到了微信后台的"版本管理"里。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.3 设为体验版</p>
+
+<p>上传完成后，在管理后台的「管理 → 版本管理」里，找到你刚上传的版本，点"选为体验版"。然后用微信扫码，在你的手机上真实跑一遍。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ⚠️ <strong>这一步很重要！</strong>模拟器正常不代表真机正常。一定要用真机扫一遍体验版。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 6.4 提交审核</p>
+
+<p>体验版跑完没问题了，回管理后台点"提交审核"。</p>
+
+<p>微信会让你填：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ⚙️ <strong>功能配置：</strong>确认你用了哪些微信接口（比如云开发、用户信息等）
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🔒 <strong>隐私保护指引：</strong>填清楚你的小程序收集什么数据、用来做什么
+  </span>
+</p>
+
+<p>个人开发的小程序，审核通常 <strong>1-3 个工作日</strong>。企业主体的快一些，有时候当天就能过。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  审核通过后发布
+</p>
+
+<p>审核通过后，你会收到微信的通知。回到管理后台的"版本管理"，看到审核通过的版本，点"发布"。</p>
+
+<p>发布之后有两种选择：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🚀 <strong>全量发布：</strong>所有用户立刻用上新版本
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    🎯 <strong>灰度发布：</strong>先让 5% 的用户用上，没问题再推全量。新手建议走一遍灰度，稳一点
+  </span>
+</p>
+
+<p>点完发布，你的小程序就正式上线了。微信里搜你的小程序名称，就能找到。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">💰</span>
+  整个过程花多长时间
+</p>
+
+<p>说人话的预估：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  📝 注册账号 + 装工具：30 分钟<br>
+  ⚡ CodeBuddy 生成项目：10 分钟<br>
+  🎨 调界面：20-40 分钟<br>
+  ☁️ 接入 CloudBase：15-30 分钟<br>
+  🐛 调 bug：30-90 分钟<br>
+  📤 上传 + 填资料：20 分钟<br>
+  ⏳ 等待审核：1-3 天<br><br>
+  <strong>实际花时间的合计：约 2-4 小时（纯新手）</strong>
+</p>
+
+<p>审核时间不在你手里，但你能控制的开发时间，真就是这个量级。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  说点别人不会告诉你的
+</p>
+
+<p>我用 CodeBuddy 做了好几个小程序，有些上线了、有些死在了半路。下面这些话，我是真的花过时间才明白的。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 不要一上来就做大项目</p>
+
+<p>你的第一个小程序应该是"一个功能、一个页面"级别的。记账、打卡、倒数日、随机决策——这种一个功能就完了的东西，最适合当第一个。</p>
+
+<p>如果你一上来想做"类似小红书"的社交平台，大概率做到一半就卡住了。不是因为 CodeBuddy 不够强，而是因为你作为产品定义者，给不出足够清晰的需求描述。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>AI 的瓶颈从来不是你写不写代码，而是你说不说得清楚你要什么。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 善用 Project Context</p>
+
+<p>在项目根目录建一个 PROJECT_CONTEXT.md，写清楚：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  项目的核心功能是什么<br>
+  目标用户是谁<br>
+  技术约束有哪些（比如只能用微信云开发、不接外部 API）<br>
+  UI 风格偏好
+</p>
+
+<p>每次开新对话，CodeBuddy 会读这个文件。这相当于你给它了一份"项目说明书"，它就不会瞎做。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 微信审核被拒了怎么办</p>
+
+<p>最常见的拒审原因：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 服务类目选错了</strong><br>比如用"工具"类目做社交功能，审核必拒
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 隐私保护说明不完整</strong><br>你收集了什么数据、干了什么，必须写清楚。哪怕只是云开发里存了 openid，也要写出来
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 功能不完整</strong><br>提交审核时小程序至少要有能用完一条流程的完整功能，不能提交一个"即将上线"的空壳
+</p>
+
+<p>被拒了不用慌，看驳回理由，改完再提交就行。不会影响你后续审核，也不会有"黑历史"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 上线之后的事</p>
+
+<p>上线只是开始。每周看一眼后台的"数据分析"，看有多少人用、在哪卡住了。用户反馈里找改进点，用 CodeBuddy 迭代新版本。如果你想接广告赚钱，日活到了 1000 就可以开通流量主。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>三个月前那个问我"不会写代码是不是没戏了"的朋友，现在每天有 200 多个人在用他的记账小程序。</p>
+
+<p>不是他变聪明了，也不是 AI 突然进化了。只是他花了一个周末，走通了这条路——跟这篇教程一模一样。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 你不会写代码这件事，不是 bug，只是 feature。</strong><br><br>
+  因为 AI 刚好填补了"想法"和"成品"之间最麻烦的那个环节。<br><br>
+  你要准备的只有三样：<br>
+  一个想做的功能 + 一个下午的时间 + 和愿意把报错喂给 AI 的耐心
+</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  CodeBuddy 实战场景系列 · AI 开发入门<br>适用对象：想做微信小程序但不会写代码的人、想用 AI 加速小程序开发的程序员<br>本系列更多文章可在公众号合集「CodeBuddy」中查看
+</p>
+
+</body>
