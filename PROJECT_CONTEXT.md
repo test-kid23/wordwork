@@ -4,8 +4,9 @@
 现在是2026年6月，不要引用太旧的知识和内容，保持文章实时性，真实性
 多平台知识写作项目，目前覆盖：
 - **微信公众号**：面向 **想学 AI 但不知道怎么学** 的人（深度长文）
+- **CSDN**：面向 **测试工程师**，AI 辅助自动化测试技术深度文章（三条主线 + Selenium/Appium 保姆级教程）
 - **小红书**：面向 **测试工程师 / QA**，分享 AI 辅助测试实战（轻阅读笔记）
-- **公众号**：面向 **软件测试工程师**，分享测试技能与职业发展知识
+- **公众号**（测试方向）：面向 **软件测试工程师**，分享测试技能与职业发展知识
 - **一人公司 OPC**：面向 **想用 AI 一个人干一个团队的事** 的创业/自由职业者
 
 ## 目标受众
@@ -40,36 +41,69 @@
 ```
 wordwork/
 ├── PROJECT_CONTEXT.md          # 本文件
-├── ai_beginner_wx/             # AI 小白入门系列（微信公众号）✅ 6篇完成
-│   ├── PLAN.md                         # 系列选题规划
-│   ├── README.md                       # 使用说明
-│   ├── wx-beginner-00-concepts.html    # 第0篇：大模型基础概念介绍
-│   ├── wx-beginner-01-scenarios.html   # 第1篇：5个打工人必备AI场景
-│   ├── wx-beginner-02-prompt.html      # 第2篇：普通人Prompt炼金术
-│   ├── wx-beginner-03-tools.html       # 第3篇：这些AI工具全是免费的
-│   ├── wx-beginner-04-mindset.html     # 第4篇：AI时代不被替代的能力
-│   └── wx-beginner-05-nextstep.html    # 第5篇：用熟了Kimi和豆包，然后呢？
-├── ai_learning/                # AI 学习系列（入门向）
-│   ├── ai-beginner-guide.md           # AI 入门指南
-│   ├── advanced-ai-team-building-guide.md  # 进阶：AI 团队搭建
-│   ├── llama_cpp_deploy_guide.md       # llama.cpp 部署指南
-│   └── local-llm-gpu-guide.md          # 本地大模型 GPU 部署指南
-├── ai_road/                    # AI 进阶之路系列（深度版，7 章）
-│   ├── chapter-01-cognitive-upgrade.md   # 认知升级
-│   ├── chapter-02-core-principles.md     # 核心原则
-│   ├── chapter-03-team-architectures.md  # 团队架构
-│   ├── chapter-04-workflow-engine.md     # 工作流引擎
-│   ├── chapter-05-advanced-ops.md        # 进阶运维
-│   ├── chapter-06-pitfalls.md            # 踩坑实录
-│   ├── chapter-07-summary-action.md      # 总结与行动
-│   └── bak-chapter-03-role-definition.md # 旧版：角色定义（备份）
-├── ai_road_wx/                 # AI 进阶之路（微信公众号适配版，6 篇）
-│   ├── wx-01-pitfalls.md        # 踩坑篇
-│   ├── wx-02-main.md            # 正文核心
-│   ├── wx-03-studio.md          # AI Studio
-│   ├── wx-04-local-dev.md       # 本地开发
-│   ├── wx-05-ops.md             # 运维篇
-│   └── wx-06-action.md          # 行动篇
+├── README.md                   # 项目说明
+│
+├── ai_road_wx/                 # AI 进阶之路主目录
+│   ├── ai_beginner_wx/         #  AI 小白入门系列（微信公众号）✅ 6篇完成
+│   │   ├── PLAN.md                     # 系列选题规划
+│   │   ├── README.md                   # 使用说明
+│   │   ├── wx-beginner-00-concepts.html   # 第0篇：大模型基础概念介绍
+│   │   ├── wx-beginner-01-scenarios.html  # 第1篇：5个打工人必备AI场景
+│   │   ├── wx-beginner-02-prompt.html     # 第2篇：普通人Prompt炼金术
+│   │   ├── wx-beginner-03-tools.html      # 第3篇：这些AI工具全是免费的
+│   │   ├── wx-beginner-04-mindset.html    # 第4篇：AI时代不被替代的能力
+│   │   └── wx-beginner-05-nextstep.html   # 第5篇：用熟了Kimi和豆包，然后呢？
+│   ├── ai_learning/            #  AI 学习系列（入门向）
+│   │   ├── ai-beginner-guide.md              # AI 入门指南
+│   │   ├── advanced-ai-team-building-guide.md # 进阶：AI 团队搭建
+│   │   ├── llama_cpp_deploy_guide.md          # llama.cpp 部署指南
+│   │   └── local-llm-gpu-guide.md             # 本地大模型 GPU 部署指南
+│   ├── ai_road/                #  AI 进阶之路系列（深度版，7 章）
+│   │   ├── chapter-01-cognitive-upgrade.md    # 认知升级
+│   │   ├── chapter-02-core-principles.md      # 核心原则
+│   │   ├── chapter-03-team-architectures.md   # 团队架构
+│   │   ├── chapter-04-workflow-engine.md      # 工作流引擎
+│   │   ├── chapter-05-advanced-ops.md         # 进阶运维
+│   │   ├── chapter-06-pitfalls.md             # 踩坑实录
+│   │   └── chapter-07-summary-action.md       # 总结与行动
+│   ├── image/                  #  配图资源
+│   └── Published/              #  公众号适配版已发布内容
+│       ├── wx-01-pitfalls.md       # 踩坑篇
+│       ├── wx-02-main.md           # 正文核心
+│       ├── wx-03-studio.md         # AI Studio
+│       ├── wx-04-local-dev.md      # 本地开发
+│       ├── wx-05-ops.md            # 运维篇
+│       └── wx-06-action.md         # 行动篇
+│
+├── ai_test_csdn/               # AI 测试技术分享（CSDN 深度长文）🔥
+│   ├── README.md                       # 系列概览
+│   ├── OUTLINE.md                      # 完整大纲（三主线 + 两个子系列）
+│   ├── csdn-01-requests-ai-practice.md # 第1期：requests 核心编程与 AI 协作
+│   ├── csdn-02-playwright-ai-practice.md # 第2期：Playwright 核心编程与 AI 协作
+│   ├── csdn-03-ai-diagnosis-assertion.md # 第3期：AI 辅助失败诊断与智能断言
+│   ├── ai-test-platform-dev-outline.md # 平台开发系列大纲
+│   ├── selenium_webui/                 # 🆕 Selenium WebUI 自动化保姆级教程（6/12 篇）
+│   │   ├── csdn-selenium-00-overview.md        # 总篇：工具全景选型
+│   │   ├── csdn-selenium-01-env-setup.md       # 第0章：环境搭建
+│   │   ├── csdn-selenium-02-minimum-chain.md   # 第1章：最小可执行链路
+│   │   ├── csdn-selenium-03-locator-deep-1.md  # 第2章：元素定位（上）
+│   │   ├── csdn-selenium-04-locator-deep-2.md  # 第3章：元素定位（下）
+│   │   └── csdn-selenium-05-waits.md           # 第4章：等待机制
+│   └── appium_mobile/                 # 🆕 Appium App 自动化保姆级教程（6/12 篇）
+│       ├── csdn-appium-00-overview.md          # 总篇：App 自动化工具全景选型
+│       ├── csdn-appium-01-env-setup.md         # 第0章：Appium 3 环境搭建
+│       ├── csdn-appium-02-minimum-chain.md     # 第1章：最小可执行链路
+│       ├── csdn-appium-03-locator-deep.md      # 第2章：元素定位
+│       ├── csdn-appium-04-gestures.md          # 第3章：基础操作与手势
+│       └── csdn-appium-05-waits.md             # 第4章：等待与同步
+│
+├── ai_test_xhs/                # AI + 测试 小红书系列（轻阅读向）
+│   ├── README.md               # 系列说明与选题规划
+│   ├── OUTLINE.md
+│   ├── rednote_account_plan.md # 账号规划
+│   ├── xhs-01~03 已写 3 篇
+│   └── xhs-04~13 规划 10 篇
+│
 ├── codebuddy/                  # CodeBuddy 深度使用系列
 │   └── 1.1~1.5 已写 5 篇（含 .md 与 -wx.html）
 ├── rag/                        # RAG 私有知识库系列
@@ -77,50 +111,50 @@ wordwork/
 ├── claude_code/                # Claude Code 工作流系列
 │   ├── OUTLINE.md
 │   └── claude_write_case01.md  # 首篇
-├── personal_skill/             # 个人技术备忘（性能测试工具等）
-│   ├── cosbench.md
-│   └── vdbench.md
-├── testengineer/               # 软件测试工程师技能与职业发展系列（新建）
-├── ai_test_xhs/                # AI + 测试 小红书系列（轻阅读向）
-│   ├── README.md               # 系列说明与选题规划
-│   ├── OUTLINE.md
-│   ├── rednote_account_plan.md # 账号规划
-│   ├── xhs-01~03 已写 3 篇
-│   └── xhs-04~13 规划 10 篇
-├── hermes/                     # Hermes Agent 自我进化 AI 代理系列（待创作）
-├── openclaw/                   # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
-├── openhuman/                  # OpenHuman 个人 AI 超级智能系列（待创作）
-├── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
-├── scene_ocp/                  # 一人公司 OPC 系列（新建）🏢
+│
+├── scene_ocp/                  # 一人公司 OPC 系列 🏢
 │   ├── README.md               # 系列概览
 │   ├── PLAN.md                 # 详细选题规划（7 篇）
 │   ├── ocp-knowledge-01-trend-data.md  # 知识库：趋势与数据
 │   ├── ocp-knowledge-02-cases.md       # 知识库：案例拆解
 │   ├── ocp-knowledge-03-tools.md       # 知识库：AI 工具链
 │   └── ocp-knowledge-04-painpoints.md  # 知识库：陷阱与痛点
-└── comfyui/                    # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
+│
+├── testengineer/               # 软件测试工程师技能与职业发展 📁 目录已建
+├── personal_skill/             # 个人技术备忘（性能测试工具等）
+│   ├── cosbench.md
+│   └── vdbench.md
+│
+├── comfyui/                    # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
+├── hermes/                     # Hermes Agent 自我进化 AI 代理系列（待创作）
+├── openclaw/                   # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
+├── openhuman/                  # OpenHuman 个人 AI 超级智能系列（待创作）
+└── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
 ```
 
 ## 各系列创作进度（跟随 AI 浪潮持续更新）
 
 | 目录 | 系列主题 | 状态 |
 |------|---------|------|
-| `ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 6/6 篇 |
-| `ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
-| `ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
-| `ai_road_wx/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
+| `ai_road_wx/ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 6/6 篇 |
+| `ai_road_wx/ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
+| `ai_road_wx/ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
+| `ai_road_wx/Published/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
+| `ai_test_csdn/` | AI 测试技术分享（CSDN 正刊）| 🔥 已写 3 篇，主线三待启动 |
+| `ai_test_csdn/selenium_webui/` | Selenium WebUI 自动化保姆级教程 🆕 | 🔥 已写 6/12 篇（总篇+5章）|
+| `ai_test_csdn/appium_mobile/` | Appium App 自动化保姆级教程 🆕 | 🔥 已写 6/12 篇（总篇+5章）|
 | `codebuddy/` | CodeBuddy 深度使用与能力挖掘 | 🔥 连载中，已写 5 篇 |
 | `rag/` | RAG 私有知识库搭建 | 🔥 连载中，已写 4 篇 |
 | `claude_code/` | Claude Code 深度使用与工作流 | 🔥 连载中，已写 1 篇 |
 | `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
-| `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库已建，规划 7 篇待创作 |
+| `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库 4 篇已建，正文 0/7 待创作 |
 | `testengineer/` | 软件测试工程师技能与职业发展 | 📁 目录已建，待创作 |
 | `personal_skill/` | 个人技术备忘 | 📝 积累中（2 篇） |
+| `comfyui/` | ComfyUI 节点化 AI 视觉生成 🎨 | 📁 目录已建，待创作 |
 | `hermes/` | Hermes Agent 自我进化 AI 代理 | 📁 目录已建，待创作 |
 | `openclaw/` | OpenClaw 本地优先个人 AI 助手 🦞 | 📁 目录已建，待创作 |
 | `openhuman/` | OpenHuman 个人 AI 超级智能 | 📁 目录已建，待创作 |
 | `llamacpp/` | llama.cpp 本地部署大模型 | 📁 目录已建，待创作 |
-| `comfyui/` | ComfyUI 节点化 AI 视觉生成 🎨 | 📁 目录已建，待创作 |
 
 ## 排版规范
 
@@ -205,3 +239,48 @@ wordwork/
 ```
 
 **关键原则**：流量在入门，粘性在深度。用入门内容扩大受众基数，用专业内容筛选和留住核心用户。
+
+## 写作风格指引：减少 AI 味道（所有平台通用）
+
+> **这是整个项目的硬风格约束。每篇文章写完都要过一遍这个 checklist。**
+
+### 为什么要定这个约束
+
+读者对「AI 写的文章」容忍度越来越低。AI 味的文章特征明显：三段式排比、教科书结构、完美总结、零个人经历、无立场和事不关己的客观腔。一旦被识别为 AI 生成，信任直接归零，前面花的所有心血白费。
+
+这篇指引的定位：**不是建议，是规范**。不管谁接手这个仓库、在哪台电脑上写，对着这套规则检一遍。
+
+### ❌ 必须避开的 AI 味写法
+
+| 问题 | AI 典型写法 | 正确的「人话」写法 |
+|------|------------|-------------------|
+| 三段式排比 | "首先…其次…最后…"、"不仅…而且…同时…" | 打散，不排比。「先说第一个」「另一个头疼的是」「对了还有」 |
+| 教科书结构 | 每段都有小标题，标题对仗工整，结构像目录 | 有些段落直接写，不每段塞标题。标题偶尔口语化、偶尔用问句 |
+| 完美总结 | 每章结尾搞"核心要点回顾"或用表格总结 | 戛然而止也行，甩一句大白话收尾。不必每次都是「总结来说」 |
+| 无争议表述 | "根据官方文档…最佳实践是…业界推荐…" | "官方说这样最好，但我在项目里试了三次翻车两次，最后用了个野路子" |
+| 零个人经历 | 只有知识点，没有故事，通篇像翻译的文档 | 穿插踩坑经历、翻车现场、当时怎么崩的、最后怎么妥协的 |
+| 过度结构化 | 三级嵌套标题 + 列表 + 代码块 + 表格，像技术手册 | 偶尔大段纯文字叙述，代码块前后有「人话」解释为什么写这段 |
+| 无情绪波动 | 全文语调一致，像新闻稿或产品说明书 | 该高兴高兴，该骂骂。遇到坑的时候语气可以带情绪 |
+| 假谦虚/假客观 | "值得关注的是"、"值得注意的是"、"毋庸置疑" | 直接表达观点，有立场。「这玩意就是个半成品」「目前看没对手」 |
+
+### ✅ 必须刻意加入的「人味」
+
+1. **有立场、有偏见，不端水。** 比如评测工具时直接说"Airtest 截图对比看起来很美好，UI 稍微改一下断言就炸"，不要说"各有优劣，根据场景选用"。读者要的就是你帮他做了选择题，不是给他列选项。
+2. **有翻车经历。** 每个系列至少穿插 3-4 个「我当时怎么搞崩的」故事，带场景、带截图（如果有）、带当时的心理活动。读者记得住你的翻车，不一定记得住你的知识点。
+3. **口语化转折词。** 「说实话」「你猜怎么着」「这就很操蛋了」「不过话说回来」「我跟你讲」「有个邪门的事」——这些是人和人聊天的信号。
+4. **直接和读者对话。** 用「你」不用「我们」。「你打开 Appium Inspector 的时候」比「开发者通常会使用 Inspector 工具」更像人在说话。「我们」这个代词在教程里很假，除非你真的在讲自己团队的故事。
+5. **有「不推荐的方案」板块。** 不只讲怎么做，还讲「网上很多人教你这么写，别学，原因如下」。否定一个热门方案比推荐一个方案更有说服力，读者会觉得你有真经验。
+6. **留白不填满。** 不需要每个概念都解释彻底。留一点给读者自己查，反而显得不是 AI 生成的知识图谱。偶尔写一句「这个细节不在本篇展开，感兴趣的去搜一下 XX」，读者不会觉得你不负责，而是觉得你知道边界在哪。
+
+### 📝 写完后自查清单
+
+写完每篇文章，对着这 8 条过一遍：
+
+- [ ] 有没有出现「首先…其次…最后」的排比句？→ 打散
+- [ ] 有没有每段都带小标题？→ 删掉几个，留自然段落
+- [ ] 结尾是不是「总结来说」？→ 换成大白话或直接结尾
+- [ ] 有没有「根据官方文档…」的表述？→ 替换成个人经历或直接陈述
+- [ ] 这篇文章有我自己的故事吗？→ 最少 1 个踩坑经历
+- [ ] 有明确的立场和偏好判断吗？→ 不能全是「各有优劣」
+- [ ] 有没有直接用「你」对话读者？→ 避免「我们」「开发者」「用户」
+- [ ] 有没有哪些句子去掉也不影响理解？→ 删掉，留白
