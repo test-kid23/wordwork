@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>写YAML就能测接口 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+  .toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center}
+  .toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 32px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .2s}
+  .toolbar button:hover{background:#4f46e5;transform:translateY(-1px)}
+  .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+  .card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+
+  /* === 通用手绘元素 === */
+  .sketch-border{position:absolute;inset:12px;border:2px solid rgba(99,102,241,0.12);border-radius:18px;pointer-events:none;z-index:1}
+  .sketch-dot{position:absolute;width:6px;height:6px;background:rgba(99,102,241,0.15);border-radius:50%}
+
+  /* === Card 1: Cover === */
+  .card-cover{
+    background:linear-gradient(160deg,#dbeafe 0%,#bfdbfe 18%,#a5b4fc 45%,#818cf8 75%,#6366f1 100%);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:80px 72px;text-align:center;position:relative;
+  }
+  /* 背景纹理层 - AI图质感 */
+  .card-cover .bg-texture{
+    position:absolute;inset:0;opacity:0.06;
+    background-image:url('01-cover-yaml-intro.png');
+    background-size:cover;background-position:center;
+    z-index:0;
+  }
+  .card-cover .tag{
+    font-size:36px;font-weight:700;color:#6366f1;
+    background:rgba(255,255,255,0.65);backdrop-filter:blur(8px);
+    padding:14px 36px;border-radius:30px;margin-bottom:52px;
+    position:relative;z-index:2;
+    border:1.5px solid rgba(99,102,241,0.15);
+  }
+  .card-cover h1{
+    font-size:92px;font-weight:900;line-height:1.22;color:#1e1b4b;
+    position:relative;z-index:2;max-width:900px;
+    text-shadow:0 2px 8px rgba(99,102,241,0.08);
+  }
+  .card-cover h1 .highlight{color:#6366f1}
+  .card-cover .subtitle{
+    font-size:38px;font-weight:400;color:rgba(30,27,75,0.65);
+    margin-top:28px;line-height:1.5;position:relative;z-index:2;
+  }
+  .card-cover .icon-row{
+    display:flex;gap:32px;margin-top:56px;position:relative;z-index:2;
+  }
+  .card-cover .icon-row span{
+    font-size:48px;opacity:0.55;
+  }
+  .card-cover .watermark{
+    position:absolute;bottom:44px;right:68px;
+    font-size:26px;color:rgba(30,27,75,0.2);font-weight:300;
+    z-index:2;
+  }
+
+  /* === Card 2: Comparison === */
+  .card-content{
+    background:#fafafd;padding:60px 72px;
+    display:flex;flex-direction:column;position:relative;
+    justify-content:space-evenly;
+  }
+  .card-content .bg-texture{
+    position:absolute;inset:0;opacity:0.04;
+    background-size:cover;background-position:center;
+    z-index:0;
+  }
+  .card-content .section-header{
+    font-size:36px;font-weight:700;color:#1e1b4b;
+    margin-bottom:28px;position:relative;z-index:2;
+  }
+  .card-content .compare-row{
+    display:flex;gap:32px;position:relative;z-index:2;
+  }
+  .card-content .compare-col{
+    flex:1;border-radius:20px;padding:44px 36px;
+    border:1.5px solid;
+  }
+  .compare-col.bad{
+    background:rgba(254,242,242,0.7);
+    border-color:rgba(220,38,38,0.18);
+  }
+  .compare-col.good{
+    background:rgba(236,253,245,0.7);
+    border-color:rgba(5,150,105,0.18);
+  }
+  .compare-col .col-label{
+    font-size:32px;font-weight:700;margin-bottom:20px;
+  }
+  .compare-col.bad .col-label{color:#dc2626}
+  .compare-col.good .col-label{color:#059669}
+  .compare-col .metric{
+    display:flex;align-items:baseline;gap:12px;margin-bottom:14px;
+    font-size:28px;color:#374151;
+  }
+  .compare-col .metric .num{
+    font-size:56px;font-weight:900;
+  }
+  .compare-col.bad .num{color:#dc2626}
+  .compare-col.good .num{color:#059669}
+  .compare-col .metric .unit{font-size:24px;color:#6b7280}
+  .card-content .insight{
+    background:rgba(99,102,241,0.06);border-radius:16px;
+    padding:28px 36px;font-size:28px;color:#4338ca;
+    position:relative;z-index:2;
+    border-left:3px solid #6366f1;
+    font-weight:500;
+  }
+
+  /* === Card 3: Flow === */
+  .card-content .flow-row{
+    display:flex;align-items:stretch;gap:0;position:relative;z-index:2;
+  }
+  .card-content .flow-step{
+    flex:1;text-align:center;padding:32px 20px;
+    position:relative;
+  }
+  .flow-step .step-num{
+    width:72px;height:72px;border-radius:50%;
+    background:linear-gradient(135deg,#6366f1,#818cf8);
+    color:#fff;font-size:36px;font-weight:900;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 20px;
+  }
+  .flow-step .step-icon{font-size:48px;margin-bottom:16px}
+  .flow-step .step-title{font-size:30px;font-weight:700;color:#1e1b4b;margin-bottom:10px}
+  .flow-step .step-desc{font-size:24px;color:#6b7280;line-height:1.5}
+  .flow-arrow{
+    display:flex;align-items:center;
+    font-size:36px;color:#a5b4fc;
+    flex-shrink:0;padding:0 4px;
+  }
+
+  /* === Card 4: Dense Advantages === */
+  .card-content .adv-list{
+    display:flex;flex-direction:column;gap:0;position:relative;z-index:2;
+  }
+  .card-content .adv-item{
+    display:flex;align-items:center;gap:28px;
+    padding:32px 24px;
+    border-bottom:1px solid rgba(99,102,241,0.08);
+  }
+  .adv-item .adv-icon{
+    font-size:40px;flex-shrink:0;width:64px;text-align:center;
+  }
+  .adv-item .adv-body{flex:1}
+  .adv-item .adv-title{
+    font-size:32px;font-weight:700;color:#1e1b4b;margin-bottom:6px;
+  }
+  .adv-item .adv-desc{
+    font-size:24px;color:#6b7280;line-height:1.4;
+  }
+  .adv-item .adv-tag{
+    font-size:22px;color:#6366f1;background:rgba(99,102,241,0.08);
+    padding:6px 18px;border-radius:14px;flex-shrink:0;
+    font-weight:500;
+  }
+
+  /* === Card 5: Ending CTA === */
+  .card-closing{
+    background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:80px 72px;text-align:center;position:relative;
+  }
+  .card-closing .bg-texture{
+    position:absolute;inset:0;opacity:0.06;
+    background-size:cover;background-position:center;
+    z-index:0;
+  }
+  .card-closing .speech{
+    font-size:48px;font-weight:700;color:#1e1b4b;
+    position:relative;z-index:2;max-width:800px;line-height:1.4;
+    margin-bottom:24px;
+  }
+  .card-closing .speech .emoji{font-size:56px}
+  .card-closing .hint{
+    font-size:32px;color:#6366f1;font-weight:500;
+    position:relative;z-index:2;margin-bottom:48px;
+  }
+  .card-closing .star-line{
+    font-size:30px;color:rgba(99,102,241,0.5);
+    position:relative;z-index:2;margin-bottom:52px;
+  }
+  .card-closing .divider{
+    width:200px;height:2px;background:rgba(99,102,241,0.2);
+    margin-bottom:48px;position:relative;z-index:2;
+  }
+  .card-closing .next-preview{
+    font-size:28px;color:#374151;
+    position:relative;z-index:2;line-height:1.5;
+  }
+  .card-closing .next-preview strong{color:#6366f1}
+  .card-closing .tags{
+    display:flex;flex-wrap:wrap;gap:16px;justify-content:center;
+    margin-top:44px;max-width:700px;position:relative;z-index:2;
+  }
+  .card-closing .tags span{
+    font-size:24px;color:rgba(30,27,75,0.45);font-weight:300;
+  }
+  .card-closing .watermark{
+    position:absolute;bottom:44px;right:68px;
+    font-size:26px;color:rgba(0,0,0,0.12);font-weight:300;
+    z-index:2;
+  }
+
+  /* === 通用 Watermark === */
+  .card-content .watermark{
+    position:absolute;bottom:36px;right:68px;
+    font-size:24px;color:rgba(0,0,0,0.1);font-weight:300;
+    z-index:2;
+  }
+
+  /* === 下载按钮 === */
+  .dl-btn{
+    position:absolute;top:20px;right:20px;z-index:10;
+    background:rgba(0,0,0,0.35);color:#fff;border:none;
+    padding:10px 20px;border-radius:20px;font-size:22px;
+    cursor:pointer;font-family:'Noto Sans SC',sans-serif;
+    backdrop-filter:blur(4px);transition:all .2s;
+  }
+  .dl-btn:hover{background:rgba(0,0,0,0.55)}
+</style>
+</head>
+<body>
+
+<!-- ====== 工具栏 ====== -->
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片（5张）</button>
+</div>
+
+<div class="cards">
+
+<!-- ====== Card 1: 封面 ====== -->
+<div class="card card-cover">
+  <div class="bg-texture"></div>
+  <div class="sketch-dot" style="top:60px;left:80px"></div>
+  <div class="sketch-dot" style="top:90px;right:100px"></div>
+  <div class="sketch-dot" style="bottom:120px;left:120px"></div>
+
+  <div class="tag">零代码测试</div>
+  <h1>写<span class="highlight">YAML</span>就能测接口？</h1>
+  <div class="subtitle">不需要 import，不需要写 Python<br>声明式测试，10行配置搞定一个接口</div>
+  <div class="icon-row">
+    <span>📄</span><span>⚙️</span><span>✅</span>
+  </div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ====== Card 2: Python vs YAML 对比 ====== -->
+<div class="card card-content">
+  <div class="bg-texture" style="background-image:url('02-comparison-python-vs-yaml.png')"></div>
+  <div class="sketch-border"></div>
+
+  <div class="section-header">📊 命令式 vs 声明式 — 一张图看懂差距</div>
+
+  <div class="compare-row">
+    <div class="compare-col bad">
+      <div class="col-label">❌ Python 命令式</div>
+      <div class="metric"><span class="num">30+</span><span class="unit">行代码</span></div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        改一个字段<br>→ 改 N 个文件
+      </div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        换测试环境<br>→ 改代码
+      </div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        团队协作<br>→ 只有开发看得懂
+      </div>
+    </div>
+    <div class="compare-col good">
+      <div class="col-label">✅ YAML 声明式</div>
+      <div class="metric"><span class="num">~10</span><span class="unit">行配置</span></div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        改一个字段<br>→ 改 1 行
+      </div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        换测试环境<br>→ 换 1 个参数
+      </div>
+      <div class="metric" style="font-size:24px;color:#6b7280;margin-top:8px">
+        团队协作<br>→ 产品经理都能看懂
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    💡 就像点菜：命令式是"去冰箱拿鸡蛋打散热油……"<br>声明式是"来一份番茄炒蛋"
+  </div>
+
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ====== Card 3: 三步工作流 ====== -->
+<div class="card card-content">
+  <div class="bg-texture" style="background-image:url('03-flow-three-steps.png')"></div>
+
+  <div class="section-header">⚡ 三步工作流 — 就这么简单</div>
+
+  <div class="flow-row" style="margin-top:20px">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-icon">📝</div>
+      <div class="step-title">定义请求</div>
+      <div class="step-desc">写清楚 URL、方法、参数</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-icon">✅</div>
+      <div class="step-title">定义断言</div>
+      <div class="step-desc">写清楚要检查什么字段、什么值</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-icon">▶️</div>
+      <div class="step-title">跑</div>
+      <div class="step-desc">一行命令<br>自动执行+出报告</div>
+    </div>
+  </div>
+
+  <div class="insight" style="text-align:center;margin-top:20px">
+    🎯 不需要 import 任何东西<br>不需要写一行 Python
+  </div>
+
+  <div class="insight" style="text-align:center;margin-top:0;background:rgba(5,150,105,0.06);border-left-color:#059669;color:#059669">
+    🧠 测试人员的核心价值是设计测试场景<br>不是写代码
+  </div>
+
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ====== Card 4: 5大优势 ====== -->
+<div class="card card-content">
+  <div class="bg-texture" style="background-image:url('04-dense-five-advantages.png')"></div>
+  <div class="sketch-border"></div>
+
+  <div class="section-header">🔑 YAML 写测试的 5 大核心优势</div>
+
+  <div class="adv-list">
+    <div class="adv-item">
+      <div class="adv-icon">📉</div>
+      <div class="adv-body">
+        <div class="adv-title">学习成本极低</div>
+        <div class="adv-desc">会写英文就会写 YAML，零编程基础也能上手</div>
+      </div>
+      <div class="adv-tag">零门槛</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">👀</div>
+      <div class="adv-body">
+        <div class="adv-title">可读性拉满</div>
+        <div class="adv-desc">用例即文档，产品、开发、测试看同一份文件</div>
+      </div>
+      <div class="adv-tag">人人能读</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">🔧</div>
+      <div class="adv-body">
+        <div class="adv-title">维护成本骤降</div>
+        <div class="adv-desc">改一行配置 vs 改 N 个 Python 文件</div>
+      </div>
+      <div class="adv-tag">1/N倍</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">🤝</div>
+      <div class="adv-body">
+        <div class="adv-title">团队协作友好</div>
+        <div class="adv-desc">非技术同学也能 review 测试用例</div>
+      </div>
+      <div class="adv-tag">跨角色</div>
+    </div>
+    <div class="adv-item" style="border-bottom:none">
+      <div class="adv-icon">⚡</div>
+      <div class="adv-body">
+        <div class="adv-title">效率提升显著</div>
+        <div class="adv-desc">把时间花在"怎么测"上，而非"怎么写代码测"</div>
+      </div>
+      <div class="adv-tag">提效</div>
+    </div>
+  </div>
+
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ====== Card 5: 结尾 CTA ====== -->
+<div class="card card-closing">
+  <div class="bg-texture" style="background-image:url('05-ending-cta.png')"></div>
+  <div class="sketch-dot" style="top:80px;left:120px"></div>
+  <div class="sketch-dot" style="bottom:180px;right:140px"></div>
+
+  <div class="speech">
+    💬 你现在写接口测试<br>用的是什么方式？
+  </div>
+  <div class="hint">试过声明式测试吗？评论区聊聊～</div>
+  <div class="star-line">⭐ 觉得有用的话，收藏不迷路！</div>
+  <div class="divider"></div>
+  <div class="next-preview">
+    📌 <strong>下一篇预告</strong><br>
+    解剖一个真实的 YAML 测试文件<br>看看一个文件怎么测完整个 API
+  </div>
+  <div class="tags">
+    <span>#零代码</span><span>#自动化测试</span><span>#YAML</span>
+    <span>#测试用例</span><span>#效率工具</span><span>#接口测试</span>
+    <span>#软件测试</span><span>#测试工程师</span>
+  </div>
+
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+</div><!-- /.cards -->
+
+<!-- ====== 脚本 ====== -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '写YAML就能测接口';
+
+  // 给每张卡片加独立下载按钮
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+
+  // 一键下载全部
+  async function downloadAll() {
+    const btn = document.querySelector('.toolbar button');
+    const orig = btn.textContent;
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      btn.textContent = `📥 下载中 ${i + 1}/${cards.length}...`;
+      const dlBtn = cards[i].querySelector('[data-dl-btn]');
+      if (dlBtn) dlBtn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (dlBtn) dlBtn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+    btn.textContent = orig;
+  }
+</script>
+
+</body>
+</html>

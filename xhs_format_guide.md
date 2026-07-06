@@ -599,28 +599,103 @@ def login(user, pwd):
 | 字体 | Noto Sans SC（Google Fonts CDN） |
 | 输出格式 | 2x 高清 PNG（html2canvas, scale: 2） |
 
-### 11.2 配色方案（科技蓝）
+### 11.2 配色方案（两个方案）
 
-> 统一配色，所有卡片使用此方案。
+> 两个配色方案，生成新卡片时直接指定使用哪个方案。
+> 触发语：说「用 Tech Indigo 方案」或「用 Sketch Cream 方案」即可。
 
-```
-封面渐变：  #dbeafe → #bfdbfe → #a5b4fc → #818cf8 → #6366f1
-内容卡底色： #fafafd
-备用底色：   #ffffff
-CTA卡渐变：  #eef2ff → #e0e7ff → #c7d2fe
+---
 
-标题色：     #1e1b4b
-主题色：     #6366f1 / #4338ca
-section标题：#4338ca + 左边框 4px solid #6366f1
-链条按钮：   linear-gradient(135deg, #6366f1, #818cf8)
+#### 方案1：Tech Indigo（科技靛蓝）
 
-✅ 正确/优点：#ecfdf5 + #059669
-❌ 错误/缺点：#fef2f2 + #dc2626
-⚠️ 警告/根源：rgba(239,68,68,0.06) + 1.5px dashed #fca5a5
+冷调蓝紫渐变，偏理性/技术感。适合：技术科普、框架对比、底层原理类内容。
 
-下载按钮：   background: rgba(0,0,0,0.35), 悬浮 rgba(0,0,0,0.55)
-工具栏按钮： background: #6366f1, 悬浮 #4f46e5
-```
+| 角色 | 颜色 | 用途 |
+|------|------|------|
+| 页面背景 | `#e8ecf1` | body |
+| 封面渐变 | `linear-gradient(150deg, #dbeafe → #818cf8 → #6366f1)` | card-cover |
+| 内容卡底色 | `#fafafd` | card-content |
+| 收尾卡渐变 | `linear-gradient(150deg, #eef2ff → #c7d2fe)` | card-closing |
+| 标题色 | `#1e1b4b` | h1, h2 |
+| 重点色 | `#4338ca` / `#6366f1` | 标签、边框高亮、小标题 |
+| 错误/警示 | `#dc2626` + `#fef2f2` 底 | 痛点、对比左边 |
+| 成功/方案 | `#059669` + `#ecfdf5` 底 | 解法、对比右边 |
+| 中性卡片 | `#ffffff` | 白色卡片、表格单元格 |
+| 边框 | `#e0e7ff` / `#c7d2fe` | 卡片边框 |
+| 弱文本 | `#4b5563` / `#9ca3af` | 描述文字 |
+
+**排版特征**：
+- 封面：全屏渐变 + 半透白标签 + 大字
+- 内容：左蓝竖线标记标题 `.section-title`（`border-left: 4px solid #6366f1`）
+- 卡片：圆角 12-14px，纯白底+淡阴影
+- 对比：红底左侧 vs 绿底右侧
+- 按钮：`#6366f1` 科技蓝
+
+**历史使用**：
+| 文章 | 文件 |
+|------|------|
+| 接口测试永远写不完 | `published/card-01-style-tech-blue.html` |
+| 换了3个测试框架 | `published/card-02-style-dark-warm.html` |
+| 手写断言写到吐 | `published/card-03-style-fresh-green.html` |
+
+---
+
+#### 方案2：Sketch Cream（手绘奶油）
+
+暖调奶油/杏仁/薄荷绿，偏亲切/手绘感。适合：入门教程、工具推荐、实操干货类内容。
+
+| 角色 | 颜色 | 用途 |
+|------|------|------|
+| 页面背景 | `#EDE4D3`（杏仁米） | body |
+| 主奶油底 | `#FFFBF0` | `.warm-bg` 所有卡片底色 |
+| 纸纹叠加 | `radial-gradient(orange+tint, green+tint)` | `.paper-texture` |
+| 暖棕文字 | `#3D3021` | 标题、主要文字 |
+| 暖灰文字 | `#7A6B55` | 描述、次要文字 |
+| 封面标签 | `#FEF5E8` + border `#F5B971`（杏橙） | `.cover-tag` |
+| 浅杏底 | `#FEF8F0` + border `#F5D5B8` | 内容小卡片 |
+| 橙色面板 | `#FEF0E1` + border `#F5B971` | 对比左侧/痛点 `.cp-bad` |
+| 薄荷绿面板 | `#E8F8ED` + border `#81C995` | 对比右侧/解法 `.cp-good` |
+| 珊瑚重点 | `#E8856B` | 高亮文字、图标、下划线 |
+| 红色标记 | `#FFE0D6` 底 + `#E57373` 字 | ✕ 圆形标记 `.mk-x` |
+| 绿色标记 | `#D4EDDA` 底 + `#43A047` 字 | ✓ 圆形标记 `.mk-ok` |
+| 问题气泡 | `#FEF5E8` + border `#E8856B` | `.bubble-question` |
+| 预览框 | `#E8F8ED` + border `#81C995` | `.preview-box` |
+| 工具栏按钮 | `#5C4033`（深棕） | `.toolbar button` |
+| 装饰星星 | `#5C4033` opacity 0.15 | `.doodle-star` |
+
+**核心原则**：
+- **禁止纯白 `#FFF` / `#ffffff`**：所有白色底必须替换为暖色调
+- 卡片底色统一用 `#FEF5E8`（封面级）或 `#FEF8F0`（内容级）
+- 边框用暖色：杏橙 `#F5B971` / 淡橙 `#F5D5B8` / 薄荷绿 `#81C995`
+- 阴影用半透明暖棕 `rgba(92,64,51,0.0x)`
+
+**排版特征**：
+- 封面：奶油底 + 纸纹 + ✦ 四角散落 + 圆形珊瑚高亮下划线
+- 内容：章节标题用薄荷绿半透底划线
+- 卡片：手绘圆角 `border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px`（可选）
+- 对比：橙色块 vs 绿色块 + 圆形 ✕/✓ 标记
+- 结尾：气泡提问 + 尾巴三角 + 预览框
+
+**历史使用**：
+| 文章 | 文件 |
+|------|------|
+| 9-18 全部第2章 | `ch2-yaml-zero-code/*/xx-cards.html` |
+
+---
+
+#### 方案切换速查
+
+| 元素 | Tech Indigo（方案1） | Sketch Cream（方案2） |
+|------|---------------------|----------------------|
+| body | `#e8ecf1` | `#EDE4D3` |
+| 卡片底色 | `#fafafd` | `#FFFBF0` |
+| 纯白卡片 | `#ffffff` | `#FEF8F0` |
+| 封面渐变 | 蓝紫渐变 | 纸纹叠加 |
+| 标题色 | `#1e1b4b` | `#3D3021` |
+| 重点色 | `#6366f1` | `#E8856B` |
+| 错误/痛点 | `#fef2f2` + `#dc2626` | `#FEF0E1` + `#E57373` |
+| 成功/解法 | `#ecfdf5` + `#059669` | `#E8F8ED` + `#43A047` |
+| 按钮 | `#6366f1` | `#5C4033` |
 
 ### 11.3 卡片结构
 
@@ -768,16 +843,23 @@ section标题：#4338ca + 左边框 4px solid #6366f1
   body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
   .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
   .card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
-  /* 封面卡 */
-  .card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center}
-  /* 内容卡 */
-  .card-content{background:#fafafd;padding:60px 72px 60px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
-  /* CTA卡 */
-  .card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+  /* 封面卡 — 背景见 11.2 配色方案 */
+  .card-cover{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center}
+  /* 方案1 封面：background:linear-gradient(150deg,#dbeafe,#bfdbfe,#a5b4fc,#818cf8,#6366f1) */
+  /* 方案2 封面：background:#FFFBF0 + .paper-texture 纸纹叠加 */
+  /* 内容卡 — 背景见 11.2 配色方案 */
+  .card-content{padding:60px 72px 60px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+  /* 方案1 内容：background:#fafafd */
+  /* 方案2 内容：background:#FFFBF0 + .paper-texture */
+  /* CTA卡 — 背景见 11.2 配色方案 */
+  .card-closing{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+  /* 方案1 CTA：background:linear-gradient(150deg,#eef2ff,#e0e7ff,#c7d2fe) */
+  /* 方案2 CTA：background:#FFFBF0 + .paper-texture */
   /* 下载按钮 */
   .dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(0,0,0,0.35);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:22px;cursor:pointer;font-family:'Noto Sans SC',sans-serif}
   .toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center}
   .toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 32px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif}
+  /* 方案2 工具栏按钮：background:#5C4033 */
   /* ... 具体内容样式按需添加 ... */
 </style>
 </head>
@@ -830,7 +912,7 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 ### 11.10 生成 Checklist
 
 - [ ] 卡片尺寸 1080×1440、24px 圆角
-- [ ] 配色使用科技蓝渐变，未使用其他色系
+- [ ] 配色选定方案1或方案2，未混用两个方案的色值
 - [ ] 内容卡使用 `justify-content: space-evenly`
 - [ ] 内容上下均匀分布，无上半密集下半空白
 - [ ] 顶部有「📥 一键下载全部卡片」工具栏按钮
@@ -851,3 +933,50 @@ section标题：#4338ca + 左边框 4px solid #6366f1
 5. **加空行**：每 2-3 行一个空行，制造呼吸感
 6. **检查行内代码**：超过 15 字符的全部改为描述
 7. **HTML 卡片**：如需画布笔记，按第十一章规范生成 1080×1440 HTML 卡片
+
+---
+
+## 十三、baoyu-skills 辅助工具链（按写作阶段触发）
+
+> 以下技能均已安装到 `~/.codebuddy/skills/`，写作时在对话中直接说出需求即可调用。
+
+### 阶段 1：写稿阶段
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| Markdown 草稿写完后，需要统一格式 | `baoyu-format-markdown` | "帮我格式化这篇 Markdown" |
+| 需要把参考网页转成 Markdown 素材 | `baoyu-url-to-markdown` | "帮我把这个链接转成 Markdown" |
+| 需要 YouTube 视频字幕做素材 | `baoyu-youtube-transcript` | "帮我下载这个 YouTube 视频的字幕" |
+| 文章需要翻译 | `baoyu-translate` | "帮我把这篇文章翻译成中文" |
+
+### 阶段 2：配图 / 卡片生成（小红书画布笔记核心）
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| **写完小红书正文，需要生成 1080×1440 图文卡片** | `baoyu-xhs-images` | "帮我生成这套小红书图片卡片" |
+| 需要封面图（配合钩子标题） | `baoyu-cover-image` | "帮我生成这篇小红书的封面图" |
+| 文章需要正文插图 | `baoyu-article-illustrator` | "帮这篇文章配图" |
+| 需要画流程图/架构图 | `baoyu-diagram` | "帮我画一个 XX 流程图" |
+| 数据密集段落需要信息图 | `baoyu-infographic` | "帮我把这段内容做成信息图" |
+| 配图文件太大，需要压缩后再发 | `baoyu-compress-image` | "帮我把这些图压缩一下" |
+| 需要 PPT 风格的图文 | `baoyu-slide-deck` | "帮我生成一套幻灯片" |
+
+### 阶段 3：多平台分发
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| Markdown 转微信 HTML 排版 | `baoyu-markdown-to-html` | "帮我把这篇转成微信 HTML" |
+| 发布到微信公众号 | `baoyu-post-to-wechat` | "帮我把这篇发布到微信公众号" |
+| 同步发布到微博 | `baoyu-post-to-weibo` | "帮我把这篇发到微博" |
+| 同步发布到 X/Twitter | `baoyu-post-to-x` | "帮我把这篇发到 X" |
+
+### ⚠️ 有风险的技能（慎用）
+
+以下技能使用非官方反向工程 API，**仅在实际使用时才有风险，安装本身无任何风险**：
+
+| 技能 | 风险说明 |
+|------|---------|
+| `baoyu-danger-gemini-web` | 通过浏览器模拟与 Gemini Web 交互（非官方 API）。使用可能导致 Google 检测到异常流量，限制你的 Google 账号功能。**仅在免费额度用完、无其他方案时考虑。** |
+| `baoyu-danger-x-to-markdown` | 通过非官方接口抓取 X/Twitter 内容。使用可能导致 X 账号被限流或封禁。**建议优先用 `baoyu-url-to-markdown` 替代。** |
+
+> 💡 **安全原则**：`baoyu-image-gen` 是正经的图像生成方案（走 OpenAI/Google 官方 API），小红书配图优先用它而不是 `baoyu-danger-gemini-web`。

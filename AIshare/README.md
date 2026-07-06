@@ -13,6 +13,7 @@
 | 方向 | 说明 | 已有文章 |
 |------|------|----------|
 | 🐙 GitHub宝藏仓库 | 免费教科书、学习资源、开发者工具列表 | 002 ✅ |
+| 🤖 AI Skills 技能包 | 给 AI 编程助手装插件，效率翻倍 | 005 ✅ 006 ✅ 007 ✅ 008 ✅ |
 | 🌐 免费在线工具箱 | 免安装免登录的网页工具 | 003 ✅ |
 | 📱 微信小程序 | 微信内即开即用的宝藏工具 | 004 ✅ |
 | 🆓 免费API & 开发资源 | 大模型API、云服务免费额度 | 待写 |
@@ -28,6 +29,10 @@
 | 002 | `aishare-002-github-treasure.html` | GitHub上这5个白嫖神仓，帮你省下一辈子买书钱 | 🐙 GitHub |
 | 003 | `aishare-003-free-web-tools.html` | 这8个网站打开就能用，不用下载、不用注册、全部免费 | 🌐 在线工具 |
 | 004 | `aishare-004-wechat-miniapps.html` | 微信里这7个免费工具，打开就用，一个APP都不用装 | 📱 小程序 |
+| 005 | `aishare-005-baoyu-skills.html` | 写完稿还要排版配图发5个平台？这个工具3分钟全搞定 | 🤖 Skills |
+| 006 | `aishare-006-marketingskills.html` | 请不起营销团队？这个3.7万星仓库内置了47个专家帮你卖 | 🤖 Skills |
+| 007 | `aishare-007-nanobanana-ppt.html` | 想到做PPT就头疼？文档丢给它，连转场动画都自动配好 | 🤖 Skills |
+| 008 | `aishare-008-awesome-claude-skills.html` | AI还只会陪你聊天？装上这个，它能直接发邮件做报表写文档 | 🤖 Skills |
 
 ---
 
@@ -74,5 +79,9 @@ AIshare/
 ├── README.md                            # 本文件
 ├── aishare-002-github-treasure.html     # GitHub宝藏仓库
 ├── aishare-003-free-web-tools.html      # 免费在线工具箱
-└── aishare-004-wechat-miniapps.html     # 微信小程序合集
+├── aishare-004-wechat-miniapps.html     # 微信小程序合集
+├── aishare-005-baoyu-skills.html        # baoyu-skills 技能包
+├── aishare-006-marketingskills.html     # marketingskills 营销技能
+├── aishare-007-nanobanana-ppt.html      # NanoBanana PPT生成
+└── aishare-008-awesome-claude-skills.html # awesome-claude-skills 技能目录
 ```

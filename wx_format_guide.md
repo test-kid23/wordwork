@@ -484,3 +484,53 @@
 3. **Ctrl+C** 复制
 4. 粘贴到微信公众号编辑器
 5. 微调：微信编辑器可能过滤部分背景色，手动补一下关键色块
+
+---
+
+## 八、baoyu-skills 辅助工具链（按写作阶段触发）
+
+> 以下技能均已安装到 `~/.codebuddy/skills/`，写作时在对话中直接说出需求即可调用。
+
+### 阶段 1：写稿阶段
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| Markdown 草稿写完后，需要统一格式（标题层级、加粗、列表规范） | `baoyu-format-markdown` | "帮我格式化这篇 Markdown" |
+| 需要把参考网页/Twitter 帖子转成 Markdown 素材 | `baoyu-url-to-markdown` | "帮我把这个链接转成 Markdown" |
+| 需要 YouTube 视频字幕做素材 | `baoyu-youtube-transcript` | "帮我下载这个 YouTube 视频的字幕" |
+| 文章需要翻译成其他语言 | `baoyu-translate` | "帮我把这篇文章翻译成英文" |
+
+### 阶段 2：配图阶段
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| 文章写完，需要公众号封面图（配合标题钩子） | `baoyu-cover-image` | "帮我生成这篇文章的封面图" |
+| 文章需要正文插图（流程图/架构图/对比图） | `baoyu-article-illustrator` | "帮这篇文章配图" |
+| 文章中需要画架构图、流程图、序列图 | `baoyu-diagram` | "帮我画一个 XX 架构图" |
+| 数据/流程密集段落需要信息图 | `baoyu-infographic` | "帮我把这段数据做成信息图" |
+| 配图文件太大需要压缩 | `baoyu-compress-image` | "帮我把这张图压缩一下" |
+
+### 阶段 3：排版发布阶段
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| Markdown 定稿后，转成微信兼容 HTML | `baoyu-markdown-to-html` | "帮我把这篇 Markdown 转成微信 HTML" |
+| HTML 确认无误，直接发布到公众号 | `baoyu-post-to-wechat` | "帮我把这篇发布到微信公众号" |
+
+### 阶段 4：多平台分发
+
+| 时机 | 调用技能 | 触发语（对 AI 说） |
+|------|---------|-------------------|
+| 公众号文章同步发布到微博 | `baoyu-post-to-weibo` | "帮我把这篇发到微博" |
+| 内容需要同步到 X/Twitter | `baoyu-post-to-x` | "帮我把这篇发到 X" |
+
+### ⚠️ 有风险的技能（慎用）
+
+以下技能使用非官方反向工程 API，**仅在实际使用时才有风险，安装本身无任何风险**：
+
+| 技能 | 风险说明 |
+|------|---------|
+| `baoyu-danger-gemini-web` | 通过浏览器模拟与 Gemini Web 交互（非官方 API）。使用可能导致 Google 检测到异常流量，限制你的 Google 账号功能。**仅在免费额度用完、无其他方案时考虑。** |
+| `baoyu-danger-x-to-markdown` | 通过非官方接口抓取 X/Twitter 内容。使用可能导致 X 账号被限流或封禁。**建议优先用 `baoyu-url-to-markdown` 替代。** |
+
+> 💡 **安全原则**：`baoyu-image-gen` 才是正经的图像生成方案（走 OpenAI/Google 官方 API），优先用它而不是 `baoyu-danger-gemini-web`。

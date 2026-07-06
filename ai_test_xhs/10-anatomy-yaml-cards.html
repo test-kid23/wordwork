@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一个YAML=整套测试？· 手绘知识卡</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:#EDE4D3;padding:24px;font-family:'Noto Sans SC',sans-serif}
+  .toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .toolbar button{background:#5C4033;color:#FFF;border:none;padding:12px 32px;border-radius:28px 24px 26px 22px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .2s}
+  .toolbar button:hover{background:#7B5B3D;transform:translateY(-1px)}
+  .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+
+  .card{width:1080px;height:1440px;border-radius:16px 20px 14px 18px;overflow:hidden;position:relative;flex-shrink:0;
+    box-shadow:0 3px 16px rgba(92,64,51,0.12)}
+
+  /* ====== 手绘风格基础 ====== */
+  .warm-bg{background:#FFFBF0}
+  .cream-bg{background:#FFF8E7}
+  .paper-texture{
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(254,215,170,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(198,246,213,0.06) 0%, transparent 50%);
+  }
+
+  /* 手绘波浪边框 */
+  .sketch-border{
+    border: 2.5px solid;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+  .sketch-border-thin{
+    border: 2px solid;
+    border-radius: 225px 18px 255px 12px / 12px 255px 18px 225px;
+  }
+
+  /* 色彩体系 - warm + sketch */
+  --sk-cream: #FFFBF0;
+  --sk-warm-orange: #FEE4CA;    /* 浅橙 - 负面/旧方式 */
+  --sk-orange: #FDD0A5;          /* 中橙 */
+  --sk-deep-orange: #F5B971;     /* 深橙 */
+  --sk-mint: #C6F6D5;            /* 薄荷绿 - 正面/YAML */
+  --sk-mint-light: #D9F5E3;      /* 浅薄荷 */
+  --sk-coral: #E8856B;           /* 珊瑚红 - 强调 */
+  --sk-red: #E57373;             /* 红标记 */
+  --sk-green: #66BB6A;           /* 绿标记 */
+  --sk-text: #3D3021;            /* 主文字 - 暖黑 */
+  --sk-sub: #7A6B55;             /* 副文字 - 暖灰 */
+  --sk-bubble: #FFF;             /* 气泡白 */
+
+  .c-orange{background:#FEE4CA;border-color:#F5B971}
+  .c-mint{background:#C6F6D5;border-color:#81C995}
+  .c-coral{color:#E8856B}
+  .c-red-mark{color:#E57373}
+  .c-green-mark{color:#66BB6A}
+  .t-main{color:#3D3021}
+  .t-sub{color:#7A6B55}
+
+  /* 手绘装饰元素 */
+  .doodle-star{
+    position:absolute;font-size:48px;opacity:0.15;color:#5C4033;
+    z-index:1;line-height:1;
+  }
+
+  /* ====== Card 1: Cover 封面 ====== */
+  .card-cover{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:80px 72px;text-align:center;position:relative}
+  .card-cover .doodle-star:nth-child(1){top:100px;left:140px;font-size:64px;transform:rotate(-20deg)}
+  .card-cover .doodle-star:nth-child(2){top:240px;right:160px;font-size:52px;transform:rotate(25deg)}
+  .card-cover .doodle-star:nth-child(3){bottom:320px;left:180px;font-size:56px;transform:rotate(10deg)}
+  .card-cover .doodle-star:nth-child(4){bottom:160px;right:200px;font-size:44px;transform:rotate(-12deg)}
+  .cover-tag{
+    font-size:32px;font-weight:700;color:#7A6B55;background:#FFF;
+    border:2.5px solid #D4C4A8;
+    border-radius:24px 28px 22px 26px;
+    padding:10px 36px;margin-bottom:48px;position:relative;z-index:2;
+    box-shadow:2px 3px 0 rgba(92,64,51,0.08);
+  }
+  .cover-title{
+    font-size:82px;font-weight:900;line-height:1.25;color:#3D3021;
+    position:relative;z-index:2;max-width:800px;
+  }
+  .cover-title .highlight{
+    display:inline-block;position:relative;
+  }
+  .cover-title .highlight::after{
+    content:'';position:absolute;left:-4px;right:-4px;bottom:4px;
+    height:14px;background:rgba(232,133,107,0.35);
+    border-radius:4px 8px 6px 4px;z-index:-1;transform:rotate(-1deg);
+  }
+  .cover-subtitle{
+    font-size:36px;font-weight:500;color:#7A6B55;margin-top:36px;position:relative;z-index:2;
+  }
+  .cover-insight{
+    font-size:28px;font-weight:700;color:#E8856B;margin-top:48px;position:relative;z-index:2;
+    background:#FFF;padding:16px 36px;
+    border:2.5px solid #FDD0A5;
+    border-radius:20px 26px 18px 24px;
+    box-shadow:3px 4px 0 rgba(245,185,113,0.15);
+  }
+  .watermark{
+    position:absolute;bottom:44px;right:64px;
+    font-size:24px;color:rgba(92,64,51,0.18);font-weight:500;z-index:2;
+  }
+
+  /* ====== Card 2: Flow 四大块 ====== */
+  .card-content{display:flex;flex-direction:column;padding:56px 68px;position:relative}
+  .section-title{
+    font-size:42px;font-weight:900;color:#3D3021;margin-bottom:40px;
+    position:relative;z-index:2;display:inline-block;
+  }
+  .section-title::after{
+    content:'';position:absolute;bottom:2px;left:4px;right:-4px;
+    height:10px;background:rgba(198,246,213,0.5);
+    border-radius:4px 6px 3px 5px;z-index:-1;transform:rotate(-0.5deg);
+  }
+  .flow-list{display:flex;flex-direction:column;gap:18px;position:relative;z-index:2;flex:1;justify-content:space-evenly}
+  .flow-item{
+    display:flex;align-items:center;gap:24px;
+    background:#FFF;border:2.5px solid #E8DFD0;
+    border-radius:20px 16px 24px 18px;padding:26px 34px;
+    position:relative;
+    box-shadow:2px 3px 0 rgba(92,64,51,0.06);
+  }
+  .flow-item:nth-child(odd){border-radius:18px 24px 16px 22px}
+  .flow-num{
+    width:56px;height:56px;border-radius:50% 48% 52% 46%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:28px;font-weight:900;color:#3D3021;
+    flex-shrink:0;border:2.5px solid;
+    box-shadow:1px 2px 0 rgba(0,0,0,0.06);
+  }
+  .flow-item:nth-child(1) .flow-num{border-color:#81C995;background:rgba(198,246,213,0.3)}
+  .flow-item:nth-child(2) .flow-num{border-color:#F5B971;background:rgba(254,228,202,0.3)}
+  .flow-item:nth-child(3) .flow-num{border-color:#E8856B;background:rgba(232,133,107,0.12)}
+  .flow-item:nth-child(4) .flow-num{border-color:#9B8EC4;background:rgba(155,142,196,0.15)}
+  .flow-body{flex:1}
+  .flow-title{font-size:32px;font-weight:700;color:#3D3021;margin-bottom:4px}
+  .flow-desc{font-size:23px;color:#7A6B55;font-weight:400}
+  .flow-arrow{text-align:center;font-size:30px;color:#C4B5A0;letter-spacing:6px;position:relative;z-index:2}
+  .insight-bar{
+    margin-top:auto;padding-top:24px;display:flex;justify-content:center;gap:44px;
+    font-size:25px;color:#7A6B55;font-weight:600;position:relative;z-index:2;
+  }
+  .insight-bar span{background:#FFF;padding:8px 20px;border:2px dashed #D4C4A8;border-radius:16px 18px 14px 17px}
+
+  /* ====== Card 3: Comparison 对比 ====== */
+  .compare-wrap{display:flex;gap:16px;flex:1;position:relative;z-index:2;min-height:0}
+  .compare-panel{flex:1;display:flex;flex-direction:column;padding:36px 40px;
+    border-radius:24px 18px 26px 20px;position:relative;
+    border:2.5px solid;box-shadow:2px 3px 0 rgba(0,0,0,0.05)}
+  .compare-left{background:#FEF0E1;border-color:#F5B971}
+  .compare-right{background:#E8F8ED;border-color:#81C995}
+  .compare-left{border-radius:22px 26px 20px 24px}
+  .compare-right{border-radius:26px 20px 24px 22px}
+  .compare-head{
+    font-size:32px;font-weight:900;display:flex;align-items:center;gap:14px;margin-bottom:28px;
+  }
+  .circle-mark{
+    width:44px;height:44px;border-radius:50% 48% 46% 50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:28px;font-weight:900;flex-shrink:0;
+  }
+  .mark-x{background:#FFE0D6;color:#E57373;border:2px solid #E57373}
+  .mark-ok{background:#D4EDDA;color:#43A047;border:2px solid #66BB6A}
+  .file-stack{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+  .file-item{
+    background:#FFF;border:2px solid;border-radius:10px 14px 8px 12px;
+    padding:12px 18px;font-size:23px;font-weight:600;color:#5C4033;
+    display:flex;align-items:center;gap:10px;
+  }
+  .compare-left .file-item{border-color:#F5B971;width:90%}
+  .compare-left .file-item:nth-child(2){width:78%;margin-left:12px}
+  .compare-left .file-item:nth-child(3){width:70%;margin-left:24px}
+  .compare-left .file-item:nth-child(4){width:65%;margin-left:32px}
+  .compare-left .file-item:nth-child(5){width:72%;margin-left:18px}
+  .compare-right .file-item{border-color:#81C995}
+  .compare-stat{
+    font-size:30px;font-weight:900;margin:16px 0 10px;
+  }
+  .compare-left .compare-stat{color:#D86040}
+  .compare-right .compare-stat{color:#43A047}
+  .compare-detail{font-size:23px;color:#7A6B55;line-height:1.7}
+  .compare-vs{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    background:#FFFBF0;padding:10px 24px;
+    border:2.5px solid #D4C4A8;
+    border-radius:20px;font-size:24px;font-weight:800;
+    color:#7A6B55;z-index:3;white-space:nowrap;
+    box-shadow:2px 3px 0 rgba(92,64,51,0.08);
+  }
+  .compare-conclusion{
+    margin-top:auto;text-align:center;font-size:29px;font-weight:800;
+    color:#3D3021;padding-top:24px;position:relative;z-index:2;
+  }
+  .conclusion-bubble{
+    display:inline-block;background:#FFF;
+    border:2.5px solid #E8856B;
+    border-radius:24px 28px 22px 26px;
+    padding:16px 36px;box-shadow:3px 4px 0 rgba(232,133,107,0.12);
+    position:relative;
+  }
+  .conclusion-bubble::before,.conclusion-bubble::after{
+    content:'';position:absolute;bottom:-8px;
+    border-left:8px solid transparent;border-right:8px solid transparent;
+    border-top:8px solid #E8856B;
+  }
+  .conclusion-bubble::before{left:60px}
+  .conclusion-bubble::after{left:68px;border-top-color:#FFF;bottom:-5px}
+
+  /* ====== Card 4: Anatomy 解剖 ====== */
+  .anatomy-card{
+    background:#FFF;border:2.5px solid #E8DFD0;
+    border-radius:22px 18px 24px 20px;padding:36px 40px;
+    position:relative;z-index:2;flex:1;
+    display:flex;flex-direction:column;gap:18px;min-height:0;
+    box-shadow:2px 3px 0 rgba(92,64,51,0.05);
+  }
+  .anatomy-row{display:flex;align-items:flex-start;gap:18px}
+  .a-tag{
+    font-size:21px;font-weight:800;padding:7px 20px;
+    border-radius:14px 18px 12px 16px;
+    flex-shrink:0;min-width:84px;text-align:center;border:2px solid;
+  }
+  .tag-blue{background:rgba(168,216,234,0.25);color:#2E86AB;border-color:#A8D8EA}
+  .tag-mint{background:rgba(198,246,213,0.3);color:#2E8B57;border-color:#81C995}
+  .tag-lavender{background:rgba(213,198,224,0.25);color:#6B5B95;border-color:#D5C6E0}
+  .tag-orange{background:rgba(254,228,202,0.35);color:#C06000;border-color:#F5B971}
+  .a-body{flex:1}
+  .a-desc{font-size:23px;color:#7A6B55;margin-bottom:4px}
+  .a-code{font-size:22px;color:#3D3021;font-weight:700;
+    background:rgba(254,228,202,0.2);padding:5px 14px;
+    border-radius:8px 12px 6px 10px;display:inline-block;
+    border:1.5px dashed #F5B971;}
+  .anatomy-insight{
+    text-align:center;margin-top:auto;padding-top:20px;
+    font-size:28px;font-weight:800;color:#3D3021;position:relative;z-index:2;
+  }
+  .anatomy-insight .hl{color:#E8856B}
+
+  /* ====== Card 5: Ending 结尾 ====== */
+  .card-ending{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:80px 72px;text-align:center}
+  .bubble-question{
+    position:relative;background:#FFF;
+    border:3px solid #5C4033;
+    border-radius:32px 28px 36px 30px;
+    padding:44px 52px;margin-bottom:52px;max-width:720px;z-index:2;
+    box-shadow:4px 5px 0 rgba(92,64,51,0.1);
+  }
+  .bubble-tail{
+    position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);
+    width:28px;height:28px;background:#FFF;
+    border-right:3px solid #5C4033;border-bottom:3px solid #5C4033;
+    transform:translateX(-50%) rotate(45deg);
+  }
+  .bubble-question .q-text{
+    font-size:44px;font-weight:900;color:#3D3021;line-height:1.4;
+  }
+  .ending-cta{font-size:30px;color:#7A6B55;font-weight:600;margin-bottom:44px;z-index:2}
+  .preview-box{
+    background:#FFF;border:2.5px solid #D4C4A8;
+    border-radius:18px 22px 16px 20px;
+    padding:26px 48px;margin-bottom:48px;position:relative;z-index:2;
+    box-shadow:2px 3px 0 rgba(92,64,51,0.06);
+  }
+  .preview-label{font-size:23px;color:#7A6B55;font-weight:500;margin-bottom:8px}
+  .preview-title{font-size:34px;font-weight:900;color:#3D3021}
+  .hashtags{font-size:23px;color:rgba(92,64,51,0.2);font-weight:500;z-index:2;letter-spacing:2px}
+
+  /* 全局水印 */
+  .card .watermark{position:absolute;bottom:44px;right:64px;
+    font-size:24px;color:rgba(92,64,51,0.18);font-weight:500;z-index:2}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部 (html2canvas)</button>
+  <button onclick="downloadCard(0)" style="background:#C6F6D5;color:#3D3021">1.封面</button>
+  <button onclick="downloadCard(1)" style="background:#FEE4CA;color:#3D3021">2.四大块</button>
+  <button onclick="downloadCard(2)" style="background:#E8F8ED;color:#3D3021">3.对比</button>
+  <button onclick="downloadCard(3)" style="background:#FEF0E1;color:#3D3021">4.解剖</button>
+  <button onclick="downloadCard(4)" style="background:#FFF3E0;color:#3D3021">5.结尾</button>
+</div>
+
+<div class="cards" id="cards-container">
+
+  <!-- ====== Card 1: Cover ====== -->
+  <div class="card card-cover warm-bg paper-texture" id="card-0">
+    <div class="doodle-star">✦</div><div class="doodle-star">✧</div>
+    <div class="doodle-star">✦</div><div class="doodle-star">✧</div>
+    <div class="cover-tag">零代码测试系列</div>
+    <h1 class="cover-title">一个 YAML 文件<br>=<span class="highlight">整套测试？</span></h1>
+    <div class="cover-subtitle">解剖一个真实案例 · 带你看懂每一行</div>
+    <div class="cover-insight">四个结构 + 一行命令 = 完整测试套件 🎯</div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- ====== Card 2: Flow ====== -->
+  <div class="card card-content warm-bg paper-texture" id="card-1">
+    <div class="doodle-star" style="top:80px;right:100px;font-size:40px;transform:rotate(15deg)">✦</div>
+    <div class="section-title">📋 YAML 的四大块</div>
+    <div class="flow-list">
+      <div class="flow-item">
+        <div class="flow-num">1</div>
+        <div class="flow-body"><div class="flow-title">name — 套件名称</div><div class="flow-desc">告诉团队测什么 · 一眼看懂</div></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item">
+        <div class="flow-num">2</div>
+        <div class="flow-body"><div class="flow-title">base_url — 基础地址</div><div class="flow-desc">所有接口共用前缀 · 不用重复写</div></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item">
+        <div class="flow-num">3</div>
+        <div class="flow-body"><div class="flow-title">variables — 全局变量</div><div class="flow-desc">username / password · 整个文件共享</div></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item">
+        <div class="flow-num">4</div>
+        <div class="flow-body"><div class="flow-title">cases — 用例列表</div><div class="flow-desc">一条 case = 一次请求 + 断言 · 排队跑</div></div>
+      </div>
+    </div>
+    <div class="insight-bar">
+      <span>不需要 import 任何库</span>
+      <span>不需要写 class 和 def</span>
+    </div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- ====== Card 3: Comparison ====== -->
+  <div class="card card-content warm-bg paper-texture" id="card-2">
+    <div class="doodle-star" style="top:90px;left:120px;font-size:38px;transform:rotate(-18deg)">✦</div>
+    <div class="doodle-star" style="bottom:100px;right:140px;font-size:42px;transform:rotate(22deg)">✧</div>
+    <div class="section-title">⚡ 同样的 CRUD · 两种写法</div>
+    <div class="compare-wrap" style="position:relative">
+      <div class="compare-panel compare-left">
+        <div class="compare-head">
+          <div class="circle-mark mark-x">✕</div>
+          <span class="t-main">传统方式</span>
+        </div>
+        <div class="file-stack">
+          <div class="file-item">📄 conftest.py</div>
+          <div class="file-item">📄 test_create.py</div>
+          <div class="file-item">📄 test_query.py</div>
+          <div class="file-item">📄 test_update.py</div>
+          <div class="file-item">📄 test_delete.py</div>
+        </div>
+        <div class="compare-stat">5个文件 · ~150行代码</div>
+        <div class="compare-detail">import 各种库<br>定义 class 类<br>写 def 函数<br>管理 conftest 固定装置</div>
+      </div>
+      <div class="compare-vs">VS</div>
+      <div class="compare-panel compare-right">
+        <div class="compare-head">
+          <div class="circle-mark mark-ok">✓</div>
+          <span class="t-main">YAML 方式</span>
+        </div>
+        <div class="file-stack">
+          <div class="file-item">📄 users.yaml</div>
+        </div>
+        <div class="compare-stat">1个文件 · ~50行</div>
+        <div class="compare-detail">定义请求路径<br>定义期望结果<br>一行命令运行<br>零 import</div>
+      </div>
+    </div>
+    <div class="compare-conclusion">
+      <div class="conclusion-bubble">不是代码行数的差距<br>是<span class="c-coral">管理复杂度</span>的差距 💡</div>
+    </div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- ====== Card 4: Anatomy ====== -->
+  <div class="card card-content warm-bg paper-texture" id="card-3">
+    <div class="doodle-star" style="top:70px;right:90px;font-size:36px;transform:rotate(12deg)">✧</div>
+    <div class="section-title">🔬 解剖「创建新用户」</div>
+    <div class="anatomy-card">
+      <div class="anatomy-row">
+        <div class="a-tag tag-blue">名称</div>
+        <div class="a-body"><div class="a-desc">描述这个用例做什么</div><div class="a-code">→ 创建新用户</div></div>
+      </div>
+      <div class="anatomy-row">
+        <div class="a-tag tag-mint">请求</div>
+        <div class="a-body"><div class="a-desc">POST 到指定地址 · 参数引用全局变量</div><div class="a-code">→ POST /api/v1/users</div></div>
+      </div>
+      <div class="anatomy-row">
+        <div class="a-tag tag-lavender">提取</div>
+        <div class="a-body"><div class="a-desc">从响应里把 user_id 存起来 · 后续用例接着用</div><div class="a-code">→ user_id 存入环境变量</div></div>
+      </div>
+      <div class="anatomy-row">
+        <div class="a-tag tag-orange">断言</div>
+        <div class="a-body"><div class="a-desc">验证两样东西</div><div class="a-code">→ 状态码 201 · 用户名一致</div></div>
+      </div>
+    </div>
+    <div class="anatomy-insight">没有一句 Python 代码 <span class="hl">·</span> 但该做的都做了 ✨</div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- ====== Card 5: Ending ====== -->
+  <div class="card card-ending warm-bg paper-texture" id="card-4">
+    <div class="doodle-star" style="top:110px;left:130px;font-size:50px;transform:rotate(-8deg)">✦</div>
+    <div class="doodle-star" style="top:200px;right:150px;font-size:40px;transform:rotate(28deg)">✧</div>
+    <div class="doodle-star" style="bottom:220px;left:170px;font-size:46px;transform:rotate(-22deg)">✦</div>
+    <div class="bubble-question">
+      <div class="bubble-tail"></div>
+      <div class="q-text">YAML 和 Python<br>哪种更容易看懂？</div>
+    </div>
+    <div class="ending-cta">评论区聊聊你的选择 👇</div>
+    <div class="preview-box">
+      <div class="preview-label">下篇预告</div>
+      <div class="preview-title">十分钟写完整套 CRUD 测试 🔥</div>
+    </div>
+    <div class="hashtags">#YAML测试 #接口自动化 #测试开发 #零代码 #软件测试</div>
+    <div class="watermark">@Testkid</div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function downloadCard(index) {
+  const card = document.getElementById('card-' + index);
+  const names = ['01-cover-anatomy','02-four-blocks','03-comparison','04-anatomy','05-ending'];
+  try {
+    const canvas = await html2canvas(card, {scale:2, useCORS:true, backgroundColor:'#FFFBF0'});
+    const link = document.createElement('a');
+    link.download = names[index] + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) { alert('截图失败: ' + e.message); }
+}
+async function downloadAll() {
+  for(let i=0;i<5;i++){
+    await downloadCard(i);
+    await new Promise(r=>setTimeout(r,500));
+  }
+  alert('5张全部下载完成!');
+}
+</script>
+</body>
+</html>
