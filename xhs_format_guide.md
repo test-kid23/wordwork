@@ -934,49 +934,4 @@ def login(user, pwd):
 6. **检查行内代码**：超过 15 字符的全部改为描述
 7. **HTML 卡片**：如需画布笔记，按第十一章规范生成 1080×1440 HTML 卡片
 
----
 
-## 十三、baoyu-skills 辅助工具链（按写作阶段触发）
-
-> 以下技能均已安装到 `~/.codebuddy/skills/`，写作时在对话中直接说出需求即可调用。
-
-### 阶段 1：写稿阶段
-
-| 时机 | 调用技能 | 触发语（对 AI 说） |
-|------|---------|-------------------|
-| Markdown 草稿写完后，需要统一格式 | `baoyu-format-markdown` | "帮我格式化这篇 Markdown" |
-| 需要把参考网页转成 Markdown 素材 | `baoyu-url-to-markdown` | "帮我把这个链接转成 Markdown" |
-| 需要 YouTube 视频字幕做素材 | `baoyu-youtube-transcript` | "帮我下载这个 YouTube 视频的字幕" |
-| 文章需要翻译 | `baoyu-translate` | "帮我把这篇文章翻译成中文" |
-
-### 阶段 2：配图 / 卡片生成（小红书画布笔记核心）
-
-| 时机 | 调用技能 | 触发语（对 AI 说） |
-|------|---------|-------------------|
-| **写完小红书正文，需要生成 1080×1440 图文卡片** | `baoyu-xhs-images` | "帮我生成这套小红书图片卡片" |
-| 需要封面图（配合钩子标题） | `baoyu-cover-image` | "帮我生成这篇小红书的封面图" |
-| 文章需要正文插图 | `baoyu-article-illustrator` | "帮这篇文章配图" |
-| 需要画流程图/架构图 | `baoyu-diagram` | "帮我画一个 XX 流程图" |
-| 数据密集段落需要信息图 | `baoyu-infographic` | "帮我把这段内容做成信息图" |
-| 配图文件太大，需要压缩后再发 | `baoyu-compress-image` | "帮我把这些图压缩一下" |
-| 需要 PPT 风格的图文 | `baoyu-slide-deck` | "帮我生成一套幻灯片" |
-
-### 阶段 3：多平台分发
-
-| 时机 | 调用技能 | 触发语（对 AI 说） |
-|------|---------|-------------------|
-| Markdown 转微信 HTML 排版 | `baoyu-markdown-to-html` | "帮我把这篇转成微信 HTML" |
-| 发布到微信公众号 | `baoyu-post-to-wechat` | "帮我把这篇发布到微信公众号" |
-| 同步发布到微博 | `baoyu-post-to-weibo` | "帮我把这篇发到微博" |
-| 同步发布到 X/Twitter | `baoyu-post-to-x` | "帮我把这篇发到 X" |
-
-### ⚠️ 有风险的技能（慎用）
-
-以下技能使用非官方反向工程 API，**仅在实际使用时才有风险，安装本身无任何风险**：
-
-| 技能 | 风险说明 |
-|------|---------|
-| `baoyu-danger-gemini-web` | 通过浏览器模拟与 Gemini Web 交互（非官方 API）。使用可能导致 Google 检测到异常流量，限制你的 Google 账号功能。**仅在免费额度用完、无其他方案时考虑。** |
-| `baoyu-danger-x-to-markdown` | 通过非官方接口抓取 X/Twitter 内容。使用可能导致 X 账号被限流或封禁。**建议优先用 `baoyu-url-to-markdown` 替代。** |
-
-> 💡 **安全原则**：`baoyu-image-gen` 是正经的图像生成方案（走 OpenAI/Google 官方 API），小红书配图优先用它而不是 `baoyu-danger-gemini-web`。
