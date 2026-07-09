@@ -1,4 +1,4 @@
-# ⚡ 10分钟写一套完整CRUD，隔壁小哥看傻了
+⚡ 10分钟写一套完整CRUD，隔壁小哥看傻了
 
 
 上篇解剖了YAML文件长啥样
@@ -8,59 +8,41 @@
 今天跑给你看 计个时 ⏱️
 
 
-## 🛠️ 目标：一个文件测完增删改查
+🛠️ 目标：一个文件测完增删改查
 
 创建 → 查询 → 更新 → 删除 四个操作一条链
 
 
-## ✍️ 套件定义（1分钟）
+✍️ 套件定义（1分钟）
 
-```yaml
-name: "用户CRUD完整测试"
-base_url: "http://localhost:8000"
-variables:
-  username: cjtest
-  password: Test@123456
-```
+三行搞定：定义测试名、接口地址、写两个变量（用户名+密码）
 
-三行 比写conftest.py快十倍
+比写 conftest.py 快十倍
 
 
-## ✍️ 创建用例（3分钟）
+✍️ 创建用例（3分钟）
 
-```yaml
-  - name: 创建用户
-    request:
-      method: POST
-      url: /api/v1/users
-      json:
-        username: "{{username}}"
-        password: "{{password}}"
-    extract:
-      user_id: $.data.id
-    assert:
-      - path: $.status_code | eq | 201
-```
+发一个 POST 请求创建用户，用 extract 把返回的 user_id 存下来
 
-重点：extract把返回的user_id存起来 后面查/改/删全靠它
+后面查/改/删全靠这个自动传的变量，零手动拼接
 
 
-## ✍️ 查询+更新+删除（5分钟）
+✍️ 查询+更新+删除（5分钟）
 
-查询、更新、删除 三个case都引用{{user_id}}
+三个 case 都引用同一个 user_id，链式跑完
 
-零手动传变量 一步到位
+不用切文件、不用 import、不用手动传参
 
 
-## 🚀 跑（1分钟）
+🚀 跑（1分钟）
 
-```bash
-autotest run users.yaml -v
-```
+一行命令 autotest run users.yaml -v
 
-✅✅✅✅ 四连过 数据库干干净净
+✅✅✅✅ 四连过，数据库干干净净
 
-真正省的不是代码行数 是这些：不用切文件、不用import、不用手动传变量、不用写teardown
+
+真正省的不是代码行数，是这些：
+不用切文件、不用 import、不用手动传变量、不用写 teardown
 
 
 💬 你用Python写CRUD要多久？评论区聊聊～

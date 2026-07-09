@@ -1,4 +1,4 @@
-# 🏗️ 一个文件测完一个业务模块！测试组织哲学
+🏗️ 一个文件测完一个业务模块！测试组织哲学
 
 
 你有没有遇到过 接手别人的测试代码 根本找不到某个接口的用例在哪
@@ -6,34 +6,27 @@
 翻了好几个文件夹 才拼出来
 
 
+📁 YAML 的目录哲学
 
-## 📁 YAML 的目录哲学
-
-```
 testcases/
-├── smoke/          # 冒烟测试
-│   └── login.yaml
-├── regression/     # 回归测试
-│   ├── users.yaml
-│   └── orders.yaml
-└── local/          # 本地调试
-    └── wip.yaml
-```
+├── smoke/ 放冒烟测试（login.yaml）
+├── regression/ 放回归（users.yaml、orders.yaml）
+└── local/ 放本地调试（wip.yaml）
 
 一个YAML文件 = 一个业务场景 = 一套完整测试
 
 不比Python那种 一个接口拆成五个文件
 
 
-## 🎯 好处
+🎯 好处
 
-- 新同事接手 打开users.yaml 增删改查全看到了
-- Git diff 改了哪个接口 一目了然
-- 测试用例也能 Code Review：开发改接口→测试review YAML diff
-- 版本回滚 `git revert` 测试用例也能回
+• 新同事接手 打开users.yaml 增删改查全看到了
+• Git diff 改了哪个接口 一目了然
+• 测试用例也能 Code Review：开发改接口→测试review YAML diff
+• 版本回滚 git revert 测试用例也能回
 
 
-## 🤔 和代码放一起还是独立仓库？
+🤔 和代码放一起还是独立仓库？
 
 和开发代码放一起：开发改接口时顺手更新测试
 独立仓库：测试团队完全自治
