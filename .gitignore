@@ -1,0 +1,3 @@
+# ===== 图片资源不入库（本地保留，节省远端空间）=====
+ai_road_wx/image/
+ai_road_wx/Published/ai_road/image_airoad/
