@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给各家大模型交API钱？英伟达免费key，一个顶一百个</title>
+</head>
+
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧰 AI好物 · 薅羊毛速递</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:20px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  给各家大模型交API钱？<br>英伟达免费key，一个顶一百个
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:16px;">
+  免信用卡 · 国内直连 · 兼容OpenAI，100+模型随便切
+</p>
+
+<!-- 引入 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.7;">
+  📝 你是不是也这样：DeepSeek 一个 key、Kimi 一个 key、Qwen 又一个 key，每家额度不够用就开会员，月底一算账比视频会员还贵。我也是被这堆账单搞烦了，才发现英伟达那个 `build.nvidia.com` 早就把这事办了——<strong>一个免费 key，直接调 100 多款主流大模型</strong>，不用绑卡，国内还能直连。这波不薅真说不过去。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 它到底是什么 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 它到底是什么？</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  🔗 NVIDIA NIM（英伟达推理微服务），挂在 <strong>build.nvidia.com</strong> 上<br>
+  📦 相当于老黄把自家的算力开放成「模型超市」：DeepSeek、Llama、Qwen、Kimi、GLM、Gemma、Mistral，连它自研的 Nemotron 都在里面。<br>
+  💡 <strong>一句话：</strong>你不用每家分别注册，一个 key 进去，想用哪个模型切哪个，像在自助餐厅随便拿。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- 为什么值得薅 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 为什么值得薅</p>
+
+<p>说实话，免费推理平台我踩过不少坑，大部分要么限速到没法用、要么国内连不上要梯子。NIM 让我改观的有三点：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>① 真·不用绑卡。</strong>注册个 NVIDIA 开发者账号，手机号验证就行，不刷信用卡、不预授权，等于它没留任何自动扣费的口子。<br><br>
+  <strong>② 一个 key 通吃 100+ 模型。</strong>DeepSeek 写代码、Kimi 读长文、Qwen 做中文、GLM 跑 Agent——你不用挨家注册，换模型就是换个名字的事。<br><br>
+  <strong>③ 国内能直连、还兼容 OpenAI。</strong>实测不用代理就能调，而且接口长得跟 OpenAI 一模一样，你现在的 Cursor、脚本、SDK 把地址和 key 一换就能用，代码一行都不用改。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- 怎么薅 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 怎么薅到手</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong><span style="color:#4A90D9;">①</span> 打开 build.nvidia.com，注册 / 登录 NVIDIA 开发者账号</strong><br>
+  <strong><span style="color:#8e44ad;">②</span> 随便点开一个模型页，找「Get API Key」生成你的 key</strong><br>
+  <strong><span style="color:#4A90D9;">③</span> 复制那串 nvapi- 开头的 key，额度直接到账</strong>
+</p>
+
+<p>顺带说一句：你拿到的是通用 key，不是某个模型专属的。在控制台里翻模型列表，看上哪个就把模型名抄走——下面接代码时填进去就行。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- 拿到别处用 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 想在 Cursor / 自己的脚本里用？</p>
+
+<p>关键就一句：<strong>NIM 兼容 OpenAI 协议</strong>。你只要把 base_url 指向英伟达的地址，模型名换成控制台里的名字，原来调 OpenAI 的代码原封不动就能跑。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;font-family:Consolas,Monaco,monospace;line-height:1.7;">
+from openai import OpenAI<br><br>
+client = OpenAI(<br>
+&nbsp;&nbsp;api_key="你的nvapi-key",<br>
+&nbsp;&nbsp;base_url="https://integrate.api.nvidia.com/v1"<br>
+)<br><br>
+r = client.chat.completions.create(<br>
+&nbsp;&nbsp;model="nvidia/llama-3.1-8b-instruct",&nbsp;# 模型名以控制台为准<br>
+&nbsp;&nbsp;messages=[{"role":"user","content":"帮我写个Python爬虫"}]<br>
+)<br>
+print(r.choices[0].message.content)
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;">
+  💡 <strong>说实话：</strong>免费档有速率限制（大概每分钟几十次请求），日常调用、写脚本、给 AI 编程助手当后端完全够；但你要想拿它跑高并发生产，趁早死心，那得加钱买算力。额度用完也不会偷偷扣费，这点比很多「免费试用」良心。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- CC Switch -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 用 CC Switch 接到 Claude Code / Codex</p>
+
+<p>如果你平时用 Claude Code 或 Codex 写代码，上面的代码接入法就有点绕了——每次切模型还得改环境变量。这时候有个免费工具叫 <strong>CC Switch</strong>（GitHub: <strong>farion1231/cc-switch</strong>，MIT 协议开源），专门帮你管这事：一个桌面面板，把 NVIDIA NIM 加进去当 provider，然后 Claude Code / Codex 想用哪个模型一键就切。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong><span style="color:#4A90D9;">①</span> 去 GitHub 搜 CC Switch，下载对应系统版本装上</strong><br>
+  <strong><span style="color:#8e44ad;">②</span> 在 Providers 里新增一个，填上你的 NVIDIA API key 和 base_url（`https://integrate.api.nvidia.com/v1`）</strong><br>
+  <strong><span style="color:#4A90D9;">③</span> 在 Claude Code / Codex 标签页里选中这个 provider，模型名选好</strong><br>
+  <strong><span style="color:#8e44ad;">④</span> 它自动帮你配好环境变量，打开 Claude Code / Codex 终端就能用</strong>
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;">
+  💡 不止 NIM——CC Switch 还支持 OpenRouter、SiliconFlow 等一堆 provider。等于你把所有免费 API 全收进一个面板，按需切，不用再翻文件夹改 .env 了。配合 NVIDIA NIM 免费额度，Claude Code / Codex 的日常编码基本不花钱。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 不推荐 -->
+<p style="font-size:16px;font-weight:700;color:#e74c3c;margin:16px 0 8px 0;">⚠️ 不是所有人都需要——先看清这几条</p>
+
+<p style="background:#fdf2f2;padding:10px 14px;border-left:3px solid #e74c3c;color:#555;font-size:14px;">
+  <strong>✅ 建议你冲，如果：</strong>
+  <br>• 同时在用好几家大模型 API，key 管到头大、账单管到肉疼
+  <br>• 想白嫖一个「模型超市」做对比、做原型、给 AI 工具当后端
+  <br>• 人在国内，懒得折腾代理，又想要个能直连的免费接口
+
+  <br><br><strong>❌ 先别急，如果：</strong>
+  <br>• 你要稳定跑生产级高并发——免费档限速，别指望它扛
+  <br>• 你只用一个模型且已有免费额度，多一个 key 纯添乱
+  <br>• 你冲着「永久白嫖」去——免费额度先用着，长期政策英伟达说了算，别当成铁饭碗
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- 我的偏见 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.7;">
+  🎯 我自己的判断：老黄这波与其说发福利，不如说在抢「开发者习惯」——你用熟了它的接口，以后买算力顺理成章。但管他呢，<strong>免费、不用绑卡、国内能直连</strong>这三件套，对咱们普通用户就是实打实的羊毛。一个 key 顶一百个，先把账单省下来再说。具体哪些模型好用、哪些踩过雷，我回头单独写篇横评。
+</p>
+
+<!-- 结尾 -->
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:16px 0;">
+  <strong>🚀 现在就去 build.nvidia.com 生成你的 nvapi key，100+ 模型一个 key 通吃，不薅白不薅。</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  🧰 AIshare · 薅羊毛速递<br>
+  适用对象：被各家大模型API账单困扰、想找统一免费接口的开发者 / 创作者<br>
+  本系列更多文章可在公众号合集「AI好物分享」中查看
+</p>
+
+</body>
+</html>

@@ -17,7 +17,7 @@
 | 🌐 免费在线工具箱 | 免安装免登录的网页工具 | 003 ✅ |
 | 📱 微信小程序 | 微信内即开即用的宝藏工具 | 004 ✅ |
 | 🆓 免费API & 开发资源 | 大模型API、云服务免费额度 | 待写 |
-| 💰 薅羊毛速递 | 限时免费、新用户福利、隐藏福利 | 待写 |
+| 💰 薅羊毛速递 | 限时免费、新用户福利、隐藏福利 | 009 ✅ |
 | 🔧 痛点小工具 | 解决具体场景的轻量工具 | 待写 |
 
 ---
@@ -33,6 +33,7 @@
 | 006 | `aishare-006-marketingskills.html` | 请不起营销团队？这个3.7万星仓库内置了47个专家帮你卖 | 🤖 Skills |
 | 007 | `aishare-007-nanobanana-ppt.html` | 想到做PPT就头疼？文档丢给它，连转场动画都自动配好 | 🤖 Skills |
 | 008 | `aishare-008-awesome-claude-skills.html` | AI还只会陪你聊天？装上这个，它能直接发邮件做报表写文档 | 🤖 Skills |
+| 009 | `aishare-009-hunyuan-hy3-free.html` | 给AI交会员肉疼？腾讯Hy3限时2周免费，开源能自装 | 💰 薅羊毛 |
 
 ---
 
@@ -84,4 +85,7 @@ AIshare/
 ├── aishare-006-marketingskills.html     # marketingskills 营销技能
 ├── aishare-007-nanobanana-ppt.html      # NanoBanana PPT生成
 └── aishare-008-awesome-claude-skills.html # awesome-claude-skills 技能目录
+└── aishare-009-hunyuan-hy3-free.html       # 腾讯混元Hy3 限时2周免费·开源薅羊毛
+├── aishare-010-nvidia-nim-free-api.html     # 英伟达NIM免费API·一个key调100+模型
+└── aishare-011-github-copilot-free.html     # GitHub Copilot免费版·GPT-5和Claude白嫖
 ```
