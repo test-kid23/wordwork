@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数值比较5种写法 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e8ecf1; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+
+  /* ===== 封面卡 ===== */
+  .card-cover { background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover .tag { background:rgba(255,255,255,0.55); backdrop-filter:blur(8px); color:#4338ca; padding:12px 32px; border-radius:28px; font-size:36px; font-weight:700; margin-bottom:44px; }
+  .card-cover h1 { font-size:88px; font-weight:900; color:#1e1b4b; line-height:1.25; margin-bottom:24px; }
+  .card-cover .subtitle { font-size:38px; color:#4338ca; font-weight:400; line-height:1.5; }
+  .card-cover .watermark { position:absolute; bottom:36px; right:56px; font-size:24px; color:rgba(30,27,75,0.2); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fafafd; padding:60px 72px 60px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(99,102,241,0.1); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(0,0,0,0.1); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:30px; font-weight:800; color:#4338ca; margin-bottom:18px; padding-left:16px; border-left:5px solid #6366f1; line-height:1.35; }
+  .card-content .section-title.warn { color:#b91c1c; border-left-color:#ef4444; }
+
+  /* 故事对话盒 */
+  .dialog-box { background:#f0f4ff; padding:28px 32px; border-radius:14px; }
+  .dialog-box .you-say { font-size:25px; color:#4b5563; line-height:1.85; margin-bottom:18px; }
+  .dialog-box .boss-say { background:#fff; border-left:4px solid #ef4444; padding:18px 24px; border-radius:10px; font-size:26px; color:#dc2626; font-weight:700; line-height:1.6; }
+  .dialog-box .aha { margin-top:18px; padding-top:16px; border-top:1px dashed #c7d2fe; font-size:25px; color:#4338ca; text-align:center; line-height:1.8; font-weight:700; }
+
+  /* 内联代码 / 路径 */
+  .code { font-family:'SF Mono',Consolas,'Courier New',monospace; background:#eef2ff; color:#4338ca; padding:3px 10px; border-radius:6px; font-size:22px; font-weight:700; word-break:break-all; }
+
+  /* 操作符双列网格 */
+  .op-grid { display:flex; flex-wrap:wrap; gap:14px; }
+  .op-item { flex:0 0 calc(50% - 7px); background:#fff; border:1.5px solid #e0e7ff; border-left:4px solid #6366f1; padding:18px 22px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+  .op-item .oname { font-size:25px; font-weight:800; color:#1e1b4b; line-height:1.35; margin-bottom:6px; }
+  .op-item .odesc { font-size:20px; color:#6b7280; line-height:1.6; }
+  .op-item.feature { flex:0 0 100%; border-left-color:#f59e0b; background:linear-gradient(135deg,#fffbeb,#fef3c7); }
+  .op-item.feature .oname { color:#b45309; }
+  .op-item.feature .odesc { color:#92400e; }
+  .op-item.green { border-left-color:#059669; }
+
+  /* 金句强调盒 */
+  .tip { background:linear-gradient(135deg,#eff6ff,#eef2ff); padding:18px 30px; border-radius:14px; font-size:24px; color:#4338ca; text-align:center; font-weight:700; line-height:1.7; }
+  .tip.warn { background:rgba(239,68,68,0.06); border:1.5px dashed #fca5a5; color:#991b1b; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:44px; font-weight:900; color:#1e1b4b; margin-bottom:24px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.65); padding:24px 44px; border-radius:18px; font-size:30px; color:#4338ca; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#6366f1; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#4f46e5; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(67,56,202,0.4); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(0,0,0,0.12); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(0,0,0,0.35); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(0,0,0,0.55); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#6366f1; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">📊 断言的艺术 · 数值比较</div>
+    <h1>数值比较的5种写法<br>别只会"等于"了</h1>
+    <div class="subtitle">金额多一分就挂、少一分也挂？<br>那不是严谨，是给自己找事</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子故事 + 五种全景 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😏 说句得罪人的</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          我看不少人写数值断言，只有一个招式：等于。<br>
+          金额 100.00，断言必须等于 100.00……
+        </div>
+        <div class="boss-say">
+          多一个零头就挂，少一分也挂 —— 这哪是测试，是给自己找事 💢
+        </div>
+        <div class="aha">
+          💡 数值比较，至少得会五种 ——<br>等值 / 大小 / 范围 / 长度 / 类型，各有各的场景
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📌 今天盘这五种</div>
+      <div class="tip">
+        从最基础的"等于"，到最容易漏的"类型校验"<br>五种武器配齐，数值断言不再乱写
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：等值 + 大小判断 -->
+  <div class="card card-content">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">✅ 等值判断（最基础，但别滥用）</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          什么时候该用"等于"？什么时候用就傻了？
+        </div>
+        <div class="boss-say">
+          固定不变的业务常量 —— 用 <span class="code">等于</span>，没毛病。<br>动态变化的数值 —— 还死磕"等于"，接口一变全挂
+        </div>
+        <div class="aha">
+          💡 简写直接写值，完整写法是指定"等于" + 目标值
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📈 大小判断（我每个用例都有）</div>
+      <div class="op-grid">
+        <div class="op-item"><div class="oname">大于 0</div><div class="odesc">最常见：订单数 > 0 才算正常</div></div>
+        <div class="op-item"><div class="oname">小于上限</div><div class="odesc">卡住上限，溢出直接报警</div></div>
+        <div class="op-item green"><div class="oname">大于号开头一行简写</div><div class="odesc">框架自动识别，不用写三行</div></div>
+        <div class="op-item"><div class="oname">大于等于 / 小于等于</div><div class="odesc">边界值场景必备</div></div>
+      </div>
+      <div class="tip" style="margin-top:14px">💡 我几乎每个用例都至少有一个"大于 0"</div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：范围 + 长度 + 类型 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">📏 范围判断（比"等于"实用十倍）</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          年龄得在 18–99，折扣得在 0–1，每次写多个断言好烦。
+        </div>
+        <div class="boss-say">
+          用 <span class="code">介于之间</span>，上下限一填，一句话锁死区间
+        </div>
+        <div class="aha">
+          💡 这招比"等于"实用太多了 —— 该用范围就用范围
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🔢 长度 & 🏷️ 类型（容易被漏掉的两个）</div>
+      <div class="op-grid">
+        <div class="op-item"><div class="oname">长度检查</div><div class="odesc">数组长度 > 0，配合分页接口绝配</div></div>
+        <div class="op-item feature"><div class="oname">⭐ 类型检查（最容易被漏）</div><div class="odesc">先确认它是数字，再比大小。不然接口返回字符串"123"，我们比了个寂寞</div></div>
+      </div>
+      <div class="tip" style="margin-top:14px">💡 类型对了，后面随便玩；类型不对，后面全白费</div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：不推荐的写法 + 金句 -->
+  <div class="card card-content">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title warn">⚠️ 我不推荐的写法</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          我以前也走过这弯路：为了"稳"，把所有数值都写成"等于"，看着严谨，其实是偷懒。
+        </div>
+        <div class="boss-say">
+          表面严谨实则脆弱 —— 接口稍微一变，我们全挂，还得一个个改 💢
+        </div>
+        <div class="aha">
+          💡 该用范围的用范围，该用大于的用大于<br>别让"等于"替我们扛所有数值场景
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎯 一句话记住</div>
+      <div class="tip">
+        数值断言的精髓不是"必须等于"，是"合理即可"。<br>
+        把关卡设对，bug 自然卡在门外
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">✅ 五种写法速查</div>
+      <div class="op-grid">
+        <div class="op-item"><div class="oname">1. 等值</div><div class="odesc">固定常量才用</div></div>
+        <div class="op-item"><div class="oname">2. 大小</div><div class="odesc">>0 最常用</div></div>
+        <div class="op-item"><div class="oname">3. 范围</div><div class="odesc">介于之间锁死</div></div>
+        <div class="op-item green"><div class="oname">4. 长度</div><div class="odesc">数组不能空</div></div>
+        <div class="op-item feature"><div class="oname">5. 类型</div><div class="odesc">数字才比大小</div></div>
+        <div class="op-item"><div class="oname">记住</div><div class="odesc">合理即可，不死磕等于</div></div>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>数值断言的精髓<br>不是"必须等于"<br>是"合理即可"</h2>
+    <div class="golden">
+      把关卡设对<br>bug 自然卡在门外
+    </div>
+    <div class="cta-ask">
+      💬 大家写过最离谱的<br>"等于"断言是啥？评论区乐一下～
+    </div>
+    <div class="save-tip">⭐ 收藏这张对照 · 下次写数值断言，先想清楚用哪种</div>
+    <div class="hashtags">
+      #测试断言 #数值比较 #自动化测试 #软件测试
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '数值比较5种写法别只会等于';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

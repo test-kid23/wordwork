@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>正则断言 · 小红书卡片 · 科技蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e8ecf1; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+
+  /* ===== 封面卡 ===== */
+  .card-cover { background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover .tag { background:rgba(255,255,255,0.55); backdrop-filter:blur(8px); color:#4338ca; padding:12px 32px; border-radius:28px; font-size:36px; font-weight:700; margin-bottom:44px; }
+  .card-cover h1 { font-size:88px; font-weight:900; color:#1e1b4b; line-height:1.25; margin-bottom:24px; }
+  .card-cover .subtitle { font-size:38px; color:#4338ca; font-weight:400; line-height:1.5; }
+  .card-cover .watermark { position:absolute; bottom:36px; right:56px; font-size:24px; color:rgba(30,27,75,0.2); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fafafd; padding:60px 72px 60px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(99,102,241,0.1); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(0,0,0,0.1); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:30px; font-weight:800; color:#4338ca; margin-bottom:18px; padding-left:16px; border-left:5px solid #6366f1; line-height:1.35; }
+  .card-content .section-title.warn { color:#b91c1c; border-left-color:#ef4444; }
+
+  /* 故事对话盒 */
+  .dialog-box { background:#f0f4ff; padding:28px 32px; border-radius:14px; }
+  .dialog-box .you-say { font-size:25px; color:#4b5563; line-height:1.85; margin-bottom:18px; }
+  .dialog-box .boss-say { background:#fff; border-left:4px solid #ef4444; padding:18px 24px; border-radius:10px; font-size:26px; color:#dc2626; font-weight:700; line-height:1.6; }
+  .dialog-box .aha { margin-top:18px; padding-top:16px; border-top:1px dashed #c7d2fe; font-size:25px; color:#4338ca; text-align:center; line-height:1.8; font-weight:700; }
+
+  /* 内联代码 / 正则 */
+  .code { font-family:'SF Mono',Consolas,'Courier New',monospace; background:#eef2ff; color:#4338ca; padding:3px 10px; border-radius:6px; font-size:20px; font-weight:700; word-break:break-all; }
+
+  /* 操作符双列网格 */
+  .op-grid { display:flex; flex-wrap:wrap; gap:14px; }
+  .op-item { flex:0 0 calc(50% - 7px); background:#fff; border:1.5px solid #e0e7ff; border-left:4px solid #6366f1; padding:18px 22px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+  .op-item .oname { font-size:25px; font-weight:800; color:#1e1b4b; line-height:1.35; margin-bottom:6px; }
+  .op-item .odesc { font-size:20px; color:#6b7280; line-height:1.6; }
+  .op-item.feature { flex:0 0 100%; border-left-color:#f59e0b; background:linear-gradient(135deg,#fffbeb,#fef3c7); }
+  .op-item.feature .oname { color:#b45309; }
+  .op-item.feature .odesc { color:#92400e; }
+  .op-item.green { border-left-color:#059669; }
+
+  /* 金句强调盒 */
+  .tip { background:linear-gradient(135deg,#eff6ff,#eef2ff); padding:18px 30px; border-radius:14px; font-size:24px; color:#4338ca; text-align:center; font-weight:700; line-height:1.7; }
+  .tip.warn { background:rgba(239,68,68,0.06); border:1.5px dashed #fca5a5; color:#991b1b; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:44px; font-weight:900; color:#1e1b4b; margin-bottom:24px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.65); padding:24px 44px; border-radius:18px; font-size:30px; color:#4338ca; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#6366f1; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#4f46e5; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(67,56,202,0.4); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(0,0,0,0.12); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(0,0,0,0.35); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(0,0,0,0.55); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#6366f1; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#4f46e5; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="tag">🧵 断言的艺术 · 正则断言</div>
+    <h1>正则断言<br>返回乱码也能揪出</h1>
+    <div class="subtitle">有些字段值是多少不重要<br>只在乎"长得对不对"</div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子 + 四种场景概览 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😎 讲个偏门的本事</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          有些字段，值天天变，我们只在乎它"长得对不对"。<br>
+          手机号、邮箱、UUID、时间戳，值老变，但格式万年不变。
+        </div>
+        <div class="boss-say">
+          这种字段用"等于"根本没法验 —— 正则断言才是对路 💡
+        </div>
+        <div class="aha">
+          💡 正则断言管的是"长得对"，不是"等于啥"
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📌 今天讲四个实战</div>
+      <div class="tip">
+        手机 / 邮箱 / UUID / 时间戳<br>四种最常见的格式字段，正则一卡一个准
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：手机号 + 邮箱 -->
+  <div class="card card-content">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">📱 手机号格式（第一道门）</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          返回哪怕是一串乱码，但我只关心它是不是合法手机号。
+        </div>
+        <div class="boss-say">
+          用 <span class="code">^1[3-9]\d{9}$</span>，开头是 1、第二位 3–9、后面 9 位数字 —— 格式不对直接判死刑
+        </div>
+        <div class="aha">
+          💡 我靠它抓出过把手机号存成空字符串的 bug
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📧 邮箱格式（新人最容易翻车）</div>
+      <div class="op-grid">
+        <div class="op-item"><div class="oname">正则锁格式</div><div class="odesc">校验注册接口返回的用户邮箱长得对不对</div></div>
+        <div class="op-item green"><div class="oname">@ 打成 #</div><div class="odesc">正则一卡，当场现形</div></div>
+        <div class="op-item feature"><div class="oname">⭐ 常用正则</div><div class="odesc"><span class="code">^[\w.+-]+@[\w-]+\.[\w.-]+$</span></div></div>
+        <div class="op-item"><div class="oname">先攒模板</div><div class="odesc">邮箱正则人人眼熟，存一份下次直接抄</div></div>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：UUID + 时间戳 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">🆔 UUID 格式（网关对接必用）</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          很多接口返回的 ID 是 UUID，我只想确认它生成的真是 UUID。
+        </div>
+        <div class="boss-say">
+          用 <span class="code">^[0-9a-f]{8}-...-[0-9a-f]{12}$</span> 锁死格式，不是随便拼的串
+        </div>
+        <div class="aha">
+          💡 对接网关类接口，这招特别稳
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⏱️ 时间戳格式（卡位数就够了）</div>
+      <div class="tip">
+        时间戳一般是 10 位或 13 位数字。<br>
+        用 <span class="code">^\d{10}$</span> 或 <span class="code">^\d{13}$</span> 卡位数 —— 位数不对说明时间没生成好。<br>
+        我见过返回成字符串 "null"，长度不对，正则直接拦下
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：致命陷阱 + 金句 -->
+  <div class="card card-content">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title warn">⚠️ 正则的致命陷阱</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          正则写错了，等于没断言——我们以为在验格式，其实只是"包含"。
+        </div>
+        <div class="boss-say">
+          少写 <span class="code">^</span> 和 <span class="code">$</span>，"abc123" 里包含 "123" 就过，啥都能过 💢
+        </div>
+        <div class="aha">
+          💡 写正则一定加首尾锚点，写完自己先测一遍再上线
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎯 一句话记住</div>
+      <div class="tip">
+        正则断言管的是"长得对"，不是"等于啥"。<br>
+        格式类字段交给正则，我们睡觉都踏实
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">✅ 两种必记</div>
+      <div class="op-grid">
+        <div class="op-item green"><div class="oname">首尾锚点</div><div class="odesc">大家写的时候，永远加上 ^ 和 $</div></div>
+        <div class="op-item"><div class="oname">写完自测</div><div class="odesc">拿正常/异常各测一遍</div></div>
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>正则断言管"长得对"<br>不是"等于啥"</h2>
+    <div class="golden">
+      格式类字段交给正则<br>我们睡觉都踏实
+    </div>
+    <div class="cta-ask">
+      💬 大家最常用的正则<br>是验手机还是邮箱？评论区贴一个～
+    </div>
+    <div class="save-tip">⭐ 收藏 · 正则模板攒一套，下次直接抄</div>
+    <div class="hashtags">
+      #正则表达式 #测试验证 #自动化测试 #软件测试 #数据校验
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '正则断言返回乱码也能揪出';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

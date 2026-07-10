@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>25 · 小红书卡片 · 科技靛蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e8ecf1; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(30,27,75,0.10); }
+  /* 封面 */
+  .card-cover { background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; position:relative; }
+  .card-cover .tag { background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); color:#4338ca; padding:12px 32px; border-radius:28px; font-size:36px; font-weight:700; margin-bottom:44px; }
+  .card-cover h1 { font-size:88px; font-weight:900; color:#1e1b4b; line-height:1.25; margin-bottom:24px; max-width:900px; }
+  .card-cover .subtitle { font-size:38px; color:#3730a3; font-weight:500; line-height:1.5; max-width:880px; }
+  .watermark { position:absolute; bottom:36px; right:56px; font-size:22px; font-weight:500; z-index:3; }
+  .card-cover .watermark { color:rgba(30,27,75,0.30); }
+  .card-content .watermark { color:rgba(0,0,0,0.10); }
+  .card-closing .watermark { color:rgba(30,27,75,0.18); }
+  /* 内容卡 */
+  .card-content { background:#fafafd; padding:60px 72px 60px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content > *:not(.num) { position:relative; z-index:1; }
+  .card-content .num { position:absolute; top:40px; right:60px; font-size:72px; font-weight:900; color:rgba(99,102,241,0.10); line-height:1; z-index:2; pointer-events:none; user-select:none; }
+  .card-content .section { margin:0; }
+  .section-title { font-size:32px; font-weight:800; color:#1e1b4b; margin-bottom:20px; padding-left:18px; border-left:6px solid #6366f1; line-height:1.35; }
+  .section-title.warn { color:#b91c1c; border-left-color:#ef4444; }
+  /* 故事盒 */
+  .story-box { background:#f0f4ff; padding:26px 32px; border-radius:14px; font-size:25px; color:#374151; line-height:1.85; }
+  .story-box .hl { background:#fee2e2; color:#dc2626; padding:1px 8px; border-radius:4px; font-weight:700; }
+  .story-box .em { color:#4338ca; font-weight:700; }
+  /* 对话盒（翻车/故事三态） */
+  .dialog-box { background:#f0f4ff; padding:28px 32px; border-radius:14px; font-size:25px; color:#374151; line-height:1.85; }
+  .dialog-box .you-say { font-size:23px; color:#6b7280; line-height:1.8; margin-bottom:14px; }
+  .dialog-box .boss-say { background:#fff; border-left:4px solid #dc2626; padding:18px 24px; border-radius:10px; font-size:26px; color:#dc2626; font-weight:700; line-height:1.6; margin-bottom:4px; }
+  .dialog-box .aha { margin-top:18px; padding-top:16px; border-top:1px dashed #c7d2fe; font-size:24px; color:#4338ca; text-align:center; line-height:1.8; font-weight:700; }
+  /* 金句/强调盒（每卡收尾） */
+  .insight-box { background:rgba(239,68,68,0.06); border:1.5px dashed #fca5a5; padding:16px 28px; border-radius:12px; font-size:23px; color:#991b1b; text-align:center; font-weight:700; line-height:1.8; }
+  .allure-tip { background:linear-gradient(135deg,#eff6ff,#eef2ff); padding:16px 28px; border-radius:12px; font-size:23px; color:#4338ca; text-align:center; font-weight:700; line-height:1.7; }
+  .sec-note { background:linear-gradient(135deg,#eff6ff,#eef2ff); padding:28px 36px; border-radius:16px; font-size:23px; color:#4338ca; line-height:1.8; }
+  .sec-note strong { color:#1e1b4b; }
+  /* 开场清单 */
+  .agenda-label { font-size:26px; font-weight:800; color:#4338ca; margin:6px 0 14px; }
+  .checklist { display:flex; flex-direction:column; gap:12px; }
+  .check-item { display:flex; align-items:center; gap:14px; background:#fff; border:1.5px solid #e0e7ff; border-left:4px solid #6366f1; padding:16px 24px; border-radius:12px; font-size:25px; color:#1e1b4b; font-weight:600; }
+  .check-item .ci { font-size:28px; }
+  /* 定义列表 */
+  .def-list { display:flex; flex-direction:column; gap:16px; }
+  .def-item { display:flex; align-items:flex-start; gap:18px; background:#fff; border:1.5px solid #e0e7ff; border-left:4px solid #6366f1; padding:20px 26px; border-radius:12px; }
+  .def-item.green { border-left-color:#059669; }
+  .def-item.red { border-left-color:#ef4444; }
+  .def-item.amber { border-left-color:#f59e0b; }
+  .def-item .di { font-size:32px; flex-shrink:0; line-height:1.3; }
+  .def-item .dt { font-size:27px; font-weight:800; color:#1e1b4b; line-height:1.4; }
+  .def-item .dd { font-size:23px; color:#4b5563; line-height:1.7; margin-top:6px; }
+  /* 链路图 */
+  .chain { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin:8px 0; }
+  .chain .step { background:linear-gradient(135deg,#6366f1,#818cf8); color:#fff; padding:14px 24px; border-radius:12px; font-size:25px; font-weight:700; }
+  .chain .arr { font-size:28px; color:#a5b4fc; font-weight:700; }
+  /* 有序阶梯 */
+  .order { display:flex; flex-direction:column; }
+  .order-item { display:flex; align-items:center; gap:18px; padding:18px 4px; }
+  .order-item .on { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:27px; font-weight:900; color:#fff; flex-shrink:0; background:#6366f1; }
+  .order-item .ot { font-size:26px; color:#1e1b4b; font-weight:600; line-height:1.5; }
+  .order-item .oa { text-align:center; color:#a5b4fc; font-size:28px; font-weight:700; margin:-2px 0; }
+  .order-item:not(:last-child) { border-bottom:2px dashed #e0e7ff; }
+  /* 收尾卡 */
+  .card-closing { background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:46px; font-weight:900; color:#1e1b4b; margin-bottom:22px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.7); padding:24px 44px; border-radius:18px; font-size:30px; color:#4338ca; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:26px; color:#4f46e5; line-height:1.9; margin-bottom:18px; font-weight:600; }
+  .card-closing .save-tip { font-size:26px; color:#4f46e5; font-weight:800; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(67,56,202,0.45); line-height:2; }
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(30,27,75,0.45); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:20px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(30,27,75,0.65); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#6366f1; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; }
+  .toolbar button:hover { background:#4f46e5; }
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+<div class="card card-cover"><div class="tag">📐 变量系统 · 谁覆盖谁一次讲透</div><h1>📐 变量覆盖优先级：到底谁说了算</h1><div class="subtitle">第3章最后一篇 讲个最容易翻车的点😤</div><div class="watermark">@Testkid · 2026</div></div><div class="card card-content"><div class="num">01</div><div class="dialog-box"><div class="you-say">第3章最后一篇，讲个最容易翻车的点😤 同一个变量名，在好几个地方都定义了</div><div class="boss-say">搞不清最后用哪个，你迟早会遇到"我明明改了怎么没生效"的灵异事件</div><div class="aha">今天一次讲透</div></div><div class="insight-box">搞不清优先级，"改了没生效"就是常态</div><div class="watermark">@Testkid</div></div><div class="card card-content" style="background:#ffffff;"><div class="num">02</div><div class="section"><div class="section-title">🪜 优先级从低到高</div></div><div class="story-box">记住这个顺序👇<br>内置函数默认值</div><div class="order"><div class="order-item"><div class="on">1</div><div class="ot">全局配置</div></div><div class="oa">▼</div><div class="order-item"><div class="on">2</div><div class="ot">环境变量</div></div><div class="oa">▼</div><div class="order-item"><div class="on">3</div><div class="ot">套件变量</div></div><div class="oa">▼</div><div class="order-item"><div class="on">4</div><div class="ot">用例变量</div></div><div class="oa">▼</div><div class="order-item"><div class="on">5</div><div class="ot">提取出来的值</div></div></div><div class="story-box">越往后<br>越有话语权<br>同名的时候<br>后面的盖前面的</div><div class="insight-box">记住一句话：范围越小，优先级越高</div><div class="watermark">@Testkid</div></div><div class="card card-content"><div class="num">03</div><div class="section"><div class="section-title">🧪 实战感受一下</div></div><div class="dialog-box"><div class="you-say">套件里 base_url 指 dev，某条用例里我改成了 staging</div><div class="boss-say">这条用例跑的时候用 staging，因为用例级更高；其他用例还是老实用 dev</div><div class="aha">这不是 bug，是设计——范围小，优先级就高</div></div><div class="insight-box">用例级盖全局，不是 bug 是设计</div><div class="watermark">@Testkid</div></div><div class="card card-content" style="background:#ffffff;"><div class="num">04</div><div class="section"><div class="section-title">⚡ 一个特例要记牢</div></div><div class="dialog-box"><div class="you-say">CI 上想临时覆盖某个值，又不想改任何文件？</div><div class="boss-say">带特定前缀的环境变量，优先级往往拉到最高，注入一个就行</div><div class="aha">这招在流水线里特别好使，临时覆盖零改动</div></div><div class="insight-box">带前缀的环境变量，CI 临时覆盖最香</div><div class="watermark">@Testkid</div></div><div class="card card-content"><div class="num">05</div><div class="section"><div class="section-title warn">⚠️ 最坑的"谜之 bug"</div></div><div class="dialog-box"><div class="you-say">我真实翻过的车👇 全局配了一个超时时间，某条用例又配了一遍，两个值不一样</div><div class="boss-say">我改全局的，怎么改都不生效，折腾一下午，才发现用例级早把它盖死了</div><div class="aha">教训：改值没生效，先看有没有更高优先级在偷偷覆盖它</div></div><div class="insight-box">改值没生效，先查有没有更高优先级在覆盖</div><div class="watermark">@Testkid</div></div><div class="card card-closing"><h2>范围越小，优先级越高</h2><div class="golden">变量覆盖不是玄学<br>是有明确顺序的<br>你只要记住一句：<br>范围越小，优先级越高<br>搞懂它<br>"改了没生效"这种鬼故事<br>就再也吓不到你</div><div class="cta-ask">💬 你被变量覆盖坑过吗？<br>最离谱的一次查了多久？<br>评论区抱团取暖～</div><div class="save-tip">⭐ 收藏这张优先级顺序<br>下次值不生效时<br>第一个翻出来对照</div><div class="hashtags">#变量管理 #测试配置 #自动化测试 #软件测试 #测试技巧</div><div class="watermark">@Testkid · 2026</div></div>
+</div>
+<script>const names = ['25-cover','25-c1','25-c2','25-c3','25-c4','25-c5','25-closing'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = names[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = names[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>

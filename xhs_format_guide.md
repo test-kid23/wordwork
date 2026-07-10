@@ -922,6 +922,140 @@ def login(user, pwd):
 - [ ] html2canvas scale:2 输出 2x 高清
 - [ ] Noto Sans SC 字体 CDN 已引入
 
+### 11.11 内容卡组件库（可复用排版组件）
+
+> **标杆**：`ai_test_xhs/published/card-05-test-report.html` 排版最佳。
+> 它好在不靠"一张大表格/同款列表"撑场，而是**每卡组件不同、每卡用金句盒收尾、序号角标克制**。
+> 以下组件为 Tech Indigo（方案1）下的标准实现。生成内容卡时，**按内容选组件，禁止整篇内容卡都用同一款列表**。
+
+#### 11.11.1 序号角标 `.num`（每卡必须有，右上角小号淡标）
+
+> ⚠️ **禁止**用居中 200-300px 巨型半透数字当背景（喧宾夺主）。序号应是"角落里的页码感"。
+
+| 属性 | 值 |
+|------|-----|
+| 字号 / 字重 | 72px / 900 |
+| 颜色 | `rgba(99,102,241,0.1)`（淡靛蓝） |
+| 位置 | `position:absolute; top:40px; right:60px;` |
+| 行高 | 1（不占行） |
+
+#### 11.11.2 对话盒 `.dialog-box`（讲翻车 / 故事 / 场景）
+
+分三段，**铺陈 → 翻车 → 顿悟**，自带层次，不要一长条 `<br>` 堆。
+
+```css
+.dialog-box { background:#f0f4ff; padding:28px 32px; border-radius:14px; }
+.dialog-box .you-say { font-size:23px; color:#6b7280; line-height:1.8; }      /* 铺垫：灰字 */
+.dialog-box .boss-say {                                                        /* 翻车：白底+红左线 */
+  background:#fff; border-left:4px solid #dc2626;
+  padding:18px 24px; border-radius:10px;
+  font-size:26px; color:#dc2626; font-weight:700; line-height:1.6;
+}
+.dialog-box .aha {                                                             /* 顿悟：虚线分隔+强调 */
+  margin-top:18px; padding-top:16px; border-top:1px dashed #c7d2fe;
+  font-size:24px; color:#4338ca; text-align:center; line-height:1.8; font-weight:700;
+}
+```
+
+#### 11.11.3 左右对比 `.vs-row`（A vs B / 你给的 vs 领导看到的）
+
+```css
+.vs-row { display:flex; gap:18px; }
+.vs-you  { flex:1; background:#fef2f2; border:1.5px solid #fecaca; border-radius:14px; padding:24px 22px; text-align:center; }  /* 左：红=痛点 */
+.vs-boss { flex:1; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:14px; padding:24px 22px; text-align:center; }  /* 右：蓝=解法 */
+.vs-label { font-size:22px; color:#dc2626; font-weight:700; margin-bottom:12px; }
+.vs-boss .vs-label { color:#2563eb; }
+.vs-content { font-size:22px; color:#4b5563; line-height:1.8; }
+```
+
+#### 11.11.4 图标网格 `.boss-want`（2×2 罗列要素）
+
+```css
+.boss-want { display:flex; flex-wrap:wrap; gap:12px; }
+.want-item { flex:0 0 calc(50% - 6px); background:#fff; border:1.5px solid #e0e7ff;
+  border-radius:12px; padding:20px 24px; display:flex; align-items:flex-start; gap:14px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+.wi-icon { font-size:32px; flex-shrink:0; }
+.wi-body { font-size:21px; color:#1e1b4b; line-height:1.6; }
+.wi-body strong { display:block; font-size:22px; color:#4338ca; margin-bottom:4px; }
+```
+
+#### 11.11.5 多列卡片 `.allure-cols` / `.three-row`（3 列并列）
+
+```css
+.allure-cols { display:flex; gap:14px; }
+.allure-col { flex:1; background:#ffffff; border:1.5px solid #e0e7ff; border-radius:14px; padding:24px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.03); }
+.allure-col .ac-icon { font-size:36px; text-align:center; margin-bottom:10px; }
+.allure-col .ac-title { font-size:23px; font-weight:700; color:#4338ca; text-align:center; margin-bottom:14px; }
+.allure-col .ac-item { font-size:20px; color:#4b5563; line-height:1.8; }
+.allure-col .ac-item::before { content:'• '; color:#818cf8; font-weight:700; }
+
+.three-row { display:flex; gap:14px; }
+.three-item { flex:1; background:linear-gradient(135deg,#eef2ff,#e0e7ff); border-radius:14px; padding:28px 20px; text-align:center; }
+.three-item .tnum { font-size:52px; font-weight:900; color:rgba(99,102,241,0.15); margin-bottom:12px; line-height:1; }
+.three-item .tlabel { font-size:22px; font-weight:700; color:#1e1b4b; margin-bottom:10px; }
+.three-item .tdesc { font-size:19px; color:#6b7280; line-height:1.7; }
+```
+
+#### 11.11.6 金句盒 / 强调块（**每卡结尾必须有**，形成翻页节奏）
+
+> 这是 card-05 排版好最关键的一点：每张内容卡结尾放一个居中强调盒，**不只是在收尾卡放**。
+
+```css
+.insight-box { background:rgba(239,68,68,0.06); border:1.5px dashed #fca5a5;      /* 警示型金句 */
+  padding:16px 28px; border-radius:12px; font-size:23px; color:#991b1b; text-align:center; font-weight:700; line-height:1.8; }
+.allure-tip { background:linear-gradient(135deg,#eff6ff,#eef2ff);                  /* 提示型金句 */
+  padding:16px 28px; border-radius:12px; font-size:23px; color:#4338ca; text-align:center; font-weight:700; line-height:1.7; }
+.sec-note { background:linear-gradient(135deg,#eff6ff,#eef2ff);                    /* 说明型强调块 */
+  padding:28px 36px; border-radius:16px; }
+```
+
+### 11.12 排版最佳实践（对照 card-05 标准 · 铁律）
+
+生成任何一篇内容卡，必须逐条对照：
+
+| # | 铁律 | 错误做法 |
+|---|------|----------|
+| 1 | **每卡双 section**：一张内容卡放 2 个 section（密度优先，5 张卡搞定一篇） | 每卡 1 个 section，撑到 8 张、重复感强 |
+| 2 | **组件多样化**：相邻卡片用不同组件（对话盒 / 对比 / 网格 / 多列 / 金句盒轮换） | 6 张内容卡全是同款 `def-list` |
+| 3 | **金句盒收尾**：每张内容卡结尾放一个 `.insight-box`/`.allure-tip`/`.sec-note` 强调盒 | 只有收尾卡有 golden，中间卡干巴巴 |
+| 4 | **序号角标克制**：右上角 72px 淡标，颜色 `rgba(99,102,241,0.1)` | 居中 300px 巨型半透数字当背景 |
+| 5 | **封面 tag + 标题分行**：tag 用「emoji + 痛点/主题 · 副主题」格式；h1 用 `<br>` 主动分行，占卡片宽 60-70% | 只有一个干巴巴的栏目名；标题不分行堆一行 |
+| 6 | **故事分层**：翻车/场景用对话盒三态（铺垫→红框翻车→虚线顿悟），不靠 `<br>` 平铺 | 一长条 `<br>` 堆叠，无视觉层次 |
+| 7 | **收尾卡结构固定**：`h2 标题 + golden 金句盒 + cta-ask 提问 + save-tip 收藏引导 + hashtags + 水印` | 结构随意、缺互动或收藏引导 |
+
+**收尾卡标准结构（参考值）**：
+```css
+.card-closing h2 { font-size:44px; font-weight:900; color:#1e1b4b; line-height:1.4; margin-bottom:24px; }
+.card-closing .golden { background:rgba(255,255,255,0.65); padding:20px 44px; border-radius:18px;
+  font-size:28px; color:#4338ca; font-weight:700; line-height:1.7; margin-bottom:24px; }
+.card-closing .cta-ask { font-size:25px; color:#6366f1; line-height:1.9; margin-bottom:20px; }
+.card-closing .save-tip { font-size:26px; color:#4f46e5; font-weight:700; margin-bottom:24px; }
+.card-closing .hashtags { font-size:21px; color:rgba(67,56,202,0.4); line-height:2; }
+```
+
+### 11.13 内容卡底色交替（可选技巧）
+
+当一篇有多张内容卡时，可让部分卡用纯白 `#ffffff` 与默认 `#fafafd` 交替，制造轻微视觉变化、避免连翻几张同色疲劳。
+
+```html
+<!-- 默认底色 -->
+<div class="card card-content">…</div>
+<!-- 交替底色 -->
+<div class="card card-content" style="background:#ffffff;">…</div>
+```
+
+> ⚠️ 仅限 Tech Indigo（方案1）。Sketch Cream（方案2）已有纸纹差异，不需此技巧，且禁止出现纯白 `#ffffff`。
+
+### 11.14 生成 Checklist（增强版）
+
+在 §11.10 基础上追加：
+- [ ] 每张内容卡右上角有克制序号角标（72px 淡标，非巨型背景数字）
+- [ ] 相邻内容卡用了**不同**组件（对话盒/对比/网格/多列/金句盒轮换）
+- [ ] 每张内容卡有 **2 个 section**，且结尾有金句/强调盒收尾
+- [ ] 封面 tag 为「emoji + 痛点/主题 · 副主题」格式，h1 用 `<br>` 主动分行
+- [ ] 翻车/故事类内容用了对话盒三态（铺垫→红框翻车→虚线顿悟），非平铺
+- [ ] 收尾卡含：h2 + golden 金句 + cta-ask 提问 + save-tip 收藏 + hashtags
+
 ---
 
 ## 十二、从 Markdown 转换到小红书实操流程
