@@ -1,0 +1,419 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 入门</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Claude Code 装不上？<br>我踩了 5 个坑，第 3 个 90% 的人都卡这
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  从零到第一个对话的完整指南，手把手带你绕过所有安装陷阱
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>你打开了终端，敲了官方那行 curl 命令，等着 Claude Code 装好。然后它就报错了——网络超时、401、command not found……你搜遍 Google 找不到一篇中文教程说清楚怎么绕。这篇就是给你的。<strong>不是翻译官方文档，是按国内网络环境实测出来的踩坑地图。</strong>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、装前准备</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、安装本体</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、搞定 API</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、第一个对话</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、5 个高频坑</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 一、装前准备 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  装前准备：别急着敲命令
+</p>
+
+<p>先搞清楚你要准备什么，然后再动手。装到一半才发现缺东西，最浪费时间。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>🔹 你需要的东西：</strong><br><br>
+  <strong>一个终端</strong> — macOS 用 Terminal/iTerm2，Windows 用 PowerShell 或 WSL，Linux 不用说了<br><br>
+  <strong>一个能用的 API Key</strong> — Anthropic 官方的（如果网络能直连）或者第三方模型 API Key（OpenAI / DeepSeek / 智谱等）<br><br>
+  <strong>一个中转工具（国内用户）</strong> — Claude Code 默认直连 Anthropic，国内网络不通，需要中间代理
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 最重要的判断：走直连还是中转？</p>
+
+<p>这是安装前要做的<strong>唯一一个关键决策</strong>，决定了后面所有步骤。</p>
+
+<p style="background:#ebf4ff;padding:10px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;margin:12px 0;">
+  <strong>✅ 人在海外、网络能直连 Anthropic：</strong><br>
+  走官方路径。直接用 Anthropic API Key，安装 → 配环境变量 → 搞定。全程 5 分钟。
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:8px;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>✅ 人在国内：</strong><br>
+  走中转路线。先装 Claude Code 本体，再配一个叫 <strong>ccswitch</strong> 的中转代理，把 Claude Code 发出的请求转发到你能用的模型 API 上。
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>❌ 别装好了才去找 Key</strong><br>
+  大概率会卡在"有客户端、没后端"这个尴尬状态。<span style="color:#276749;">先确认你能用哪个模型，再往下走。</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 二、安装本体 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  安装 Claude Code 本体
+</p>
+
+<p>Claude Code 的安装方式有官方脚本和包管理器两种。<strong>推荐官方脚本</strong>，最简单。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 macOS / Linux</p>
+
+<p>打开终端，一条命令：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  curl -fsSL https://claude.ai/install.sh | bash
+</p>
+
+<p>如果你用 Homebrew：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  brew install --cask claude-code
+</p>
+
+<p>两个方法都一样，官方脚本是 Anthropic 推荐的方式，Homebrew 是 macOS 用户更熟悉的渠道。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Windows</p>
+
+<p><strong>推荐用 PowerShell（管理员模式）</strong>：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  irm https://claude.ai/install.ps1 | iex
+</p>
+
+<p>或者用 WinGet：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  winget install Anthropic.ClaudeCode
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一件不要做的事</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>❌ 别用这条命令：</strong><br>
+  npm install -g @anthropic-ai/claude-code<br><br>
+  <span style="color:#276749;"><strong>✅ NPM 安装方式已被 Anthropic 官方废弃。</strong>用 NPM 装的版本可能缺少关键更新和功能，后续可能完全不支持。走上面的官方脚本或包管理器就行。</span>
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 装完之后：</strong>在终端里敲 <strong>claude</strong> 试试。如果能进去（即使还没配 API Key），说明本体装好了。如果敲了没反应，关掉终端重开一次——环境变量刚写进去有时候没生效。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 三、搞定 API ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  搞定 API：直连 vs 中转
+</p>
+
+<p>这是国内用户最容易卡住的环节。分开讲。</p>
+
+<!-- 3.1 直连路线 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ✈️ 直连路线（海外用户 / 网络能翻墙）
+</p>
+
+<p style="margin-top:10px;">如果你能直连 Anthropic 的服务，设置很简单。</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 获取 API Key</strong><br>去 <strong>console.anthropic.com</strong> 注册账号，在 API Keys 页面创建一个 Key。</p>
+
+<p><strong><span style="color:#4A90D9;">②</span> 设置环境变量</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # macOS / Linux<br>
+  export ANTHROPIC_API_KEY="sk-ant-xxxxxxxxxxxxx"<br><br>
+  # Windows PowerShell<br>
+  $env:ANTHROPIC_API_KEY="sk-ant-xxxxxxxxxxxxx"
+</p>
+
+<p>建议把这一行加到 shell 配置文件里（<strong>~/.zshrc</strong> 或 <strong>~/.bashrc</strong>），每次打开终端不用重新设。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 验证</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  claude --version<br>
+  # 或者直接进项目目录，敲 claude 开始对话
+</p>
+
+<p>如果能正常进入交互界面，直连路线就通了。</p>
+
+<!-- 3.2 中转路线 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  🔄 中转路线（国内用户实测可用）
+</p>
+
+<p style="margin-top:10px;">走中转的本质：Claude Code 以为它在跟 Anthropic 对话，实际上中间有个翻译官，把它的请求"翻译"成 OpenAI 格式，发给 DeepSeek 或其他你买得到的模型 API。</p>
+
+<p><strong><span style="color:#8e44ad;">①</span> 准备好你的模型 API Key</strong><br>OpenAI、DeepSeek、智谱、通义千问……你手头有哪个能用就用哪个。建议至少准备一个便宜好用的模型，推荐 DeepSeek V3，性价比极高。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 安装 cswitch</strong><br>ccswitch 是一个本地代理工具，把你的 Claude Code 请求转发到指定模型的 API。GitHub 上直接搜索 <strong>ccswitch</strong> 就能找到。安装方式通常是一键脚本或者二进制下载，跟着它的 README 走就行。</p>
+
+<p><strong><span style="color:#8e44ad;">③</span> 配置 cswitch</strong><br>启动 cswitch，在它的配置里填好：模型 API 地址（比如 DeepSeek 是 <strong>https://api.deepseek.com</strong>）、你的 API Key、端口号。启动后，ccswitch 会在你本地开一个代理服务。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 让 Claude Code 走代理</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # macOS / Linux<br>
+  export ANTHROPIC_API_KEY="ccswitch-proxy"<br>
+  export ANTHROPIC_BASE_URL="http://localhost:8080/v1"<br><br>
+  # Windows PowerShell<br>
+  $env:ANTHROPIC_API_KEY="ccswitch-proxy"<br>
+  $env:ANTHROPIC_BASE_URL="http://localhost:8080/v1"
+</p>
+
+<p><strong><span style="color:#8e44ad;">⑤</span> 验证</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  claude
+</p>
+
+<p>进入交互界面，随便问个简单的问题测试一下。如果正常回复了，中转路线就通了。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 中转路线的注意事项：</strong><br>
+  • 不同模型的 API 格式略有差异，如果遇到奇怪的报错，先查 cswitch 文档里支持的模型列表<br>
+  • 中转有额外的延迟，响应速度会比直连慢一些——正常，别慌<br>
+  • 某些高级功能（比如 /compact 上下文压缩）依赖 Claude 模型特有的 API，中转到非 Claude 模型时可能不完整。大部分日常使用不受影响
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 四、第一个对话 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  第一个对话：感受"Agent 直接动手"
+</p>
+
+<p>装好了，别急着炫技，先做一件事：<strong>让 Claude Code 读你的项目，然后问它问题。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进项目目录</p>
+
+<p>Claude Code 不是聊天机器人，它需要<strong>在项目目录里运行</strong>才能发挥完整能力。如果你在空目录里启动，它会少很多核心功能。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  cd /你的/项目/路径<br>
+  claude
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一次对话：让它解释你的代码</p>
+
+<p>如果你有一个现成的项目，跟它说：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "分析一下这个项目的整体结构，告诉我主要模块是什么、它们之间怎么协作的"
+</p>
+
+<p>Claude Code 会自动翻你的目录、读关键文件，然后给你一份结构分析。<strong>不需要你手动告诉它"这个文件是干嘛的"——它自己会看。</strong></p>
+
+<p>如果你没有现成项目，随便建一个测试文件：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  mkdir claude-test && cd claude-test<br>
+  echo "print('hello')" > main.py<br>
+  claude
+</p>
+
+<p>然后跟它说：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "创建一个简单的 Python Web 应用，用 Flask，有一个 /api/hello 接口返回 JSON"
+</p>
+
+<p>Claude Code 会自动创建文件、写代码、安装依赖、启动服务。<strong>你只用看着。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 感受"代理"和"辅助"的区别</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 Copilot / Cursor 的做法</strong><br>你打开文件，选中位置，等补全建议，按 Tab 接受。你是操作者，它是指南针。
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 Claude Code 的做法</strong><br>你说话，它动手。创建文件、写代码、跑命令、改配置——全自动。你是导演，它是执行团队。
+</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 第一次用的心理建议：</strong>别怕。它改的文件你随时可以 <strong>git diff</strong> 看变化，不爽就 <strong>git checkout</strong> 回退。Claude Code 不会绕过你的 Git 版本管理，一切都可回溯。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 五、5 个高频坑 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  安装过程中 5 个高频坑（附解法）
+</p>
+
+<p>这些是我自己踩过、也在各种社区看到别人反复踩的坑。每个都给你标了<strong>表现</strong>、<strong>真相</strong>和<strong>一步解法</strong>。</p>
+
+<!-- 坑 1 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  敲了 claude 没反应
+</p>
+
+<p><strong>表现：</strong>装完脚本显示成功，但在终端里敲 <strong>claude</strong> 提示 "command not found"。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>安装脚本改了 PATH，但当前终端会话还没刷新。这是跨平台通病——macOS、Linux、Windows 上都遇到过。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong><br>
+  ① 关掉当前终端窗口，重新打开一个。99% 的情况这就好了。<br>
+  ② 如果还不行，手动检查 PATH。macOS/Linux 查 <strong>echo $PATH</strong> 里有没有 claude 的安装路径。Windows 查系统环境变量。
+</p>
+
+<!-- 坑 2 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  API Key 报 "401 Unauthorized"
+</p>
+
+<p><strong>表现：</strong><strong>claude</strong> 启动后，发消息报 401 错误。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>有几种可能，按顺序排查——Key 确实填错了（多了空格/换行符）、该 Key 所属的账户没充值、Key 已被删除或过期。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong><br>
+  ① 先确认环境变量是不是真的写进去了：<strong>echo $ANTHROPIC_API_KEY</strong>（macOS/Linux）或 <strong>echo $env:ANTHROPIC_API_KEY</strong>（Windows）<br>
+  ② 去 Anthropic Console 或你的模型 API 平台确认 Key 状态<br>
+  ③ 如果走中转，确认 cswitch 是否正在运行、端口是否正确
+</p>
+
+<!-- 坑 3 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  网络超时 / Connection Refused
+</p>
+
+<p><strong>表现：</strong>消息发出去一直转圈，最后报 Connection Error 或 Timeout。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>国内网络环境直连 Anthropic API 会被墙。就算你挂了全局代理，<strong>终端里的非 HTTP 流量不一定走代理</strong>——这也是为什么很多人说"我开着 VPN 啊怎么还连不上"。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>走中转路线（见上面第三章）。或者如果你有可靠的 HTTP 代理，单独配置终端的代理环境变量：<br><br>
+  <strong>macOS / Linux：</strong><br>
+  export HTTPS_PROXY=http://127.0.0.1:7890<br>
+  export HTTP_PROXY=http://127.0.0.1:7890<br><br>
+  <strong>Windows PowerShell：</strong><br>
+  $env:HTTPS_PROXY="http://127.0.0.1:7890"<br>
+  $env:HTTP_PROXY="http://127.0.0.1:7890"<br><br>
+  端口号换成你自己的代理端口。
+</p>
+
+<!-- 坑 4 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  Windows 终端中文乱码
+</p>
+
+<p><strong>表现：</strong>Claude Code 返回的中文内容在 Windows 终端里显示为乱码或方块。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>Windows 的 PowerShell 默认编码是 GBK，不是 UTF-8。Claude Code 输出的是 UTF-8 编码。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong><br>
+  打开 PowerShell，执行：<br>
+  [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8<br>
+  $OutputEncoding = [System.Text.Encoding]::UTF8<br><br>
+  或者更一劳永逸——<strong>用 Windows Terminal</strong>（微软商店免费下载），它默认 UTF-8，没有编码问题。
+</p>
+
+<!-- 坑 5 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  NPM 装完版本不对 / 功能缺失
+</p>
+
+<p><strong>表现：</strong>用 NPM 装的旧版本，有些命令找不到，或者体验跟教程里描述的不一样。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>你大概率是用 <strong>npm install -g @anthropic-ai/claude-code</strong> 装的，而这条路已被废弃。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong><br>
+  ① 先卸载 NPM 版本：<strong>npm uninstall -g @anthropic-ai/claude-code</strong><br>
+  ② 用官方脚本或包管理器重装（见上面第二章）<br>
+  ③ 装完之后 <strong>claude --version</strong> 确认是最新版
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 自查清单 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📋 安装自查清单</p>
+
+<p>装完之后，快速过一遍这 5 项，确认没遗漏：</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> 终端里敲 <strong>claude</strong> 能正常启动（不是 command not found）<br>
+  <span style="color:#8e44ad;">☐</span> API Key 已正确写入环境变量，echo 能打印出来<br>
+  <span style="color:#4A90D9;">☐</span> 发一条消息不报 Connection Error 或 401<br>
+  <span style="color:#8e44ad;">☐</span> 中文输出不显示为乱码（Windows 用户重点检查）<br>
+  <span style="color:#4A90D9;">☐</span> <strong>claude --version</strong> 显示的是最新版本
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 写在最后 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>装好 Claude Code 不是终点，是起点。</p>
+
+<p>第一次让它改你项目代码的时候，你的本能反应可能是"等等你别动那个文件"。它干活的方式跟你习惯的所有工具都不一样——不是辅助，是代理。</p>
+
+<p>但一旦你跨过那个心理门槛，你会发现自己开始把越来越多的事情丢给它做。不是因为你变懒了，而是你发现你的时间花在<strong>想清楚要什么</strong>上，比花在<strong>动手做</strong>上，产出高太多了。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 找一个小项目试试。</strong><br>让它帮你做一件事——哪怕只是新建一个文件夹、写一个 Hello World、跑一遍测试。<br>让它动一次手，你就知道我在说什么。
+</p>
+
+<p>下一篇聊 <strong>CLAUDE.md —— 给 AI 同事的项目说明书</strong>。这是 Claude Code 最被低估的功能，写好了它能让 AI 对你的项目了如指掌，写不好它就是盲人摸象。模板和写法一起给你。</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 入门系列 · 安装与配置<br>适用对象：想用 Claude Code 但卡在安装/配置/网络问题上的开发者<br>本系列更多文章可在公众号合集「Claude Code」中查看
+</p>
+
+</body>

@@ -1,0 +1,278 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 入门</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  同一个需求返工 4 遍？<br>你差一份给 AI 看的「入职文档」
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  同一个需求，有 CLAUDE.md 和没有，AI 的输出质量差了不止一个级别
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>Claude Code 帮你写了段代码，功能没问题，但命名规范不对、目录放错了、import 路径跟你项目惯用的不一样。你叹口气，一行行手动改回去。<strong>不是 AI 不行——是你没告诉它你项目的规矩。</strong>新同事入职你都会给个 Onboarding 文档，AI 程序员也一样。它那份叫 CLAUDE.md。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、有和没有的差距</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、完整模板</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、上下文三层</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、Hook 机制</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 一、CLAUDE.md 是什么 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  CLAUDE.md 是什么
+</p>
+
+<p>官方说法：CLAUDE.md 是 Claude Code 的<strong>项目级记忆文件</strong>。放在项目根目录，Claude Code 启动时会自动加载。</p>
+
+<p>说人话：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>它就是你给 AI 程序员写的入职文档。
+</p>
+
+<p>跟新同事聊项目，你会告诉他：代码这么结构的、命名这么规范的、测试这么跑的。CLAUDE.md 就是把这些话写成文件，Claude Code 每次启动都会读一遍。</p>
+
+<p>它长什么样？就是一个普通的 Markdown 文件，放在项目根目录：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  your-project/<br>
+  ├── <strong>CLAUDE.md</strong>          ← 这个<br>
+  ├── src/<br>
+  ├── tests/<br>
+  └── ...
+</p>
+
+<p>内容完全由你决定——你想让 AI 知道什么，就往里写什么。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 二、没有它的时候，Claude Code 在猜什么 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  没有它的时候，Claude Code 在猜什么
+</p>
+
+<p>我用同一个真实需求做对比，看差距有多明显。</p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+  📝 <strong>需求：</strong>"给用户模块加一个修改密码的接口"
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:10px 0;">
+  <strong>🔹 没有 CLAUDE.md 时</strong><br><br>
+  它看你是 Python 项目，用了 Flask 风格——但你的项目是 FastAPI。<br>
+  它看文件都在 src/ 下，就在 src/ 新建了——但你的 API 约定放 src/api/。<br>
+  它写了 unittest.TestCase——但你的测试框架是 pytest + fixture。<br>
+  它 import 了 from src.models.user——但你的路径是 from app.models.user。<br><br>
+  代码能跑，功能对。<strong>但要并入主分支，需手动调整 4 处。</strong>
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 有 CLAUDE.md 时</strong><br><br>
+  它知道项目用 FastAPI，直接用 APIRouter，文件放 src/api/。<br>
+  它知道代码风格要过 ruff format，格式跟你项目完全一致。<br>
+  它知道测试框架是 pytest，自动创建 fixture，放 tests/api/ 下。<br>
+  它知道 import 路径是 app.xxx，所有引用都对。<br>
+  写完代码后，<strong>还自动跑了一遍 pytest</strong>。<br><br>
+  <strong>零返工。</strong>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🎯 同一个需求。没有 CLAUDE.md 返工 4 处，有它零返工。</strong><br>不是 AI 变聪明了，是你把规矩告诉它了。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 三、完整模板 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  一份好 CLAUDE.md 的骨架（附模板）
+</p>
+
+<p>下面是一份<strong>可以直接复用的模板</strong>。前几项必须写，后面的按你项目情况来。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.9;">
+  <strong># 项目名称</strong><br><br>
+  <strong>## 项目简介</strong><br>
+  一句话说清楚这个项目是干什么的。比如：<br>
+  "这是一个电商后台管理系统，负责商品管理、订单处理和用户管理。"<br><br>
+  <strong>## 技术栈</strong><br>
+  - 后端：Python 3.11 + FastAPI<br>
+  - 数据库：PostgreSQL + SQLAlchemy<br>
+  - 测试：pytest + httpx<br>
+  - 前端：React + TypeScript<br><br>
+  <strong>## 项目结构</strong><br>
+  src/<br>
+  ├── api/          # API 路由层<br>
+  ├── models/       # 数据模型<br>
+  ├── services/     # 业务逻辑层<br>
+  ├── schemas/      # Pydantic 模型<br>
+  └── utils/        # 工具函数<br><br>
+  <strong>## 编码规范</strong><br>
+  - 使用 ruff 进行代码格式化和 lint<br>
+  - 类型注解：所有函数必须注明参数类型和返回值<br>
+  - 命名：文件名小写下划线，类名大驼峰<br>
+  - import 路径：使用 app.xxx 格式<br><br>
+  <strong>## 命令</strong><br>
+  - 启动：uvicorn app.main:app --reload<br>
+  - 测试：pytest tests/ -v<br>
+  - 检查：ruff check .<br><br>
+  <strong>## 注意事项</strong><br>
+  - 敏感信息从环境变量读取<br>
+  - 新增接口必须在 tests/api/ 下写测试<br>
+  - commit 前必须 run ruff check 和 pytest
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 8px 0;">📌 每个部分的写法要点</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 项目简介</strong><br>一句话就行。Claude Code 需要知道"这个项目是卖货的还是做社交的"，这决定了代码的整体倾向。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 技术栈</strong><br>精确到版本号。不同版本的 API 差异很大，Python 3.10 的 Union 写法和 3.11 的 X | Y 写法不一样。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 项目结构</strong><br>这是<strong>最值钱的部分</strong>。Claude Code 虽然能自己翻目录，但它不知道你的命名约定——到底是 src/api/ 还是 src/routes/？是 utils/ 还是 helpers/？写明白了，它新建文件就不会放错地方。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 编码规范</strong><br>告诉它你的 lint 工具是什么、命名风格是什么。这样它写出来的代码就能直接通过 lint 检查，你不用手动调格式。</p>
+
+<p><strong><span style="color:#4A90D9;">⑤</span> 命令</strong><br>把常用命令写上。Claude Code 在跑测试、装依赖的时候会自动用这些命令，不用你每次都手敲一遍。</p>
+
+<p><strong><span style="color:#8e44ad;">⑥</span> 注意事项</strong><br>把你项目里的"潜规则"写下来。比如"数据库密码从环境变量读"、"commit 前要跑测试"。这些都是新同事最容易犯的错，AI 也一样。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 四、上下文管理的三个层次 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  上下文管理的三个层次
+</p>
+
+<p>有了 CLAUDE.md 之后，Claude Code 的知识来源有三个层次，越精确定位越准：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>第 1 层：会话内临时说明</strong> → 当前对话 → 说完就忘 → 比如"这次重构别动 user 模块"
+  </span>
+</p>
+
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>第 2 层：CLAUDE.md</strong> → 整个项目 → 永久 → 上面模板里的所有内容
+  </span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>第 3 层：工作区文件</strong> → AI 实时读取 → 实时 → 你 @ 引用的文件、AI 自己翻到的代码
+  </span>
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 关键原则：不同信息放不同层。</strong><br><br>
+  举个例子：你要重构订单模块，但特意嘱咐它"别碰 login.py，那个文件有坑"。<br><br>
+  ✅ 会话里说一句就行——这是临时约束，不是项目级规则。<br>
+  ❌ 不用写到 CLAUDE.md——CLAUDE.md 只放通用的、持久的信息。<br><br>
+  很多人 CLAUDE.md 写得又长又杂，就是因为把会话级约束也塞进去了。保持精简，只放长期有效的信息。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 五、Hook 机制 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  Hook 机制：让它自动做规矩
+</p>
+
+<p>这是 CLAUDE.md 里一个被严重低估的功能。<strong>Hook</strong> 就是在特定事件发生时，Claude Code 自动执行你设定好的行为。</p>
+
+<p style="background:#ebf4ff;padding:10px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;margin:12px 0;">
+  <strong>✅ 每次写完代码，自动跑 ruff 格式化一遍。</strong>
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:8px;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>✅ 每次 commit 之前，自动跑一遍全部测试。</strong>
+</p>
+
+<p style="background:#ebf4ff;padding:10px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;margin:12px 0;">
+  <strong>✅ 每次启动对话，自动检查当前分支是否是最新的。</strong>
+</p>
+
+<p>这些行为你不需要每次都手动提醒它。写在 CLAUDE.md 的 Hook 区域里，它就自动执行。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 基础 Hook 写法</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.9;">
+  <strong>## Hooks</strong><br><br>
+  <strong>### 保存文件时</strong><br>
+  - 自动执行：ruff format {file_path}<br><br>
+  <strong>### commit 之前</strong><br>
+  - 自动执行：pytest tests/ -v<br>
+  - 自动执行：ruff check .
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个很实用的进阶配置</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.9;">
+  <strong>## Hooks</strong><br><br>
+  <strong>### 启动对话时</strong><br>
+  - 自动执行：git status  # 先告诉我当前分支状态<br><br>
+  <strong>### 每次修改文件后</strong><br>
+  - 如果没有对应测试文件，提醒我是否要创建<br><br>
+  <strong>### 准备 commit 时</strong><br>
+  - 自动跑一次项目全部测试<br>
+  - 如果有失败，禁止 commit
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 这个配置的效果：</strong>你再也不会说"糟了忘跑测试就 push 了"——AI 替你记住了。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 写在最后 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>CLAUDE.md 可能是 Claude Code 里<strong>"投入产出比"最高的东西</strong>。</p>
+
+<p>写它只需要 10 分钟。但写完之后，Claude Code 对你项目的理解从"猜"变成了"知道"。每一次跟它交互，你的时间都花在业务逻辑上，而不是纠正格式、调整路径、改命名规范。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 建一个 CLAUDE.md 吧。就现在。</strong><br>把技术栈、项目结构、编码规范、注意事项填进去。<br>然后让 Claude Code 重新做一件它之前做过的事，看看差别。
+</p>
+
+<p>下一期聊一个很多人关心的问题：<strong>Claude Code 能跑命令、能改文件，怎么放心把终端交出去而不用担心它搞出生产事故？</strong>权限模型、安全边界、企业实践——全安排上。</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 入门系列 · CLAUDE.md 项目说明书<br>适用对象：已经装好 Claude Code，想让 AI 更懂你项目的开发者<br>本系列更多文章可在公众号合集「Claude Code」中查看
+</p>
+
+</body>

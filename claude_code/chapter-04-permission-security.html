@@ -1,0 +1,265 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 入门</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  AI 要删你文件？<br>先套上这 3 层「安全带」，随便它干活
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  不是限制它的能力，而是知道什么能放、什么必须锁
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>它能在终端跑命令。rm -rf、sudo、git push --force——理论上它都能干。<strong>你第一次意识到这一点的时候，是不是后背凉了一下？</strong>但用了这么久，我的结论是：它不会偷偷搞破坏，它只会在你不注意的时候，按你的话做一件你没想到后果的事。它不是恶意的——它是听话到有点蠢。安全不是不让它干活，是给它戴上安全带。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、三层权限</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、白名单&amp;排除</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、数据收集</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、企业实践</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、5 条铁律</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 一、三层权限 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  三层权限：它能碰什么、不能碰什么
+</p>
+
+<p>Claude Code 对项目文件的操作分三个级别。<strong>理解这个分层，你就知道什么该放心、什么该盯着。</strong></p>
+
+<!-- 读文件 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  📖 第一层：读文件
+</p>
+
+<p style="margin-top:10px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">低风险 · 默认允许</span>
+</p>
+
+<p>Claude Code 读你项目里的文件，理解代码结构。只读不改，不会造成破坏。<strong>读文件阶段你可以完全放心。</strong>它看得越多，理解越准，后面的操作质量越高。</p>
+
+<!-- 写文件 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ✏️ 第二层：写文件
+</p>
+
+<p style="margin-top:10px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">中风险 · 有确认机制</span>
+</p>
+
+<p>Claude Code 会创建新文件、修改已有文件。但它不会偷偷改——<strong>每次写操作之前会告诉你"我将修改以下文件"，等你确认。</strong>你随时可以拒绝。也可以用 <strong>git diff</strong> 看变化，不对劲就 <strong>git checkout</strong> 回退。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">💡 最重要的习惯：</strong>让它干活之前先 <strong>git commit</strong> 一次。这样不管它怎么改，你都能精确回到"动手之前"的状态。5 秒种就能做好的安全网。
+</p>
+
+<!-- 执行命令 -->
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ⚡ 第三层：执行命令
+</p>
+
+<p style="margin-top:10px;">
+  <span style="background:#fff5f5;color:#9b2c2c;font-size:11px;padding:2px 8px;border-radius:8px;">高风险 · 必须你确认</span>
+</p>
+
+<p>Claude Code 可以跑 shell 命令——装依赖、跑测试、操作 Git。<strong>它执行每一条命令之前都会告诉你"我要执行 xxx"，等你许可。</strong>但它不知道你这台机器的真实环境。你的判断才是最后一道防线。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ 遇到 sudo 一定要自己过脑子。</strong><br>
+  它可能在执行"安装依赖"时需要 sudo，而你装的包恰巧跟系统其他版本冲突——这个问题它判断不了，<span style="color:#276749;">但后果你承担。</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 二、白名单和敏感文件排除 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  白名单目录和敏感文件排除
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🎯 核心原则：</strong>让它知道——<strong>这里随便碰，那里千万别动。</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 .claudeignore：告诉它哪些文件别看</p>
+
+<p><strong>.claudeignore</strong> 文件放在项目根目录，语法跟 <strong>.gitignore</strong> 一模一样。Claude Code 在分析项目结构和读取代码时会自动跳过这些文件。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:1.9;">
+  # .claudeignore 示例<br>
+  node_modules/<br>
+  dist/<br>
+  build/<br>
+  *.log<br>
+  .env<br>
+  secrets/<br>
+  credentials/
+</p>
+
+<p>这有两个好处：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 安全——</strong>敏感文件直接屏蔽，物理隔绝，AI 读都读不到。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 性能——</strong>Claude Code 不用在这些文件上浪费 Token，聚焦在真正的代码上。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 项目结构隔离</p>
+
+<p>这个更简单：你让 Claude Code 在哪个目录干活，它就只管那个目录。不会越界。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">✅ 一句话记住：</strong>别把敏感文件放在项目目录里，然后又指望 AI 自己知道"这个不能看"。该放 .claudeignore 的放 .claudeignore，该移出项目目录的移出去。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 三、数据收集 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Claude Code 会收集什么数据
+</p>
+
+<p>聊安全问题，隐私和数据收集绕不开。以下是基于 Anthropic 官方文档的事实：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 它会收集什么</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>📊 使用数据</strong> — 功能使用频率、对话次数、命令调用统计 → 用于产品改进
+  </span>
+</p>
+
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>💬 对话数据</strong> — 你跟 Claude Code 说的内容、它的回复 → 用于服务提供
+  </span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>🐛 /bug 反馈</strong> — 你主动提交的 bug 报告 → 用于问题修复
+  </span>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 它不会做什么</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;">
+  <span style="color:#276749;">✅</span> <strong>反馈数据不用于模型训练</strong>——Anthropic 明确承诺：/bug 提交的反馈和对话数据不会用来训练模型<br>
+  <span style="color:#276749;">✅</span> <strong>会话数据有有限保留期</strong>——不是为了训练而永久存储<br>
+  <span style="color:#276749;">✅</span> <strong>API 调用的数据有独立隐私政策</strong>——通过 API Key 使用，条款跟 Web 端不同
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>⚠️ 如果你的项目涉及商业机密或客户数据：</strong><br>
+  <span style="color:#276749;">✅ 使用 API Key 方式，而非绑定个人 Anthropic 账户</span><br>
+  <span style="color:#276749;">✅ 确认组织对 AI 工具的数据政策</span><br>
+  <span style="color:#276749;">✅ 敏感项目做隔离——别把生产环境跟 AI 实验环境混在一起</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 四、企业实践 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  企业场景的安全实践
+</p>
+
+<p>如果你在团队里用 Claude Code，安全要多上几个台阶。</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 隔离敏感项目</strong><br>不要在生产服务器上跑 Claude Code。用开发机或容器，代码从 Git 拉下来，改完、验证完、再推到 Git。AI 碰不到生产环境，就不存在"误操作删库"。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 定期审计 AI 操作记录</strong><br>Git 是最好的审计工具。Claude Code 改的每一行代码都记在 Git 历史里。养成习惯：每次它干完活，用 <strong>git log --stat -1</strong> 看一眼它改了什么。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 团队共用时的权限策略</strong><br>如果多人共用同一个 API Key：设置调用上限防止用量失控、定期查看账单及时发现异常、考虑每人独立 Key 分别追踪。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 代码审查不跳过 AI 的改动</strong><br>很多人对 AI 写的代码审核标准比人写的低——"AI 写的，应该没问题吧"。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 事实正相反——</strong>AI 写的代码<strong>应该审核得更仔细</strong>。它不是你的同事，不懂你的业务上下文。功能对、逻辑对，但不一定在边缘情况下对。<strong>永远不要让 AI 的代码绕过 Code Review。</strong>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ==================== 五、5 条铁律 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  日常操作的 5 条安全铁律
+</p>
+
+<p>这些是我用了这么久总结的——<strong>不是建议，是"不做就会后悔"的那种。</strong></p>
+
+<p><strong><span style="color:#4A90D9;">🔒 铁律 1</span></strong><br>让它干活之前，先 <strong>git commit</strong>。5 秒钟的安全网，保你随便回退。确保工作区是干净的。</p>
+
+<p><strong><span style="color:#8e44ad;">🔒 铁律 2</span></strong><br>不要在不干净的目录里让它干活。Git 有未提交的修改？先 commit 或 stash。否则它改了东西混在你的改动里，你分不清谁写的。</p>
+
+<p><strong><span style="color:#4A90D9;">🔒 铁律 3</span></strong><br>涉及删除操作，自己先看一眼。"清理没用的文件"——它对"没用"的定义可能跟你不一样。<strong>先让它列出会被删的文件，你看一眼，再点头。</strong></p>
+
+<p><strong><span style="color:#8e44ad;">🔒 铁律 4</span></strong><br><strong>sudo 命令必须过你的脑子。</strong>没有任何例外。它要跑 sudo，停下来问三个问题：要干什么？为什么需要管理员权限？有没有不用 sudo 的方案？</p>
+
+<p><strong><span style="color:#4A90D9;">🔒 铁律 5</span></strong><br>敏感信息不在代码里、不在项目目录里。API Key、数据库密码、支付密钥——放环境变量，或放项目目录之外。<strong>不要让 AI 有机会读到它们。</strong></p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 自查清单 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📋 安全配置自查清单</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> 项目根目录已创建 <strong>.claudeignore</strong>，屏蔽了 node_modules、.env、密钥目录<br>
+  <span style="color:#8e44ad;">☐</span> 敏感信息已从项目目录移走，改用环境变量<br>
+  <span style="color:#4A90D9;">☐</span> 每次让 AI 动手前，工作区是干净的（已 git commit）<br>
+  <span style="color:#8e44ad;">☐</span> 团队已达成共识：AI 写的代码不能绕过 Code Review<br>
+  <span style="color:#4A90D9;">☐</span> API Key 走 API 方式而非绑定个人账户（企业用户）
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 写在最后 ==================== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>说实话，用了这么久，Claude Code 从没搞出过让我想砸键盘的事。不是因为它在安全方面特别智能，而是因为<strong>它的权限模型很保守</strong>——每次写文件要确认、每次跑命令要确认、操作范围不出项目目录。</p>
+
+<p>它最危险的时刻，不是它自己乱来，是<strong>你麻痹大意</strong>的时候。用得顺手了，确认弹窗一路按 Y，脑子里想着"上回没出过问题，这回也不会"。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;text-align:center;">
+  <strong>别这样。Claude Code 是你的工具，不是你的替身。<br>最终每一行代码的责任都在你身上。</strong>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 给它戴好安全带。</strong><br>让它放开了干，<strong>但你的手永远在刹车上。</strong>
+</p>
+
+<p>下一篇聊实战：<strong>用 Claude Code 快速接手一个陌生项目</strong>——入职第一天面对 10 万行代码，怎么让 AI 帮你一小时画出完整地图。</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 入门系列 · 权限模型与安全边界<br>适用对象：已经在用 Claude Code，想知道怎么安全地把文件系统和命令行交给 AI<br>本系列更多文章可在公众号合集「Claude Code」中查看
+</p>
+
+</body>
