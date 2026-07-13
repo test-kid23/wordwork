@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>18 · Git版本管理 · 小红书卡片 · 科技靛蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+/* 封面卡 */
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:36px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:88px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:38px;color:#3730a3;font-weight:500;line-height:1.5}
+
+/* 内容卡 */
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.section-sub{font-size:36px;font-weight:800;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2}
+
+/* 理由网格 */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.why-card{background:#fff;border:1.5px solid #e0e7ff;border-radius:16px;padding:28px 24px;box-shadow:0 2px 8px rgba(30,27,75,0.04);display:flex;flex-direction:column;gap:10px}
+.why-card .wc-icon{font-size:40px}
+.why-card .wc-title{font-size:26px;font-weight:800;color:#1e1b4b}
+.why-card .wc-desc{font-size:21px;color:#4b5563;line-height:1.6}
+
+/* 流程 */
+.flow-wrap{display:flex;flex-direction:column;justify-content:center;gap:18px}
+.flow-step{display:flex;align-items:center;gap:14px}
+.flow-step .fs-box{flex:1;background:#fff;border:1.5px solid #e0e7ff;border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.flow-step .fs-num{font-size:20px;color:#9ca3af;margin-bottom:6px}
+.flow-step .fs-title{font-size:25px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.flow-step .fs-desc{font-size:20px;color:#4b5563}
+.flow-step .fs-arrow{font-size:28px;color:#a5b4fc;flex-shrink:0}
+
+/* Diff */
+.diff-box{font-family:'SF Mono','Consolas',monospace;font-size:25px;line-height:1.9;background:#1e1b4b;color:#e0e7ff;padding:34px 42px;border-radius:16px;text-align:center;box-shadow:0 3px 12px rgba(30,27,75,0.2)}
+.diff-box .red{color:#fca5a5}.diff-box .green{color:#6ee7b7}
+
+/* 金句 */
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:16px 28px;border-radius:12px;font-size:23px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+.allure-tip{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:16px 28px;border-radius:12px;font-size:23px;color:#4338ca;text-align:center;font-weight:700;line-height:1.7}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+
+/* 收尾卡 */
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+/* 通用 */
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🧩 版本管理 · 工程篇</div>
+  <h1>YAML<span class="em">也能进</span>Git？</h1>
+  <div class="subtitle">测试用例的版本管理正确姿势</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">🤔 测试用例为什么要进Git</div>
+  <div class="why-grid">
+    <div class="why-card"><div class="wc-icon">📝</div><div class="wc-title">纯文本天生友好</div><div class="wc-desc">YAML 自动 diff 改了什么一行看清</div></div>
+    <div class="why-card"><div class="wc-icon">👥</div><div class="wc-title">团队协作</div><div class="wc-desc">开发改接口→提 PR→测试 review YAML diff</div></div>
+    <div class="why-card"><div class="wc-icon">🌿</div><div class="wc-title">分支管理</div><div class="wc-desc">feature 分支带测试 hotfix 分支带回归</div></div>
+    <div class="why-card"><div class="wc-icon">⏪</div><div class="wc-title">随时回滚</div><div class="wc-desc">git revert 一行命令 测试也能倒回去</div></div>
+  </div>
+  <div class="allure-tip">测试用例也是代码<br>该有的 Git 能力一样不少</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🔄 协作四步走</div>
+  <div class="flow-wrap">
+    <div class="flow-step">
+      <div class="fs-box"><div class="fs-num">Step 1</div><div class="fs-title">开发改接口</div><div class="fs-desc">提交代码 + YAML变更</div></div>
+      <div class="fs-arrow">→</div>
+      <div class="fs-box"><div class="fs-num">Step 2</div><div class="fs-title">CI 自动跑</div><div class="fs-desc">看测试有没有挂</div></div>
+      <div class="fs-arrow">→</div>
+      <div class="fs-box"><div class="fs-num">Step 3</div><div class="fs-title">Review YAML</div><div class="fs-desc">测试看 diff 确认</div></div>
+      <div class="fs-arrow">→</div>
+      <div class="fs-box"><div class="fs-num">Step 4</div><div class="fs-title">Merge</div><div class="fs-desc">一起进主干</div></div>
+    </div>
+  </div>
+  <div class="sec-note">
+    测试用例的 <strong style="color:#4338ca">Code Review</strong><br>
+    跟代码一样流程 🔄
+  </div>
+  <div class="insight-box">不是 YAML 特殊<br>是它终于让测试跟上了代码的节奏</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">👀 Git Diff 一眼看穿</div>
+  <div class="diff-box">
+    <span class="red">- base_url: "http://localhost:8000"</span><br>
+    <span class="green">+ base_url: "https://api.example.com"</span><br><br>
+    <span class="red">- username: admin</span><br>
+    <span class="green">+ username: test_user</span>
+  </div>
+  <div class="sec-note">
+    改了哪个环境 · 换了哪个账号<br>
+    <strong style="color:#4338ca">一行 diff 看得明明白白</strong> 👁️
+  </div>
+  <div class="allure-tip">Python 测试 diff 看一眼就头疼<br>YAML diff 新人也能看懂 ✨</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>YAML + Git<br>= 测试用例也有版本</h2>
+  <div class="golden">代码该有的 Git 能力 · 测试用例一样不少 💡</div>
+  <div class="cta-ask">你的测试用例有没有进 Git 管理？<br>评论区聊聊 👇</div>
+  <div class="save-tip">⭐ 收藏，下次接入 CI 流程直接翻出来</div>
+  <div class="hashtags">#Git #版本管理 #测试协作 #DevOps #软件工程</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+</div>
+<script>const NAMES = ['Git版本管理-1','Git版本管理-2','Git版本管理-3','Git版本管理-4','Git版本管理-5'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>

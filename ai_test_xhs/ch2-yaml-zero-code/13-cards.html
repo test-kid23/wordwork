@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13 · 标签系统 · 小红书卡片 · 科技靛蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+/* 封面卡 */
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:36px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:88px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:38px;color:#3730a3;font-weight:500;line-height:1.5}
+
+/* 内容卡 */
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.section-sub{font-size:36px;font-weight:800;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2}
+
+/* 对比面板 */
+.col2{display:flex;gap:20px}
+.col2>div{flex:1;padding:26px 24px;border-radius:16px}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}
+.col2 h3{font-size:26px;margin-bottom:12px}
+.col2 .bad h3{color:#dc2626}.col2 .good h3{color:#059669}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.7}
+
+/* 标签展示 */
+.tag-show{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tag-show .tb{font-size:24px;font-weight:700;padding:10px 24px;border-radius:20px;border:2px solid}
+.tb-s{background:rgba(99,102,241,0.08);border-color:#a5b4fc;color:#4338ca}
+.tb-p{background:rgba(236,72,153,0.08);border-color:#f9a8d4;color:#be185d}
+.tb-l{background:rgba(16,185,129,0.08);border-color:#6ee7b7;color:#047857}
+
+/* 维度卡片 */
+.dim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.dim-card{background:#fff;border:1.5px solid #e0e7ff;border-radius:16px;padding:28px 22px;text-align:center;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.dim-card .dim-icon{font-size:44px;margin-bottom:10px}
+.dim-card .dim-title{font-size:25px;font-weight:800;color:#1e1b4b;margin-bottom:8px}
+.dim-card .dim-desc{font-size:20px;color:#4b5563}
+
+/* 金句盒 */
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:16px 28px;border-radius:12px;font-size:23px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+.allure-tip{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:16px 28px;border-radius:12px;font-size:23px;color:#4338ca;text-align:center;font-weight:700;line-height:1.7}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+
+/* 收尾卡 */
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+/* 通用 */
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🏷️ 标签 · 效率篇</div>
+  <h1>给用例<span class="em">打标签</span><br>分类不用再复制</h1>
+  <div class="subtitle">比文件夹聪明10倍的管理方式</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">📁 文件夹的困局</div>
+  <div class="col2">
+    <div class="bad"><h3>❌ 一个case放一个文件夹</h3>
+      <p>smoke/ 、P0/ 都要这份用例</p>
+      <p style="color:#dc2626;font-weight:700;margin-top:8px">只能复制两份</p>
+      <p style="color:#4b5563">改一处漏一处 → 线上翻车</p>
+    </div>
+    <div class="good"><h3>✅ 打上标签就行</h3>
+      <p>一个YAML写一次</p>
+      <p style="color:#059669;font-weight:700;margin-top:8px">tags: [smoke, P0]</p>
+      <p style="color:#4b5563">一个用例 · 两个维度 · 零冗余</p>
+    </div>
+  </div>
+  <div class="insight-box">文件夹分类是二维的<br>标签系统是多维的 — 维度碾压</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🏷️ 一个用例 · 多重身份</div>
+  <div class="tag-show">
+    <div class="tb tb-s">🔥 smoke</div>
+    <div class="tb tb-p">⭐ P0</div>
+    <div class="tb tb-l">🔑 login</div>
+    <div style="font-size:20px;color:#6366f1;display:flex;align-items:center">+</div>
+    <div class="tb tb-s">🌍 staging</div>
+  </div>
+  <div class="sec-note">
+    同一个用例 · 五个维度<br>
+    想怎么跑就怎么筛选<br>
+    <span style="color:#4338ca;font-weight:700">--tags=smoke → 只跑冒烟</span><br>
+    <span style="color:#4338ca;font-weight:700">--tags=smoke,P0 → 冒烟且P0</span><br>
+    <span style="color:#4338ca;font-weight:700">--tags=login,regression → 登录回归</span>
+  </div>
+  <div class="allure-tip">文件夹 → 物理拷贝<br>标签 → 逻辑筛选 ✨</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🎯 三维筛选 · 精准打击</div>
+  <div class="dim-grid">
+    <div class="dim-card"><div class="dim-icon">🏷️</div><div class="dim-title">测试类型</div><div class="dim-desc">smoke / regression / P0</div></div>
+    <div class="dim-card"><div class="dim-icon">🌍</div><div class="dim-title">运行环境</div><div class="dim-desc">dev / staging / prod</div></div>
+    <div class="dim-card"><div class="dim-icon">⚡</div><div class="dim-title">优先级</div><div class="dim-desc">P0 必过 / P1 常规 / P2 低优</div></div>
+  </div>
+  <div class="sec-note">
+    <strong style="color:#1e1b4b">--tags=smoke --env=staging --priority=P0</strong><br>
+    <span style="font-size:26px">「测试环境冒烟 + P0」</span><br>
+    <span style="color:#4338ca;font-weight:700;font-size:28px">一键命中 🎯</span>
+  </div>
+  <div class="insight-box">不是文件夹做不到<br>是标签把「分类」升级成了「筛选」</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>一个用例 N 个标签<br>= 零冗余管理</h2>
+  <div class="golden">文件夹是物理枷锁 · 标签是逻辑自由 💡</div>
+  <div class="cta-ask">你现在用文件夹还是标签管理用例？<br>评论区聊聊 👇</div>
+  <div class="save-tip">⭐ 收藏一下，下次重构测试目录翻出来看</div>
+  <div class="hashtags">#测试管理 #测试用例 #标签分类 #自动化测试 #软件测试</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+</div>
+<script>const NAMES = ['标签管理-1','标签管理-2','标签管理-3','标签管理-4','标签管理-5'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>

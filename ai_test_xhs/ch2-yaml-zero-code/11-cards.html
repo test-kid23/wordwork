@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11 · 零代码CRUD测试 · 小红书卡片 · 科技靛蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:36px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:88px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:38px;color:#3730a3;font-weight:500;line-height:1.5}
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.section-sub{font-size:36px;font-weight:800;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2}
+.chain-h{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:0}
+.chain-h .step{background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;padding:10px 18px;border-radius:10px;font-size:22px;font-weight:700}
+.chain-h .arr{font-size:24px;color:#a5b4fc}
+.chain-desc{font-size:26px;color:#4b5563;text-align:center;line-height:1.8}
+.col2{display:flex;gap:20px}
+.col2>div{flex:1;padding:26px 24px;border-radius:16px}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}
+.col2 h3{font-size:26px;margin-bottom:12px}
+.col2 .bad h3{color:#dc2626}.col2 .good h3{color:#059669}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.7}
+.scene-row{display:flex;align-items:center;gap:16px;background:#f0f4ff;border-radius:12px;padding:18px 24px}
+.scene-row .icon{font-size:34px}
+.scene-row .text{font-size:25px;color:#374151;line-height:1.7}
+.scene-row .hl{background:#fee2e2;color:#dc2626;padding:2px 8px;border-radius:4px;font-weight:700}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:16px 28px;border-radius:12px;font-size:23px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+.allure-tip{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:16px 28px;border-radius:12px;font-size:23px;color:#4338ca;text-align:center;font-weight:700;line-height:1.7}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.benefit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bf-card{background:#fff;border:1.5px solid #e0e7ff;border-radius:16px;padding:24px 22px;box-shadow:0 2px 8px rgba(30,27,75,0.04);display:flex;flex-direction:column;gap:8px}
+.bf-card .bf-icon{font-size:36px}
+.bf-card .bf-title{font-size:24px;font-weight:800;color:#1e1b4b}
+.bf-card .bf-desc{font-size:20px;color:#4b5563;line-height:1.6}
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">⚡ 零代码测试 · 实战篇</div>
+  <h1>10分钟写<span class="em">完整CRUD</span></h1>
+  <div class="subtitle">从空白编辑器到四个case全通过</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+
+  <!-- Section 1 -->
+  <div class="section-title">⛓️ CRUD 四步链</div>
+  <div class="chain-h">
+    <div class="step">创建 · POST</div><div class="arr">→</div>
+    <div class="step">查询 · GET</div><div class="arr">→</div>
+    <div class="step">更新 · PUT</div><div class="arr">→</div>
+    <div class="step">删除 · DELETE</div>
+  </div>
+  <div class="chain-desc">全部在一个 YAML 文件里<br>user_id 自动串联 · 不用手工拷贝</div>
+
+  <!-- Section 2 -->
+  <div class="section-sub">🔗 链式测试的本质</div>
+  <div class="sec-note">
+    传统方式：4 个独立脚本，变量靠<span style="color:#dc2626;font-weight:700">手工复制粘贴</span><br>
+    YAML 方式：extract 自动捕获，id 在 4 个 case 间<span style="color:#059669;font-weight:700">自动流转</span>
+  </div>
+
+  <div class="allure-tip">链式 = 数据不落地，全程自动 ✨</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+
+  <!-- Section 1 -->
+  <div class="section-title">⚡ 两种写法 · 一套CRUD</div>
+  <div class="col2">
+    <div class="bad"><h3>❌ Python</h3>
+      <p>conftest.py / test_create.py / test_query.py / test_update.py / test_delete.py</p>
+      <p style="margin-top:10px;color:#dc2626;font-weight:700">5个文件 · ~150行</p>
+      <p>变量靠全局传 · import一堆 · 易改漏</p>
+    </div>
+    <div class="good"><h3>✅ YAML</h3>
+      <p>就一个 users.yaml</p>
+      <p style="margin-top:10px;color:#059669;font-weight:700">1个文件 · ~60行</p>
+      <p>extract自动串联user_id · 零import · 改一个地方就行</p>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section-sub">💡 YAML 三大核心优势</div>
+  <div class="benefit-grid">
+    <div class="bf-card"><div class="bf-icon">📝</div><div class="bf-title">声明式</div><div class="bf-desc">描述"测什么"，不用写"怎么测"</div></div>
+    <div class="bf-card"><div class="bf-icon">🔗</div><div class="bf-title">零 import</div><div class="bf-desc">不用导入 pytest / requests / 任何库</div></div>
+    <div class="bf-card"><div class="bf-icon">🔄</div><div class="bf-title">自动串联</div><div class="bf-desc">extract 变量在 case 间自动流转</div></div>
+    <div class="bf-card"><div class="bf-icon">🎯</div><div class="bf-title">一文件到底</div><div class="bf-desc">增删改查全在一个 YAML 里搞定</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 不是行数的差距<br>是<span style="text-decoration:underline">搞错一个变量</span>就能让你找半小时</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+
+  <!-- Section 1 -->
+  <div class="section-title">🪄 核心魔法：extract 变量传递</div>
+  <div class="scene-row"><div class="icon">1️⃣</div><div class="text"><span class="hl">extract: user_id</span> · POST 创建用户后，从响应体把 user_id 抠出来存好</div></div>
+  <div class="scene-row"><div class="icon">2️⃣</div><div class="text"><span class="hl">GET /users/{{user_id}}</span> · 直接用花括号引用刚存的 id，查到这个用户</div></div>
+  <div class="scene-row"><div class="icon">3️⃣</div><div class="text"><span class="hl">PUT /users/{{user_id}}</span> · 改邮箱密码都没问题</div></div>
+  <div class="scene-row"><div class="icon">4️⃣</div><div class="text"><span class="hl">DELETE /users/{{user_id}}</span> · 删完不留脏数据，库干干净净</div></div>
+
+  <!-- Section 2 -->
+  <div class="section-sub">🎯 零代码背后的哲学</div>
+  <div class="sec-note">
+    你不是在"写测试脚本"<br>
+    你是在<span style="color:#4338ca;font-weight:700">声明</span>：<br>
+    对哪个接口 · 做什么操作 · 期望什么结果<br>
+    <span style="color:#6366f1;font-weight:700">框架帮你跑，变量帮你传</span>
+  </div>
+
+  <div class="allure-tip">全程没有一行变量赋值代码 · 自动串起来 🔗</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>10分钟写完一套CRUD<br>从 5 个文件变成 1 个 YAML</h2>
+  <div class="golden">不是手速变快了，是工具选对了 💡</div>
+  <div class="cta-ask">你用 Python 写一套 CRUD 需要多长时间？<br>评论区说说 👇</div>
+  <div class="save-tip">⭐ 收藏不迷路，下次写 CRUD 直接翻出来照着改</div>
+  <div class="hashtags">#CRUD测试 #接口自动化 #YAML #零代码 #软件测试</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+</div>
+<script>const NAMES = ['零代码CRUD测试-1','零代码CRUD测试-2','零代码CRUD测试-3','零代码CRUD测试-4','零代码CRUD测试-5'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>

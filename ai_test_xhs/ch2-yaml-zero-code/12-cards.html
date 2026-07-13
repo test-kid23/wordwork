@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12 · 数据驱动测试 · 小红书卡片 · 科技靛蓝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+/* 封面卡 */
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:36px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:88px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:38px;color:#3730a3;font-weight:500;line-height:1.5}
+
+/* 内容卡 */
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.section-sub{font-size:36px;font-weight:800;color:#1e1b4b;margin-bottom:0;position:relative;z-index:2}
+
+/* 对比面板 */
+.col2{display:flex;gap:20px}
+.col2>div{flex:1;padding:26px 24px;border-radius:16px}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}
+.col2 h3{font-size:26px;margin-bottom:12px}
+.col2 .bad h3{color:#dc2626}.col2 .good h3{color:#059669}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.7}
+
+/* 场景卡片 */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.demo-card{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 20px;box-shadow:0 2px 8px rgba(30,27,75,0.04);display:flex;flex-direction:column;gap:8px}
+.demo-card .dc-icon{font-size:34px}
+.demo-card .dc-title{font-size:25px;font-weight:800;color:#1e1b4b}
+.demo-card .dc-desc{font-size:20px;color:#4b5563;line-height:1.6}
+.demo-card .dc-tag{font-size:18px;color:#6366f1;font-weight:700;background:#eef2ff;padding:4px 14px;border-radius:8px;align-self:flex-start}
+
+/* 对话盒（讲故事） */
+.dialog-box{background:#f0f4ff;padding:28px 32px;border-radius:14px;display:flex;flex-direction:column;gap:16px}
+.dialog-box .you-say{font-size:23px;color:#6b7280;line-height:1.8}
+.dialog-box .boss-say{background:#fff;border-left:4px solid #dc2626;padding:18px 24px;border-radius:10px;font-size:26px;color:#dc2626;font-weight:700;line-height:1.6}
+.dialog-box .aha{margin-top:4px;padding-top:16px;border-top:1px dashed #c7d2fe;font-size:24px;color:#4338ca;text-align:center;line-height:1.8;font-weight:700}
+
+/* 金句盒 */
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:16px 28px;border-radius:12px;font-size:23px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+.allure-tip{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:16px 28px;border-radius:12px;font-size:23px;color:#4338ca;text-align:center;font-weight:700;line-height:1.7}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+
+/* 步骤行 */
+.step-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.step-row .st{background:#fff;border:1.5px solid #e0e7ff;border-radius:12px;padding:14px 22px;font-size:23px;font-weight:700;color:#1e1b4b;box-shadow:0 1px 4px rgba(30,27,75,0.04)}
+.step-row .ar{font-size:26px;color:#a5b4fc;font-weight:700}
+
+/* 收尾卡 */
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+/* 通用 */
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🔄 数据驱动 · 进阶篇</div>
+  <h1>一条模板 ×<br><span class="em">N组数据</span> = N个用例</h1>
+  <div class="subtitle">告别复制粘贴 · 一行配置搞定一切</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+
+  <!-- Section 1: 翻车故事 -->
+  <div class="section-title">🤯 复制粘贴差点害死我</div>
+  <div class="dialog-box">
+    <div class="you-say">同一个查询接口，用 3 个 user_id 各测一遍</div>
+    <div class="boss-say">我居然复制了三份 case<br>第二个 id 改漏了，测试全绿，其实压根没测到</div>
+    <div class="aha">被 leader 拎去谈话才意识到<br>复制 case 就是在复制 bug 💀</div>
+  </div>
+
+  <!-- Section 2: data_driven 概念 -->
+  <div class="section-sub">🔄 data_driven 怎么翻盘的</div>
+  <div class="sec-note">
+    一条<strong style="color:#4338ca">用例模板</strong>，配一组<span style="color:#059669;font-weight:700">parameters 列表</span><br>
+    框架帮你渲染成 N 条测试<br>
+    <span style="color:#6366f1;font-weight:700">一行配置 · 不是 50 份拷贝 ✨</span>
+  </div>
+
+  <div class="insight-box">不是省复制粘贴<br>是省「改漏了还不知道」的坑</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+
+  <!-- Section 1: 场景卡 -->
+  <div class="section-title">🔥 哪些场景最值</div>
+  <div class="demo-grid">
+    <div class="demo-card"><div class="dc-icon">📄</div><div class="dc-title">分页测试</div><div class="dc-desc">page=1,2,3,4,5 一次性跑完</div><div class="dc-tag">参数 [1,2,3,4,5]</div></div>
+    <div class="demo-card"><div class="dc-icon">🔍</div><div class="dc-title">搜索验证</div><div class="dc-desc">不同关键词验证结果是否正确</div><div class="dc-tag">["手机","电脑","耳机"]</div></div>
+    <div class="demo-card"><div class="dc-icon">👥</div><div class="dc-title">批量用户</div><div class="dc-desc">100个用户登录一行参数配完</div><div class="dc-tag">数据越多性价比越高</div></div>
+    <div class="demo-card"><div class="dc-icon">⚠️</div><div class="dc-title">边界值</div><div class="dc-desc">空字符串/超长/特殊字符全覆盖</div><div class="dc-tag">["","A"×500,"!@#"]</div></div>
+  </div>
+
+  <!-- Section 2: 效率对比 -->
+  <div class="section-sub">📊 效率根本不在一个量级</div>
+  <div class="col2">
+    <div class="bad"><h3>❌ 手动拷贝</h3>
+      <p>50 组数据 → 50 个 case → 维护噩梦</p>
+      <p style="color:#dc2626;font-weight:700;margin-top:8px">加一组就得复制一份</p>
+    </div>
+    <div class="good"><h3>✅ data_driven</h3>
+      <p>50 组数据 → 一个模板 → 一行配置</p>
+      <p style="color:#059669;font-weight:700;margin-top:8px">加一组就加一行参数</p>
+    </div>
+  </div>
+
+  <div class="allure-tip">只要「同一逻辑不同输入」<br>全都可以这么玩 🚀</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+
+  <!-- Section 1: 避坑 -->
+  <div class="section-title">⚠️ 什么时候别用</div>
+  <div class="col2">
+    <div class="bad"><h3>❌ 硬塞不合适的</h3>
+      <p>不同接口逻辑完全不一样<br>非要塞一个模板<br>参数表比代码还难懂 💀</p>
+    </div>
+    <div class="good"><h3>✅ 边界值也塞进去</h3>
+      <p>正常值 + 最大值 + 最小值 + 空值<br>一组 parameters 全覆盖<br>比手写十个 case 踏实</p>
+    </div>
+  </div>
+
+  <!-- Section 2: 实战心法 -->
+  <div class="section-sub">💡 我的实战心法</div>
+  <div class="step-row">
+    <div class="st">🎯 正常值</div><div class="ar">+</div>
+    <div class="st">📏 边界值</div><div class="ar">+</div>
+    <div class="st">⚡ 空值</div><div class="ar">=</div>
+    <div class="st" style="background:#6366f1;color:#fff;border-color:#6366f1">全覆盖 🧠</div>
+  </div>
+  <div class="sec-note" style="font-size:22px;padding:20px 28px">
+    同一个模板跑完全量<br>
+    比分散写在十几个 case 里<span style="color:#4338ca;font-weight:700">安心十倍</span>
+  </div>
+
+  <div class="insight-box">⚠️ 数据驱动不是万能<br>逻辑不同就老老实实分开写</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>一条模板 × N组数据<br>= 告别复制粘贴</h2>
+  <div class="golden">不是省时间，是省「改漏了还自信全绿」的社死瞬间 💡</div>
+  <div class="cta-ask">你还在手动复制 case 改参数吗？<br>评论区聊聊 👇</div>
+  <div class="save-tip">⭐ 收藏不迷路，下次批量测试直接翻出来</div>
+  <div class="hashtags">#数据驱动 #参数化测试 #自动化测试 #YAML #软件测试 #测试效率 #接口测试</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+</div>
+<script>const NAMES = ['数据驱动测试-1','数据驱动测试-2','数据驱动测试-3','数据驱动测试-4','数据驱动测试-5'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>
