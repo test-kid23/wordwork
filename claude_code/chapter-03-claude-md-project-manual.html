@@ -42,7 +42,7 @@
   CLAUDE.md 是什么
 </p>
 
-<p>官方说法：CLAUDE.md 是 Claude Code 的<strong>项目级记忆文件</strong>。放在项目根目录，Claude Code 启动时会自动加载。</p>
+<p>文档里管它叫「项目级记忆文件」——说白了，放项目根目录，Claude Code 启动时自动加载。</p>
 
 <p>说人话：</p>
 
@@ -147,19 +147,27 @@
   - commit 前必须 run ruff check 和 pytest
 </p>
 
-<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 8px 0;">📌 每个部分的写法要点</p>
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:20px 0 8px 0;">📌 模板里每一项，我多聊两句</p>
 
-<p><strong><span style="color:#4A90D9;">①</span> 项目简介</strong><br>一句话就行。Claude Code 需要知道"这个项目是卖货的还是做社交的"，这决定了代码的整体倾向。</p>
+<p>项目简介，一句话就行。Claude Code 需要知道"这个项目是卖货的还是做社交的"，这决定了代码的整体倾向。我见过有人在这写了三段的项目背景介绍，其实没必要——AI 不需要知道你公司的创业故事。</p>
 
-<p><strong><span style="color:#8e44ad;">②</span> 技术栈</strong><br>精确到版本号。不同版本的 API 差异很大，Python 3.10 的 Union 写法和 3.11 的 X | Y 写法不一样。</p>
+<p>技术栈要写到版本号。不同版本的 API 差异很大，比如 Python 3.10 的 Union 写法和 3.11 的 X | Y 完全不一样。你写 3.11，它就按 3.11 的语法来，不会给你产出过时的代码。我自己的项目里技术栈这一块是最常更新的，每次升级依赖都会改一下。</p>
 
-<p><strong><span style="color:#4A90D9;">③</span> 项目结构</strong><br>这是<strong>最值钱的部分</strong>。Claude Code 虽然能自己翻目录，但它不知道你的命名约定——到底是 src/api/ 还是 src/routes/？是 utils/ 还是 helpers/？写明白了，它新建文件就不会放错地方。</p>
+<p>项目结构是这套模板里<strong>最值钱的部分</strong>。Claude Code 能自己翻目录，但它不知道你的命名约定——到底是 src/api/ 还是 src/routes/？utils/ 还是 helpers/？我踩过这个坑：项目里明明约定 API 文件放 src/api/，但 Claude Code 看别人用 src/routes/ 的多，就给我新建到 routes 里去了。写明白了就没这事。</p>
 
-<p><strong><span style="color:#8e44ad;">④</span> 编码规范</strong><br>告诉它你的 lint 工具是什么、命名风格是什么。这样它写出来的代码就能直接通过 lint 检查，你不用手动调格式。</p>
+<p>编码规范告诉它 lint 工具和命名风格。这不仅省了你手动调格式的时间，更重要的是——<strong>代码 review 的时候 diff 只显示你真正改的逻辑，不是满屏的格式调整。</strong></p>
 
-<p><strong><span style="color:#4A90D9;">⑤</span> 命令</strong><br>把常用命令写上。Claude Code 在跑测试、装依赖的时候会自动用这些命令，不用你每次都手敲一遍。</p>
+<p>常用命令写上去，Claude Code 跑测试、装依赖的时候自动用，不用每次手敲一遍。</p>
 
-<p><strong><span style="color:#8e44ad;">⑥</span> 注意事项</strong><br>把你项目里的"潜规则"写下来。比如"数据库密码从环境变量读"、"commit 前要跑测试"。这些都是新同事最容易犯的错，AI 也一样。</p>
+<p>注意事项那部分，把项目"潜规则"写进去："数据库密码从环境变量读"、"commit 前跑测试"。这些是新同事最容易翻车的点，AI 也一样，不写它真不知道。</p>
+
+<p style="font-size:16px;font-weight:700;color:#c53030;margin:20px 0 8px 0;">❌ 别往 CLAUDE.md 里塞什么</p>
+
+<p>网上有些教程会让你把<strong>整个 API 文档、所有数据库表结构、完整的部署流程</strong>全塞进去。别学。</p>
+
+<p>CLAUDE.md 是入职文档，不是 wiki。它每次启动都加载一遍——文件越大，加载越慢，上下文窗口也越挤。我有一次塞了将近 2000 行进去，结果 Claude Code 启动慢了好几秒，而且经常"忘掉"关键指令，因为被后面那些不重要的信息稀释了。</p>
+
+<p>简单原则：<strong>如果一条信息只在你做特定任务时有用，它不该进 CLAUDE.md。</strong> 比如"部署到 K8s 的详细步骤"——你应该新建一个 DEPLOY.md，做部署任务时 @ 给它就行。</p>
 
 <!-- 细分隔线 -->
 <p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
@@ -171,7 +179,7 @@
   上下文管理的三个层次
 </p>
 
-<p>有了 CLAUDE.md 之后，Claude Code 的知识来源有三个层次，越精确定位越准：</p>
+<p>有了 CLAUDE.md 之后，Claude Code 的知识来源有三个层次。分层搞对了，它找信息才精准：</p>
 
 <p>
   <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
@@ -192,12 +200,15 @@
 </p>
 
 <p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
-  <strong>💡 关键原则：不同信息放不同层。</strong><br><br>
-  举个例子：你要重构订单模块，但特意嘱咐它"别碰 login.py，那个文件有坑"。<br><br>
-  ✅ 会话里说一句就行——这是临时约束，不是项目级规则。<br>
-  ❌ 不用写到 CLAUDE.md——CLAUDE.md 只放通用的、持久的信息。<br><br>
-  很多人 CLAUDE.md 写得又长又杂，就是因为把会话级约束也塞进去了。保持精简，只放长期有效的信息。
+  这三层搞混了，CLAUDE.md 就容易又长又杂。比如：<br><br>
+  你要重构订单模块的代码，但特别嘱咐它"别碰 login.py，那个文件有坑"。<br><br>
+  ✅ 会话里说一句就行。"这次别动 login.py"——这就够了。<br>
+  ❌ 不用写到 CLAUDE.md 里。"别动 login.py" 是临时约束，不是项目级规则。<br>
+  ✅ CLAUDE.md 放的是<strong>通用的、持久的</strong>规则，比如"所有 API 路由放在 src/api/ 下"。<br><br>
+  很多人 CLAUDE.md 写得又长又杂，是把会话级的约束也塞进去了。保持精简，只放长期有效的信息。
 </p>
+
+<p style="color:#888;font-size:14px;">我自己的 CLAUDE.md 大概 50 行。写多了反而没人看——AI 也一样。</p>
 
 <!-- 细分隔线 -->
 <p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
@@ -223,7 +234,7 @@
   <strong>✅ 每次启动对话，自动检查当前分支是否是最新的。</strong>
 </p>
 
-<p>这些行为你不需要每次都手动提醒它。写在 CLAUDE.md 的 Hook 区域里，它就自动执行。</p>
+<p>这些行为你不用每次都手动提醒它。写在 CLAUDE.md 的 Hook 区域里，它自己到点就执行。说实话我第一次配 Hook 的时候还不太信——以前习惯了每次手动喊它"跑一下测试"，突然不用喊了反而有点不习惯。</p>
 
 <p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 基础 Hook 写法</p>
 
@@ -235,6 +246,8 @@
   - 自动执行：pytest tests/ -v<br>
   - 自动执行：ruff check .
 </p>
+
+<p>Hook 写好了之后，你不用再每次说"格式化一下代码"或"跑一下测试"。它到点自动干活，跟请了个真助理似的。</p>
 
 <p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个很实用的进阶配置</p>
 
@@ -256,19 +269,13 @@
 <!-- 粗分隔线 -->
 <p style="text-align:center;color:#ccc;font-size:12px;margin:24px 0 16px 0;">━━━━━━━━━━━━━━</p>
 
-<!-- ==================== 写在最后 ==================== -->
+<!-- ==================== 结尾 ==================== -->
 
-<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+<p>写 CLAUDE.md 就 10 分钟的事。写完以后，每次跟 Claude Code 交互，不用再纠正格式、调整路径、改命名规范了——时间花在真正要写的逻辑上。</p>
 
-<p>CLAUDE.md 可能是 Claude Code 里<strong>"投入产出比"最高的东西</strong>。</p>
+<p>至于要不要写、写多详细，随你。我自己的 CLAUDE.md 到现在也就 50 行，够用了。</p>
 
-<p>写它只需要 10 分钟。但写完之后，Claude Code 对你项目的理解从"猜"变成了"知道"。每一次跟它交互，你的时间都花在业务逻辑上，而不是纠正格式、调整路径、改命名规范。</p>
-
-<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
-  <strong>🚀 建一个 CLAUDE.md 吧。就现在。</strong><br>把技术栈、项目结构、编码规范、注意事项填进去。<br>然后让 Claude Code 重新做一件它之前做过的事，看看差别。
-</p>
-
-<p>下一期聊一个很多人关心的问题：<strong>Claude Code 能跑命令、能改文件，怎么放心把终端交出去而不用担心它搞出生产事故？</strong>权限模型、安全边界、企业实践——全安排上。</p>
+<p>下一期聊 Claude Code 的权限模型与安全边界——怎么把文件系统和命令行交给它，还敢放心睡大觉。</p>
 
 <!-- 页脚 -->
 <p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">

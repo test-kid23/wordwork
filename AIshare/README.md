@@ -37,6 +37,9 @@
 | 009 | `aishare-009-hunyuan-hy3-free.html` | 给AI交会员肉疼？腾讯Hy3限时2周免费，开源能自装 | 💰 薅羊毛 |
 | 012 | `aishare-012-munger-books.html` | 查理·芒格死后捐了身家，却说这6本书比钱更该传下去 | 📚 书单分享 |
 | 013 | `aishare-013-naval-books.html` | 纳瓦尔推过的书能列满三屏，但这6本他真翻烂了 | 📚 书单分享 |
+| 014 | `aishare-014-qoder-free-credits.html` | 阿里Qoder发福利了：新用户白送2000积分，Qwen3.7MAX免费用 | 💰 薅羊毛 |
+| 015 | `aishare-015-qoder-ultimate-free-calls.html` | Qoder白送200次极致调用，Qwen3.7 Max 夜间2折 | 💰 薅羊毛 |
+
 
 ---
 
@@ -93,4 +96,7 @@ AIshare/
 └── aishare-011-github-copilot-free.html     # GitHub Copilot免费版·GPT-5和Claude白嫖
 └── aishare-012-munger-books.html            # 查理·芒格点名书单·6本值得传下去的书
 └── aishare-013-naval-books.html            # 纳瓦尔点名书单·主推6本+扩展9本
+└── aishare-014-qoder-free-credits.html      # 阿里Qoder新用户福利·Qwen3.7MAX免费积分
+└── aishare-015-qoder-ultimate-free-calls.html # Qoder编程工具200次极致调用+错峰折扣
+
 ```
