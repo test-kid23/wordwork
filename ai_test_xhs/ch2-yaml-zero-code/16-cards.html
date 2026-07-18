@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16 · Python vs YAML 对比 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+/* ===== 封面卡 · 暗色终端风 ===== */
+.card-cover{
+  background:#0d1117;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:48px 56px;text-align:center;position:relative;overflow:hidden
+}
+.card-cover .code-bg{
+  position:absolute;inset:0;
+  font-family:'SF Mono','Consolas',monospace;
+  font-size:17px;color:rgba(255,255,255,0.035);
+  line-height:2.2;padding:80px 70px;
+  white-space:pre-wrap;z-index:0;pointer-events:none
+}
+.card-cover .overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(13,17,23,0.55) 0%,rgba(13,17,23,0.85) 60%,rgba(13,17,23,0.95) 100%);
+  z-index:1
+}
+.card-cover .emo-badge{
+  position:relative;z-index:2;
+  background:rgba(239,68,68,0.18);border:1.5px solid rgba(239,68,68,0.35);
+  color:#fca5a5;padding:14px 36px;border-radius:30px;
+  font-size:34px;font-weight:800;margin-bottom:52px;backdrop-filter:blur(6px)
+}
+.card-cover h1{
+  position:relative;z-index:2;
+  font-size:82px;font-weight:900;color:#f0f0f5;line-height:1.25;
+  margin-bottom:28px;max-width:860px
+}
+.card-cover h1 .em{color:#a5b4fc}
+.card-cover .subtitle{
+  position:relative;z-index:2;
+  font-size:36px;color:#94a3b8;font-weight:500;line-height:1.6
+}
+
+/* ===== 内容卡 ===== */
+.card-content{
+  background:#161b22;padding:60px 72px;
+  display:flex;flex-direction:column;position:relative;justify-content:space-evenly
+}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.08);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#e2e8f0;margin-bottom:0;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+
+/* 对比行 */
+.compare-row{display:flex;gap:18px;align-items:stretch}
+.compare-box{flex:1;border-radius:18px;padding:30px 24px;display:flex;flex-direction:column;gap:10px}
+.compare-box.python{background:rgba(239,68,68,0.07);border:1.5px solid rgba(239,68,68,0.18)}
+.compare-box.yaml-b{background:rgba(34,197,94,0.07);border:1.5px solid rgba(34,197,94,0.18)}
+.compare-box h3{font-size:32px;font-weight:800}
+.compare-box.python h3{color:#fca5a5}
+.compare-box.yaml-b h3{color:#6ee7b7}
+.compare-box .cl{font-size:22px;color:#94a3b8;line-height:1.7}
+
+/* 对比列表项 */
+.vs-item{display:flex;align-items:center;gap:14px;background:#1e2430;border:1.5px solid #30363d;border-radius:14px;padding:22px 26px}
+.vs-item .vs-num{font-size:30px;font-weight:800;color:#818cf8;min-width:48px}
+.vs-item .vs-text{flex:1}
+.vs-item .vs-text .vs-label{font-size:24px;font-weight:800;color:#e2e8f0}
+.vs-item .vs-text .vs-desc{font-size:21px;color:#94a3b8;line-height:1.6;margin-top:2px}
+.vs-item .vs-verdict{font-size:28px}
+
+/* 场景选择 */
+.scene-row{display:flex;gap:20px}
+.scene-box{flex:1;background:#1e2430;border:1.5px solid #30363d;border-radius:18px;padding:28px 24px;text-align:center}
+.scene-box .sc-icon{font-size:52px}
+.scene-box .sc-title{font-size:26px;font-weight:800;color:#e2e8f0;margin:10px 0}
+.scene-box .sc-desc{font-size:21px;color:#94a3b8;line-height:1.7}
+
+/* 金句 */
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed rgba(239,68,68,0.25);padding:16px 28px;border-radius:12px;font-size:23px;color:#fca5a5;text-align:center;font-weight:700;line-height:1.8}
+.quote-box{background:rgba(99,102,241,0.08);padding:24px 32px;border-radius:14px;font-size:28px;color:#a5b4fc;line-height:1.7;text-align:center;font-weight:700}
+.sec-note{background:rgba(99,102,241,0.06);padding:24px 32px;border-radius:14px;font-size:24px;color:#94a3b8;line-height:1.9;text-align:center}
+
+/* 收尾卡 */
+.card-closing{
+  background:#0d1117;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:64px 72px;text-align:center;position:relative;overflow:hidden
+}
+.card-closing::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,17,23,0.4),rgba(13,17,23,0.95));z-index:0}
+.card-closing>*{position:relative;z-index:1}
+.card-closing h2{font-size:44px;font-weight:900;color:#f0f0f5;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(99,102,241,0.15);border:1.5px solid rgba(99,102,241,0.3);padding:20px 44px;border-radius:18px;font-size:28px;color:#a5b4fc;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#94a3b8;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#818cf8;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(148,163,184,0.4);line-height:2}
+
+/* 通用 */
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(255,255,255,0.12);font-weight:500;z-index:2}
+.card-cover .watermark,.card-closing .watermark{color:rgba(255,255,255,0.15)}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(99,102,241,0.25);color:#c7d2fe;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(99,102,241,0.45)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="code-bg"># pytest
+def test_login():
+    resp = requests.post(...)
+    assert resp.status_code == 200
+
+# YAML
+name: 登录测试
+request:
+  method: POST
+  url: /login
+assert:
+  - path: $.status_code
+    operator: eq
+    value: 200</div>
+  <div class="overlay"></div>
+  <div class="emo-badge">🔥 实话</div>
+  <h1>Python vs YAML<br><span class="em">8年后</span>团队只剩YAML了</h1>
+  <div class="subtitle">5点实在对比 · 不吹不黑</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 01 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">📌 前三点实在对比</div>
+  <div style="display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center">
+    <div class="vs-item">
+      <div class="vs-num">1</div>
+      <div class="vs-text"><div class="vs-label">学习成本</div><div class="vs-desc">Python 要懂编程 · YAML 只要懂接口协议</div></div>
+      <div class="vs-verdict">✅ YAML</div>
+    </div>
+    <div class="vs-item">
+      <div class="vs-num">2</div>
+      <div class="vs-text"><div class="vs-label">可读性</div><div class="vs-desc">YAML 一眼看清测什么 · 业务同学也能 review</div></div>
+      <div class="vs-verdict">✅ YAML</div>
+    </div>
+    <div class="vs-item">
+      <div class="vs-num">3</div>
+      <div class="vs-text"><div class="vs-label">维护性</div><div class="vs-desc">Python 改好几处 · YAML 改一个配置</div></div>
+      <div class="vs-verdict">✅ YAML</div>
+    </div>
+  </div>
+  <div class="quote-box">90% 的接口测试场景<br>YAML 真比 Python 舒服</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">📌 后两点 + 老实说局限性</div>
+  <div style="display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center">
+    <div class="vs-item">
+      <div class="vs-num">4</div>
+      <div class="vs-text"><div class="vs-label">协作</div><div class="vs-desc">YAML 产品都能看懂 · Python 只能开发改</div></div>
+      <div class="vs-verdict">✅ YAML</div>
+    </div>
+    <div class="vs-item">
+      <div class="vs-num">5</div>
+      <div class="vs-text"><div class="vs-label">局限性（老实说）</div><div class="vs-desc">特别绕的逻辑还是得写代码 · YAML 搞不定</div></div>
+      <div class="vs-verdict">⚠️ Python</div>
+    </div>
+  </div>
+  <div class="insight-box">YAML 不是银弹<br>别信那些"零代码取代一切"的鬼话</div>
+  <div class="sec-note">新人当天上手 · 老人少写 boilerplate<br><strong style="color:#a5b4fc">两个都对 看你场景</strong></div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🎯 什么场景选什么</div>
+  <div class="scene-row">
+    <div class="scene-box">
+      <div class="sc-icon">🚀</div>
+      <div class="sc-title">小团队 · 业务常变</div>
+      <div class="sc-desc">YAML 优先<br>没悬念</div>
+    </div>
+    <div class="scene-box">
+      <div class="sc-icon">🏗️</div>
+      <div class="sc-title">大厂复杂流程</div>
+      <div class="sc-desc">Python 打底<br>YAML 补上层</div>
+    </div>
+  </div>
+  <div class="insight-box">⚠️ 不推荐：硬把逻辑塞进配置<br>一个YAML八百行全是嵌套<br>改的人哭了💀</div>
+  <div class="quote-box">别二选一 · 叠加着用<br>哪个顺手用哪个</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>YAML 是工具<br>不是宗教</h2>
+  <div class="golden">该声明就声明 · 该写代码就写代码<br>别为了信仰折磨队友 😤</div>
+  <div class="cta-ask">💬 你站 YAML 还是 Python？<br>评论区掰头一下～理性讨论别打起来</div>
+  <div class="save-tip">⭐ 干货不易，赶紧先点个「收藏」！<br>下次跟同事 battle 有论据了</div>
+  <div class="hashtags">#YAML #Python测试 #测试框架对比 #自动化测试 #软件测试 #接口测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>const NAMES = ['PyVsYAML-1','PyVsYAML-2','PyVsYAML-3','PyVsYAML-4','PyVsYAML-5'];</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = NAMES[i] + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+</body>
+</html>
