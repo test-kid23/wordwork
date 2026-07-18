@@ -1,9 +1,8 @@
-# llama.cpp 本地大模型部署实战教程
+# Ollama 太慢了？换上 llama.cpp，同样的模型推理速度快了 3 倍
 
-> **编写日期**: 2026-05-29（更新于 2026-06-12）  
 > **适用平台**: Linux (Ubuntu 22.04/24.04) & Windows 10/11  
 > **llama.cpp 仓库**: https://github.com/ggml-org/llama.cpp  
-> **当前稳定版**: b9601（2026-06-11）
+> **当前稳定版**: b9601
 
 ---
 

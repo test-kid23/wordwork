@@ -1,6 +1,5 @@
-# Open WebUI 本地部署实战：给本地模型配上 ChatGPT 一样的界面
+# 本地跑的 AI 只能看黑窗口？一条命令给它装上 ChatGPT 同款界面，还带知识库
 
-> **编写日期**: 2026-06-12
 > **适用平台**: Windows 10/11 · Linux (Ubuntu 22.04/24.04) · macOS
 > **Open WebUI 官网**: https://docs.openwebui.com
 > **前置阅读**: 推荐先完成 [Ollama 部署教程](./ollama-windows-deploy-guide.md) 或 [llama.cpp 部署教程](./llama_cpp_deploy_guide.md)

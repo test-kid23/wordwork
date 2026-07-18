@@ -3,13 +3,13 @@
   <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 RAG 入门教程</span>
 </p>
 <p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
-  向量数据库选型指南<br>Chroma、FAISS、Milvus……到底该选哪个？
+  我的知识库越来越慢，<br>换了数据库之后检索速度快了 10 倍
 </p>
 <p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
-  六大向量数据库全景对比，选型决策树让你 5 分钟做出决定
+  六大向量数据库亲测对比，选型决策树让你 5 分钟做出决定
 </p>
 <p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
-  📝 <strong style="color:#2b6cb0;">写在前面：</strong>这是 RAG 入门教程系列的第 3 篇。上一篇我们跑通了最小可用 RAG 系统，这篇帮你回答"ChromaDB 能用在生产环境吗？我要不要换成 Milvus？"的灵魂拷问。读完就能做出决定。
+  📝 <strong style="color:#2b6cb0;">读完这篇你能决定：</strong>ChromaDB 能用在生产环境吗？要不要换成 Milvus？Qdrant 又是什么？Pinecone 怎么这么贵——读完就能做决定，不用再查三天资料。
 </p>
 <p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
 <p style="text-align:center;margin-bottom:8px;">
@@ -27,15 +27,12 @@
 <!-- ====== 章节 1 ====== -->
 <p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
   <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
-  开篇：选型焦虑，你并不孤单
+  开篇：文档涨到 1000 份，ChromaDB 开始卡了
 </p>
-<p>上一篇文章中，我们用 ChromaDB 跑通了第一个 RAG 系统。但当你开始认真思考"怎么把这个系统用在真实项目里"时，一个灵魂拷问就来了：</p>
+<p>当你的文档从 100 份涨到 1000 份，ChromaDB 开始卡了。我问了 5 个做 RAG 的朋友，每个人推荐的数据库都不一样——"上 Milvus""Qdrant 更好""直接 Pinecone 省心"。</p>
+<p>我没办法，只能把 6 个全测了一遍。</p>
 <p style="background:#fffbf0;padding:12px 16px;border-radius:8px;border:1px solid #e8d5a3;color:#8a6d3b;font-size:14px;margin:12px 0;">
-  "ChromaDB 能用在生产环境吗？我要不要换成 Milvus？Qdrant 又是什么？Pinecone 怎么这么贵？"
-</p>
-<p>这些疑问非常合理。向量数据库正处在快速发展期，选择多到让人眼花缭乱。但好消息是：<strong>在你达到百万级文档之前，大多数向量数据库的差异都不会成为瓶颈。</strong>选型的关键不是"找最好的"，而是"找最适合你当前阶段和未来 12 个月的"。</p>
-<p style="background:#f0f7ff;padding:12px 14px;border-radius:8px;border:1px solid #b8d4f0;color:#3a5a7e;font-size:14px;margin:12px 0;">
-  <strong>🎯 本文目标：</strong>让你读完就能做出决定，不再陷入无休止的对比。
+  选型的关键不是"找最好的"，而是"找最适合你当前阶段和未来 12 个月的"——在你达到百万级文档之前，大多数向量数据库的差异都不会成为瓶颈。
 </p>
 <p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
 

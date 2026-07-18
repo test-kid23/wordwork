@@ -3,13 +3,13 @@
   <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 RAG 入门教程</span>
 </p>
 <p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
-  嵌入模型的选择与使用<br>选对嵌入模型，检索效果翻倍
+  同一个问题，换了个模型搜出来的答案准了 90%<br>嵌入模型选错有多要命
 </p>
 <p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
-  你的知识库能不能"找到对的内容"，全看这个组件
+  你的知识库能不能"找到对的内容"，全看这个被大多数人忽视的组件
 </p>
 <p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
-  📝 <strong style="color:#2b6cb0;">写在前面：</strong>这是 RAG 入门教程系列的第 4 篇——第一期的收官之作。前面讲了原理、搭建、向量数据库，这篇聚焦 RAG 最重要的"翻译官"——嵌入模型。选对它，你的知识库检索效果直接翻倍。
+  📝 <strong style="color:#2b6cb0;">读完这篇你能搞清楚：</strong>为什么搜"年假"能出"年会通知"——不是向量数据库的问题，是你用的那个"翻译官"不对。这是 RAG 系列第 4 篇，第一期的收官之作。
 </p>
 <p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
 <p style="text-align:center;margin-bottom:8px;">
@@ -27,10 +27,11 @@
 <!-- ====== 章节 1 ====== -->
 <p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
   <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
-  开篇：嵌入模型，RAG 的"翻译官"
+  开篇：搜"年假", 出来的全是年会通知
 </p>
-<p>前两篇文章，我们搭了 RAG 系统，选了向量数据库。但还有一个关键的组件，直接决定你知识库的检索效果——<strong>嵌入模型（Embedding Model）。</strong></p>
-<p>它做的事很简单，但影响巨大：<strong>把文字变成向量。</strong></p>
+<p>我搭好 RAG 之后发现一个问题——搜"年假怎么申请"，返回的前三条是<strong>年会通知、节假日安排、考勤制度</strong>。跟年假毫无关系。</p>
+<p>一开始我以为是向量数据库的问题，换了 Qdrant 还是一样。后来才发现，问题根本不在数据库——<strong>在那个把文字翻译成向量的模型。</strong></p>
+<p>嵌入模型相当于 RAG 的翻译官。它做的事很简单，但影响巨大：<strong>把文字变成向量。</strong></p>
 <pre style="background:#282c34;color:#abb2bf;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.7;text-align:center;">
 "公司年假5天" → [0.23, -0.67, 0.89, ..., 0.12, -0.45]
 </pre>

@@ -7,7 +7,7 @@
 
 <!-- 大标题 -->
 <p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
-  Open WebUI 本地部署实战：给本地模型配上 ChatGPT 同款界面
+  本地跑的 AI 只能看黑窗口？<br>一条命令给它装上 ChatGPT 同款界面，还带知识库
 </p>
 
 <!-- 副标题 -->
@@ -17,8 +17,7 @@
 
 <!-- 写在前面 -->
 <p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
-  <strong style="color:#2b6cb0;">📝 写在前面：</strong>如果你已经用 Ollama 或 llama.cpp 跑起了本地大模型，那恭喜你——你已经有了引擎，但还缺一个驾驶舱。Ollama 和 llama.cpp 都是命令行交互，而 <strong>Open WebUI</strong> 给它们配上一个和 ChatGPT 几乎一模一样的 Web 界面，完全运行在你自己的电脑上，数据零泄露。<br><br>
-  更新日期：2026-06-12 · 前置阅读：<strong>Ollama 部署教程</strong> / <strong>llama.cpp 部署教程</strong>
+  <strong style="color:#2b6cb0;">📝 写在前面：</strong>我本地模型跑起来之后第一反应是：这能用？黑底白字，没法上传文件，没法查历史记录。我差点就回去用 ChatGPT 了——直到发现了 Open WebUI，一条 Docker 命令就能给你的本地模型装上 ChatGPT 同款界面。前置阅读：<strong>Ollama 部署教程</strong> / <strong>llama.cpp 部署教程</strong>
 </p>
 
 <p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
@@ -42,10 +41,12 @@
 <!-- ===== 第1章 ===== -->
 <p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
   <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
-  为什么要用 Open WebUI？
+  我差点就回去用 ChatGPT 了
 </p>
 
-<p>如果你已经用 Ollama 或 llama.cpp 跑起了本地大模型，那恭喜你——你已经有了引擎，但还缺一个驾驶舱。</p>
+<p>用 Ollama 跑起本地模型的那一刻还挺兴奋的——然后我就看到了黑底白字的终端。</p>
+
+<p>没有对话历史，不能传文件，代码不会高亮。我问自己：<strong>这跟直接用 ChatGPT 有什么区别？不对，还不如呢。</strong></p>
 
 <p>Ollama 和 llama.cpp 的默认交互方式都是<strong>命令行</strong>：</p>
 

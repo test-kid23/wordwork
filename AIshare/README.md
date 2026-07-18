@@ -39,6 +39,8 @@
 | 013 | `aishare-013-naval-books.html` | 纳瓦尔推过的书能列满三屏，但这6本他真翻烂了 | 📚 书单分享 |
 | 014 | `aishare-014-qoder-free-credits.html` | 阿里Qoder发福利了：新用户白送2000积分，Qwen3.7MAX免费用 | 💰 薅羊毛 |
 | 015 | `aishare-015-qoder-ultimate-free-calls.html` | Qoder白送200次极致调用，Qwen3.7 Max 夜间2折 | 💰 薅羊毛 |
+| 016 | `aishare-016-waic-2026-news.html` | WAIC 2026干货速递（上）：AI不卷参数了，开始真干活了 | 📰 行业速递 · 7.17-18 |
+| 017 | `aishare-017-waic-2026-closing.html` | WAIC 2026下半场（下）：AI搞科研了、SAIL奖花落谁家 | 📰 行业速递 · 7.19-20 |
 
 
 ---
@@ -98,5 +100,7 @@ AIshare/
 └── aishare-013-naval-books.html            # 纳瓦尔点名书单·主推6本+扩展9本
 └── aishare-014-qoder-free-credits.html      # 阿里Qoder新用户福利·Qwen3.7MAX免费积分
 └── aishare-015-qoder-ultimate-free-calls.html # Qoder编程工具200次极致调用+错峰折扣
+└── aishare-016-waic-2026-news.html            # WAIC 2026大会速递（上）· 7.17-18产业落地与硬件爆发
+└── aishare-017-waic-2026-closing.html          # WAIC 2026大会速递（下）· 7.19-20科研学术与闭幕
 
 ```

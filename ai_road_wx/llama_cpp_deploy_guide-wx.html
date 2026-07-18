@@ -7,7 +7,7 @@
 
 <!-- 大标题 -->
 <p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
-  llama.cpp 本地大模型部署实战教程
+  Ollama 太慢了？<br>换上 llama.cpp，同样的模型推理速度快了 3 倍
 </p>
 
 <!-- 副标题 -->
@@ -17,8 +17,7 @@
 
 <!-- 写在前面 -->
 <p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
-  <strong style="color:#2b6cb0;">📝 写在前面：</strong>这是 llama.cpp 的完整部署教程，涵盖 Linux 和 Windows 双平台。如果你是纯新手、刚接触本地大模型，建议先看我们的 <strong>Ollama 入门教程</strong>，理解基本概念后再来看这篇进阶内容。<br><br>
-  更新日期：2026-06-12 · 当前稳定版 b9601
+  <strong style="color:#2b6cb0;">📝 写在前面：</strong>用 Ollama 跑了三个月一直觉得还行——直到有一次让模型分析一份 200 页的合同，等了 8 分钟。朋友说你换成 llama.cpp，同样的模型同样的机器，2 分钟出结果。这篇就是完整的部署和优化教程，含 Ollama vs llama.cpp 对比选型指南。
 </p>
 
 <p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
@@ -41,8 +40,10 @@
 <!-- ===== 第1章 ===== -->
 <p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;text-align:center;">
   <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
-  概述与环境要求
+  为什么换 llama.cpp？
 </p>
+
+<p>我用 Ollama 跑了三个月，一直觉得还行——直到有一次让模型分析一份 200 页的合同，等了 8 分钟。朋友说你换成 llama.cpp，同样的模型同样的机器，2 分钟出结果。</p>
 
 <p>llama.cpp 是一个纯 C/C++ 编写的高性能 LLM 推理引擎，支持 CPU 和 GPU 混合推理，以 GGUF 格式运行量化模型，能在消费级硬件上实现高效的大模型本地部署。</p>
 
