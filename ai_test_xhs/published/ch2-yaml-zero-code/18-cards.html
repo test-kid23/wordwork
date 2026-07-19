@@ -14,40 +14,14 @@ body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
 .cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
 .card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
 
-/* ===== 封面卡 · 暗色终端风 ===== */
-.card-cover{
-  background:#0d1117;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  padding:48px 56px;text-align:center;position:relative;overflow:hidden
-}
-.card-cover .code-bg{
-  position:absolute;inset:0;
-  font-family:'SF Mono','Consolas',monospace;
-  font-size:17px;color:rgba(255,255,255,0.035);
-  line-height:2.2;padding:80px 70px;
-  white-space:pre-wrap;z-index:0;pointer-events:none
-}
-.card-cover .overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(13,17,23,0.55) 0%,rgba(13,17,23,0.85) 60%,rgba(13,17,23,0.95) 100%);
-  z-index:1
-}
-.card-cover .emo-badge{
-  position:relative;z-index:2;
-  background:rgba(239,68,68,0.18);border:1.5px solid rgba(239,68,68,0.35);
-  color:#fca5a5;padding:14px 36px;border-radius:30px;
-  font-size:34px;font-weight:800;margin-bottom:52px;backdrop-filter:blur(6px)
-}
-.card-cover h1{
-  position:relative;z-index:2;
-  font-size:82px;font-weight:900;color:#f0f0f5;line-height:1.25;
-  margin-bottom:28px;max-width:860px
-}
-.card-cover h1 .em{color:#a5b4fc}
-.card-cover .subtitle{
-  position:relative;z-index:2;
-  font-size:36px;color:#94a3b8;font-weight:500;line-height:1.6
-}
+/* ===== 封面卡 · 紫色渐变 ===== */
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .code-bg{display:none}
+.card-cover .overlay{display:none}
+.card-cover .emo-badge{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:14px 36px;border-radius:30px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:28px;max-width:860px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.6}
 .card-cover .tag{display:none}
 
 /* 内容卡 */
@@ -82,22 +56,16 @@ body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
 .sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
 
 /* 收尾卡 */
-.card-closing{
-  background:#0d1117;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  padding:64px 72px;text-align:center;position:relative;overflow:hidden
-}
-.card-closing::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,17,23,0.4),rgba(13,17,23,0.95));z-index:0}
-.card-closing>*{position:relative;z-index:1}
-.card-closing h2{font-size:44px;font-weight:900;color:#f0f0f5;line-height:1.4;margin-bottom:24px}
-.card-closing .golden{background:rgba(99,102,241,0.15);border:1.5px solid rgba(99,102,241,0.3);padding:20px 44px;border-radius:18px;font-size:28px;color:#a5b4fc;font-weight:700;line-height:1.7;margin-bottom:24px}
-.card-closing .cta-ask{font-size:25px;color:#94a3b8;line-height:1.9;margin-bottom:20px}
-.card-closing .save-tip{font-size:26px;color:#818cf8;font-weight:700;margin-bottom:24px}
-.card-closing .hashtags{font-size:21px;color:rgba(148,163,184,0.4);line-height:2}
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
 
 /* 通用 */
 .watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
-.card-cover .watermark,.card-closing .watermark{color:rgba(255,255,255,0.15)}
+.card-cover .watermark,.card-closing .watermark{color:rgba(30,27,75,0.22)}
 .dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
 .dl-btn:hover{background:rgba(30,27,75,0.65)}
 </style>
