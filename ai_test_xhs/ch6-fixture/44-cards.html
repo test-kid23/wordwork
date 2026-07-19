@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>44 · 套件级vs用例级怎么选 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:78px;font-weight:900;color:#1e1b4b;line-height:1.23;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:40px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.level-card{display:flex;align-items:center;gap:16px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.level-card .lc-icon{font-size:42px;min-width:52px;text-align:center}
+.level-card .lc-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.level-card .lc-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.level-card.suite{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#a5b4fc}
+.level-card.case{background:linear-gradient(135deg,#ecfdf5,#eef2ff);border-color:#a7f3d0}
+
+.ask-item{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.ask-item .ak-num{font-size:36px;font-weight:900;color:#6366f1;min-width:44px;text-align:center}
+.ask-item .ak-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.ask-item .ak-desc{font-size:21px;color:#4b5563;line-height:1.7}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">📏 Fixture · 作用域决策</div>
+  <h1>套件级vs用例级<span class="em">怎么选不踩坑</span></h1>
+  <div class="subtitle">放错了要么重复劳动，要么数据打架</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 套件级 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">📦  套件级 Setup & Teardown</div>
+
+  <div class="level-card suite">
+    <div class="lc-icon">📦</div>
+    <div><div class="lc-title">套件级 Setup</div><div class="lc-desc">整套用例跑前做一次准备。比如建一个共享的测试账号，所有用例都共用它，不重复建。适合数据共享且互不改动的场景。</div></div>
+  </div>
+
+  <div class="level-card suite">
+    <div class="lc-icon">🧹</div>
+    <div><div class="lc-title">套件级 Teardown</div><div class="lc-desc">所有用例跑完，统一清理一次。只清一次效率最高。比如删掉那个共享账号，一套用例只做一次删操作。</div></div>
+  </div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 优点</h3>
+      <p>效率最高。准备一次、清理一次，不重复浪费。跑得快。</p>
+    </div>
+    <div class="bad">
+      <h3>⚠️ 缺点</h3>
+      <p>数据可能串。两个用例都改同一份数据，后面的读到的是被改过的。</p>
+    </div>
+  </div>
+
+  <div class="sec-note">共享数据 → 套件级 · 一条多用 · 快速高效</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 用例级 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">👤  用例级 Setup & Teardown</div>
+
+  <div class="level-card case">
+    <div class="lc-icon">👤</div>
+    <div><div class="lc-title">用例级 Setup</div><div class="lc-desc">每个用例跑前各自准备。各自有自己独立的数据，互不干扰。隔离性最强，谁也不会影响谁。</div></div>
+  </div>
+
+  <div class="level-card case">
+    <div class="lc-icon">✨</div>
+    <div><div class="lc-title">用例级 Teardown</div><div class="lc-desc">每个用例跑完各自清理。上一个的脏数据绝不影响下一个。最稳的方式，但每个用例都要做一次准备+清理，稍慢一点。</div></div>
+  </div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 优点</h3>
+      <p>数据彻底隔离。每个用例是独立世界，结果100%可复现。最稳。</p>
+    </div>
+    <div class="bad">
+      <h3>⚠️ 缺点</h3>
+      <p>稍慢。每个用例都单独准备+清理，跑100个就是100次准备+100次清理。</p>
+    </div>
+  </div>
+
+  <div class="sec-note">独立数据 → 用例级 · 隔离最强 · 最稳最可靠</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 决策三问 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🧭  决策三问，一锤定音</div>
+
+  <div class="ask-item">
+    <div class="ak-num">❶</div>
+    <div><div class="ak-title">数据共不共享？</div><div class="ak-desc">共享 → 套件级。独立 → 用例级。这是最核心的判断标准，先回答这个问题。</div></div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ak-num">❷</div>
+    <div><div class="ak-title">跑得勤不勤？</div><div class="ak-desc">跑得少 → 用例级更稳，几秒差异无所谓。跑得多（CI每小时跑）→ 套件级更快，效率差别很大。</div></div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ak-num">❸</div>
+    <div><div class="ak-title">资源贵不贵？</div><div class="ak-desc">贵（比如需要第三方API回调）→ 套件级省资源。便宜（本地造几条数据）→ 用例级随便用。</div></div>
+  </div>
+
+  <div class="insight-box">💡 三问过一遍，选错概率降低90%。对着问就行，不用纠结。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 权衡 + 坑 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">⚖️  我的默认规则 + 躲坑</div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 核心链路</h3>
+      <p>用<b>用例级</b></p>
+      <p>数据彻底隔离，结果必须100%可靠。多花几秒值得。</p>
+      <p>示例：下单、支付、退款。</p>
+    </div>
+    <div class="good">
+      <h3>✅ 冒烟/回归</h3>
+      <p>用<b>套件级</b></p>
+      <p>追求速度，共享数据不改动。能跑就行，不追求极致隔离。</p>
+      <p>示例：登录、查接口。</p>
+    </div>
+  </div>
+
+  <div class="do-item" style="display:flex;align-items:center;gap:14px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:14px;padding:22px 26px">
+    <div style="font-size:38px;min-width:48px;text-align:center">⚠️</div>
+    <div><div style="font-size:26px;font-weight:800;color:#dc2626;margin-bottom:4px">最常见的一个坑</div><div style="font-size:21px;color:#4b5563;line-height:1.7">套件级共享数据，两个用例都改它。后面那个读到的是被改过的，不是初始值。这种数据千万别共享，老老实实用用例级。</div></div>
+  </div>
+
+  <div class="insight-box">💢 选错了要么重复劳动要么数据打架。三问+默认规则 = 不再踩坑。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>清理放哪不是随便放<br>看共享还是隔离</h2>
+  <div class="golden">套件级求快<br>用例级求稳<br>对着三问选 不纠结</div>
+  <div class="cta-ask">💬 大家更喜欢套件级还是用例级？评论区站队～</div>
+  <div class="save-tip">⭐ 收藏这张决策表，写Fixture前先问三问</div>
+  <div class="hashtags">#测试设计 #Fixture作用域 #自动化测试 #软件测试 #测试架构</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>
+function downloadAll(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    html2canvas(c,{scale:2,backgroundColor:null}).then(canvas=>{
+      let a=document.createElement('a');a.download='card-'+(i+1)+'.png';a.href=canvas.toDataURL('image/png');a.click()
+    })
+  })
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

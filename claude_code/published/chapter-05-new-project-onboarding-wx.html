@@ -1,0 +1,342 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  10万行代码看不懂？<br>我用 Claude Code 一小时画出地图
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  让 AI 帮你把隐形的结构画出来——从项目全景到函数细节，全程你自己不用翻一个文件。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>入职新公司，Git 仓库拉下来，几千个文件，README 只有三行。被临时拉去修别人的代码，连入口文件都找不到。想给开源项目提 PR，光看代码结构就花了一下午。<br><br>这篇文章不讲理论——我用真实案例展示，怎么用 Claude Code 在 60 分钟内，从"一个字都不认识"到"能给别人讲清楚这个项目在干什么"。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、进场第一步：画地图</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、定位核心：找入口</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、追踪链路：串文件</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、看懂难点：解代码</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、交付文档：可复用</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、进场第一步 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  进场第一步：别打开代码，先让它画地图
+</p>
+
+<p>大多数人拿到新项目的习惯：点开文件夹 → 看到几十个目录 → 随便点一个 → 看不懂 → 关掉 → 焦虑。</p>
+
+<p><strong>停。别自己翻了。</strong></p>
+
+<p>Claude Code 最擅长的事之一，就是快速理解和总结项目结构。让它替你做地毯式扫描。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：一句话获取项目全景</p>
+
+<p>在项目根目录打开终端，敲 <strong>claude</strong>，然后：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "分析一下这个项目的整体结构。列出所有一级和二级目录，说明每个目录的作用。然后告诉我这个项目的技术栈和主要依赖。"
+</p>
+
+<p>它会做什么：</p>
+<p>• 扫描 <strong>package.json</strong> / <strong>requirements.txt</strong> / <strong>go.mod</strong> 等依赖文件，告诉你用了什么技术<br>
+• 遍历目录树，根据文件命名推断各目录的职责<br>
+• 找到 README、配置文件、构建脚本，提取关键信息</p>
+
+<p>整个过程大概 30 秒。你什么都不用干——它读文件，你等结果。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 它会给你什么</p>
+
+<p>类似这样的输出：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  这个项目是一个基于 React + Express 的全栈 Web 应用：<br><br>
+  <strong>技术栈：</strong><br>
+  - 前端：React 18 + TypeScript + Vite + Ant Design<br>
+  - 后端：Express + TypeScript + Prisma ORM<br>
+  - 数据库：PostgreSQL（通过 Prisma 管理）<br>
+  - 测试：Jest（前端）/ Vitest（后端）<br><br>
+  <strong>目录结构：</strong><br>
+  src/<br>
+  ├── client/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# React 前端代码<br>
+  │&nbsp;&nbsp;&nbsp;├── components/&nbsp;&nbsp;# 可复用 UI 组件<br>
+  │&nbsp;&nbsp;&nbsp;├── pages/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 页面级组件<br>
+  │&nbsp;&nbsp;&nbsp;├── hooks/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 自定义 React Hooks<br>
+  │&nbsp;&nbsp;&nbsp;└── utils/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 前端工具函数<br>
+  ├── server/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Express 后端代码<br>
+  │&nbsp;&nbsp;&nbsp;├── routes/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# API 路由定义<br>
+  │&nbsp;&nbsp;&nbsp;├── services/&nbsp;&nbsp;&nbsp;&nbsp;# 业务逻辑层<br>
+  │&nbsp;&nbsp;&nbsp;├── models/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 数据模型<br>
+  │&nbsp;&nbsp;&nbsp;└── middleware/&nbsp;&nbsp;&nbsp;# 中间件<br>
+  └── shared/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 前后端共享的类型定义
+</p>
+
+<p>你花 30 秒得到的这页信息，自己翻可能要 20 分钟——而且还不一定准确。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 扩展：生成模块依赖关系</p>
+
+<p>基础地图有了，接下来看模块之间的关系：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "分析各模块之间的依赖关系。哪些模块被引用最多？哪些是核心基础设施模块？有没有循环依赖？"
+</p>
+
+<p>它会做更深入的事情——追踪 import 语句、分析文件引用频率、找出"中枢模块"。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>你知道改动一个文件会波及哪些模块，这是接手陌生项目最关键的信息。老员工脑子里都有这张地图，新人没有——但现在你有了。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、定位核心 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  定位核心：找到"第一行代码"在哪
+</p>
+
+<p>项目结构看过一遍了，但你还是不知道"这个系统的入口在哪"。</p>
+
+<p>一个项目有几十个入口候选：<strong>main.go</strong>、<strong>app.ts</strong>、<strong>server.py</strong>、<strong>App.jsx</strong>……哪个才是真正的起点？</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：让 Claude Code 定位入口</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "找到这个项目的所有入口文件——哪个文件是启动入口、哪个是前端入口、哪个是路由入口、哪个是数据库入口。按启动顺序排列。"
+</p>
+
+<p>它会做的事情：</p>
+<p>• 搜索 <strong>main</strong>、<strong>bootstrap</strong>、<strong>start</strong>、<strong>listen</strong> 等关键词定位启动文件<br>
+• 从启动文件出发，追踪 import 链，绘制启动流程<br>
+• 列出每个入口的路径和作用</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 输出示例</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>启动链路（从前到后）：</strong><br><br>
+  1. server/src/index.ts（服务器启动）<br>
+  &nbsp;&nbsp;&nbsp;- 加载环境变量<br>
+  &nbsp;&nbsp;&nbsp;- 初始化数据库连接<br>
+  &nbsp;&nbsp;&nbsp;- 注册中间件<br>
+  &nbsp;&nbsp;&nbsp;- 挂载路由<br>
+  &nbsp;&nbsp;&nbsp;- 监听 3000 端口<br><br>
+  2. client/src/main.tsx（前端入口）<br>
+  &nbsp;&nbsp;&nbsp;- 渲染 React 根组件<br>
+  &nbsp;&nbsp;&nbsp;- 加载全局样式<br>
+  &nbsp;&nbsp;&nbsp;- 初始化路由<br><br>
+  3. server/src/routes/index.ts（路由入口）<br>
+  &nbsp;&nbsp;&nbsp;- 汇总所有子路由<br>
+  &nbsp;&nbsp;&nbsp;- /api/auth&nbsp;&nbsp;→ auth.router<br>
+  &nbsp;&nbsp;&nbsp;- /api/users → users.router<br>
+  &nbsp;&nbsp;&nbsp;...
+</p>
+
+<p>到这里，你已经知道了：</p>
+<p>• 按什么顺序读代码（从启动文件开始，沿 import 链走）<br>
+• 每个文件在整体架构中的位置（是入口、中间层、还是工具）<br>
+• 要加新功能应该先找哪个文件</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、追踪链路 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  追踪链路：一个用户请求走过了哪些文件
+</p>
+
+<p>这是我最推荐的一步——<strong>挑一个最核心的业务功能，让 Claude Code 追踪完整的执行链路。</strong></p>
+
+<p>比如一个用户登录：从前端表单提交 → API 调用 → 身份验证 → 数据库查询 → 返回 Token。这条链路穿过了多少个文件？</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：端到端链路追踪</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "追踪用户登录功能的完整执行链路。从前端点击登录按钮开始，到后端返回 JWT Token 并写入前端存储结束。列出这条链路上经过的每一个文件，标注每个文件做了什么。"
+</p>
+
+<p>Claude Code 会做的事：</p>
+<p>• 从前端搜索跟登录相关的组件和 API 调用<br>
+• 从后端搜索 auth/login 路由和处理函数<br>
+• 追踪数据库查询（查用户表、验证密码）<br>
+• 追踪中间件（比如密码加密、JWT 签发）<br>
+• 把所有环节串成一条线</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 为什么这一步特别值钱</p>
+
+<p>你接手别人代码时，最崩溃的体验不是"代码看不懂"，而是<strong>"改一个地方，不知道会影响到哪"</strong>。</p>
+
+<p>知道登录功能经过了 8 个文件之后——你改第 3 个，就知道第 5、第 7 个可能受影响。这是老员工的肌肉记忆，你用 3 分钟就拿到了。</p>
+
+<p>更进一步，你还可以问：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "如果我要把这个项目的数据库从 PostgreSQL 换成 MySQL，哪些文件需要改？"
+</p>
+
+<p>它会告诉你所有涉及数据库查询的文件——不用你自己满世界搜 <strong>import prisma</strong>。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、看懂难点 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  看懂难点：让 AI 解释你不理解的代码
+</p>
+
+<p>你一定会遇到这种情况：找到一段代码，每个字都认识，连起来不知道在干什么。</p>
+
+<p>可能是复杂的递归、绕来绕去的状态管理、一看就是写了三手的中间件。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：解释任意一段代码</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "解释 server/src/services/order.service.ts 中的 calculateRefund 函数在做什么。包含它的输入、输出、边界条件、以及为什么这样设计。"
+</p>
+
+<p>Claude Code 会做：</p>
+<p>• 逐行解析代码逻辑<br>
+• 标注变量含义和类型<br>
+• 识别算法的意图（不只看代码做了什么，还看为什么这样做）<br>
+• 指出潜在的边界条件问题</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进阶：从特殊到一般</p>
+
+<p>弄懂了一个函数，还想理解整个模块的设计模式：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "server/src/services/ 目录下的服务层用了什么设计模式？跟 server/src/utils/ 的区别是什么？为什么要把逻辑拆到 services 而不是直接写在 routes 里？"
+</p>
+
+<p>它不只是回答你"用了 Service 模式"，还会结合这个项目的实际代码举例说明。这种理解速度，你自己啃代码可能需要一周才能悟出来。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、交付文档 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  交付一份"新人入职文档"
+</p>
+
+<p>前面四步做完，你对这个项目的理解和老员工的差距已经缩小了一大截。</p>
+
+<p>但这些都是临时对话——换一台机器、换一个会话，就没有了。<strong>最后一步：把前面的分析沉淀成文档。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：让它帮你写一份项目概览文档</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "基于前面的分析，帮我写一份 PROJECT_OVERVIEW.md，包含：1）项目简介和技术栈 2）目录结构说明 3）启动方式 4）核心业务链路 5）常见开发任务指引（比如怎么加一个新 API、怎么改前端页面）"
+</p>
+
+<p>Claude Code 会：</p>
+<p>• 把前面分析的所有内容汇总<br>
+• 用 Markdown 格式输出<br>
+• 补充你的项目特有的信息</p>
+
+<p>这份文档有两个用途：</p>
+<p><strong><span style="color:#4A90D9;">①</span> 当下：</strong>是你自己理解项目的笔记，后续开发随时查阅<br>
+<strong><span style="color:#8e44ad;">②</span> 以后：</strong>下一个新人入职，不用再从零开始——直接看这份文档就能上手</p>
+
+<p>如果你觉得不够，还可以追加：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "在这个目录里搜索所有的 TODO、FIXME、HACK 注释，汇总成一份 TECH_DEBT.md。"
+</p>
+
+<p>几分钟拿到一份技术债清单。这件事手动做有多痛苦，做过的人都知道。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一小时复盘 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">✦</span>
+  一小时复盘
+</p>
+
+<p>这一小时你做了什么：</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 0-15min</span>
+  <strong> 项目结构+技术栈+模块依赖</strong><br>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">传统 1-2 天 → 现在 30 秒</span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 15-30min</span>
+  <strong> 定位入口+启动链路</strong><br>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">传统 半天 → 现在 15 分钟</span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 30-45min</span>
+  <strong> 追踪核心业务链路</strong><br>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">传统 2-3 天 → 现在 15 分钟</span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 45-55min</span>
+  <strong> 理解复杂代码+设计模式</strong><br>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">传统 1 周以上 → 现在 10 分钟</span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 55-60min</span>
+  <strong> 生成项目文档+技术债清单</strong><br>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">传统 半天 → 现在 5 分钟</span>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>60 分钟，完成了传统方式可能需要两周的信息收集工作。
+</p>
+
+<p>不是说你用它就能跳过所有学习曲线——理解代码还是需要你自己看、自己改、自己踩坑。但它帮你把"找代码"的时间压缩到了极限，把时间真正花在"理解代码"上。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这一篇的内容其实回应了很多人对 AI 工具的一个质疑："用 AI 写代码的人看不懂自己的代码。"</p>
+
+<p>对，如果你让 AI 直接帮你写代码而你不过脑子，你确实看不懂。但如果你<strong>让 AI 帮你理解别人的代码</strong>，你是在加速学习，不是在跳过学习。</p>
+
+<p>接手陌生项目的关键瓶颈不是"看不懂"，而是"找不到"。你不知道哪段代码值得看、哪段代码先看、哪段代码跟哪段有关系。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 关键洞察：</strong>Claude Code 帮你解决的是"找"的问题，"懂"的问题还是你自己的功课。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一期：从需求到 PR，Claude Code 怎么帮你一气呵成写完功能+测试+Review</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 用 AI 快速接手陌生项目<br>适用对象：刚入职的新人 / 接手遗留系统的维护者 / 想给开源项目提 PR 的开发者<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

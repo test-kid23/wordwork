@@ -1,0 +1,243 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  公众号周更要写两整天？<br>我把代码提交给 Claude Code，它帮我写了 3 篇
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  不是让它替你凭空编——而是你给它代码，它还你一篇人话教程。从 API 文档到公众号推文，全程你没敲一个字。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>上篇聊了日常开发怎么用 Claude Code 加速。但这一篇要聊的，可能是这个系列里<strong>适用面最广</strong>的一个场景：写作。<br><br>不是小说那种"创作"。是每个技术人员都躲不掉的日常——API 文档、变更日志、上线公告、技术博客、知识库维护。这些事没人替你干，但你又觉得"要是有时间写就好了"。Claude Code 在这件事上的表现，坦白说比写代码更让人意外。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、AI 写作的陷阱</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、API 文档一触生成</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、代码变技术博客</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、翻译+润色</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、写作辅助速查</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、AI 写作的致命陷阱 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  AI 写作的致命陷阱：它会说正确的废话
+</p>
+
+<p>先泼一盆冷水：<strong>如果你直接让 AI "写一篇关于 React Hooks 的文章"，你会得到一篇正确的废话。</strong></p>
+
+<p>开头是"随着前端技术不断发展……"，中间是官方文档的改写，结尾是"值得深入探索"。这种文章 ChatGPT 能一分钟写 10 篇。但它不是你想发的东西。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Claude Code 和 ChatGPT 写作的根本区别：</strong><br><br>
+  ChatGPT 只能基于它的训练数据写作——你的代码、你的项目经验、你的踩坑记录，它全不知道。<br><br>
+  Claude Code <strong>能读你的项目</strong>——读你刚写好的 useDebounce Hook，读你那个绕了三个弯才想出来的状态管理方案，读你花了两天修掉的诡异 Bug。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 关键认知：</strong>不是"让 AI 写文章"。是"让 AI 读你的代码，然后写文章"。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、API 文档 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  API 文档：从代码到人话，一步到位
+</p>
+
+<p>你写了一个模块，接口很清晰——参数、返回值、错误码——但文档是另一回事。函数签名是给编译器看的，文档是给人看的。两者之间的翻译，在 Claude Code 出现之前，全靠你自己手敲。</p>
+
+<p>尤其是参数说明。<strong>userId: string</strong> 这件事你要在文档里写"用户唯一标识，长度不超过 36 位，对应 user 表的 id 字段"——这些上下文 AI 比你还清楚，因为它见过你的 database schema。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：从函数签名生成完整文档</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "读一下 src/hooks/usePagination.ts，生成它的中文 API 文档。包含：用途说明、参数表格（参数名、类型、必填、默认值、说明）、返回值表格、使用示例（用真实的项目数据）、注意事项（基于代码中的边界条件判断）。文档风格参考 README.md 里已有 API 文档的格式。"
+</p>
+
+<p>Claude Code 会做：读完整实现 → 分析参数的类型和默认值 → 分析返回值结构 → 从代码逻辑中推断边界条件 → <strong>参考你已有的文档风格</strong>组织格式。</p>
+
+<p>它会给你类似这样的文档：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>usePagination</strong><br><br>
+  分页状态管理 Hook，封装了页码切换、每页条数变更、数据请求触发等分页相关逻辑。<br><br>
+  <strong>参数：</strong><br>
+  fetchFn | (params) =&gt; Promise | 是 | — | 数据请求函数<br>
+  defaultPageSize | number | 否 | 20 | 可选 10/20/50<br>
+  initialPage | number | 否 | 1 | 传入 0 会自动修正为 1<br><br>
+  <strong>返回值：</strong><br>
+  data | T[] | 当前页数据<br>
+  loading | boolean | 加载状态<br>
+  pagination | { page, pageSize, total } | 分页信息<br>
+  onPageChange | (page) =&gt; void | 切换页码，自动触发请求<br><br>
+  <strong>注意事项：</strong><br>
+  - page 参数为 0 或负数时会自动修正为 1<br>
+  - 组件卸载时自动取消未完成的请求<br>
+  - 连续快速切换页码时只保留最后一次请求的结果
+</p>
+
+<p>注意"注意事项"这一栏——不是你自己写的，是 Claude Code 读了你的代码之后，从逻辑里扒出来的。比如你那个"page 传 0 时修正为 1"的判断，你自己可能都忘了文档化。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、技术博客 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  技术博客：把你的代码变成高质量教程
+</p>
+
+<p>API 文档好歹有既定格式——参数、返回值、示例。技术博客没有固定格式，但有一个标准：<strong>读者看完要知道怎么用、会踩什么坑、为什么要这么设计。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：从代码到教程</p>
+
+<p>假设你做了一个"前端图片压缩"的小工具：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "读一下 src/utils/imageCompress.ts。帮我写一篇面向中级前端开发者的技术文章，主题是'前端图片压缩方案的实现与优化'。文章结构：1）背景 2）基于 Canvas 的压缩原理（基于我的代码讲解）3）踩坑记录 4）Worker 线程压缩 5）完整示例。语气像在跟同事分享经验，不要'随着前端技术发展'。"
+</p>
+
+<p>关键指令分解："基于我的代码讲解"——不是让它写通用的压缩教程；"语气像在跟同事分享"——明确语气方向，避免学术腔；"不要'随着前端技术发展'"——别写废话开头。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 写好之后的"套娃操作"——让它审稿</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "审一下刚写的这篇压缩教程。检查：1）有没有技术原理讲错了 2）关键步骤有没有遗漏 3）读者跟着做会不会卡住 4）代码示例能不能直接跑。只列问题，不改。"
+</p>
+
+<p>它可能会指出："Canvas 的 toBlob 参数里 quality 的取值范围是 0-1，你在文章里写的 0-100，会误导读者。"</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:12px 0;">
+  <strong style="font-size:16px;">🎯 写技术博客的核心公式</strong><br><br>
+  <strong style="font-size:18px;">你的代码 + 精准场景指令 + 风格约束 + 审稿 = 一篇能发的文章</strong>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、翻译 + 润色 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  翻译 + 润色：把英文博客变成公众号推文
+</p>
+
+<p>翻译这件事，机器翻译能做 70 分。但那 30 分的差距——术语一致性、长句拆分、口语化——刚好是你最花时间的地方。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：翻译一篇英文技术博客</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "把这篇英文 React 文档翻译成中文公众号推文。要求：1）保持技术术语英文不翻译（比如 'Server Components' 直接用原词）2）长句按中文语感拆分，超过 40 字的句子必须断 3）语气口语化但不失专业感——像阮一峰博客的风格 4）代码块保留不动 5）文末加上原文链接。"
+</p>
+
+<p>为什么这条指令有效："长句拆分"——英文习惯的从句嵌套，中文读者看着累；"语气像阮一峰博客"——比"语气自然"具体得多；"代码块保留不动"——没人需要看翻译过的代码。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进阶：翻译 + 适配国内读者</p>
+
+<p>单纯翻译不够。英文博客的语境、工具链、示例代码可能对国内读者不适用。加一步：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "扫一遍这篇文章，把不适合国内读者的地方标出来。比如：引用的服务国内用不了、工具链在国内网络下装不成、示例用的 API 需要翻墙。"
+</p>
+
+<p>Claude Code 可以识别这些"本地化适配点"，帮你替换成国内的等价方案。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">一个模板化的翻译流程：</strong><br><br>
+  1. 原文 → Claude Code 翻译初稿（口语气质）<br>
+  2. 初稿 → Claude Code 本地化审查<br>
+  3. 标注点 → 你手动替换国内等价方案<br>
+  4. 终稿 → Claude Code 润色 + 公众号排版<br>
+  5. 发布<br><br>
+  这个流程里，你做了什么？<strong>步骤 3 的本地化判断</strong>。这是 AI 做不到的——它不知道哪些国内服务好用。但其他 4 步它全包了。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、写作辅助速查 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  写作辅助的开箱即用技巧
+</p>
+
+<p>不是让你把每一篇文章都扔给 AI 生成。更像是你手边坐着一个看了无数技术文档的同事，随时可以问"这段这么写行不行"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 1. 帮你找灵感："这个功能，写什么角度？"</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "我做了前端水印组件，代码在 src/components/Watermark。帮我列 3 个这篇教程可以切入的角度。每个角度一句话说明：适合什么读者、核心卖点是什么。"
+</p>
+
+<p>它会给你：<br>
+<span style="color:#4A90D9;">① 破解防御角度</span>——适合关注安全的开发者，卖点是"怎么让你的水印不被删"<br>
+<span style="color:#8e44ad;">② 高性能角度</span>——适合做后台系统的开发者，卖点是"万行表格加水印不掉帧"<br>
+<span style="color:#4A90D9;">③ 框架集成角度</span>——"React/Vue/原生，一个方案全兼容"</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 2. 帮你改表达："这句话太绕了"</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "重写这段话。保持技术含义不变，把句子拆短，去掉'然而、因此、显而易见'这类词。控制在 100 字以内。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 3. 帮你写摘要和标题</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "基于这篇文章的内容，写 3 个公众号标题和一个 3 句话的摘要。标题风格：痛点 + 数字 + 反常识。摘要：让读者在 3 秒内决定要不要点进来。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 4. 帮你改排版</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "帮我改成适合微信公众号阅读的排版。段落不超过 3 行，关键句加粗，列表项前加 emoji 提升可读性，重点数据用引用块突出。"
+</p>
+
+<p>这些场景的共同点：不是让 AI 写一篇新文章，而是<strong>在你要写的文章上做增量</strong>——改一段、换一个说法、换个标题。它不是替你做创作，是帮你消除写作里的摩擦。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>技术写作有一个很少被说破的事实：<strong>大部分技术人员不是不会写，是不想写。</strong></p>
+
+<p>不是懒，是觉得"花 4 个小时写一篇博客"这件事的性价比太低了——有这时间不如多修两个 Bug、多看两个 PR。写博客的收益要半年一年才能看到，但投入是立刻的。</p>
+
+<p>Claude Code 解决的不是"你不会写"。是"你不想花 4 个小时做一件收益后置的事"。它把 4 小时的写作变成了 40 分钟——你出代码、出思路、出踩坑经验，它出组织结构、出遣词造句、出格式排版。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 关键洞察：</strong>技术写作最难的不是写，是开始写。AI 帮你提前越过了那个"空白的文档"。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一期：Commit、PR、Changelog——Claude Code 把你的 Git 文案全自动化了</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 技术写作<br>适用对象：想输出技术内容但被时间卡住的开发者 / 写过教程但感觉太花时间的博主 / 需要维护团队文档的技术 Leader<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

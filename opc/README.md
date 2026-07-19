@@ -1,4 +1,4 @@
-# scene_ocp · 一人公司 OCP 系列
+# scene_ocp · 一人公司 OPC 系列
 
 ## 系列定位
 

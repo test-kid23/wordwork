@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>38 · 响应耗时当变量 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.detail-item{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.detail-item .di{font-size:38px;min-width:44px;text-align:center}
+.detail-item .dt{font-size:24px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.detail-item .dd{font-size:20px;color:#4b5563;line-height:1.7}
+.detail-item.highlight{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#a5b4fc}
+
+.example-box{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 30px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.example-box .ex-path{font-size:24px;font-weight:800;color:#4338ca;margin-bottom:6px}
+.example-box .ex-desc{font-size:21px;color:#4b5563;line-height:1.7;margin-bottom:10px}
+.example-box .ex-code{font-family:'SF Mono','Consolas',monospace;font-size:19px;background:rgba(99,102,241,0.06);padding:12px 18px;border-radius:8px;color:#4338ca;line-height:1.8}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:28px 24px;border-radius:16px;display:flex;flex-direction:column;gap:10px}
+.col2 h3{font-size:28px;font-weight:800}
+.col2 p{font-size:21px;color:#4b5563;line-height:1.7}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.speed-bar{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:20px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.speed-bar .sl{font-size:23px;font-weight:800;color:#1e1b4b;min-width:160px}
+.speed-bar .sr{flex:1;height:32px;border-radius:16px}
+.speed-bar .ok{background:linear-gradient(90deg,#6ee7b7,#34d399)}.speed-bar .warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}.speed-bar .slow{background:linear-gradient(90deg,#fca5a5,#ef4444)}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">⏱️ 性能监控 · 技巧篇</div>
+  <h1>响应耗时当变量<span class="em">性能监控</span></h1>
+  <div class="subtitle">不额外打点 · 性能数据自动攒</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 提取耗时 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">⏱️ 响应耗时也能存成变量</div>
+
+  <div class="detail-item">
+    <div class="di">📦</div>
+    <div><div class="dt">提取什么</div><div class="dd">每个接口调完都有响应时间（毫秒）。这个值本身就是一种变量类型，不用JSONPath，不用正则。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔄</div>
+    <div><div class="dt">怎么存</div><div class="dd">框架内置的耗时字段 → 直接提出来起个名 → 扔进变量池 → 跟其他变量一样用。</div></div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-path">提完之后干什么</div>
+    <div class="ex-desc">断言、日志、收集报告，三种玩法</div>
+    <div class="ex-code">响应耗时 → 存为 {{resp_time}}</div>
+  </div>
+
+  <div class="sec-note">不需要额外工具、不插入代码、不打点<br>框架自带的响应时间就够了</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 断言 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🎯 第一招：断言慢接口</div>
+
+  <div class="detail-item">
+    <div class="di">📏</div>
+    <div><div class="dt">数据驱动断言</div><div class="dd">Assert: resp_time < 500ms。每次回归自动拦慢接口，不用人盯着看。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔔</div>
+    <div><div class="dt">分级告警</div><div class="dd"><500ms=正常 / 500-1000ms=警告 / >1000ms=报错。不同接口不同阈值，灵活配。</div></div>
+  </div>
+
+  <div class="speed-bar"><div class="sl">🟢 正常 < 500ms</div><div class="sr ok"></div></div>
+  <div class="speed-bar"><div class="sl">🟡 偏慢 500-1000ms</div><div class="sr warn"></div></div>
+  <div class="speed-bar"><div class="sl">🔴 超时 > 1000ms</div><div class="sr slow"></div></div>
+
+  <div class="insight-box">⚠️ 不同接口阈值不能一刀切！导出报表当然比查ID慢，区分设置</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 日志收集 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">📊 第二招：攒数据做报表</div>
+
+  <div class="detail-item highlight">
+    <div class="di">📋</div>
+    <div><div class="dt">每次回归录一版</div><div class="dd">跑完一轮回归 → 所有接口的耗时自动输出 → 粘进Excel → 趋势图有了</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">📈</div>
+    <div><div class="dt">横向对比</div><div class="dd">今天 vs 昨天 vs 上周 → 发现"这版本登录变慢了500ms" → 定位到新上代码</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔍</div>
+    <div><div class="dt">定位慢SQL</div><div class="dd">列表接口变慢 → 提耗时 → 发现从200ms涨到2s → 查库→ 少了个索引</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 网络波动一天跑下来数据会抖。取中位数看趋势，别盯一次的值</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 和压测区别 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">⚡ 第三招：不是压测，但很实用</div>
+
+  <div class="col2">
+    <div class="bad"><h3>这不能替代</h3><p>不是放1万并发测QPS<br>不是在找瓶颈在哪里<br>不是正式性能报告</p></div>
+    <div class="good"><h3>但能做到</h3><p>每次回归顺便看性能趋势<br>早于用户拿到慢接口信号<br>几MB工具外不用另装</p></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🚨</div>
+    <div><div class="dt">CI中自动告警</div><div class="dd">回归跑完 → 耗时超过阈值 → CI标记失败 → 提测前就拦住。别等到线上用户卡才知道。</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 把每次回归都当成一次轻量级性能巡检</div>
+
+  <div class="sec-note">不是压测 · 但低成本 · 每次回归都在跑<br>趋势数据 · 白送的</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>一个接口跑完<br>耗时数据白送给你</h2>
+  <div class="golden">不捡就浪费了</div>
+  <div class="cta-ask">💬 你发现过哪个接口默默变慢？<br>评论区交流～</div>
+  <div class="save-tip">⭐ 收藏 · 下次跑回归把耗时一起输出</div>
+  <div class="hashtags">#性能监控 #接口耗时 #自动化测试 #CI告警 #响应时间</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function downloadAll(){
+  const cards=document.querySelectorAll('.card');
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i];const d=document.createElement('a');
+    const canvas=await html2canvas(c,{scale:2,backgroundColor:null});
+    d.href=canvas.toDataURL('image/png');d.download='38-耗时变量-0'+(i+1)+'.png';d.click();
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+</script>
+</body>
+</html>

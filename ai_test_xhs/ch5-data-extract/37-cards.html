@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>37 · 响应头提取 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.detail-item{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.detail-item .di{font-size:38px;min-width:44px;text-align:center}
+.detail-item .dt{font-size:24px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.detail-item .dd{font-size:20px;color:#4b5563;line-height:1.7}
+.detail-item.highlight{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#a5b4fc}
+
+.example-box{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 30px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.example-box .ex-path{font-size:24px;font-weight:800;color:#4338ca;margin-bottom:6px}
+.example-box .ex-desc{font-size:21px;color:#4b5563;line-height:1.7;margin-bottom:10px}
+.example-box .ex-code{font-family:'SF Mono','Consolas',monospace;font-size:19px;background:rgba(99,102,241,0.06);padding:12px 18px;border-radius:8px;color:#4338ca;line-height:1.8}
+
+.header-card{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.header-card .hc-icon{font-size:48px}
+.header-card .hc-key{font-family:'SF Mono','Consolas',monospace;font-size:28px;font-weight:800;color:#4338ca;background:rgba(99,102,241,0.06);padding:4px 14px;border-radius:8px;margin-bottom:8px;display:inline-block}
+.header-card .hc-text{font-size:21px;color:#4b5563;line-height:1.7}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:28px 24px;border-radius:16px;display:flex;flex-direction:column;gap:10px}
+.col2 h3{font-size:28px;font-weight:800}
+.col2 p{font-size:21px;color:#4b5563;line-height:1.7}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">📨 响应头挖掘 · 技巧篇</div>
+  <h1>响应头里藏着宝<span class="em">别只盯body</span></h1>
+  <div class="subtitle">Cookie、重定向、TraceId……全在头里</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 4种头 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">🎯 4种必须知道怎么提的头</div>
+
+  <div class="header-card">
+    <div class="hc-icon">🔑</div>
+    <div>
+      <div class="hc-key">Set-Cookie</div>
+      <div class="hc-text">session、权限凭证经常通过Cookie传。登录后提取，传给所有后续</div>
+    </div>
+  </div>
+
+  <div class="header-card">
+    <div class="hc-icon">↩️</div>
+    <div>
+      <div class="hc-key">Location</div>
+      <div class="hc-text">3xx跳转的目标URL。拿到重定向地址，直接传给下一个请求</div>
+    </div>
+  </div>
+
+  <div class="header-card">
+    <div class="hc-icon">🔍</div>
+    <div>
+      <div class="hc-key">X-Trace-Id</div>
+      <div class="hc-text">链路追踪ID。错误复现的钥匙，一个TraceId甩给开发，秒级定位</div>
+    </div>
+  </div>
+
+  <div class="header-card">
+    <div class="hc-icon">🔢</div>
+    <div>
+      <div class="hc-key">Content-Length</div>
+      <div class="hc-text">验证响应大小是否合理。太大或太小说明返回异常</div>
+    </div>
+  </div>
+
+  <div class="sec-note">响应头提取方式跟JSONPath一样简单<br>指定头名字 → 直接取值</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 实战场景 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🔧 实战：TraceId的妙用</div>
+
+  <div class="detail-item">
+    <div class="di">🐛</div>
+    <div><div class="dt">为什么重要</div><div class="dd">日志系统里全靠TraceId串起一次请求的完整链路。有TraceId=开发能秒定位。没有=开发让你复现。</div></div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-path">提取TraceId</div>
+    <div class="ex-desc">每个接口调用后提取响应头里的TraceId，存进变量</div>
+    <div class="ex-code">提取X-Trace-Id → 存为 {{trace_id}}</div>
+  </div>
+
+  <div class="detail-item highlight">
+    <div class="di">📋</div>
+    <div><div class="dt">用例失败时输出</div><div class="dd">断言失败 → 自动打印当前TraceId → 甩给开发 → 不用纠结"怎么复现"</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 很多人写了几百条用例，失败后一句关键的TraceId都没留，排查成本激增</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 配合body ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🤝 头 + body 双管齐下</div>
+
+  <div class="detail-item">
+    <div class="di">🍪</div>
+    <div><div class="dt">Cookie + body里的token</div><div class="dd">有些系统头里设Cookie存凭证，body里也有access_token。两个都要提，拼接后传给下游。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">↩️</div>
+    <div><div class="dt">Location + body里的资源ID</div><div class="dd">创建接口返回201，body里有新资源ID，头里Location给出URL。提URL直接发起GET验证。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">📨</div>
+    <div><div class="dt">自定义头</div><div class="dd">X-Ratelimit-Remaining 剩余调用次数、X-Env 环境标识...业务自定义头也能提取做断言。</div></div>
+  </div>
+
+  <div class="sec-note">body告诉你做了什么 · 头告诉你怎么做的<br>两个都看 · 才完整</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 注意 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">⚡ 必看：Cookie提取注意</div>
+
+  <div class="col2">
+    <div class="good"><h3>🍪 Cookie怎么提</h3><p>Set-Cookie返回一长串，选你需要的字段：<br>SESSION=abc123 → 提"abc123"<br>后续请求拼进Cookie头</p></div>
+    <div class="good"><h3>🔍 区分大小写</h3><p>X-Trace-Id ≠ x-trace-id<br>HTTP头理论上大小写不敏感，但提取时写错就取不到。严格按实际返回写。</p></div>
+  </div>
+
+  <div class="insight-box">⚠️ 头里没有你想要的值 → 先看是不是跨域被屏蔽了（CORS）</div>
+
+  <div class="sec-note">Header里没有就去body找<br>两个都没有 → 那确实没有</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>别只盯着body看<br>数据远不止一处</h2>
+  <div class="golden">头里有宝 · body里有仙 · 结合起来满汉全席</div>
+  <div class="cta-ask">💬 你用过头里的什么隐藏信息？<br>评论区炫耀一下～</div>
+  <div class="save-tip">⭐ 收藏 · 下次写测试打开响应头看一眼</div>
+  <div class="hashtags">#响应头 #Cookie提取 #TraceId #接口测试 #自动化测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function downloadAll(){
+  const cards=document.querySelectorAll('.card');
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i];const d=document.createElement('a');
+    const canvas=await html2canvas(c,{scale:2,backgroundColor:null});
+    d.href=canvas.toDataURL('image/png');d.download='37-响应头-0'+(i+1)+'.png';d.click();
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+</script>
+</body>
+</html>

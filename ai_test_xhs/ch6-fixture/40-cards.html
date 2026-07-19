@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40 · 接口准备测试数据 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:80px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.step-item{display:flex;align-items:center;gap:16px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.step-item .st-num{font-size:36px;font-weight:900;color:#6366f1;min-width:48px;text-align:center}
+.step-item .st-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.step-item .st-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.step-item .st-emoji{font-size:38px;min-width:48px;text-align:center}
+
+.flow-item{display:flex;align-items:center;gap:10px;justify-content:center;margin:8px 0}
+.flow-item .fl-box{background:#eef2ff;border:1.5px solid #a5b4fc;border-radius:12px;padding:14px 22px;font-size:22px;font-weight:700;color:#4338ca}
+.flow-item .fl-arrow{font-size:28px;color:#6366f1}
+
+.example-box{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 30px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.example-box .ex-title{font-size:24px;font-weight:800;color:#4338ca;margin-bottom:8px}
+.example-box .ex-desc{font-size:21px;color:#4b5563;line-height:1.8}
+.example-box .ex-code{font-family:'SF Mono','Consolas',monospace;font-size:19px;background:rgba(99,102,241,0.06);padding:12px 18px;border-radius:8px;color:#4338ca;line-height:1.8;margin-top:8px}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🧪 Fixture · 数据准备实战</div>
+  <h1>测试前置数据<span class="em">用接口一键准备</span></h1>
+  <div class="subtitle">别手动往库里插，用框架自动调接口</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 场景演示 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">🎯  场景：测"查订单"</div>
+
+  <div class="step-item">
+    <div class="st-num">①</div>
+    <div><div class="st-title">问题</div><div class="st-desc">你要测查询订单的接口，前提是——库里得先有订单。没订单查什么？</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-num">②</div>
+    <div><div class="st-title">解法</div><div class="st-desc">Setup里先调"创建订单"接口，造一条订单出来。然后再调"查询订单"去查它。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-num">③</div>
+    <div><div class="st-title">顺序对了，用例才能跑</div><div class="st-desc">造数据（Setup）→ 查询（正式用例）→ 断言 → 清理（Teardown）。一步不落。</div></div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">💡 思路示意</div>
+    <div class="ex-desc">Setup调POST /orders创建 → 提取order_id → 正式用例调GET /orders/{{order_id}}查询 → 断言</div>
+  </div>
+
+  <div class="sec-note">前置数据接口造 · 不走手动不走库</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 提取+变量传递 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🔗  提取 + 变量传递</div>
+
+  <div class="step-item">
+    <div class="st-emoji">🎯</div>
+    <div><div class="st-title">造了用户，把user_id提出来</div><div class="st-desc">Setup调创建接口之后，用JSONPath提取$.data.user_id，存成变量{{user_id}}。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">📤</div>
+    <div><div class="st-title">变量自动流到正式用例</div><div class="st-desc">后面的接口直接引用{{user_id}}，不用手动复制粘贴。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">✨</div>
+    <div><div class="st-title">一套流程，数据自己流</div><div class="st-desc">创建用户 → 提取ID → 查询用户 → 更新用户 → 删除用户。变量从头传到尾。</div></div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">📦 变量链路示意</div>
+    <div class="ex-code">创建 → $.user_id → {{uid}} → 查询/更新/删除 全用{{uid}}</div>
+  </div>
+
+  <div class="sec-note">造完就提取 · 提取就引用 · 全程不用人肉传值</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 链式准备 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🔗  链式准备：搭积木</div>
+
+  <div class="flow-item">
+    <div class="fl-box">建用户</div>
+    <div class="fl-arrow">→</div>
+    <div class="fl-box">建订单</div>
+    <div class="fl-arrow">→</div>
+    <div class="fl-box">建订单项</div>
+    <div class="fl-arrow">→</div>
+    <div class="fl-box">Ready!</div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">🧱</div>
+    <div><div class="st-title">一步步调，像搭积木</div><div class="st-desc">每个接口的输出是下一个接口的输入。串联起来，Setup跑完环境就绪。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">⚡</div>
+    <div><div class="st-title">我做过一个下单链路</div><div class="st-desc">Setup串了四步：建用户 → 建地址 → 建购物车 → 建订单。跑起来丝滑得很。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">⏱️</div>
+    <div><div class="st-title">等正式用例开始时</div><div class="st-desc">环境已经ready。正式用例只管调被测接口、写断言，前面的事全自动化了。</div></div>
+  </div>
+
+  <div class="sec-note">链式准备 · 步步为营 · 环境就绪再开测</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 失败跳过 + 不推荐 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">🛑  两个关键提醒</div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 失败就跳过</h3>
+      <p>Setup如果失败了，后续用例自动跳过。</p>
+      <p>不会硬着头皮跑一堆假失败。</p>
+      <p>前置环境没好，就不浪费时间。这机制救过我无数次。</p>
+    </div>
+    <div class="bad">
+      <h3>❌ Setup别过厚</h3>
+      <p>别在Setup里调一堆无关接口。</p>
+      <p>准备得过厚，一个Setup挂了，整条suite跟着挂。</p>
+      <p>只准备当前用例要用的！</p>
+    </div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">⚠️</div>
+    <div><div class="st-title">只准备最小集合</div><div class="st-desc">不是越多越好。够用就行，多了反而是负担。过犹不及。</div></div>
+  </div>
+
+  <div class="insight-box">💡 用接口造数据，比手动插库优雅十倍。数据自己生，变量自己流，你只管写断言。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>Setup用接口造数据<br>优雅胜过手动</h2>
+  <div class="golden">数据自己生<br>变量自己流<br>你只管写断言</div>
+  <div class="cta-ask">💬 大家的Setup最长串过几步准备？评论区比比谁的链最长～</div>
+  <div class="save-tip">⭐ 收藏，下次写前置准备用接口别用手动</div>
+  <div class="hashtags">#测试准备 #数据初始化 #自动化测试 #接口测试 #测试技巧</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>
+function downloadAll(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    html2canvas(c,{scale:2,backgroundColor:null}).then(canvas=>{
+      let a=document.createElement('a');a.download='card-'+(i+1)+'.png';a.href=canvas.toDataURL('image/png');a.click()
+    })
+  })
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

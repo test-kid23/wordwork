@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>35 · Token自动传递 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.flow-h{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.flow-h .step{background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;padding:14px 24px;border-radius:12px;font-size:23px;font-weight:700}
+.flow-h .arr{font-size:28px;color:#a5b4fc}
+
+.detail-item{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.detail-item .di{font-size:38px;min-width:44px;text-align:center}
+.detail-item .dt{font-size:24px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.detail-item .dd{font-size:20px;color:#4b5563;line-height:1.7}
+.detail-item.highlight{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#a5b4fc}
+
+.example-box{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 30px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.example-box .ex-path{font-size:24px;font-weight:800;color:#4338ca;margin-bottom:6px}
+.example-box .ex-desc{font-size:21px;color:#4b5563;line-height:1.7;margin-bottom:10px}
+.example-box .ex-code{font-family:'SF Mono','Consolas',monospace;font-size:19px;background:rgba(99,102,241,0.06);padding:12px 18px;border-radius:8px;color:#4338ca;line-height:1.8}
+
+.tip-row{display:flex;gap:16px}
+.tip-box{flex:1;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 20px;text-align:center;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.tip-box .ti{font-size:44px;margin-bottom:8px}
+.tip-box .tt{font-size:22px;font-weight:800;color:#1e1b4b;margin-bottom:6px}
+.tip-box .td{font-size:19px;color:#4b5563;line-height:1.6}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🔐 Token管理 · 实战篇</div>
+  <h1>Token自动传递<span class="em">告别复制粘贴</span></h1>
+  <div class="subtitle">登录一次 · 全线自动 · 零手动</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 痛点 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">😤 手动搬token的三大灾难</div>
+
+  <div class="detail-item">
+    <div class="di">💀</div>
+    <div><div class="dt">悲剧1：挤掉其他测试</div><div class="dd">同一账号你登录我也登录，token互相踢。最后一波跑出来全是401。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">💀</div>
+    <div><div class="dt">悲剧2：上线发现没token</div><div class="dd">你本机cookie存着token，感觉一切正常。去CI上跑→啥也没传，全401。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">💀</div>
+    <div><div class="dt">悲剧3：过期全军覆没</div><div class="dd">token两小时过期，你手动粘了50个用例。过期后重粘50次……噩梦。</div></div>
+  </div>
+
+  <div class="sec-note">上线=没人手点 · 手动=链路崩<br>自动化第一步：把token交给框架管</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 提取 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">📤 第一步：提取token</div>
+
+  <div class="example-box">
+    <div class="ex-path">用 JSONPath 锁定位置</div>
+    <div class="ex-desc">登录接口返回的JSON，找到token所在字段</div>
+    <div class="ex-code">$.data.access_token → 存为 {{token}}</div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🛡️</div>
+    <div><div class="dt">提取前先断言</div><div class="dd">登录成功后先断言code=0，拿到响应了再提取。别在失败响应上抠token。</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔍</div>
+    <div><div class="dt">一眼学会的路径</div><div class="dd">打开响应JSON → 找到token → 倒推路径。$.data.token_info.access_token，倒数每一层。</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 提取路径写错 → 下游字段为空 → 请求头 Bearer 后面啥也没有 → 全401</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 引用 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">📥 第二步：所有接口自动引用</div>
+
+  <div class="flow-h">
+    <div class="step">🔐 登录</div><div class="arr">→</div>
+    <div class="step">📤 提取token</div><div class="arr">→</div>
+    <div class="step">📥 存进变量池</div><div class="arr">→</div>
+    <div class="step">🔗 后面全引用</div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-path">请求头里填</div>
+    <div class="ex-desc">Authorization → Bearer + token变量</div>
+    <div class="ex-code">Authorization: Bearer {{token}}</div>
+  </div>
+
+  <div class="detail-item highlight">
+    <div class="di">🧩</div>
+    <div><div class="dt">进阶：自动刷新</div><div class="dd">token快过期 → 框架自动触发refresh接口 → 提取新token → 变量池自动更新。你完全不用管。</div></div>
+  </div>
+
+  <div class="sec-note">跑定时任务 · 跑CI · 跑回归<br>token从来没断过 ✨</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 坑点 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">⛔ 三个最常见的坑</div>
+
+  <div class="col2">
+    <div class="bad"><h3>❌ 提取路径写死</h3><p>不同环境返回字段名不一样？路径里预设环境判断，别写死同一个key。</p></div>
+    <div class="bad"><h3>❌ 没验证就引用</h3><p>token为空也被拼进Bearer 后面，导致401但报错不清晰。</p></div>
+  </div>
+
+  <div class="col2">
+    <div class="bad"><h3>❌ 忽略过期策略</h3><p>不设refresh逻辑。token2小时过期，CI跑到第3小时全崩。</p></div>
+    <div class="good"><h3>💡 加了变量后</h3><p>把token引用的接口单独跑一次。确认headers有Bearer {{token}}，才发给下游。</p></div>
+  </div>
+
+  <div class="insight-box">⚠️ "漏了一步没填"比"不会提取"更多见——全局配置漏掉token头，排查半小时发现忘了设</div>
+
+  <div class="sec-note">调通一个 · 后面全部自动</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>Token该自动流<br>不是手动搬</h2>
+  <div class="golden">你搬一次 · 就多一个出错点</div>
+  <div class="cta-ask">💬 你还在手动复制token吗？<br>评论区坦白～</div>
+  <div class="save-tip">⭐ 收藏 · 下次接登录链路直接照这个来</div>
+  <div class="hashtags">#Token管理 #认证测试 #自动登录 #接口测试 #自动化测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function downloadAll(){
+  const cards=document.querySelectorAll('.card');
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i];const d=document.createElement('a');
+    const canvas=await html2canvas(c,{scale:2,backgroundColor:null});
+    d.href=canvas.toDataURL('image/png');d.download='35-token传递-0'+(i+1)+'.png';d.click();
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+</script>
+</body>
+</html>

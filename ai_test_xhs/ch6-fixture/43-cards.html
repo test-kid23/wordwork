@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>43 · Shell命令在测试中的安全用法 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:78px;font-weight:900;color:#1e1b4b;line-height:1.23;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:40px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.do-item{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.do-item .di-icon{font-size:38px;min-width:48px;text-align:center}
+.do-item .di-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.do-item .di-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.do-item.warn{background:#fef2f2;border-color:#fecaca}
+
+.lock-item{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ecfdf5,#eef2ff);border:1.5px solid #a7f3d0;border-radius:14px;padding:24px 28px}
+.lock-item .lk-icon{font-size:40px;min-width:48px;text-align:center}
+.lock-item .lk-title{font-size:26px;font-weight:800;color:#059669;margin-bottom:4px}
+.lock-item .lk-desc{font-size:21px;color:#4b5563;line-height:1.7}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🐚 Fixture · Shell命令实战</div>
+  <h1>Shell在测试中<span class="em">怎么安全用</span></h1>
+  <div class="subtitle">用好了真香，用不好真危险</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 三个实用场景 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">💡  三个实用场景</div>
+
+  <div class="do-item">
+    <div class="di-icon">🩺</div>
+    <div><div class="di-title">场景一：检查服务起没起</div><div class="di-desc">测试前用命令探一下目标服务状态。没起就别跑，省得一堆超时假失败。我CI里必加这步，服务没好直接跳过。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">📝</div>
+    <div><div class="di-title">场景二：写临时配置文件</div><div class="di-desc">有些测试要临时配置。用命令写出来，测试完再删。比改正式配置安全多了，不会影响其他环境。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">🕐</div>
+    <div><div class="di-title">场景三：打时间点做性能分析</div><div class="di-desc">测试开始时间用命令打个点，后面分析耗时可比较。小技巧，但挺实用。数据攒多了能看出趋势。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">⚡</div>
+    <div><div class="di-title">场景四：启动Mock服务</div><div class="di-desc">遇到没有真实服务的场景，用Shell拉起一个Mock。测试目标服务自己对Mock发请求。</div></div>
+  </div>
+
+  <div class="sec-note">Shell不是洪水猛兽 · 该用在刀刃上</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 安全锁一+二 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🔒  安全锁 · 第一道 + 第二道</div>
+
+  <div class="lock-item">
+    <div class="lk-icon">🔒</div>
+    <div><div class="lk-title">安全锁一：白名单</div><div class="lk-desc">不是什么命令都能跑。必须在配置里列明白允许哪些命令。没在名单里的，一律拒绝。空白名单状态 = 全禁。</div></div>
+  </div>
+
+  <div class="lock-item">
+    <div class="lk-icon">📋</div>
+    <div><div class="lk-title">白名单配置示例</div><div class="lk-desc">只允许 curl、ping、echo、cat 这几个安全的。rm -rf、chmod 这些危险操作直接配死不让用。</div></div>
+  </div>
+
+  <div class="lock-item">
+    <div class="lk-icon">🏖️</div>
+    <div><div class="lk-title">安全锁二：沙箱</div><div class="lk-desc">敏感路径命令碰不了。比如删系统目录的操作，直接拦下。防止手滑把机器搞崩。路径控制做在框架层。</div></div>
+  </div>
+
+  <div class="lock-item">
+    <div class="lk-icon">🛡️</div>
+    <div><div class="lk-title">路径隔离机制</div><div class="lk-desc">只允许操作测试专用目录（如/tmp/test_workspace），系统目录、配置目录、数据目录全部禁写。</div></div>
+  </div>
+
+  <div class="sec-note">白名单精准放行 · 沙箱兜底隔离 · 双重保险</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 安全锁三 + 不推荐 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">🔒  安全锁三  +  我不推荐</div>
+
+  <div class="lock-item">
+    <div class="lk-icon">⏰</div>
+    <div><div class="lk-title">安全锁三：超时</div><div class="lk-desc">默认30秒，跑太久自动杀。防止一条命令卡死，把整个测试堵住。我设过超时，真救过一次——某命令死循环了。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">🎯</div>
+    <div><div class="di-title">超时设计要点</div><div class="di-desc">不同类型设不同超时：curl 15秒、db查询 10秒、启动服务 60秒。精准控制，不浪费一秒，也不轻易超时。</div></div>
+  </div>
+
+  <div class="col2">
+    <div class="bad">
+      <h3>❌ 千万别这么干</h3>
+      <p>觉得白名单麻烦，想全放开。</p>
+      <p>那是把后门焊死在自己测试里。</p>
+      <p>任何能用Shell的地方都是攻击面，安全机制该开必须开。</p>
+    </div>
+    <div class="good">
+      <h3>✅ 正确姿势</h3>
+      <p>白名单配死、沙箱配齐、超时设好。</p>
+      <p>三道锁都上，你才敢放心用Shell。</p>
+      <p>安全不是阻碍效率，是保护效率。</p>
+    </div>
+  </div>
+
+  <div class="insight-box">💢 三道安全锁缺一不可。少一把，就别用Shell做Fixture。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 实战总结 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">📋  Shell最佳实践清单</div>
+
+  <div class="do-item">
+    <div class="di-icon">✅</div>
+    <div><div class="di-title">只放行必要的命令</div><div class="di-desc">不是越多越好，能用接口解决的别用Shell。真的非用不可才加白名单。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">✅</div>
+    <div><div class="di-title">输出重定向到日志</div><div class="di-desc">Shell的输出别消失在黑洞里。重定向到日志文件，出问题能回溯。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">✅</div>
+    <div><div class="di-title">失败时能 graceful 降级</div><div class="di-desc">Shell命令挂了，不要全测试跟着挂。设计好降级策略，最多跳过当前用例。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">✅</div>
+    <div><div class="di-title">区分环境：本地 / CI / 线上</div><div class="di-desc">不同环境允许的Shell范围不同。本地可以宽松，CI严格，线上直接禁用Shell。</div></div>
+  </div>
+
+  <div class="sec-note">Shell是利器不是玩具 · 三道锁挂上才能用</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>Shell是利器<br>不是玩具</h2>
+  <div class="golden">白名单 · 沙箱 · 超时<br>三道锁上了 你才敢用</div>
+  <div class="cta-ask">💬 大家用Shell在测试里干过最骚的操作是啥？评论区见～</div>
+  <div class="save-tip">⭐ 收藏这三道锁，用Shell前对照检查</div>
+  <div class="hashtags">#Shell脚本 #测试自动化 #安全测试 #DevOps #自动化测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>
+function downloadAll(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    html2canvas(c,{scale:2,backgroundColor:null}).then(canvas=>{
+      let a=document.createElement('a');a.download='card-'+(i+1)+'.png';a.href=canvas.toDataURL('image/png');a.click()
+    })
+  })
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

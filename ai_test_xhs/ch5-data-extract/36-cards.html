@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>36 · 数据库反向验证 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.detail-item{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.detail-item .di{font-size:38px;min-width:44px;text-align:center}
+.detail-item .dt{font-size:24px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.detail-item .dd{font-size:20px;color:#4b5563;line-height:1.7}
+.detail-item.highlight{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#a5b4fc}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:28px 24px;border-radius:16px;display:flex;flex-direction:column;gap:10px}
+.col2 h3{font-size:28px;font-weight:800}
+.col2 p{font-size:21px;color:#4b5563;line-height:1.7}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.flow-h{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:0}
+.flow-h .step{background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;padding:12px 22px;border-radius:12px;font-size:22px;font-weight:700}
+.flow-h .arr{font-size:26px;color:#a5b4fc}
+
+.trio-item{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:22px 26px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.trio-item .ti{font-size:40px}
+.trio-item .tt{font-size:24px;font-weight:800;color:#1e1b4b;min-width:100px}
+.trio-item .td{font-size:21px;color:#4b5563;line-height:1.6}
+
+.example-box{background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 30px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.example-box .ex-path{font-size:24px;font-weight:800;color:#4338ca;margin-bottom:6px}
+.example-box .ex-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.example-box .ex-code{font-family:'SF Mono','Consolas',monospace;font-size:19px;background:rgba(99,102,241,0.06);padding:12px 18px;border-radius:8px;color:#4338ca;line-height:1.8}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🗄️ 数据验证 · 进阶篇</div>
+  <h1>数据库反向验证<span class="em">测试闭环</span></h1>
+  <div class="subtitle">接口返回对 + 数据库状态对 = 真相</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 双验概念 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">😌 接口返回200，就一定能信？</div>
+
+  <div class="col2">
+    <div class="bad"><h3>💀 只验接口返回</h3><p>接口说"创建成功"<br>结果库没写进去<br>用户刷新→数据全没<br>上线后才发现BUG</p></div>
+    <div class="good"><h3>🛡️ 接口+数据库双验</h3><p>接口验完<br>再去库里查一遍<br>确认这行确实在<br>两关都过=真成功</p></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔗</div>
+    <div><div class="dt">同一个变量池</div><div class="dd">接口JSONPath提取的值 + 数据库SQL查出的字段 → 扔进同一个变量池。下游不区分来源，想用哪个用哪个。</div></div>
+  </div>
+
+  <div class="sec-note">"创建返回的ID" 对比 "库里实际存在的行"<br>= 双保险</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 三连打法 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🧪 数据库验证三连击</div>
+
+  <div class="trio-item"><div class="ti">🥇</div><div class="tt">创建后查库</div><div class="td">注册/创建接口调完后 → SELECT WHERE创建返回的ID → 确认新行存在</div></div>
+  <div class="trio-item"><div class="ti">🥈</div><div class="tt">更新后查库</div><div class="td">改密码/更新 → 去库里查最新值 → 断言确实变了</div></div>
+  <div class="trio-item"><div class="ti">🥉</div><div class="tt">删除后查库</div><div class="td">删除接口调完 → SELECT确认行已不在 → 软删除看标记位</div></div>
+
+  <div class="flow-h" style="margin-top:10px">
+    <div class="step">接口调</div><div class="arr">→</div>
+    <div class="step">查SQL</div><div class="arr">→</div>
+    <div class="step">对比</div><div class="arr">→</div>
+    <div class="step">断言</div>
+  </div>
+
+  <div class="insight-box">⚠️ 核心增删改场景 · 不验库 = 假闭环</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · SQL怎么配 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">⚙️ SQL怎么配</div>
+
+  <div class="detail-item">
+    <div class="di">🎯</div>
+    <div><div class="dt">SELECT精准字段</div><div class="dd">别 SELECT *。精准捞需要的列：SELECT id,status,createtime FROM users WHERE id=之前存的变量值</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔑</div>
+    <div><div class="dt">列名就是变量名</div><div class="dd">查到 status 字段 → 存入 {{status}} → 断言 status=1 表示创建成功</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">🔐</div>
+    <div><div class="dt">别用生产环境测</div><div class="dd">读操作可以连生产从库。写操作一定指定测试库，别污染线上数据。</div></div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-path">示例：注册后验库</div>
+    <div class="ex-desc">创建接口返回uid → 存为{{uid}} → SQL用uid查</div>
+    <div class="ex-code">SELECT id,status FROM users WHERE id={{uid}}</div>
+  </div>
+
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 终极形态 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">🏆 终极形态：数据闭环</div>
+
+  <div class="detail-item highlight">
+    <div class="di">🔗</div>
+    <div><div class="dt">接口响应 → 库 → 变量池 → 下游</div><div class="dd">创建接口返回ID → 库里确认ID存在 → 把status/createtime也提取入池 → 下游接口直接引用日期字段</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">📊</div>
+    <div><div class="dt">批量对比</div><div class="dd">查询接口返回10条记录 → 去库查10条 → 逐条对比 → 全部对上才通过</div></div>
+  </div>
+
+  <div class="detail-item">
+    <div class="di">⏰</div>
+    <div><div class="dt">定时监控</div><div class="dd">每天凌晨跑：查询接口 → 库里对比 → 不一致就告警。数据一致性监控就这么简单。</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 生产环境只读、测试环境读写 —— 铁律</div>
+
+  <div class="sec-note">接口层 + 持久层<br>两个扇区交叉验证 = 真正的自动化</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>接口+数据库<br>缺一个都是片面</h2>
+  <div class="golden">双验闭环 · 线上才稳</div>
+  <div class="cta-ask">💬 你验过"创建后真的写进去了"吗？<br>评论区说说你的经验～</div>
+  <div class="save-tip">⭐ 收藏 · 下次接增删改链路直接加这一步</div>
+  <div class="hashtags">#数据库验证 #数据闭环 #接口测试 #自动化测试 #SQL验证</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function downloadAll(){
+  const cards=document.querySelectorAll('.card');
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i];const d=document.createElement('a');
+    const canvas=await html2canvas(c,{scale:2,backgroundColor:null});
+    d.href=canvas.toDataURL('image/png');d.download='36-数据库验证-0'+(i+1)+'.png';d.click();
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+</script>
+</body>
+</html>

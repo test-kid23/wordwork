@@ -1,0 +1,273 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  同样一句话，换个说法效率翻 3 倍<br>——Claude Code 提示词工程实战
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  你说了"帮我修这个 Bug"，它改了 3 个不相关的文件。你说了"分析性能瓶颈"，它给了你一篇教科书。问题不在 AI，在你没告诉它"怎么想"。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>前几篇一直在讲 Claude Code 能做什么——接手项目、写功能、做 Review。但你可能会说："我试了，没你说的那么神。"<br><br>大概率不是你用的不对。是你<strong>说的不对</strong>。同一个 Claude Code，同一段代码，你换一种说法让它干活——从"改这个"变成"检查 A、修改 B、确保 C"——结果天差地别。这一篇不讲功能，只讲一件事：<strong>怎么让它真正听懂你。</strong>这不是玄学，这是工程。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、好 prompt vs 差 prompt</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、四层结构模板</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、角色扮演</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、多轮对话策略</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、CLAUDE.md 长期记忆</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、好 prompt 和差 prompt 的差距 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  好 prompt 和差 prompt 的差距有多大
+</p>
+
+<p>同一个任务，两种说法：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 差 prompt：</strong>"帮我把用户列表的性能优化一下。"
+</p>
+
+<p>Claude Code 收到这句话之后会做什么？猜。猜你需要加虚拟滚动、猜你需要分页、猜你需要加缓存。它能猜——但猜错概率很高。结果：改了 5 个文件，3 个改得不对，1 个改出 Bug。</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 好 prompt：</strong>"用户列表在数据量超过 500 条时渲染明显变慢。用 React DevTools 的 Profiler 分析 client/src/pages/UserList.tsx 的渲染瓶颈，给出 2-3 个优化方案。先不改代码，只出分析报告。"
+</p>
+
+<p>区别在哪？五件事：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  问题范围：<strong>模糊"性能优化" → 精确"数据量 &gt;500 条变慢"</strong><br>
+  分析工具：<strong>没说 → "用 React DevTools Profiler"</strong><br>
+  限定范围：<strong>全项目 → "client/src/pages/UserList.tsx"</strong><br>
+  交付形式：<strong>直接改代码 → "先出分析报告，不改代码"</strong><br>
+  方案数量：<strong>没说 → "2-3 个方案"</strong>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>差 prompt 让 Claude Code 在黑暗里摸索。好 prompt 给它手电筒和地图。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、分层结构 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  分层结构：把你的需求变成指令
+</p>
+
+<p>一个好的 prompt 可以分解成四层。分层不是让指令更长——是让 AI 不用猜。</p>
+
+<p><strong><span style="color:#4A90D9;">第一层：角色设定</span></strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "你是一个 5 年经验的 React 前端工程师，熟悉 TypeScript 和 Ant Design 组件库。"
+</p>
+
+<p>不加这层，它可能用初学者的方式解释。加了，它会用更精确的技术术语和更实际的工程判断。</p>
+
+<p><strong><span style="color:#8e44ad;">第二层：任务目标</span></strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "优化用户列表页面的渲染性能，目标：在 2000 条数据下渲染时间从 1.2 秒降到 200 毫秒以内。"
+</p>
+
+<p>注意这不是"把代码改成虚拟滚动"。那是方式，不是目标。<strong>说你想要什么结果，让它自己选最优方式。</strong></p>
+
+<p><strong><span style="color:#4A90D9;">第三层：约束条件</span></strong>（最关键也最容易被省略）</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "约束条件：1）不改变现有组件的外部 props 接口，因为已经被 5 个页面调用 2）不使用新的第三方依赖，审批周期太长 3）优先用 useMemo/React.memo，其次才考虑虚拟滚动。"
+</p>
+
+<p>不加约束条件会出什么事？它可能会引入一个 50KB 的 npm 包，或者改了 props 签名让其他页面炸掉。然后你花 20 分钟把它改回去。</p>
+
+<p><strong><span style="color:#8e44ad;">第四层：输出格式</span></strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "输出格式：1）一句话概述性能瓶颈 2）表格对比 3 个优化方案（方案名、原理、预计提升、风险、实施难度）3）推荐的实施步骤（按 30 分钟可完成拆分）。"
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:12px 0;">
+  <strong style="font-size:16px;">🎯 四层 prompt 模板</strong><br><br>
+  <strong style="font-size:14px;">[角色] 你是一个有经验的 [技术栈] 工程师。</strong><br>
+  <strong style="font-size:14px;">[目标] [一句话说清楚要达成什么结果，带可测量的指标]。</strong><br>
+  <strong style="font-size:14px;">[约束] 1）[边界] 2）[边界] 3）[边界]</strong><br>
+  <strong style="font-size:14px;">[格式] 输出格式：[描述你想要的回答结构]。</strong>
+</p>
+
+<p>不需要每次都四层全写。小改动可能只要目标层就够了。但越复杂的任务，越应该把这四层写全。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、角色扮演 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  角色扮演：给它一个身份，它会扮演好它
+</p>
+
+<p>当你指定一个角色，你是在帮它从海量知识里<strong>选出跟当前场景最相关的那部分</strong>。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 四个你应该知道的角色</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>🏗 架构师模式</strong> —— "review 我这次的改动。关注点：架构一致性、模块耦合度、扩展性、技术债务。列出 3-5 个架构层面的问题。"
+  </span>
+</p>
+
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>🔍 代码审查者模式</strong> —— "你现在是一个严格的代码审查者，像 Google Code Review 的标准。检查命名规范、错误处理完整性、安全问题、代码重复。"
+  </span>
+</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>🧪 测试工程师模式</strong> —— "对这个模块写测试。覆盖：正常路径、边界条件、异常路径、并发场景。不要只是跑一遍 pass，要找 corner case。"
+  </span>
+</p>
+
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    <strong>✍️ 技术作家模式</strong> —— "把这段代码的设计思路写成 500 字以内的说明，让接手的新人能在 10 分钟内理解为什么这么设计。"
+  </span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、多轮对话 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  多轮对话：不要一次性把话说死
+</p>
+
+<p>有一个很自然的冲动：把所有要求塞进第一句话，让它一次到位。<strong>但这个做法往往更慢。</strong></p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第一轮：定方向</span>
+  <strong> "用户列表性能不行，帮我分析瓶颈在哪。先对 UserList.tsx 做 Profiler 分析，不改代码。"</strong>
+</p>
+<p style="margin-left:16px;">它出报告。你看完，确认瓶颈跟你猜的一样。</p>
+
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第二轮：选方案</span>
+  <strong> "方案 2（虚拟滚动）最合适。项目已在用 react-window，不要引入新库。改动限制在 UserList.tsx。"</strong>
+</p>
+<p style="margin-left:16px;">它实现虚拟滚动，用已有的 react-window。</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第三轮：验证</span>
+  <strong> "跑测试确保没有破坏已有功能。写一个性能对比：优化前后的渲染时间。"</strong>
+</p>
+<p style="margin-left:16px;">它跑测试、出对比数据。</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  <strong style="color:#2b6cb0;">为什么多轮比一轮好：</strong><br><br>
+  1. <strong>你可以中途纠偏</strong>——不存在"代码已经写了再推翻"<br>
+  2. <strong>每轮信息量可控</strong>——不会一次性给你 500 行 diff<br>
+  3. <strong>上下文质量更高</strong>——前几轮的分析结果沉淀在对话历史里，更精准
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、CLAUDE.md ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  CLAUDE.md：把"每次都说的废话"固化下来
+</p>
+
+<p>如果你每天都跟 Claude Code 协作，每次都要写"你是一个 React 前端工程师"、"不要用 class component"——这就太蠢了。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CLAUDE.md 是干嘛的</p>
+
+<p>它是 Claude Code 在你项目里的<strong>"长期记忆"</strong>。每次打开 Claude Code，它会先读 CLAUDE.md，把这些信息带入上下文——不需要你每次说。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 怎么写</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Tech Stack</strong><br>
+  - React 18 + TypeScript + Vite<br>
+  - Ant Design 5.x（不要用 4.x 的 API）<br>
+  - 状态管理用 Zustand，不用 Redux<br>
+  - HTTP 请求用 axios，已有 src/utils/request.ts 封装的实例<br><br>
+  <strong>Code Conventions</strong><br>
+  - 组件用函数式 + Hooks，不用 class component<br>
+  - 文件命名：组件 PascalCase，工具 camelCase<br>
+  - 测试用 Vitest + React Testing Library<br><br>
+  <strong>Architecture Notes</strong><br>
+  - src/client/pages/ — 页面组件<br>
+  - src/client/components/ — 可复用 UI 组件<br>
+  - src/client/hooks/ — 自定义 Hooks<br><br>
+  <strong>Current Focus</strong><br>
+  正在做用户管理模块的重构。不要改其他模块的文件，除非明显相关。
+</p>
+
+<p>这个文件的价值：<strong>杜绝了它用 Redux 写一个组件的可能性</strong>；它创建新文件时会用对的命名风格；告诉它"现在在干什么"——减少不必要的文件改动范围。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CLAUDE.md 和 System Prompt 的区别</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">CLAUDE.md</span>
+  <strong> 跟项目走的。</strong>每个项目一个。放技术栈、规范、架构信息。
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:2px 8px;border-radius:6px;">System Prompt</span>
+  <strong> 全局的。</strong>放个人偏好——"用中文回复"、"代码注释用英文"、"优先用 pnpm"。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 记住：</strong>把"项目的事"放 CLAUDE.md，把"你的事"放 system prompt。不混在一起。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这一篇写的所有技巧——分层 prompt、角色扮演、多轮对话、CLAUDE.md——都有一个共同前提：<strong>你清楚自己要什么。</strong></p>
+
+<p>AI 是放大器，不是替代品。它能把你"大概想做什么"变成"精准的指令执行"，但它不能猜出你自己都不确定的目标。</p>
+
+<p>所以一个反直觉的真相是：<strong>用好 Claude Code 的前提不是掌握 prompt 技巧，而是你对自己的需求想清楚了。</strong>花 3 分钟想清楚"我要什么结果、什么约束、什么格式"——这 3 分钟是这一篇所有技巧的前提。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 关键洞察：</strong>所有的 prompt 技巧，只是在帮你把这 3 分钟想清楚的东西，翻译成它听得懂的话。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 进阶系列还有更多：Token 优化、多模型协同、MCP 协议——持续关注合集</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 提示词工程<br>适用对象：觉得 Claude Code "有时候很神有时候很蠢"的开发者 / 想从 AI 工具里榨出更多价值的资深用户 / 带团队推广 AI 工具的 Tech Lead<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

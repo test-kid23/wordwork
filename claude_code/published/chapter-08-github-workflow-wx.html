@@ -1,0 +1,263 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  写了代码还要写 Commit、PR、Changelog？<br>Claude Code 把这些全自动化了
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  你写了 200 行代码。然后花了 20 分钟想 commit message、写 PR 描述、更新 CHANGELOG。这 20 分钟 AI 用 3 秒就能做完——而且写得比你更好。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>上篇聊了用 Claude Code 做技术写作。这篇要补上日常开发流程里同样容易被忽略但同样消耗精力的环节：<strong>Git 操作的文案工作</strong>。<br><br>Commit message、PR 描述、CHANGELOG、Release Notes——这些都不是"写代码"本身，但它们直接决定了你的代码能不能被理解、被 Review、被维护。偏偏这些事，大部分开发者是"临时糊一个"。Claude Code 在这个环节的提效，是让你不用再在这种事情上浪费脑细胞。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、AI 写 Commit</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、PR 描述自动生成</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、CHANGELOG 自动化</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、GitHub @claude 协作</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、CI/CD 集成审查</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、告别 "fix bug" ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  告别 "fix bug"：让 Claude Code 读懂你的 diff 写 commit
+</p>
+
+<p>你改完了一个功能，做了一堆修改，然后 git add .，接着盯着终端想了 10 秒——commit message 写什么？</p>
+
+<p>"update code"？太敷衍。"fix user list export bug and add loading state and refactor pagination hook"？太长。"feat: add user export"？好像少说了什么。最后你写了 "fix: update"。三天后回来看，你不知道这次改了啥。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：让 Claude Code 读 diff → 写 commit message</p>
+
+<p>在你 git add 之后、git commit 之前：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "git diff --staged 看一下我这次改动的内容，帮我生成一条 Conventional Commits 格式的 commit message。用中文写 body 部分，说清楚改了什么、为什么改、影响了哪些范围。"
+</p>
+
+<p>Claude Code 会执行 git diff --staged，看完所有改动，然后给你：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>feat(user): 用户列表导出 Excel + 前端导出按钮</strong><br><br>
+  - 后端新增 GET /users/export 接口，基于 exceljs 生成 Excel 文件流<br>
+  - 前端在 UserList 页面新增导出按钮，调用导出接口触发文件下载<br>
+  - 导出按钮增加 loading 态，防止短时间内重复点击<br>
+  - 权限校验复用 hasPermission 中间件，管理员才可见导出按钮<br><br>
+  影响范围：server/src/routes/v1/users.ts, server/src/services/export.service.ts, client/src/pages/UserList.tsx<br><br>
+  Closes #127
+</p>
+
+<p>然后你 git commit -m "那条 message" 就行了。</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  <strong style="color:#2b6cb0;">为什么它写得比你好？</strong>不是 Claude Code 文笔好。是它<strong>不会偷懒</strong>。你写 commit message 的时候在想"差不多就行了"，Claude Code 没有这个设定。它读了你每一行改动，然后忠实总结。而且它<strong>即时执行</strong>——全程在一个终端里完成，不用切窗口。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进阶：符合你团队的规范</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "看一下项目根目录有没有 commitlint 配置、commitizen 配置或者 CONTRIBUTING.md 里的 commit 规范。按那个规范写这次的 commit message。"
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、PR 描述 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  PR 描述：让你的 Reviewer 秒懂你做了什么
+</p>
+
+<p>提 PR 只需要点一个按钮。但一个好的 PR 描述需要回答三个问题：<strong>这是什么？为什么这样改？影响范围？</strong></p>
+
+<p>90% 的 PR 描述只回答了第一个问题，而且是用最敷衍的方式。后果是你的 Reviewer 要自己看一遍 diff 才能理解这次改了什么。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：自动生成 PR 描述</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "对比 main 分支，生成这次 PR 的描述。格式：1）一句话概述 2）详细改动说明（按模块分组）3）为什么这样改 4）影响范围和风险 5）Review 重点。用中文。"
+</p>
+
+<p>Claude Code 会 git diff main...feature-branch，生成结构化的 PR 描述：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>概述：</strong>新增用户列表 Excel 导出功能，支持管理员全量导出，支持自定义导出字段。<br><br>
+  <strong>后端改动：</strong><br>
+  - routes/v1/users.ts — 新增 GET /users/export 接口<br>
+  - services/export.service.ts — 新增导出服务层，基于 exceljs<br>
+  - types/export.ts — 新增导出相关类型定义<br><br>
+  <strong>前端改动：</strong><br>
+  - pages/UserList.tsx — 新增导出按钮（loading 态 + 重复点击防护）<br>
+  - api/users.ts — 新增 exportUsers 请求函数<br><br>
+  <strong>为什么这样改：</strong>使用 exceljs 而非 xlsx-populate——前者支持流式写入，可处理 10 万级数据不 OOM<br><br>
+  <strong>Review 重点：</strong>请重点看 export.service.ts 的 chunk 处理逻辑和 UserList.tsx 的防重复点击实现
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>你把 Reviewer 的信息整理成本，转嫁给了 AI。Reviewer 花 30 秒看完描述就知道改了什么、在哪、怎么看。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、CHANGELOG 自动生成 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  CHANGELOG 自动生成：从 commit 历史到版本说明
+</p>
+
+<p>每次发布，"写 CHANGELOG"总是最后一刻才想起来的事。前面功能开发、测试、修 Bug 忙了一整个迭代，CHANGELOG 就拖到发版前草草写几行。</p>
+
+<p>问题不在态度，在流程——CHANGELOG 应该是在开发过程中自动积累的，不是发版时回忆的。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实操：一键生成 CHANGELOG</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "从上次发布的 tag（v1.2.0）到 HEAD，读取所有 commit message，生成一份中文 CHANGELOG。按 Conventional Commits 分类：Features、Bug Fixes、Refactors、Docs。每条变更一句话概述+commit hash 链接。"
+</p>
+
+<p>Claude Code 会调用 git log v1.2.0..HEAD --oneline，自动分类归组：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>v1.3.0</strong><br><br>
+  <strong>Features</strong><br>
+  - 用户列表新增 Excel 导出功能 (a1b2c3d)<br>
+  - 仪表盘新增近 30 天数据趋势图 (e4f5g6h)<br><br>
+  <strong>Bug Fixes</strong><br>
+  - 修复导出按钮在 Safari 下重复触发问题 (m0n1o2p)<br>
+  - 修复大数据量下分页计算 total 偏移问题 (q3r4s5t)<br><br>
+  <strong>Refactors</strong><br>
+  - 重构分页 Hook，抽离通用逻辑到 usePagination (u6v7w8x)<br><br>
+  <strong>Docs</strong><br>
+  - 补充导出 API 文档和调用示例 (y9z0a1b)
+</p>
+
+<p>CHANGELOG 最让人头疼的不是"写"本身，是"从几十条 commit 里挑出跟用户相关的"。Claude Code 做了这个筛选——你只用在它生成的基础上做微调。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、GitHub @claude ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  GitHub Issue/PR 中 @claude：让 AI 参与协作
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 在 Issue 里分析 Bug</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  @claude 分析一下这个 Bug 报告。根据报告里的错误栈，定位到项目里可能相关的代码文件。列出需要检查的文件和可能的原因。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 在 PR 里辅助 Code Review</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  @claude review 这个 PR 的安全性——有没有 SQL 注入、XSS、敏感信息泄露的风险。
+</p>
+
+<p>人工 Review 最浪费时间的不是"这个设计不好"这种高阶判断——是"这个变量没判空吧"、"这个参数校验漏了吧"这种低级错误。<strong>@claude 把低级错误扫完了，人的精力放在真正需要经验判断的地方。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 进阶：用 /loop 让 Claude Code 自动值班</p>
+
+<p>2026 年 Claude Code 推出的 <strong>/loop</strong> 命令（详见本系列进阶篇）把这个也自动化了——它按固定间隔自己检查 PR 状态：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /loop 15m 检查 PR #512 有没有新的 review 评论或 CI 失败。有评论就按建议改代码并 push，CI 挂了就诊断修复。有冲突就解决。
+</p>
+
+<p>设好之后，Claude Code 每 15 分钟自动看一眼你的 PR——就像你雇了个值班工程师。reviewer 的每一条评论都会被及时响应，你在 PR 上的响应速度从"半天"变成"15 分钟"。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、CI/CD 集成 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  在 CI/CD 中集成 Claude Code：以代码审查为例
+</p>
+
+<p>在 CI 流水线里加入一个 Claude Code 检查环节：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>.github/workflows/ai-review.yml</strong><br><br>
+  name: Claude Code Review<br>
+  on: pull_request<br><br>
+  steps:<br>
+  - checkout@v4（fetch-depth: 0）<br>
+  - Claude Code Review：对比 HEAD 和 origin/main<br>
+  &nbsp;&nbsp;检查 1) 安全问题 2) 错误处理 3) 性能隐患 4) 代码规范<br>
+  &nbsp;&nbsp;输出为 markdown checklist<br>
+  - Post Review Comment：将结果作为 PR 评论发布
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 这个 CI 环节的三不原则</p>
+
+<p>
+  <strong><span style="color:#c53030;">❌ 不做自动 Merge</span></strong><br>
+  AI 的审查结果是参考，不是权威。千万不要设置"AI 审查通过就自动 Merge"——AI 少数情况下会误判，而那个少数情况可能就是生产事故。
+</p>
+
+<p>
+  <strong><span style="color:#c53030;">❌ 不做"最终结论"</span></strong><br>
+  AI 的审查结果是"这里值得你留意"，不是"这里有问题"。它帮助 Reviewer 提高效率，但不替代最终判断。
+</p>
+
+<p>
+  <strong><span style="color:#c53030;">❌ 不检查业务逻辑</span></strong><br>
+  AI 能检查安全漏洞、性能隐患、代码规范。但它不懂你的业务——"这里应该用百分比还是绝对值"这种问题，它回答不了。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这一篇讲的东西——commit、PR、CHANGELOG——在技术圈有个共同的名字：<strong>"胶水工作"</strong>。</p>
+
+<p>不是核心开发，但缺一不可。没人会因为 commit message 写得好被夸，但一定会因为写得太差被吐槽。没人会专门看你的 CHANGELOG，但你的用户会因为它写得清楚而更新得果断。</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 以前</strong><br>写完代码，还要硬着头皮写 commit、PR、CHANGELOG。
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 现在</strong><br>写完代码，剩下的它来。你只用在它的输出基础上做微调。
+</p>
+
+<p>这个变化带来的不只是时间节省。是你<strong>不再对"提 PR"这件事有心理阻力</strong>。不怕 reviewer 看不懂、不怕自己忘了描述关键信息——因为 AI 帮你兜底了。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 关键洞察：</strong>胶水工作也是工作。让工具做胶水，你用脑子做核心。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一期：提示词工程实战——同样一句话，换个说法效率翻 3 倍</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · GitHub 工作流<br>适用对象：每天要提 PR 的开发者 / 想提升团队协作效率的 Tech Lead / 厌倦了手动写 commit message 的任何人<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

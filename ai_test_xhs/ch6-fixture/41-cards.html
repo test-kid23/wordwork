@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>41 · 测试完自动清理 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:80px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+
+.do-item{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.do-item .di-icon{font-size:38px;min-width:48px;text-align:center}
+.do-item .di-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.do-item .di-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.do-item.warn{background:#fef2f2;border-color:#fecaca}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.step-item{display:flex;align-items:center;gap:16px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.step-item .st-emoji{font-size:38px;min-width:48px;text-align:center}
+.step-item .st-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.step-item .st-desc{font-size:21px;color:#4b5563;line-height:1.7}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🧹 Fixture · 自动清理篇</div>
+  <h1>跑完100个用例<span class="em">库干干净净</span></h1>
+  <div class="subtitle">清理比准备更能看出一个测试靠不靠谱</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · 接口清理 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">🗑️  方式一：接口清理</div>
+
+  <div class="step-item">
+    <div class="st-emoji">🔗</div>
+    <div><div class="st-title">造了测试用户？测完调删除接口</div><div class="st-desc">把user_id传进去，删掉。用之前提取的变量精准删除，不误伤一条真实数据。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">🎯</div>
+    <div><div class="st-title">造数据的接口配删除接口</div><div class="st-desc">我每个"建资源"用例都配一个"删资源"清理。有建有删，一套闭环。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">✅</div>
+    <div><div class="st-title">最优雅的方式</div><div class="st-desc">走接口删数据，有审计日志、有权限控制、不绕过业务逻辑。比直接清库安全得多。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">💡</div>
+    <div><div class="di-title">TIP</div><div class="di-desc">Teardown也走接口，和Setup对称。创建接口→提取ID→正式用例→删除接口→干净。</div></div>
+  </div>
+
+  <div class="sec-note">接口清理 · 精准 · 有审计 · 不绕过业务</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · 直接清库 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🗄️  方式二：直接清库</div>
+
+  <div class="step-item">
+    <div class="st-emoji">⚡</div>
+    <div><div class="st-title">接口删太慢？或者根本没删接口</div><div class="st-desc">别硬等。直接执行SQL，批量清理。效率高几十倍。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">🔍</div>
+    <div><div class="st-title">加前缀过滤，一把清一片</div><div class="st-desc">测试数据取名时统一前缀，比如test_。清库时WHERE name LIKE 'test_%'，一把梭。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">🔗</div>
+    <div><div class="st-title">多步清理：先子表，再主表</div><div class="st-desc">有外键关联的数据，顺序反过来删。先删子表记录，再删主表记录。顺序错了外键拦你。</div></div>
+  </div>
+
+  <div class="do-item warn">
+    <div class="di-icon">⚠️</div>
+    <div><div class="di-title">必须加WHERE条件！</div><div class="di-desc">无条件删除 = 全表清空 = 生产事故。这是血的教训，别重蹈覆辙。</div></div>
+  </div>
+
+  <div class="insight-box">💢 先删主表 → 关联数据删不动 → 外键报错。顺序千万记牢！</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 套件级清理 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">📦  方式三：套件级清理</div>
+
+  <div class="do-item">
+    <div class="di-icon">🔄</div>
+    <div><div class="di-title">所有用例跑完，统一清一次</div><div class="di-desc">不是每个用例清一次，而是整套跑完才清。省时间，效率最高。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">👥</div>
+    <div><div class="di-title">适合共享数据</div><div class="di-desc">比如整套用例共用一个测试账号。跑前建一个，所有用例用它，跑完删一个。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">⚖️</div>
+    <div><div class="di-title">套件级 vs 用例级清理</div><div class="di-desc">套件级快但数据可能串，用例级稳但略慢。核心链路用用例级，冒烟用套件级。</div></div>
+  </div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 套件级</h3>
+      <p>跑前建、跑完删。一次准备一次清，数据共享不互相改的场景首选。</p>
+    </div>
+    <div class="good">
+      <h3>✅ 用例级</h3>
+      <p>每个用例自己清。上一个的脏数据绝不坑下一个，最稳但消耗大一点。</p>
+    </div>
+  </div>
+
+  <div class="sec-note">共享数据走套件 · 独立数据走用例 · 各有各的适用</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 核心价值 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">💎  这是自动化的底线</div>
+
+  <div class="step-item">
+    <div class="st-emoji">🔄</div>
+    <div><div class="st-title">不会因脏数据导致下次失败</div><div class="st-desc">上次测试的垃圾不会堵住下一次。每次跑都在干净的环境里从头开始。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">📊</div>
+    <div><div class="st-title">Teardown覆盖率是考核项</div><div class="st-desc">我现在的项目，谁写的用例没配Teardown，code review直接打回。</div></div>
+  </div>
+
+  <div class="step-item">
+    <div class="st-emoji">🎯</div>
+    <div><div class="st-title">做不到干净 = 不算真自动化</div><div class="st-desc">这行没商量。留的脏数据迟早变成别人的bug，那时候追根溯源，锅还是你的。</div></div>
+  </div>
+
+  <div class="insight-box">⚠️ 清理语句必须加条件。无条件删除，一跑全表没了——那是事故，不是测试。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>好的测试<br>跑完比跑前还干净</h2>
+  <div class="golden">留的脏数据<br>迟早变成别人的bug</div>
+  <div class="cta-ask">💬 你因为没清理惹过什么祸？评论区坦白从宽～</div>
+  <div class="save-tip">⭐ 收藏，每个造数据的用例配一个清理</div>
+  <div class="hashtags">#数据清理 #测试清理 #自动化测试 #测试管理 #软件测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>
+function downloadAll(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    html2canvas(c,{scale:2,backgroundColor:null}).then(canvas=>{
+      let a=document.createElement('a');a.download='card-'+(i+1)+'.png';a.href=canvas.toDataURL('image/png');a.click()
+    })
+  })
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

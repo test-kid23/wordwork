@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>39 · Setup和Teardown边界 · 小红书卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8ecf1;padding:24px;font-family:'Noto Sans SC',sans-serif}
+.toolbar{position:sticky;top:8px;z-index:100;max-width:1080px;margin:0 auto 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.toolbar button{background:#6366f1;color:#fff;border:none;padding:12px 28px;border-radius:24px;font-size:22px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s}
+.toolbar button:hover{background:#4f46e5}
+.cards{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.card{width:1080px;height:1440px;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 4px 24px rgba(30,27,75,0.10)}
+
+.card-cover{background:linear-gradient(150deg,#dbeafe 0%,#bfdbfe 25%,#a5b4fc 55%,#818cf8 85%,#6366f1 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;text-align:center;position:relative}
+.card-cover .tag{background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);color:#4338ca;padding:12px 32px;border-radius:28px;font-size:34px;font-weight:700;margin-bottom:48px}
+.card-cover h1{font-size:82px;font-weight:900;color:#1e1b4b;line-height:1.25;margin-bottom:24px;max-width:880px}
+.card-cover h1 .em{color:#4338ca}
+.card-cover .subtitle{font-size:36px;color:#3730a3;font-weight:500;line-height:1.5}
+
+.card-content{background:#fafafd;padding:60px 72px;display:flex;flex-direction:column;position:relative;justify-content:space-evenly}
+.card-content .num{font-size:72px;font-weight:900;color:rgba(99,102,241,0.10);position:absolute;top:40px;right:60px;line-height:1}
+.section-title{font-size:42px;font-weight:900;color:#1e1b4b;position:relative;z-index:2;padding-left:18px;border-left:5px solid #6366f1}
+.sec-note{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:24px;color:#4b5563;line-height:1.9;text-align:center}
+.insight-box{background:rgba(239,68,68,0.06);border:1.5px dashed #fca5a5;padding:20px 32px;border-radius:14px;font-size:24px;color:#991b1b;text-align:center;font-weight:700;line-height:1.8}
+.quote-box{background:linear-gradient(135deg,#eff6ff,#eef2ff);padding:24px 32px;border-radius:14px;font-size:28px;color:#4338ca;line-height:1.7;text-align:center;font-weight:700}
+
+.col2{display:flex;gap:22px}
+.col2>div{flex:1;padding:30px 26px;border-radius:16px;display:flex;flex-direction:column;gap:14px}
+.col2 h3{font-size:30px;font-weight:800}
+.col2 p{font-size:22px;color:#4b5563;line-height:1.8}
+.col2 .good{background:#ecfdf5;border:1.5px solid #a7f3d0}.col2 .good h3{color:#059669}
+.col2 .bad{background:#fef2f2;border:1.5px solid #fecaca}.col2 .bad h3{color:#dc2626}
+
+.do-item{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e0e7ff;border-radius:14px;padding:24px 28px;box-shadow:0 2px 8px rgba(30,27,75,0.04)}
+.do-item .di-icon{font-size:38px;min-width:48px;text-align:center}
+.do-item .di-title{font-size:26px;font-weight:800;color:#1e1b4b;margin-bottom:4px}
+.do-item .di-desc{font-size:21px;color:#4b5563;line-height:1.7}
+.do-item.warn{background:#fef2f2;border-color:#fecaca}
+
+.list-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.list-item .li-dot{font-size:24px;color:#6366f1;margin-top:4px}
+.list-item .li-text{font-size:24px;color:#1e1b4b;line-height:1.8;font-weight:500}
+
+.card-closing{background:linear-gradient(150deg,#eef2ff 0%,#e0e7ff 50%,#c7d2fe 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 72px;text-align:center;position:relative}
+.card-closing h2{font-size:44px;font-weight:900;color:#1e1b4b;line-height:1.4;margin-bottom:24px}
+.card-closing .golden{background:rgba(255,255,255,0.65);padding:20px 44px;border-radius:18px;font-size:28px;color:#4338ca;font-weight:700;line-height:1.7;margin-bottom:24px}
+.card-closing .cta-ask{font-size:25px;color:#6366f1;line-height:1.9;margin-bottom:20px}
+.card-closing .save-tip{font-size:26px;color:#4f46e5;font-weight:700;margin-bottom:24px}
+.card-closing .hashtags{font-size:21px;color:rgba(67,56,202,0.4);line-height:2}
+
+.watermark{position:absolute;bottom:40px;right:64px;font-size:22px;color:rgba(30,27,75,0.22);font-weight:500;z-index:2}
+.dl-btn{position:absolute;top:20px;right:20px;z-index:10;background:rgba(30,27,75,0.45);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-size:20px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:background .2s;backdrop-filter:blur(4px)}
+.dl-btn:hover{background:rgba(30,27,75,0.65)}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="downloadAll()">📥 一键下载全部卡片</button></div>
+<div class="cards">
+
+<!-- ===== 封面卡 ===== -->
+<div class="card card-cover">
+  <div class="tag">🔄 Fixture · Setup与Teardown</div>
+  <h1>Setup和Teardown<span class="em">边界别搞混</span></h1>
+  <div class="subtitle">九成人第一次都踩过的坑</div>
+  <div class="watermark">@Testkid · 2026</div>
+</div>
+
+<!-- ===== 内容卡 01 · Setup做啥 ===== -->
+<div class="card card-content">
+  <div class="num">01</div>
+  <div class="section-title">🛠️  Setup 该做什么</div>
+
+  <div class="do-item">
+    <div class="di-icon">🎯</div>
+    <div><div class="di-title">记住一个词：最小</div><div class="di-desc">测试开始前，做"最小准备"。只准备能跑起来的那点东西，别多干。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">👤</div>
+    <div><div class="di-title">建一条测试用户</div><div class="di-desc">跑个创建接口，生成一条干净的用户数据。不污染、不冲突。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">⚙️</div>
+    <div><div class="di-title">初始化某个状态</div><div class="di-desc">比如把账户余额设成1000、把订单状态改成待发货。状态对了，用例才能跑。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">📦</div>
+    <div><div class="di-title">准备好前置数据</div><div class="di-desc">被测接口依赖什么，Setup里就造什么。只造这条用例要用的。</div></div>
+  </div>
+
+  <div class="sec-note">Setup 只铺路，不替用例干活。路铺好就停。</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 02 · Teardown做啥 ===== -->
+<div class="card card-content">
+  <div class="num">02</div>
+  <div class="section-title">🧹  Teardown 该做什么</div>
+
+  <div class="do-item">
+    <div class="di-icon">🧹</div>
+    <div><div class="di-title">把Setup造的数据全删掉</div><div class="di-desc">造了用户删用户、造了订单删订单。造啥删啥，别留。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">↩️</div>
+    <div><div class="di-title">把改过的状态恢复回去</div><div class="di-desc">改过的余额改回来、改过的状态复原。环境要像没人来过一样。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">✨</div>
+    <div><div class="di-title">目标是：跑完比跑前还干净</div><div class="di-desc">上一个用例的脏数据，绝不能影响下一个。这是自动化的底线。</div></div>
+  </div>
+
+  <div class="do-item warn">
+    <div class="di-icon">⚠️</div>
+    <div><div class="di-title">别忘加条件！</div><div class="di-desc">删数据一定加WHERE条件，不加条件全表没了，那是事故不是测试。</div></div>
+  </div>
+
+  <div class="sec-note">Setup 铺路 · Teardown 扫地 · 跑完干干净净</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 03 · 错误示范 ===== -->
+<div class="card card-content">
+  <div class="num">03</div>
+  <div class="section-title">❌  两个最常见的错误</div>
+
+  <div class="col2">
+    <div class="bad">
+      <h3>❌ 错误一：Setup里写业务逻辑</h3>
+      <p>有人图省事，把被测流程前半段塞进Setup。</p>
+      <p>结果：Setup和用例耦合死了，Setup一改，全用例跟着崩。</p>
+      <p>🔸 Setup只准备<br>🔸 别替用例干活</p>
+    </div>
+    <div class="bad">
+      <h3>❌ 错误二：没有Teardown</h3>
+      <p>跑了就跑了，数据留着，下次冲突。</p>
+      <p>我见过最狠的：测试造了100个用户没清理，开发库被占满。</p>
+      <p>开发追着骂，这锅你背。</p>
+    </div>
+  </div>
+
+  <div class="insight-box">💢 Setup写业务逻辑 + 不清理 = 定时炸弹。迟早自己坑自己。</div>
+
+  <div class="sec-note">耦合 + 脏数据 = 自动化测试的头号杀手</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 内容卡 04 · 套件级vs用例级 ===== -->
+<div class="card card-content">
+  <div class="num">04</div>
+  <div class="section-title">📐  套件级  vs  用例级</div>
+
+  <div class="do-item">
+    <div class="di-icon">📦</div>
+    <div><div class="di-title">套件级：所有用例共享</div><div class="di-desc">整套跑前做一次准备，所有用例都用它。跑完统一清一次。效率最高，但数据可能串。</div></div>
+  </div>
+
+  <div class="do-item">
+    <div class="di-icon">👤</div>
+    <div><div class="di-title">用例级：每个用例独立</div><div class="di-desc">每个用例跑前各自准备、跑完各自清理。互不干扰，隔离性最强，但稍慢一点。</div></div>
+  </div>
+
+  <div class="col2">
+    <div class="good">
+      <h3>✅ 共享数据 → 套件级</h3>
+      <p>比如共用测试账号，所有用例用它但不改它。跑前建一次、跑完删一次。</p>
+    </div>
+    <div class="good">
+      <h3>✅ 独立数据 → 用例级</h3>
+      <p>每个用例要自己的独立数据，互不影响。隔离性拉满，最稳。</p>
+    </div>
+  </div>
+
+  <div class="sec-note">共享放套件 · 独立放用例 · 别放错</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+<!-- ===== 收尾卡 ===== -->
+<div class="card card-closing">
+  <h2>Setup是铺路<br>Teardown是扫地</h2>
+  <div class="golden">路铺好 地扫净<br>测试才配叫"自动化"</div>
+  <div class="cta-ask">💬 你因为没清理，被脏数据坑过几次？评论区含泪说说～</div>
+  <div class="save-tip">⭐ 收藏这条铁律，写Fixture前默念一遍</div>
+  <div class="hashtags">#测试Fixture #测试设计 #自动化测试 #测试数据管理 #软件测试</div>
+  <div class="watermark">@Testkid</div>
+</div>
+
+</div>
+<script>
+function downloadAll(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    html2canvas(c,{scale:2,backgroundColor:null}).then(canvas=>{
+      let a=document.createElement('a');a.download='card-'+(i+1)+'.png';a.href=canvas.toDataURL('image/png');a.click()
+    })
+  })
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
