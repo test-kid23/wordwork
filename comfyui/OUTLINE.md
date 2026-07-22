@@ -46,68 +46,54 @@ ComfyUI 解决的就是这件事：**让 AI 出图从"碰运气"变成"工程化
 
 ---
 
+## 第零部分：硬件与模型选型（入门前置）
+
+> 在装 ComfyUI、下载模型之前，先搞清楚自己的显卡能跑什么。这一部分是选型指南，帮你按显存大小锁定该装哪些模型，避免下了一堆跑不动的浪费时间。
+
+### 0.1 硬件选择指南：8G/16G 显存本地模型推荐 🆕
+**→ 已发布：0.1-local-models-vram-guide.md / -wx.html**
+
+- 8G 显存图片模型推荐（Z-Image-Turbo FP8、Boogu-Image-GGUF、Flux2 Klein 4B 量化、ERNIE-Image GGUF）
+- 8G 显存视频模型的现实局限（AnimateDiff、LTX-Video 量化、Mochi-1 GGUF）
+- 16G 显存图片模型全覆盖（Flux.1 Dev FP8、SDXL/SD 3.5 Large、Qwen Image、SD 3.5 Medium）
+- 16G 显存视频模型推荐（Hunyuan Video 1.5、Wan 2.2、CogVideoX 5B、LTX-Video）
+- 按使用场景对号入座的推荐路径
+- 量化格式、ComfyUI 运行环境、模型文件管理的三个必看提醒
+
+---
+
 ## 第一部分：入门教程系列
 
-### 1.1 ComfyUI 是什么？—— 像搭乐高一样生图
-- 一句话定位：节点化 AI 视觉生成引擎
-- 为什么需要"节点化"：从 prompt → 出图 到 模型→编码→采样→解码→出图 的思维转变
-- 跟 Midjourney / A1111 动手对比：同一个 prompt，三个工具能做出的差异
-- 谁适合用 ComfyUI：
-  - 对出图质量有精确要求的自媒体博主
-  - 需要批量产出统一风格素材的内容团队
-  - 想深入理解 AI 生图原理的技术爱好者
-  - 小型创业团队的产品图/宣传图需求
-- 一个真实的工作流长什么样（截图级展示）：从看到一堆线 → 到理解它在做什么
-- 前端已独立为 ComfyUI Frontend：为什么这意味着界面体验在持续进化
+### 1.1 ComfyUI 是什么？—— 像搭乐高一样生图 🆕
+**→ 已发布：1.1-what-is-comfyui.md**
+- Midjourney / A1111 / ComfyUI 三工具对比
+- 节点化思维：从"菜单式"到"流程图纸"
+- 谁适合用、谁不适合用（直接给判断）
+- 一个六节点工作流的直观展示
 
-### 1.2 安装与首次启动：从零到出第一张图
-- 安装方式三选一：
-  - **桌面应用**（最推荐新手）：Windows/macOS 一键安装包（最新版本 v0.24.0）
-  - **Windows 便携包**：解压即用，NVIDIA/AMD/Intel GPU 三版本
-  - **手动安装（pip）**：适合 Linux 和进阶用户
-- GPU 支持矩阵：
-  - NVIDIA (CUDA)、AMD Linux (ROCm)、AMD Windows (实验性)、Intel Arc (XPU)、Apple Silicon、昇腾 NPU、MLU、Iluvatar
-- 模型去哪下载：Civitai / HuggingFace / 模型推荐清单
-- 模型放哪：`models/checkpoints`、`models/vae`、`models/loras` 等目录结构速览
-- 启动命令：`python main.py`，打开浏览器，看到那个标志性的节点界面
-- 第一个工作流：加载默认模板 → 选模型 → 写 prompt → 点生成 → 看到第一张图
-- 如果没显卡：`--cpu` 纯 CPU 模式（慢但能跑）、Comfy Cloud 云端方案
+### 1.2 安装与首次启动：从零到出第一张图 🆕
+**→ 已发布：1.2-install-first-launch.md**
+- 桌面应用 / 便携包 / 手动安装三种方式对号入座
+- GPU 支持矩阵、无显卡替代方案
+- 模型下载源（Civitai / HuggingFace）+ 新手模型清单
+- 模型目录结构速览
+- 从启动到出第一张图的完整步骤
 
-### 1.3 节点界面完全解读
-- 工作流画布的基本操作：
-  - 双击空白 → 搜索面板：最快的加节点方式
-  - 拖拽连线：输入/输出槽的颜色和形状含义
-  - 节点参数调节：数值、文本、下拉、开关
-  - 画布缩放、平移、框选
-- 核心快捷键速记：
-  - `Ctrl+Enter`：加入生成队列
-  - `Ctrl+Z/Y`：撤销/重做
-  - `Ctrl+S/O`：保存/加载工作流
-  - `Ctrl+C/V`：复制/粘贴节点
-  - `Ctrl+D`：加载默认工作流
-  - `Q`：任务队列面板
-  - `H`：历史记录面板
-  - `Delete`：删除选中节点
-- 右侧面板区域：
-  - 节点属性编辑
-  - 任务队列管理（异步队列系统：只重新执行变更部分）
-  - 生成历史浏览
-- 理解节点类型分类：加载器 → 编码器 → 采样器 → 解码器 → 保存器
+### 1.3 节点界面完全解读 🆕
+**→ 已发布：1.3-interface-guide.md**
+- 画布 10 个核心操作（搜索、连线、参数、缩放等）
+- 数据线颜色含义速记
+- 常用快捷键速查表
+- 右侧面板三大区域（属性、队列、历史）
+- 节点五类型分类（加载器→编码器→采样器→解码器→保存器）
 
-### 1.4 第一个定制工作流：文生图完整管线
-- 拆解一个最基础的 txt2img 工作流中的每个节点：
-  - Load Checkpoint（加载模型）
-  - CLIP Text Encode（正向 + 负向提示词编码）
-  - Empty Latent Image（创建空白潜空间，设分辨率）
-  - KSampler（采样器核心：步数、CFG、采样器类型、调度器）
-  - VAE Decode（潜空间 → 像素图）
-  - Save Image（保存到本地）
-- Prompt 技巧在 ComfyUI 中的实践：
-  - 动态提示词：`{选项1|选项2|选项3}` 随机组合
-  - 权重语法
-- 第一次调参体验：改步数、改 CFG、换采样器，看效果怎么变
-- 保存工作流为 JSON → 关掉 → 重新加载 → 完美复现：这就是可复现性
-- 生成的 PNG 里内嵌了完整工作流：拖进 ComfyUI 直接还原
+### 1.4 第一个定制工作流：文生图完整管线 🆕
+**→ 已发布：1.4-first-txt2img-workflow.md**
+- 从空白画布手搭六节点 txt2img 完整工作流
+- Load Checkpoint → CLIP Text Encode ×2 → Empty Latent Image → KSampler → VAE Decode → Save Image
+- 每个节点的参数详解（步数、CFG、采样器、调度器等）
+- 调参三组对比实验（种子、CFG、采样器）
+- 保存工作流为 JSON + PNG 内嵌工作流的可复现性
 
 ---
 

@@ -1,0 +1,365 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🎨 ComfyUI 节点化 AI 视觉生成</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  8G、16G显存本地生图视频模型推荐：<br>我装了14个模型实测，结论在这
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  写给想在ComfyUI上跑本地AI出图、但不知道显存够不够用的人
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>很多人以为"本地跑AI生图"得4090起步。两年前这话没错，但现在2026年了——模型量化和轻量化技术发展速度远比显存降价快。我手上有两张卡，一张RTX 5060 Ti 8G，一张RTX 4070 Ti Super 16G，过去几个月把能跑的模型装了个遍。<strong>这篇文章不给你列参数，直接告诉你哪个能跑、哪个白装、哪个跑了但体验稀烂。</strong>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、8G 显存图片模型</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、8G 视频模型</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、16G 图片模型</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、16G 视频模型</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、买卡建议</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、核心技巧</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ========== 第一章：8G显存图片模型 ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  8G显存：图片模型这六个够用了
+</p>
+
+<p>8G是很多人的实际配置——笔记本4060、5060 Ti 8G、3070/4070的8G版。这六个是我实测下来最稳的，不会装完发现OOM然后想砸电脑。</p>
+
+<!-- 1.0 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 SD 1.5 & SDXL —— 经典永不过时</p>
+
+<p>先别急着看新模型。SD 1.5 和 SDXL 是整个开源生图生态的地基——绝大部分 LoRA、ControlNet、IPAdapter 都优先支持这两个。8G跑它们完全没压力：1024×1024出图大概25-35秒。性能不炸、生态最全、教程最多。</p>
+
+<p>注意一个细节：SDXL跑的时候如果同时加载复杂ControlNet或多层LoRA，显存会接近上限——关掉一两个不用的控制节点就行。</p>
+
+<p style="background:#ebf4ff;padding:12px 14px;border-radius:8px;border:1px solid #b3d4f7;color:#2b6cb0;font-size:14px;margin:12px 0;">
+  <strong>💡 建议：</strong>SD 1.5 和 SDXL 是你永远不该删的"工作底盘"。再新再好玩的模型都可能出兼容问题，但 SDXL 永远兜底。
+</p>
+
+<!-- 1.1 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥇 Z-Image-Turbo FP8 —— 8G首选，没有之一</p>
+
+<p>FP8量化后模型大小约6GB，实际运行时显存稳定在5.5GB左右，8G卡跑起来完全没压力。</p>
+
+<p>这模型让我意外的三点：</p>
+
+<p><strong>速度。</strong>比SDXL快将近一倍，不是快一点，是明显快。体感上就是点完"生成"刷一下出来了，不用等。</p>
+
+<p><strong>Prompt贴合力。</strong>文生图领域"你写A出来B"一直是个问题，Z-Image-Turbo把这事的概率降了一大截。文字渲染能力尤其突出——让它在海报上写中文，真能写出可辨认的字，不是一团糊。</p>
+
+<p><strong>几乎没有审查限制。</strong>不像有些模型非要把prompt过滤一遍再跑，你写什么它跑什么。</p>
+
+<p>支持写实、动漫、油画多种风格。</p>
+
+<p style="background:#fef9e7;padding:12px 14px;border-radius:8px;border:1px solid #f9e4a5;color:#7d6b10;font-size:14px;margin:12px 0;">
+  <strong>💡 补充：</strong>Z-Image-Turbo原版是阿里开源的6B参数模型，官方推荐16GB显存。我们8G卡用的是FP8量化版，压到5.5GB之后体验依然很好。如果你有16G卡，建议直接跑原版（不量化），画质还有提升空间。
+</p>
+
+<p>8G用户别挑了，从它开始。</p>
+
+<!-- 1.2 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥈 Boogu-Image-GGUF 整合包 —— 对新手最友好</p>
+
+<p>GGUF格式量化的打包方案，解压即用。50系显卡完美支持，不用折腾CUDA版本、PyTorch兼容性那些让人头大的东西。单张标准图生成只要几秒。</p>
+
+<p>功能不只是文生图——图生图、局部重绘、批量队列全都有。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 我的建议：</strong>如果你刚开始玩本地生图，先装这个。不是因为它"最好"，是因为它"最不折腾"。零门槛解压即用，先跑起来再说。它的批量队列也挺好用——丢一堆prompt进去不用管，过会儿回来挑就行。
+</p>
+
+<!-- 1.3 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥉 Flux2 Klein 4B 量化版 —— 追最新架构的选这个</p>
+
+<p>Flux2的4B蒸馏版，在5090上跑完整版显存占用约8.4GB，8G卡必须用量化版本。NVFP4格式下性能提升约2.5倍，显存占用减少约60%。</p>
+
+<p>但我要说句实话：<strong>这个方案不是给新手准备的。</strong>量化格式选错直接爆显存——50系支持NVFP4（60系也会），30系/40系不一定能用同一套方案。下载之前先确认GPU架构和模型量化格式是否匹配。</p>
+
+<p>好处是一个模型既能生图又能修图，不用来回切换。400万像素的编辑能力在本地模型里算顶格了。适合Z-Image-Turbo玩顺手了想试新东西的人。</p>
+
+<!-- 1.4 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 ERNIE-Image GGUF 量化版 —— 中文场景的首选</p>
+
+<p>原版8B模型要24GB显存，Unsloth出的GGUF量化方案压到了8G可用。中文、日文、韩文、英文多语言是它最大的护城河。字形清晰——做海报、多面板漫画、排文字多的图，它的文字渲染确实更自然。</p>
+
+<p>复杂指令跟随和结构化图像生成是它的强项。你做公众号封面、海报、小红书配图这类中文内容，ERNIE-Image对中文文本的处理比同级别模型好一截。Z-Image-Turbo快，ERNIE-Image精细，两个不冲突，都值得装。</p>
+
+<!-- 1.5 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 Anima —— 低配置上的 DiT 黑马</p>
+
+<p>Anima是我最近才装的新一代DiT架构模型，对低配置出奇地友好。实测在RTX 5060 Ti 8G上，1024×1024、30步、出图只要25秒——这个速度在DiT架构模型里非常能打。</p>
+
+<p>画风偏写实，人物和场景的结构稳定性好。如果你对SDXL的画质已经不满意了、但又没到16G能跑Flux Dev的地步，Anima是一个很好的过渡选择。</p>
+
+<p>它跟Z-Image-Turbo的区别：Z-Image强在prompt贴合度和文字渲染，Anima强在纯写实画面质感。这两个可以互补着用。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ========== 第二章：8G显存视频模型 ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  8G显存：视频能跑，但实用价值有限
+</p>
+
+<p>我直说了：8G跑视频处于"能证明技术上可行"的阶段，离"好用"还有距离。下面三个是目前8G上测过能动的方案。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 AnimateDiff —— 轻量动效，显存~6-7GB</p>
+
+<p>给静态图加运动效果，比如头发飘动、背景流动、简单的动态封面。不算正经视频生成，但如果你只是想给公众号封面做个3秒动效版，这个是最实用的选择。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 LTX-Video 量化版 —— 能跑，但分辨率低</p>
+
+<p>正经文生视频模型，量化后8G勉强能跑。分辨率和时长都受限制，大概480p几秒钟的水平。拿来玩可以，拿来用差点意思。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Mochi-1 GGUF 量化版 —— 同样局限</p>
+
+<p>480p左右能跑，帧数不多。跟LTX-Video半斤八两。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  <strong>❌ 别浪费时间：</strong>8G上正经视频生成（Hunyuan Video、Wan 2.2、CogVideoX）不用试了，OOM或者慢到不可用。真想玩视频，要么升显卡，要么用云端方案。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ========== 第三章：16G显存图片模型 ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  16G显存：图片模型基本全覆盖
+</p>
+
+<p>16G是一个真正的甜点位。12G上有些模型刚好跨不过门槛，16G就通了。下面这几个都是16G上稳定运行、效果出色的。</p>
+
+<!-- 3.1 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥇 Flux.1 Dev（FP8量化） —— 生图质量天花板</p>
+
+<p>FP8量化后显存占用约14-15GB，16G卡刚好跑满。Flux的生图质量在开源模型里是第一梯队——人手、文字、复杂场景的处理不是比SDXL好一点，是明显高一档。</p>
+
+<p>一张1024图，FP8量化版约20-38秒（取决于具体配置和并发节点数）。另外，16G的好处是跑Flux.1 Dev时可以同时挂好几个LoRA而不用担心爆显存。8G上跑Flux量化版是"能跑"，16G上跑是"跑得从容"。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ Flux.1 Dev原版（FP16）16G卡跑不动，OOM，别试。
+</p>
+
+<!-- 3.2 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥈 FLUX.2-klein-4B —— Flux 家族最新蒸馏版</p>
+
+<p>这个模型在16G卡上的定位跟8G上不一样——<strong>16G可以跑原版，不用量化</strong>，显存占用约13GB。不量化的好处是画质无损、不用纠结量化格式兼容性。如果你有16G卡，我建议直接跑原版Klein 4B而不是量化版，体验更好。</p>
+
+<!-- 3.3 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥉 SDXL / SD 3.5 Large / SD3 —— 成熟生态的老大哥</p>
+
+<p>SDXL在16G上完全没压力。最大的优势是生态——LoRA最全、ControlNet最完整、社区工作流多到挑花眼。</p>
+
+<p>SD 3.5 Large出图质量比SDXL好一档，但生态还没跟上，ControlNet不如SDXL全。</p>
+
+<p>SD3（非3.5）原始模型需要24GB显存，但通过较小的文本编码器或模型卸载（offloading），可以在16G上跑。不过我个人不建议专门去折腾SD3——3.5的质量更好、优化也更成熟。除非你有必须用SD3的特定LoRA生态。</p>
+
+<p>我的用法：SDXL做主底盘，SD 3.5和Flux Dev打配合。</p>
+
+<!-- 3.4 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 Qwen Image（通义万相） —— 中文生图最强</p>
+
+<p>16G上可以跑原版，不需要量化。对中文prompt的理解力是所有开源模型里最好的——没有之一。"一个穿格子衫的程序员在工位上睡着，手里握着鼠标"，画出来就是穿格子衫、在工位、睡着、握着鼠标，每个元素都对。</p>
+
+<p>做公众号封面、广告图、电商图这些需要精确中文描述的场景，它基本没对手。</p>
+
+<!-- 3.5 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 SD 3.5 Medium —— 速度最快的正经模型</p>
+
+<p>在意速度多于极限画质的话，这个最适合。10秒内出一张1024图，质量比SDXL原版好，速度接近Turbo系列。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- ========== 第四章：16G显存视频模型 ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  16G显存：视频生成真正能用了
+</p>
+
+<p>视频生成是16G真正的分水岭——8G只能"试"，16G可以"用起来"。下面四个都是实测能稳定出片、质量在线的。</p>
+
+<!-- 4.1 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥇 Hunyuan Video 1.5（混元视频） —— 视频首选</p>
+
+<p>显存占用约12GB，16G完全够。中文prompt直出视频，不用先翻译成英文。5秒720p视频生成时间约3-5分钟。画面稳定性比一代好太多，肢体连贯性和物理合理性在开源视频模型里第一档。</p>
+
+<p>如果你是中文创作者、想做短视频内容，从Hunyuan 1.5开始不会错。</p>
+
+<!-- 4.2 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥈 Wan 2.2 —— 画质优先</p>
+
+<p>显存占用约13-14GB。1080p输出画面质量比Hunyuan高一档，但生成速度慢30%左右。做视频号/抖音画面、追求画质的场景选它。</p>
+
+<!-- 4.3 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🥉 CogVideoX 5B —— 写实风格突出</p>
+
+<p>显存占用约14GB。清华出品，智谱清影同款模型。写实风格表现力强，人物动作连贯性做得好。社区有Int4量化版速度更快，16G上直接跑原版就行。</p>
+
+<!-- 4.4 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🏅 LTX-Video —— 最快出片，适合试prompt</p>
+
+<p>实时级速度，几秒出一个短片。质量不如Hunyuan和Wan，但如果你想快速验证prompt方向——先跑个草图看看对不对，再换大模型精跑——这个最省时间。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ========== 第五章：推荐路径 ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  怎么选：按你的情况直接对号入座
+</p>
+
+<p>别按"哪个最好"选，按"你是什么情况"选。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 8G 显存用户</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>刚入门不想折腾：</strong>Boogu-Image-GGUF 整合包
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>追速度和质量：</strong>Z-Image-Turbo FP8
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>做中文内容：</strong>ERNIE-Image GGUF
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>写实画质偏爱：</strong>Anima，DiT架构、25秒出图
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>需要最全生态：</strong>SDXL，社区资源最多、永不过时
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>想试视频：</strong>AnimateDiff做动效即可，正经视频等升级显卡
+  </span>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 16G 显存用户</p>
+
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>想一步到位：</strong>Flux.1 Dev FP8 + SDXL ControlNet 双轨
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>中文内容创作者：</strong>Qwen Image + Hunyuan Video 1.5，全中文链路
+  </span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>要做短视频：</strong>Hunyuan Video 1.5 主跑 + LTX-Video 快速试prompt
+  </span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">
+    ✅ <strong>画质强迫症：</strong>Wan 2.2 出视频 + Flux.1 Dev 出图
+  </span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ========== 第六章：买8G还是16G ========== -->
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  买8G还是16G？直接给结论
+</p>
+
+<p>如果你要买新卡、或者正在做配置决策，我的判断很直接：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">选 8G，如果你：</p>
+<p>✓ 预算优先，追求性价比</p>
+<p>✓ 主要跑 SD 1.5、SDXL、和 Flux/ERNIE 的量化版本</p>
+<p>✓ 不打算跑高清视频生成</p>
+<p>✓ 接受"遇到大模型就用量化方案降压"的工作方式</p>
+
+<p style="background:#ebf4ff;padding:12px 14px;border-radius:8px;border:1px solid #b3d4f7;color:#2b6cb0;font-size:14px;margin:12px 0;">
+  8G是目前跑主流生图模型的"甜点"配置——够用、不浪费、花销可控。大多数自媒体图文需求，8G完全满足。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">选 16G，如果你：</p>
+<p>✓ 想一步到位、未来两三年不想被显存卡脖子</p>
+<p>✓ 要跑 Flux Dev 原版、Klein 4B 原版、SD3 等高参数模型</p>
+<p>✓ 想从容地做高清视频生成（Hunyuan Video、Wan 2.2）</p>
+<p>✓ 追求"从容感"——不用每次跑图前先盘算关哪个节点省显存</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  16G多花的钱，买的是硬件生命周期的延长和模型选择空间的拓宽。如果你打算长期玩本地AI，这钱花得值。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">已经有8G卡了怎么办？</p>
+<p>不用换。这篇文章8G区的六个推荐足够覆盖绝大多数创作需求。先把现有的卡用到真正瓶颈了再说——到那时候，16G卡可能又便宜一截。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 部署建议 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  跑起来之前：4个核心技巧
+</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 量化格式别选错。</strong>GGUF、FP8、NVFP4、INT4、NF4——你的显卡支持哪种要看架构。50系支持NVFP4，40系/30系不支持。下模型之前先确认GPU架构和模型量化格式是否匹配，不然下一晚上白下。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 学会用模型卸载（Offloading）。</strong>这个技巧很多人不知道：ComfyUI能把暂时不用的模型部分从显存挪到系统内存，给当前计算腾出空间。开启方式——启动时加 <code style="background:#f0f0f0;padding:1px 4px;border-radius:3px;font-size:13px;">--lowvram</code> 参数，桌面版在设置里找"低显存模式"。好处是能在接近显存上限时仍然跑得动，代价是速度会降一些。在"跑不动"和"慢一点但能跑"之间，我肯定选后者。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 控制分辨率和批量大小。</strong>这是最直接有效的防OOM手段。别一上来就1024×1024——先512×512跑通，再升分辨率。批量大小（batch_size）保持1，一张一张来。显存不够的时候，降分辨率 > 降步数 > 关掉用不到的ControlNet/LoRA节点。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 选对工具。</strong>社区里两个最成熟的运行环境：<strong>ComfyUI</strong>（节点化、工作流可复现）和<strong>Stable Diffusion WebUI Forge</strong>（A1111的优化分支、显存管理更好）。两个都能跑这些模型。Forge在显存优化上做得比原版A1111好不少——如果你短时间内不想学ComfyUI的节点操作，用Forge也能先跑起来。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 写在最后 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>本地跑生图这事，2026年的门槛已经低到离谱了。8G显存、五六年前的显卡，也能跑出两年前需要24G才能跑的效果——不是显卡变好了，是模型和量化技术变聪明了。</p>
+
+<p>如果你还在犹豫要不要折腾本地生图，我的建议是：先装一个Boogu-Image-GGUF，解压、双击、输入prompt、等几秒。出第一张图的那一刻，你自己会做判断。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：用ComfyUI把这几个模型串成自动化工作流</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  ComfyUI 节点化AI视觉生成 · 本地模型推荐<br>适用对象：想用ComfyUI在本地跑AI生图/视频、但不知道显存能不能扛住的人<br>本系列更多文章可在公众号合集「ComfyUI 节点化AI视觉生成」中查看
+</p>
+
+</body>
