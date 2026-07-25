@@ -166,6 +166,7 @@ wordwork/
 | 平台 | 规范文件 | 说明 |
 |------|---------|------|
 | 微信公众号 | `wx_format_guide.md` | HTML → 微信编辑器，全内联样式，蓝紫配色 |
+| CSDN | `csdn_format_guide.md` | Markdown 技术博文，重命令使用与问题分析方法论，专业严谨 |
 | 小红书 | `xhs_format_guide.md` | 纯文本 + emoji 排版，口语化短句，卡片式结构 |
 | 抖音 | `douyin_format_guide.md` | 图文配文规范，开篇炸场 + 节奏碎 + BGM 策略，图片复用小红书卡片 |
 
