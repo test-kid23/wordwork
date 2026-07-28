@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花了15分钟装好Qoder，我让它修的第一个Bug就省了我2小时</title>
+</head>
+
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧰 AI编程工具 · 上手实战</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:20px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  花了15分钟装好 Qoder<br>我让它修的第一个 Bug 就省了我2小时
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:16px;">
+  从下载到让 Agent 替你干活，真实踩坑全记录
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.7;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>上一篇文章讲完 Qoder 是什么之后，有人后台留言问——说再多 Agent 牛逼也没用，装不装得上还不一定。这话对。AI 工具最大的坎不是"它能不能干"，是"我能不能让它跑起来"。我装 Qoder 的时候也踩了几个坑——不算大，但没遇到过的人确实会卡住。今天这篇就是把从零到让它干完第一个活的整个过程写下来。网上那些官方安装教程教人"下一步→下一步→完成"——能把人卡住的从来不是下一步，是那些官方文档没写的边角料。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、选哪个入口</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、第一个任务</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、第一个Agent</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、常见卡住</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、自查清单</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一、选哪个入口 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  选哪个入口？大部分人装这一个就够了
+</p>
+
+<p>Qoder 现在四个入口：<strong>VS Code 插件、JetBrains 插件、独立桌面 IDE、CLI</strong>。</p>
+
+<p>先说结论——90% 的人装 VS Code 插件就行了。别一上来四个全装，又不是搞评测的。</p>
+
+<p>我用 VS Code 居多，偶尔用 CLI 跑 CI 任务。JetBrains 插件我装过但用得少——JetBrains 里 Agent 模式会卡，独立桌面 IDE 装了两次都卸了。</p>
+
+<!-- VS Code -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 VS Code 装 Qoder</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:2.1;">
+  <strong><span style="color:#4A90D9;">①</span> 打开 VS Code，左边点扩展（Ctrl+Shift+X），搜「Qoder CN」→ 安装。</strong>注意搜「Qoder CN」不是「Qoder」，不带 CN 那个是海外版，账号跟国内不互通。<br>
+  <strong><span style="color:#8e44ad;">②</span> 去 Qoder 官网（qoder.cn）点下载，会自动跳到 VS Code 扩展页。</strong><br>
+  <strong><span style="color:#4A90D9;">③</span> 如果上面两条都打不开——关掉梯子。</strong>Qoder 国内服务器对代理不友好，直连反而更快。我就在这卡了十分钟，一直以为是我 VS Code 的问题，后来把代理关了秒进。
+</p>
+
+<p>装完之后右下角弹一个「登录」按钮，点它。用<strong>阿里云账号</strong>登——微信、支付宝扫码都能登，不用注册新账号。如果没有阿里云账号，扫码之后自动注册一个，不用填手机号不用验证邮箱。</p>
+
+<p>登录完右上角出现一个 Qoder 图标，点开，弹出一个聊天面板——恭喜，到这一步就装好了。</p>
+
+<!-- JetBrains -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 JetBrains 用户注意一个坑</p>
+
+<p>PyCharm/IDEA/GoLand 里装 Qoder 流程一样，搜插件安装→登录。但它有个跟 VS Code 版完全不同的表现：Agent 模式在 JetBrains 里执行任务时，偶尔会出现文件写入卡住的情况。表现在界面上就是——AI 说"我已经修改了 XX 文件"，打开一看，文件没变。</p>
+
+<p>我遇到的解决方式是：重新触发一次同一个任务——第二次它就能正常写了。这个不太优雅，但管用。如果介意这个体验，可以在 JetBrains 里只做代码补全，Agent 任务切到 VS Code 做。</p>
+
+<!-- 独立IDE -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 独立桌面 IDE：为什么我装了两次都卸了</p>
+
+<p>Qoder Desktop 是一个基于 VS Code fork 出来的独立 IDE，装完自带 Qoder 插件，开箱就能用。</p>
+
+<p>我卸它的原因很简单——我已经有一个配好的 VS Code 了，装了三十多个插件、自定义了快捷键、主题也调好的。再装一个单独的 IDE 等于让我重新配一遍。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 建议：</strong>如果还没装过 VS Code，或者就想搞一个专门给 AI 写代码用的"干净"环境，那 Qoder Desktop 反而是最好的选择。但如果已经有 VS Code 了，直接装插件就行。
+</p>
+
+<!-- CLI -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CLI：不是用来手敲命令玩的</p>
+
+<p>Qoder CLI 装法看官方文档就行，npm install 一下的事情。但 CLI 的定位：它不是"给喜欢命令行的开发者的另一个入口"。它是给<strong>自动化流程</strong>用的——写 CI/CD 脚本的时候，在 GitHub Actions 或者 Jenkins 里调 Qoder CLI，让 AI 自动审查代码、自动跑测试、自动生成报告。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ 日常开发别用 CLI，纯找罪受。<br>
+  <span style="color:#276749;">✅ 老老实实装插件，IDE 里看着 AI 干活比终端里看日志舒服一百倍。</span>
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 二、第一个任务 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  第一个任务：让它搞清楚项目
+</p>
+
+<p>装好之后，别急着让它修 Bug。先让它认识项目。</p>
+
+<p>打开一个项目文件夹——随便哪个，自己写的项目、github 上 clone 的、甚至一个只剩 readme 的空文件夹都行。在 Qoder 聊天框里输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  "帮我分析一下这个项目的目录结构，告诉我每个目录是干什么的。"
+</p>
+
+<p>回车。Qoder 会开始读项目文件树，逐层分析每个目录和关键文件的用途。它会生成一个总结，说明这个项目大概是干什么的、用了什么技术栈、入口文件在哪。</p>
+
+<p>这一步的意义不是"获取信息"——自己当然知道自己的项目结构。意义是<strong>让 Qoder 建立对项目的初步认知</strong>。它后面帮人修 Bug、写功能、重构代码的时候，都会基于这次分析的结果。跳过这一步直接让它干活，它不是不能干，但会干得比较笨——因为每次都要重新摸一遍目录。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一个细节：</strong>如果用的是 VS Code 版的 Qoder，右键点击项目根目录，选"Qoder → Add to Context"，能让它把整个项目结构加入对话上下文中。JetBrains 版目前没有这个右键菜单。
+</p>
+
+<p>它分析完之后，还能追加问题——"核心业务逻辑在哪个文件里""这个项目里有没有没用到的代码""哪个文件的耦合最严重"。这些追问比第一轮分析更有价值，相当于让一个刚入职的同事帮忙做了第一轮代码摸底。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 三、第一个Agent -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  第一个 Agent 任务：让它替你改一个 Bug
+</p>
+
+<p>现在来真的。</p>
+
+<p>在项目里找一个确定需要的改动——最好是那种<strong>"逻辑简单但需要改好几个文件"</strong>的活儿。这种活最适合第一次试 Agent 模式，因为：难度不高 AI 不太会出错、跨文件手动改很烦 AI 恰好擅长、改完之后能快速验证对不对。</p>
+
+<p>我的第一个 Agent 任务是：把项目里所有 import 路径从相对路径改成绝对路径（项目配了路径别名）。这个事情我自己改要 15-20 分钟——逐个文件打开、看清楚相对路径层级、算对 alias、修改、保存。烦，且容易漏。</p>
+
+<p>在 Qoder 聊天框里，先切换到 Agent 模式（聊天面板顶部有个下拉，选"Agent"），然后输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  "把 src 目录下所有文件的 import 相对路径改成 @/ 绝对路径，项目已经在 tsconfig 里配置了 @ 映射到 src。改完后不要运行代码，列出你修改了哪些文件。"
+</p>
+
+<p>回车之后能看到——Agent 面板里出现了一个"任务计划"。它不是直接改代码，而是先列几步：扫描 src 目录、确定每个 import 对应的 @/ 路径、逐个替换、列出修改清单。</p>
+
+<p>这一步要确认——点"执行"。然后它会开始一个个文件打开、替换、保存。能在编辑器里实时看到文件在变。不是那种"AI 生成了代码块复制粘贴"的感觉，是"有人在另一边键盘上帮忙改文件"的感觉。</p>
+
+<p>改了大概四十多个文件，花了不到两分钟。我检查了前五个——全对。又抽查了十个——全对。全部改完之后它给我列了一个清单，文件路径 + 修改行数 + 改动内容。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 这就省了我至少 20 分钟的纯手工劳动。</strong>不是 AI 写得比我好，是它比我快。
+</p>
+
+<p>这个任务为什么适合作为"第一个 Agent 任务"：需求明确不用 AI 猜目的、范围可控不会改炸其他代码、可验证改完搜一下相对路径看还有没有漏的。</p>
+
+<p style="background:#fdf2f2;padding:10px 14px;border-left:3px solid #e74c3c;color:#555;font-size:14px;">
+  <strong>不建议第一次就让 AI 做的：</strong>改核心业务逻辑、重构数据库 schema、跨模块改数据结构。不是说它做不了——是做完了验证起来太累，第一次体验容易变差。先用小活建立信任，熟了再交大活。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 四、常见卡住 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  常见卡住的情况和怎么绕过去
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❶ 网络"正在连接…"一直转</p>
+<p>关代理试直连。如果直连也不行——检查公司/学校网络有没有网关限制阿里云的某些端口。Qoder 用的是阿里云内网链路，部分企业网络环境会拦截。遇到这种情况切手机热点试一下，能排障。</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❷ Agent 任务执行到一半停了，提示"上下文过长"</p>
+<p>这是因为当前对话里塞了太多文件。Qoder 一个会话的上下文是有限的——把整个项目十几个文件全扔进去，聊七八轮之后必然溢出。解法：新开会话，只把当前任务相关的文件加进去。</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❸ 登录之后插件没反应</p>
+<p>VS Code 里：Ctrl+Shift+P → 输入"Qoder: Sign In" → 回车，重新触发登录。JetBrains 里：File → Settings → Tools → Qoder → Sign Out → 重新登录。</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❹ JetBrains 里 Agent 改了文件但没生效</p>
+<p>重试一次同样的任务。如果重试也不行，切到 VS Code 做 Agent 任务（JetBrains 的代码补全不受影响）。</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❺ 阿里云实名认证？</p>
+<p>Qoder 个人版免费使用不需要实名认证。只有开 Pro 版或者用 Ultimate 档位需要开通阿里云账号的付费能力。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 五、自查清单 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  装完第一次用，快速自查清单
+</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> 装 VS Code 插件「Qoder CN」（不是 Qoder）<br>
+  <span style="color:#8e44ad;">☐</span> 登录阿里云账号（微信/支付宝扫码）<br>
+  <span style="color:#4A90D9;">☐</span> 打开一个真实项目，让 Qoder 分析项目结构<br>
+  <span style="color:#8e44ad;">☐</span> 找一个"逻辑简单但跨文件"的改动，切到 Agent 模式让它做<br>
+  <span style="color:#4A90D9;">☐</span> 改完后自己验证前三个文件——别全信 AI<br>
+  <span style="color:#8e44ad;">☐</span> 记笔记：这次 AI 改得满意的点和不满意的点
+</p>
+
+<p>最后一条不是凑数。AI 编程工具就是个搭档，跟人一样——第一次合作得知道它哪里靠谱、哪里爱糊弄。以后就知道什么活给它、什么活自己做。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>装 Qoder 真正花的时间不到 15 分钟——但装完之后的第一个小时，决定了以后会不会继续用。</p>
+
+<p>我的经验：第一次别拿它做太难的事，也别做太简单的事。太难了觉得它傻，太简单了觉得它没用。找一个"自己懒得做但它做得很好"的活——比如批量改 import 路径、比如统一变量命名、比如补一个模块的单元测试。做完了会觉得：这 15 分钟装得值。</p>
+
+<p>下一篇聊真正让我决定日常用 Qoder 的原因——四个编程模式。大部分工具只给一种模式：补全。Qoder 给了四种，但说实话，我大部分时候只用一个。下一篇聊聊哪个模式值得用、哪个模式是噱头。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇：</strong>四个编程模式怎么选——Editor、Agent、Quest 2.0、专家团，逐个实测。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  AI编程工具 · Qoder 上手实战<br>
+  适用对象：想试试 AI 编程工具但怕踩坑的开发者<br>
+  本系列更多文章可在公众号合集「AI编程工具实战」中查看
+</p>
+
+</body>
+</html>

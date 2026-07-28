@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qoder 是什么？—— 从通义灵码到智能体编程平台</title>
+</head>
+
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧰 AI编程工具 · 深度拆解</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:20px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Qoder 是什么？<br>从通义灵码到智能体编程平台
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:16px;">
+  用了三年通义灵码，改名之后我终于开始认真用它了
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.7;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>我用了三年通义灵码——从它还是只有一个代码补全功能的 VS Code 插件，到后来的 Agent 模式、Quest 2.0、专家团，再到今年品牌升级改名 Qoder。说实话，前两年我没把它当回事，装在那儿，偶尔用一下，基本是个 Cursor 的备胎。但今年换名之后的几个动作，让我开始认真看它了。不是因为改了个名字，是产品方向彻底变了——从一个"帮你补代码的助手"变成了"替你干活的智能体"。这个转变，每一家 AI 编程工具都在喊，但 Qoder 是第一个把 Agent 模式做成<strong>默认入口</strong>的。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、前世今生</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、一句话说清楚</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、产品家族</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、工具对比</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、适合谁</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、好用吗</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一、前世今生 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  前世今生：通义灵码的三次进化
+</p>
+
+<p>通义灵码这名字你可能听说过，也可能没听过。它是阿里云推出的 AI 编程工具，当时就一个 VS Code 插件，功能也很简单——你写代码，它猜下一行，Tab 补全。</p>
+
+<p><strong>第一版：</strong>叫"通义灵码"，定位就是"阿里版 Copilot"。代码补全为主，模型跑的是 Qwen 早期版本。那个阶段说实话，跟 Copilot 打是打不过的——补全准确率、上下文理解、多语言支持都有差距。</p>
+
+<p><strong>第二版：</strong>开始加 Agent 模式。你说"修复这个 Bug"，它自己能定位文件、分析逻辑、改代码、跑测试。这时候已经有"工具不只是帮你写，而是帮你做"的雏形了。</p>
+
+<p><strong>第三版：</strong>直接改名叫 Qoder CN。产品家族一下炸开——不只做 IDE 插件了，独立桌面 IDE、CLI、QoderWork 办公助手、Cloud Agents 云端智能体，全出来了。也在今年 5 月正式对外开放 Ultimate 档位的免费额度。</p>
+
+<p>我真正开始日常用 Qoder，是从 Quest 2.0 模式出来之后。之前还是"偶尔打开帮个忙"，现在是"改 Bug、重构、写测试、生成 commit message"全链用它。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 说人话：</strong>如果你只是想要代码补全，Qoder 不是最好的选择。如果你想要一个能独立干活、帮你拆需求、并行写代码、自动审查的 AI 队友——那你该看看这个系列。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 二、一句话说清楚 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  一句话说清楚 Qoder 是什么
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;text-align:center;">
+  <strong>Qoder 不是一个代码补全插件。它是一个能自己拆解需求、编写代码、运行测试、提交 Pull Request 的 AI 编程智能体。</strong>
+</p>
+
+<p>这句话里的关键区别：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>代码补全工具</strong>（Copilot、Tabnine）：你在写，它猜你要写什么。主控权在你手上。<br><br>
+  <strong>对话式编程助手</strong>（Cursor Chat、ChatGPT）：你问它答，生成代码，你复制粘贴到项目里。<br><br>
+  <strong>智能体编程平台</strong>（Qoder、Claude Code、CodeBuddy）：你描述需求，它自己规划步骤、定位文件、写代码、跑测试、修 Bug、提 PR。你负责确认结果。
+</p>
+
+<p>Qoder 在第三个品类里，但它跟 Claude Code 和 CodeBuddy 走的是两种完全不同的路线。这个放到第四章细说。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 三、产品家族 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Qoder 产品家族：不只是 VS Code 插件
+</p>
+
+<p>改名后的 Qoder 已经不是一个工具了，是一个产品矩阵：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.2;">
+  <strong>Qoder IDE 插件</strong> —— VS Code / JetBrains 扩展，给所有开发者，代码补全+Agent任务+聊天对话<br>
+  <strong>Qoder Desktop</strong> —— 独立桌面 IDE，想要完整开发环境的人，编辑器+Agent+Quest+专家团<br>
+  <strong>Qoder CLI</strong> —— 命令行工具，偏命令行的开发者/CI自动化，CI流程集成+批量任务<br>
+  <strong>QoderWork</strong> —— 桌面办公助手，非程序员：职场人/自媒体/创业者，写周报/做PPT/浏览器自动化<br>
+  <strong>Cloud Agents</strong> —— 云端智能体，需要不间断后台运行的场景，长时任务/无需本地环境的Agent执行
+</p>
+
+<p>它们共享同一套阿里云账号和 Credits 积分，账号打通。</p>
+
+<p><strong>如果你是写代码的，关注前四个就够了。</strong>QoderWork 是完全另一个产品线，我刚写过一篇介绍它的文章——它能写周报做PPT操控浏览器，但不写代码。本系列只讲写代码的部分。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 四、工具对比 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  跟 Copilot / Cursor / Claude Code / CodeBuddy 的差异
+</p>
+
+<p>直接给判断。</p>
+
+<!-- Copilot -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 GitHub Copilot：代码补全依然是天花板</p>
+
+<p>Copilot 的代码补全体验，目前还没有任何一个工具追得上。它的实时预测准确率、多语言覆盖面、编辑器融合程度，都是行业最好的。</p>
+
+<p>但 Copilot 的核心能力停在"补全"。它也有 Agent 模式，但基本是个附加功能——不是设计核心。你用 Copilot 的感觉是"有个很聪明的同事在旁边提示你"，不是"有个独立的程序员在替你干活"。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  <strong>选 Copilot，如果：</strong>你主要是手写代码，需要一个又快又准的补全器。它在帮你"提速"。<br>
+  <strong>选 Qoder，如果：</strong>你更想有人替你"做"，不只是提示你。
+</p>
+
+<!-- Cursor -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Cursor：编辑器体验最好，但 Agent 不够独立</p>
+
+<p>Cursor 的 UI/UX 是顶级的。它基于 VS Code 深度定制，你感觉不到是在用插件——它就是一个自带 AI 的编辑器。但 Cursor 的 AI 能力本质上是外部模型调度的包装层。它自己的模型能力有限，核心依赖 OpenAI 和 Anthropic 的 API。</p>
+
+<p>Cursor 适合：前端开发、小项目、重视编辑器体验胜过 AI 独立工作能力的人。</p>
+
+<!-- Claude Code -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Claude Code：AI 脑力天花板，但门槛也最高</p>
+
+<p>Claude Code 是 Anthropic 官方出的命令行 AI 编程工具。没有任何图形界面，纯终端操作。它的优势是模型能力——Claude Sonnet / Opus 的推理和理解能力，目前在所有 AI 编程工具里排第一。</p>
+
+<p>但代价也很明显：纯 CLI，没有代码补全，没有文件树，没有可视化 Diff。你需要习惯"对着终端说话，Claude 在终端里回复，代码改了你看 Diff"这种工作流。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;">
+  <strong>用一句话区分 Qoder 和 Claude Code：</strong><br>
+  Claude Code 是终端里的极客神器——AI 最聪明，但你得会命令行。<br>
+  Qoder 是图形化的工作台——AI 也聪明，但你能在 IDE 里看着它干活。
+</p>
+
+<!-- CodeBuddy -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CodeBuddy（腾讯）：Skills 体系最完整</p>
+
+<p>CodeBuddy 是腾讯系的 AI 编程工具。它的核心差异化在 Skills 机制和 Automation 自动化——你可以给 AI 装"专业技能包"，让它掌握特定领域的知识和工作流，还能设定时任务自动运行。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  CodeBuddy 的 Skills 体系比 Qoder 的技能市场更成熟——生态更完整，自定义能力更强。<br>
+  Qoder 的 Agent 模式和专家团模式比 CodeBuddy 更激进——多 Agent 并行协作是 Qoder 的设计核心。<br>
+  CodeBuddy 有 CloudStudio 深度集成，Qoder 有阿里云生态深度绑定。
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  <strong>选 CodeBuddy，如果：</strong>你重视 Skills 可定制性和自动化工作流，且用的是腾讯云生态。<br>
+  <strong>选 Qoder，如果：</strong>你更看重 Agent 自主工作能力、多模型灵活切换，且用的是阿里云生态。
+</p>
+
+<!-- 我的实际情况 -->
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 我的实际情况</p>
+
+<p>我现在是 Qoder + Claude Code 混用。日常开发用 Qoder（Agent 模式改 Bug、Quest 2.0 做新功能），遇到特别复杂的重构或架构问题时切到 Claude Code（因为 Claude 的模型深度确实更强）。Copilot 我留着——只用来做代码补全，不做 Agent 任务。</p>
+
+<p>这不是"最好"的方案，是我自己磨合下来的。每个人的情况不一样，别照抄。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 五、谁适合 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  谁适合用 Qoder，谁先别装
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">✅ 真的该试试，如果：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  你日常用 VS Code 或 JetBrains，想试试 Agent 模式替你干活的效率<br>
+  你手上有需要改 Bug、重构、写测试的代码，想找人"替你做"<br>
+  你带一个小团队或自己一个人干全栈，想用专家团模式并行协作<br>
+  你已经在阿里云生态里，生态联动有加成<br>
+  你对纯命令行工具有恐惧，想要图形化界面
+</p>
+
+<p style="font-size:15px;font-weight:700;color:#e74c3c;margin:16px 0 8px 0;">❌ 先别急着装，如果：</p>
+
+<p style="background:#fdf2f2;padding:10px 14px;border-left:3px solid #e74c3c;color:#555;font-size:14px;line-height:2.1;">
+  你只需要代码补全，不需要 Agent 干活——Copilot 的补全体验目前最好<br>
+  你习惯了 Claude Code 的纯终端工作流，不想切回图形化<br>
+  你的项目需要极高复杂度的跨文件深度推理——Claude Code 的模型能力目前还领先<br>
+  你主要写前端、小脚本——Qoder 的 Quest 2.0 和专家团在这种场景下的优势不明显<br>
+  你是腾讯云的重度用户——CodeBuddy 的云生态集成比 Qoder 更顺手
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 六、好用吗 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  Qoder 好用吗
+</p>
+
+<p>说实话，Qoder 不是最好的 AI 编程工具——但它现在是我用的最多的。</p>
+
+<p>不是因为它某一项能力碾压对手。是因为它在"让 AI 替你干活"这个方向上做得最彻底。Agent 模式不是附加功能，是核心入口；Quest 2.0 不是实验性特性，是真实可用的流程；专家团不是噱头，是真的可以并行跑。</p>
+
+<p>但它也有让我不太舒服的地方：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:2.1;">
+  <strong>阿里云生态绑定。</strong>如果你不在阿里云生态里，很多深度集成你享受不到。这跟 CodeBuddy 的腾讯云绑定是一个性质——大厂做 AI 工具，本质上是卖云服务的入口。<br><br>
+  <strong>国内直连偶尔抽风。</strong>不是每次都抽，但高峰期确实会慢。挂个代理能解决，但多一步操作。<br><br>
+  <strong>改名太多。</strong>通义灵码→Qoder CN，以后还会不会改？我不知道。这种不确定性让人不太想把所有工作流押在一个品牌上。
+</p>
+
+<p>但说回来——这些不舒服是"细碎的不爽"，不是"方向性错误"。Qoder 的产品方向是对的，剩下的只是工程问题。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这篇文章是 Qoder 系列的开篇。后面我们会一个一个拆：安装与第一次对话、四个编程模式怎么选、Repowiki 怎么让 AI 看懂你的项目、Quest 2.0 从需求到 PR 的完整工作流。</p>
+
+<p>如果你现在就想试，<strong>Qoder 个人版是免费的，新用户有 300 Credits 试用额度，还有 200 次 Ultimate 档位的免费调用。</strong>不用绑卡、不用订阅，装了就能试。</p>
+
+<p>别指望它一步到位解决你所有的开发问题——它不是那种"装了就爽"的工具。但它是一个值得认真了解的、方向对的产品。花半小时装一下、试一个 Agent 任务，你会有自己的判断。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇：</strong>安装与第一次对话——从下载到让它帮你修第一个 Bug，带图演示。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  AI编程工具 · Qoder 深度拆解<br>
+  适用对象：开发者、技术团队负责人、想了解 AI 编程工具的人<br>
+  本系列更多文章可在公众号合集「AI编程工具实战」中查看
+</p>
+
+</body>
+</html>

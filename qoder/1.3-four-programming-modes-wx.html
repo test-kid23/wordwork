@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qoder四个模式我全试了，真正天天在用的其实就一个</title>
+</head>
+
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧰 AI编程工具 · 深度实测</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:20px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Qoder 四个模式我全试了<br>真正天天在用的其实就一个
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:16px;">
+  Editor、Agent、Quest 2.0、专家团——逐个实测，附速查表
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:12px 14px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.7;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>上一篇我们装好了 Qoder，让它干了第一个活。但可能注意到了——Qoder 聊天框顶上有个下拉菜单，里面有四个选项：Editor、Agent、Quest 2.0、专家团。这四个模式我都用了快一个月，说一个可能不信的结论：<strong>80% 的活，一个 Agent 模式就够了。</strong>不是我懒，是另外三个模式要么太基础（比不过 Copilot），要么太重（日常用会拖慢节奏），要么太鸡肋（演示炫但实际场景少）。今天这篇把四个模式都拆一遍——不是功能介绍文档那种拆法，是每个模式我实际怎么用的、什么场景用、什么时候别用。最后给一个选择速查表，看一眼就知道当前任务该点哪个。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、Editor</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、Agent</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、Quest 2.0</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、专家团</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、速查表</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、结论</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一、Editor -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  Editor 模式：代码补全的及格线
+</p>
+
+<p>Editor 模式就是最传统的 AI 代码补全——写代码，它猜下一行，Tab 键应用。能力包括：行内补全、函数级补全、注释转代码。</p>
+
+<p>这模式最常用的场景很简单——写重复性代码。比如声明五个类似的 API 端点、初始化七八个同结构的对象、写一串 if-else 判断。写了第一个，后面四个 AI 敲，只需按 Tab。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 跟 Copilot 比，差半档</p>
+
+<p>直接说：差半档。Copilot 的补全准确率和响应速度在行业里还是天花板。Qoder 的补全不算差，但偶尔会有两种情况：一是预测出来的代码跟上下文语义对不上（Copilot 也偶尔犯，但 Qoder 频率高一点）；二是长代码块的补全有时候"断崖式中断"——它补了一段之后突然停了。</p>
+
+<p>这两个不是致命问题，如果没怎么用过 Copilot，会觉得 Qoder 的补全已经挺爽了。但如果像我一样先用了两年 Copilot 再切到 Qoder，会明显感觉到那半档差距。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  <strong>我的使用策略：</strong>Editor 模式我常开。不是因为它比 Copilot 好，因为我不想同时开两个 AI 插件——两个 Agent 在后台抢上下文，编辑器会变卡。Qoder 的 Editor 模式够日常用，差的那半档不值得我再装一个 Copilot 来补。但如果对补全体验特别敏感——每敲一行代码都期望 AI 猜对——那别用 Qoder 的 Editor 模式，继续用 Copilot 做补全，Qoder 只开 Agent 模式干活。
+</p>
+
+<p style="background:#fdf2f2;padding:10px 14px;border-left:3px solid #e74c3c;color:#555;font-size:14px;">
+  <strong>这个模式别用来干什么：</strong><br>
+  ❌ 别用它写核心算法——预测补全本质是"猜接下来写什么"，不是"理解要解决什么问题"<br>
+  ❌ 别在 Editor 模式里用大段注释驱动开发——同样的注释放 Agent 模式里效果会好很多
+</p>
+
+<p>Editor 模式跟 Agent 模式的区别打个比喻——Editor 是打字员帮忙按键盘，Agent 是程序员替人写代码。缺打字员的时候就开 Editor，但大部分时候缺的是程序员。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 二、Agent -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  Agent 模式：甜点区
+</p>
+
+<p>Agent 模式是 Qoder 的杀手级能力，也是我用得最多的模式。</p>
+
+<p>它的工作方式跟 Editor 完全不同——不是写一行它补一行，是<strong>说一个需求，它自己拆、自己找文件、自己写代码、自己验证</strong>。</p>
+
+<p>具体流程：描述需求 → Agent 扫描项目找到相关代码 → 生成执行计划 → 确认计划 → Agent 逐个执行 → 给改动清单。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Agent 模式适合干什么？三类活</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  <strong>第一类：必须跨多个文件的改动。</strong>比如"把所有 API 错误处理统一改成抛 BusinessException"。可能知道怎么改，但得打开 20 个文件一个一个改——Agent 模式能替人做这个纯体力劳动。<br><br>
+  <strong>第二类：知道目标但不想算步骤的任务。</strong>比如"在购物车模块里加一个库存预占的逻辑，下单时预占库存，支付失败时释放"。目标很清楚，但中间涉及到好几个 service、几个 dao、一个事务处理——拆步骤也得花时间，不如让 AI 拆。<br><br>
+  <strong>第三类：不想干的脏活。</strong>写单元测试是最典型的。核心业务代码写好了，知道应该写测试，但就是不想写。那就扔给 Agent 模式，它几分钟补完。（当然得自己检查一遍逻辑——AI 写的测试用例质量参差不齐。）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#e74c3c;margin:16px 0 8px 0;">📌 Agent 模式不适合干什么？</p>
+
+<p style="background:#fdf2f2;padding:10px 14px;border-left:3px solid #e74c3c;color:#555;font-size:14px;line-height:2.1;">
+  <strong>别让它做需要深度架构判断的事。</strong>比如"把整个项目从 Express 迁移到 Fastify"——这种架构级别的大改，Agent 模式的计划是有概率跑偏的。这种大活建议用 Quest 2.0，或者——说实话——用 Claude Code 更好。<br><br>
+  <strong>别在 Agent 模式里给模糊需求。</strong>"优化一下这个模块的性能"——这种需求 Agent 一定会给东西，但给的十有八九不是想要的。Agent 模式吃的是明确需求，模糊需求喂进去产出物的质量像开盲盒。
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 真实效率数据：</strong>我用 Agent 模式改 Bug，从一个 Bug 被分配到修复完提 PR，平均快了大概 40-60%。核心原因是 Agent 模式帮我省掉了"找到相关文件→理解相关逻辑→回忆历史改动"这个前置阶段。这个阶段自己干要 15-30 分钟，Agent 干只要 1-2 分钟。但改完之后的验证时间是一样的——该人工看的地方一样得看。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 三、Quest 2.0 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Quest 2.0 模式：大活专用
+</p>
+
+<p>Quest 2.0 是 Qoder 去年底推的重磅功能，定位是做"端到端功能交付"——对它说"给这个 App 加一个用户积分系统"，它从需求分析到写代码到写测试到部署，全链走一遍。</p>
+
+<p>Quest 跟 Agent 的核心区别在于<strong>规划深度</strong>：Agent 模式给具体任务，拆成 3-5 个步骤执行；Quest 2.0 给模糊需求，拆成详细的子任务，每个子任务确认后逐个执行。</p>
+
+<p>Quest 在执行之前会先生成一份"任务计划书"，里面包含：需求拆解、技术方案、实现步骤、测试策略。可以在这个阶段修改计划。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实际用了三次，效果落差非常明显</p>
+
+<p><strong>第一次：</strong>让它给一个 NestJS 后端项目加完整的用户权限模块（RBAC）。它生成了一个相当详细的计划——全链路。我调整了两个步骤后确认，它执行了大概 40 分钟，写了两三百行代码。质量出乎意料的好——接口设计合理、异常处理到位、连 Swagger 文档注解都写上了。</p>
+
+<p><strong>第二次：</strong>让它把一个 React 前端的表单模块做国际化改造。它生成的计划有点问题——它把提取翻译文案和替换组件分成两个独立的阶段。我让它调整计划，改完之后执行还算顺利。</p>
+
+<p><strong>第三次：</strong>让它给一个 Python 数据分析项目加可视化面板。这次体验不好——它的计划太"重"了。它规划了几百行的前端代码、后端 API、数据处理管道，但我的实际需求就是一个简单的图表页面。最后我自己用 Agent 模式手动分了几个小任务做完了。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  <strong>该用 Quest 的场景：</strong><br>
+  有一个"完整功能模块"要从零开始做（加用户积分、做消息推送）<br>
+  自己也需要一个方案文档来跟别人对齐（Quest 那个任务计划书就是天然的对齐文档）<br>
+  任务涉及 3 个以上的模块或服务，算步数都容易漏<br><br>
+  <strong>别用 Quest 的场景：</strong><br>
+  Bug 修复、小重构、补测试——这些用 Agent 模式就够了<br>
+  轻量级需求——Quest 会把它规划成一个大工程<br>
+  对技术方案已经有明确想法——直接用 Agent 模式分步来更快
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Quest 2.0 的一个坑</p>
+
+<p>Quest 在执行过程中<strong>不能中断它修改它正在执行的步骤</strong>。它执行到第 3 步的时候发现第 3 步的方案有问题，不能当场改——只能等它执行完第 3 步，然后再让它修改。这对工作节奏影响挺大的。Agent 模式可以随时打断、纠正、重来。Quest 模式就像上了高速——得等到下一个出口才能下来。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一个偷懒做法：</strong>如果我不确定一个需求该用 Agent 还是 Quest，我就先用 Agent 模式试——描述需求让它干。如果它生成的计划太小或太浅，我再切到 Quest 重来。宁可先轻后重，不要一上来就用 Quest。Quest 起步的成本（生成计划+审核+调整计划）本身就要 5-10 分钟，小需求不值得。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 四、专家团 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  专家团模式：炫技大于实用
+</p>
+
+<p>专家团模式是 Qoder 最"炸"的功能——点一下按钮，Qoder 自动组建一支 AI 专家团队，每个人分工不同：前端 Agent、后端 Agent、数据库 Agent、测试 Agent。它们并行分析需求，各自负责自己那块，最后把结果合成。</p>
+
+<p>听起来爽，演示视频也爽。实际用起来——说实话，不够成熟。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景一：全栈项目功能开发</p>
+
+<p>让专家团做一个"完整的商品搜索功能"。专家团开始分工，前 25 分钟一切正常——代码质量可以，并行确实比单人快。但到合并阶段，两个 Agent 改了同一个配置文件，合并时改动撞上了——AI 提示"冲突需要人工解决"。</p>
+
+<p>这就很尴尬了。开专家团的目的是省事，结果还得自己下场解决冲突。而且解决完之后不知道该告诉哪个 Agent 保留、哪个 Agent 丢弃——专家团没有冲突仲裁机制。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景二：Code Review</p>
+
+<p>这个场景专家团表现好一些。让三位专家（前端、后端、测试）各自从不同角度审查同一段代码，给出的审查意见分别标注了角度，质量挺高。但说实话——让同一个 Agent 模式做三次，每次给不同的审查角度，效果差不多。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景三：多语言国际化改造</p>
+
+<p>翻译 Agent 会直接修改 i18n 文案表达方式，跟前端 Agent 理解的 key 不完全对齐，导致了几个文案对应不上的情况。根本原因是不同 Agent 对业务概念的理解不在同一条线上。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  <strong>什么场景能用它：</strong><br>
+  Code Review（没有文件冲突风险，各审各的）<br>
+  前后端分离项目（前端 Agent 和后端 Agent 碰的文件天然不同，冲突概率低）<br><br>
+  <strong>什么场景别用：</strong><br>
+  单一 repo 全栈项目（多个 Agent 改同一组文件，冲突概率高且没有好的解决机制）<br>
+  需求不明确的探索性开发（还在摸索方向，三个 Agent 同时摸索只会更乱）<br>
+  任何有 Deadline 的活（专家团冲突 + 调试冲突的时间成本不可控）
+</p>
+
+<p>不是我泼冷水，是让人管理好预期。别第一次开 Qoder 就点专家团——会被 Demo 视频拉高的预期揍得满地找牙。从 Editor 慢慢过渡到 Agent，Agent 用熟了，偶尔用 Quest 做几个大需求，顺手了再试专家团。</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 五、速查表 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  四种模式速查表
+</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <strong>写重复代码、声明、初始化</strong> → <span style="color:#4A90D9;font-weight:700;">Editor</span> | 轻量最快，Tab 按到底<br><br>
+  <strong>改 Bug、小重构、补测试、代码分析</strong> → <span style="color:#4A90D9;font-weight:700;">Agent</span> | <strong>80% 的活都在这</strong><br><br>
+  <strong>从零做一个完整功能模块（3+ 模块）</strong> → <span style="color:#8e44ad;font-weight:700;">Quest 2.0</span> | 需要完整规划和方案对齐<br><br>
+  <strong>Code Review（多人角度）</strong> → <span style="color:#8e44ad;font-weight:700;">专家团</span> | 无冲突风险，各审各的<br><br>
+  <strong>需求模糊的探索</strong> → <span style="color:#4A90D9;font-weight:700;">Agent</span>（先试试） | 别一上来就重武器<br><br>
+  <strong>关键业务逻辑</strong> → <span style="color:#333;font-weight:700;">自己写</span> | AI 辅助理解需求，核心逻辑自己控制<br><br>
+  <strong>架构级大重构</strong> → <span style="color:#333;font-weight:700;">Claude Code</span>（别用 Qoder） | Claude 脑力目前更强
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>💡 一个反直觉的事实：</strong>最强的模式（专家团）不一定是日常用得最多的模式，用得最多的模式（Agent）才是对效率提升最大的。
+</p>
+
+<!-- 细分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<!-- 六、结论 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  到底哪个模式值得用
+</p>
+
+<p>Qoder 给四种模式起的名字挺唬人的——Quest、专家团，听起来像打游戏组队刷副本。但我用了快一个月，真正天天按的只有 Agent。不是另外三个没用，是日常开发的主力需求——改 Bug、加小功能、写测试、看代码——Agent 模式完美覆盖。</p>
+
+<p>如果让我对阿里云的产品经理说一句话：别急着往上堆"专家团"这种 Next-Level 功能了，先把 Agent 模式的文件冲突解决、上下文管理、长任务断点续做这些基础体验打磨好。一个 Agent 稳定好用，比三个 Agent 跑一半撞车更有价值。</p>
+
+<p>但话说回来——Qoder 的演进速度确实快，去年这个时候还在讲代码补全，今年已经在玩多智能体协作了。如果按这个速度迭代下去，半年后的专家团可能会好用很多。现在这个版本我先不用它做主力。</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>把 Qoder 四个模式的本质浓缩成一句话：<strong>Editor 是打字员，Agent 是程序员，Quest 是项目助理，专家团是临时团队。</strong>日常开发大部分时候需要一个程序员，不是一个临时团队。</p>
+
+<p>下一篇我们开始聊 Qoder 真能让人上头的功能——Repowiki。它自动分析项目结构、生成架构文档，之后跟 AI 的每一次对话它都知道项目上下文。我用了这个之后才觉得 AI 真在"理解"我的代码，而不只是"扫描"我的代码。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇：</strong>Repowiki 深度拆解——让 AI 真看懂你的项目，不再是盲人摸象。
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  AI编程工具 · Qoder 深度实测<br>
+  适用对象：Qoder 用户、想选对编程模式的开发者<br>
+  本系列更多文章可在公众号合集「AI编程工具实战」中查看
+</p>
+
+</body>
+</html>
