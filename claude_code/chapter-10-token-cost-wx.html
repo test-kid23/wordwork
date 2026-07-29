@@ -1,0 +1,327 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  用 Claude Code 一个月烧 $87？<br>实测 6 种省钱方法，降到 $12
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  不是让你少用 AI。是用同样多的任务，花更少的钱。省下的不只是 API 费用——你省下的 context window 空间，还能拿去塞更多有效上下文。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>Claude Code 按 token 计费，一个没注意，一个中等复杂度的开发任务就能烧掉几美元。一个月下来，账单可能比你的午饭钱还多。<br><br>但有意思的是：<strong>高消费不等于高产出的任务。</strong>很多时候你多花的 token，是因为你的 prompt 太长、文件给它太多、或者忘了清上下文。这篇文章用真实数字，把每一分钱花在哪、怎么省回来，讲清楚。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、你的钱都花在哪了</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、压缩上下文</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、选对模型</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、长对话续接</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、按需加载策略</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、成本对照表</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、你的钱都花在哪了 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  你的钱都花在哪了
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Token 是怎么烧掉的</p>
+
+<p>Claude Code 每轮交互的 token 消耗 = 输入 token + 输出 token。输入远比输出贵——大概 3:1 的价格比。</p>
+
+<p>输入 token 包括：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  你的 prompt<br>
+  <strong>CLAUDE.md</strong> 的内容<br>
+  <strong>它自己读的文件</strong>（你每次说"分析这个文件"，它就多读一段）<br>
+  <strong>对话历史</strong>（之前的所有交流，每轮都要重新发一遍）<br>
+  <strong>工具调用的结果</strong>（跑命令的输出、读文件的返回）
+</p>
+
+<p>输出 token 包括：它的文本回复、它生成的代码。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个典型任务的 token 消耗</p>
+
+<p>以"在用户列表加导出功能"为例：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>你的 prompt：</strong>~150 tokens<br>
+  <strong>CLAUDE.md：</strong>~400 tokens<br>
+  <strong>读文件（3 个文件）：</strong>~3000 tokens<br>
+  <strong>跑命令（npm test）：</strong>~800 tokens<br>
+  <strong>对话历史（前 2 轮）：</strong>~2500 tokens<br>
+  <strong>本轮输入总计：~6850 tokens</strong><br>
+  <strong>输出（代码 + 解释）：</strong>~2000 tokens<br>
+  <strong>本轮总计：~8850 tokens ≈ $0.13（Claude Sonnet）</strong>
+</p>
+
+<p>这个数字看起来不大。但这是<strong>一轮</strong>。完成整个功能可能要 8-12 轮。再加上测试修复、前端实现——轻轻松松 10 万 token。</p>
+
+<p>折算成钱：一个中等功能，用 Sonnet，大概 $1.5-$3。如果用了 Opus，翻 5-8 倍。</p>
+
+<p>一月 20 个工作日，每天做 2-3 个这样的交互——保底 $60-$150。如果你还开了 <strong>/goal</strong> 没加 turn 上限让它跑了一夜——那就是另一回事了。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、压缩上下文 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  压缩上下文：不必要的东西别喂给它
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一条铁律：别让它读不必要的文件</p>
+
+<p>你可能会觉得"让 Claude Code 多读点背景信息，效果更好"。</p>
+
+<p><strong>不是。</strong>上下文越多 → 推理越慢 → 输出质量实际上可能下降 → 你的钱照样烧。</p>
+
+<p>每次你让它读文件，先问自己：它对完成这个具体任务真的有用吗？</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  ❌ "帮我修用户列表的样式，顺便把整个项目的组件结构分析一下。"——前半句就够了，后半句多读了 20 个文件。
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  ✅ "帮我修 UserList.tsx 的样式，当前用的 Ant Design Table 组件，列定义在 UserColumns.tsx 里。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第二条：清空对话</p>
+
+<p>长对话的 token 消耗是指数级的——因为每轮都要把之前所有轮次的对话重新发给模型。</p>
+
+<p>如果你做了一个分析（比如"分析这个项目结构"），接下来要做开发（比如"改这个功能"），分析的内容对你的开发任务有用吗？大概率没有。但你如果不刷新对话，那段分析会一直在上下文里占着位置、烧着钱。</p>
+
+<p><strong>什么时候该刷新对话：</strong></p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">完成了一个独立任务，要开始新任务</span>
+</p>
+<p>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:11px;padding:2px 8px;border-radius:8px;">对话超过 15 轮</span>
+</p>
+<p>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:11px;padding:2px 8px;border-radius:8px;">发现它开始"忘记"你最早说的要求了</span>
+</p>
+
+<p>刷新之前把关键结论复制出来。比如它给你分析的项目结构、它列的待办清单——这些是"成果"，值得保留。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第三条：用 .claudeignore</p>
+
+<p>有些文件 Claude Code 永远不该读：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  node_modules/<br>
+  dist/<br>
+  build/<br>
+  *.min.js<br>
+  *.lock<br>
+  package-lock.json<br>
+  coverage/<br>
+  .git/<br>
+  *.png *.jpg *.svg *.woff2
+</p>
+
+<p>这些文件要么太大（node_modules 动不动几万行），要么对理解代码无意义（build 产物、图片），要么只是元数据（lockfile）。把筛子装上去，Claude Code 的"视野"就更专注——也更省钱。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、选对模型 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  选对模型：不是所有任务都要 Claude
+</p>
+
+<p>Claude Code 支持多个模型。默认是 Sonnet——性价比最高的。但你可以在 <strong>/config</strong> 里切换。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 各模型的适用场景</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Haiku：最便宜</strong> — 简单格式转换、变量改名、commit message 生成、代码注释。不擅长复杂逻辑推理、多文件联动。<br><br>
+  <strong>Sonnet：中等（默认）</strong> — 日常开发的主力模型。写功能、改 Bug、Review。不擅长超大上下文推理。<br><br>
+  <strong>Opus：最贵</strong> — 超大项目架构推理、复杂重构、需要深度理解的任务。不要天天日常使用。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 实战省钱技巧</p>
+
+<p>不要每一个对话都用 Sonnet。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "把这个接口的 3 个字段从 camelCase 改成 snake_case。全项目搜索引用，所有调用点一起改。"
+</p>
+
+<p>这是纯体力活。Haiku 就够了。一行命令的事，用 Sonnet 多花 3 倍钱。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "分析一下这个支付模块的设计是否合理。它目前有 15 个文件，涉及退款、回调、重复支付检测。列出架构上的问题和改进建议。"
+</p>
+
+<p>这是需要深度理解的推理任务。用 Sonnet 或 Opus——省了这个钱，结果质量会打折。</p>
+
+<p>在指令里加上 <strong>--model haiku</strong> 就行：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # 简单任务用便宜的<br>
+  claude --model haiku "把所有 console.log 注释放到 src/utils/logger.ts 里统一管理"<br><br>
+  # 复杂任务用默认的<br>
+  claude "重构 src/services/order.ts 的退款逻辑，简化状态机"
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、长对话续接 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  长对话的续接：断了不丢上下文
+</p>
+
+<p>你正在做一个重构，对话已经进行了 10 轮。上下文里积累了大量的分析——项目结构、问题定位、改了什么。但 token 快用完了，再对话下去效果会变差。</p>
+
+<p>直接刷新对话 → 前功尽弃，Claude Code 不记得你前面做了什么。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 方案：手动续接</p>
+
+<p>在第 10 轮左右，让 Claude Code 做一次"状态转储"：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "把到目前为止的分析结果、改动的文件清单、下一步要做什么——整理成一段上下文摘要。我下一个对话会从这段摘要开始。"
+</p>
+
+<p>它会给你类似：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>已分析</strong><br>
+  - 支付模块架构：路由 → 服务层 → 数据库三层<br>
+  - 主要问题：退款逻辑散落在 4 个文件里，状态机不清晰<br><br>
+  <strong>已改动</strong><br>
+  - src/services/order.ts — 简化了 createOrder 函数<br>
+  - src/api/orders.ts — 添加了参数校验中间件<br><br>
+  <strong>待完成</strong><br>
+  - 统一退款逻辑到 refund.service.ts<br>
+  - 补充退款的状态机图<br>
+  - 跑全量测试
+</p>
+
+<p>新建一个对话，把这段摘要粘进去作为开头，然后继续：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "以下是上一个对话的上下文摘要：[粘进去]。继续做第三点：统一退款逻辑到 refund.service.ts。先分析目前退款逻辑在哪些文件里，然后合并。"
+</p>
+
+<p><strong>上下文续接了，但历史包袱甩掉了。</strong>token 账户从零开始，效率拉满。</p>
+
+<p>Claude Code 也有内置的 <strong>/compact</strong> 命令，会把对话历史压缩成摘要。但手动转储的好处是你能控制保留什么——关键细节不会丢。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、大项目按需加载 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  大项目的"按需加载"策略
+</p>
+
+<p>Claude Code 不是代码搜索引擎。它是一个需要<strong>有限、高质量上下文</strong>才能发挥最好的推理引擎。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一步：建立索引</p>
+
+<p>先做一次全局扫描，生成一个"项目地图"。这个过程只做一次，不要每次请求都重复。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "扫描 src/ 下所有文件，生成一份索引清单。格式：文件路径 + 一句话职责说明。不要读文件内容，只根据命名、导入导出和注释快速判断。输出为 markdown 列表。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第二步：按需深入</p>
+
+<p>知道"地图"长什么样之后，每次只让它读跟当前任务相关的文件。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "根据你之前生成的索引，订单退款功能涉及 src/services/order.ts, src/services/refund.ts, src/routes/orders.ts。<strong>只读这三个文件</strong>，分析退款逻辑。"
+</p>
+
+<p>关键：<strong>"只读这三个文件"</strong>——不写这一句，它可能把相关目录全扫一遍。省了 80% 的上下文。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第三步：复用分析结果</p>
+
+<p>分析完项目结构之后，把结果存下来。下次同类任务直接引用，不用重新分析。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "根据 CLAUDE_ARCHITECTURE.md 里的架构说明（你已经分析过了），在 src/services/ 下新增一个导出服务。"
+</p>
+
+<p>这三步走完，一个 15 万行的项目，每次交互只加载几百行的相关代码。Token 消耗从"读整个项目"降到"读当前模块"。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 六、成本对照表 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  成本对照表：同样任务，优化前后差多少
+</p>
+
+<p>以一个月 20 个工作日、每天 3 个中等复杂度开发任务为基准：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>简单任务用 Haiku（占比 ~30%）：</strong>省 ~$15<br><br>
+  <strong>不读不必要的文件（每次少 2000 token）：</strong>$90 → $72，省 ~$18<br><br>
+  <strong>及时刷新/续接对话：</strong>$90 → $68，省 ~$22<br><br>
+  <strong>.claudeignore 排除 node_modules 等：</strong>省 ~$5<br><br>
+  <strong>大项目按需加载（10 万行级项目）：</strong>$150 → $65，省 ~$85<br><br>
+  <strong>综合优化（大项目）：$150 → $45，省 $105</strong><br>
+  <strong>综合优化（小中型项目）：$87 → $28，省 $59</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 三个不值得省的 token</p>
+
+<p>说完了怎么省钱，也要说说<strong>哪些钱不该省</strong>：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> CLAUDE.md 的内容不要缩水</strong><br>这是你的"项目知识库"，省这几百 token 会让每一轮交互的质量下降。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 关键约束条件不要省略</strong><br>"不改 test 文件"、"不引入新依赖"这种约束省了，后面返工的代价远大于这几个 token。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 安全相关的审查不要省</strong><br>AI Review 找出的安全漏洞，值回几万倍的 API 费用。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>写这篇文章的时候我算了一下：按照优化后的策略，加上日常的 token 管理习惯，Claude Code 的月度 API 成本大概是一顿火锅的钱。</p>
+
+<p>但优化 token 的真正意义不只是省钱。是<strong>context window 更干净 → 输出质量更高 → 返工更少 → 工作更快 → 你更少被卡住</strong>。</p>
+
+<p>Token 管理和代码质量，在这个工具的逻辑里，是同一条线上的事。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下篇预告：Claude 不是万能的——多模型流水线让便宜模型干体力活、Claude 做高价值推理</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · Token 管理<br>适用对象：看到 API 账单皱眉头的人 / 大项目里觉得 Claude Code "越用越笨"的人 / 想在公司推广但被成本卡住的 Tech Lead<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>
