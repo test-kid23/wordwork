@@ -1,0 +1,328 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  你自己写的脚本能直接喂给 AI 当工具？<br>Claude Code 插件系统让 GPT 程序员变架构师
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  Claude Code 支持自定义 hooks 和 slash commands。写一段 python 脚本，配个 JSON，它就能调用你的"专属工具"。从此 Claude 不再是只会写代码——它有了你自己的武器库。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>跟 Claude Code 对话了两个星期之后，你可能会有一个念头："如果它能直接查我的 Jira 任务呢？""如果它能自己写 Kafka 消息来触发部署呢？""如果它能调用我们公司的 eslint 规则来审核规范呢？"<br><br>这些都不是 Claude Code 内置的能力。但它的插件系统可以让这些事成为现实。<strong>用你自己写的工具，扩展 Claude 能做的事情。</strong>这篇不做抽象介绍——直接看怎么配、怎么写、怎么用。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、hooks 机制</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、slash command</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、写第一个插件</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、实用插件示例</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、团队共享</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、hooks ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  hooks 机制：什么时候触发你的代码
+</p>
+
+<p>Claude Code 的 hooks 是在 AI 的"生命周期事件"上执行你指定的命令。跟 Git hooks 一个逻辑。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 可用的事件</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>PreToolUse：</strong>工具调用之前触发 — 可以拦截、验证、阻止<br>
+  <strong>PostToolUse：</strong>工具调用之后触发 — 可以记录、校验结果<br>
+  <strong>Notification：</strong>AI 发消息时触发 — 可以做格式化、翻译<br>
+  <strong>Stop：</strong>对话停止时触发 — 可以做清理、保存日志<br>
+  <strong>UserPromptSubmit：</strong>你提交消息时触发 — 可以自动注入上下文
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 配置文件位置</p>
+
+<p>两种配置方式：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>全局配置：</strong>~/.claude/settings.json<br>
+  <strong>项目配置：</strong>项目根目录/.claude/settings.json（优先级更高）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 最简单的一个 hook</p>
+
+<p>在每次文件被写入之后，自动跑 lint：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+{<br>
+&nbsp;&nbsp;"hooks": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"PostToolUse": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matcher": "Write|Edit",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"hooks": [{"type": "command", "command": "npx eslint --fix $CLAUDE_PROJECT_DIR"}]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;}<br>
+}
+</p>
+
+<p>这段配置的意思是：当 Claude 使用 Write 或 Edit 工具修改了文件之后，自动跑 eslint --fix。写完代码 → 自动格式化 → 你少一次手动操作。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 hook 可以用来做这三件事</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 质量把关</strong> — 每次写入后自动跑 lint、format、test——保证 AI 生成的代码符合团队规范。你不需要每次手动检查。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 安全审计</strong> — 拦截包含特定模式的代码。如果 AI 想写 process.env.SECRET 到日志里——PreToolUse hook 可以拒绝。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 上下文注入</strong> — UserPromptSubmit 时自动往里面加"当前时间 → 2025-07-29 14:30"。这样 Claude 知道你什么时候在用它。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、slash command ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  自定义 slash command：写你自己的 / 扩展
+</p>
+
+<p>除了 hooks，你还可以写自定义的 <strong>slash command</strong>——让你在对话窗口里直接调自己的工具。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 结构</p>
+
+<p>一个 slash command 是 .claude/commands/ 目录下的一个 <strong>markdown 文件</strong>。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  .claude/commands/<br>
+  ├── deploy.md<br>
+  ├── review.md<br>
+  └── test-coverage.md
+</p>
+
+<p>文件内容就是一段 prompt——但它可以引用上一个对话上下文、项目文件、甚至环境命令。</p>
+
+<p>举个最简单的 /review 命令：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # review.md<br><br>
+  对最近改动的文件做一轮 Code Review。<br>
+  规则：<br>
+  - 检查循环复杂度和函数长度<br>
+  - 列出可能被忽略的 edge case<br>
+  - 如果有 console.log 或测试代码没清理掉，标出来<br>
+  - 输出一个 1-10 的改动信心分，低于 6 分的地方单独列出
+</p>
+
+<p>然后对话里输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /review
+</p>
+
+<p>Claude 会自动加载 review.md 的内容作为 prompt 执行。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 传参数</p>
+
+<p>slash command 还可以传参数。在 markdown 里用 <strong>$ARGUMENTS</strong> 或 <strong>$1, $2</strong> 来接收：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # jira.md<br><br>
+  用以下 Jira ticket 信息创建一个分支：<br>
+  - Ticket ID: $1<br>
+  - Title: $2<br><br>
+  用 ID 和标题生成 branch name，格式为 feature/TICKET_ID-description
+</p>
+
+<p>使用：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /jira PAY-421 "修复退款流程的状态机 bug"
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、第一个插件 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  手把手写第一个插件
+</p>
+
+<p>写一个 <strong>/changelog</strong> 命令，自动从 git log 生成 changelog。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第一步：写 markdown prompt</p>
+
+<p>创建 .claude/commands/changelog.md：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # changelog.md<br><br>
+  请先执行这个命令来获取 git log：<br>
+  git --no-pager log $1..HEAD --oneline --no-merges<br><br>
+  然后根据 git log 结果，生成 changelog。<br>
+  <br>
+  规则：<br>
+  - 按类型分组（feat, fix, refactor, docs）<br>
+  - 每个 entry 一行<br>
+  - 格式：- [feat] xxx @作者<br>
+  - 最后输出一个"上次 tag 到现在的改动简要"<br>
+  - 不要猜测——没有在 git log 里出现的内容不要加
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第二步：用它</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /changelog v1.2.0
+</p>
+
+<p>Claude Code 会执行 git log v1.2.0..HEAD，拿到输出后按你定义的规则整理成 changelog。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 为什么要用插件</p>
+
+<p>两个关键的好处：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>1. 标准化：</strong>团队的 changelog 格式统一。不是你靠嘴说"帮我生成 changelog"——每次格式不一样。现在用 /changelog，格式永远统一。<br><br>
+  <strong>2. 减少重复：</strong>一条命令代替一堆描述。"帮我根据 git log 生成 changelog，类型分组，格式是……"→ 变成 "/changelog"。每天省 30 秒。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、实用示例 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  五个实用的自定义插件示例
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /checklist — 上线前检查</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  做 Pre-deploy 检查：<br>
+  1. git diff 看最近改动<br>
+  2. 搜索所有改动文件里的 console.log<br>
+  3. 检查所有 import 路径是否有效<br>
+  4. 如果 package.json 里有改动，检查是否存在 peer dependency 冲突<br>
+  5. 输出一个 OK/FAIL 列表
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /story — 从需求生成测试用例</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  以下是一个用户故事：$ARGUMENTS<br><br>
+  请生成 5-8 个测试用例，覆盖：<br>
+  - Happy path（正常流程）<br>
+  - Sad path（输入有误）<br>
+  - Corner case（极端情况）<br>
+  - State transition（状态变化）<br><br>
+  每个用例包含：场景描述、前置条件、操作步骤、期望结果
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /deps — 依赖分析</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  分析 package.json 的依赖：<br>
+  1. 哪些包版本过时（和最新稳定版对比）<br>
+  2. 哪些包不是直接依赖（在代码里找不到 import 引用）<br>
+  3. 哪些包有已知的安全漏洞（如果能访问的话）<br><br>
+  输出一个整洁的报告
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /unittest — 给指定文件生成测试</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  给 $ARGUMENTS 里的每个函数生成单元测试。<br>
+  测试框架：Jest + React Testing Library（如果涉及组件）<br>
+  要求：<br>
+  - 每个函数的每个返回路径都覆盖到<br>
+  - 先写正常输入→输出，再写异常输入→错误处理<br>
+  - 不要傻测 getter（比如 state = 0, expect(state).toBe(0)）<br>
+  - 用真实的使用场景而不是"测试像在测试"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /lint-all — 全量代码扫描</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  全量扫描 src/ 下所有文件：<br>
+  - 文件中是否有多余的 import（ESLint 报 / unused import）<br>
+  - 函数超过 50 行是否考虑拆分<br>
+  - API 请求是否有错误处理<br>
+  - 任何 window. / document. 直接操作（说明 SSR 可能有问题）<br><br>
+  输出一个分文件的问题清单
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、团队共享 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  团队共享：统一工具链
+</p>
+
+<p>Claude Code 的插件是可以共享的。让整个团队用同一套 commands 和 hooks——统一工作流。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 推荐的组织方式</p>
+
+<p>把 commands 目录放在项目根目录的 .claude/commands/ 下，跟代码一起版本管理：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  项目根目录/<br>
+  ├── .claude/<br>
+  │   ├── settings.json  ← 项目级 hook 配置<br>
+  │   └── commands/<br>
+  │       ├── review.md<br>
+  │       ├── deploy.md<br>
+  │       ├── changelog.md<br>
+  │       └── lint-all.md<br>
+  ├── src/<br>
+  └── package.json
+</p>
+
+<p>新成员 clone 项目后，自动拿到所有 Claude Code 插件。不用教"你该用什么命令"——所有人用同一套。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 共享套路</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> Onboarding 新成员：</strong>克隆项目 → /setup 自动装依赖→ /init 自动配数据库→ 开始写代码。不需要"传帮带"。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> Code Review 标准化：</strong>所有人用 /review 做自审。提交前跑一遍，输出结果贴在 MR 里——不影响 Review 质量，但避免初级问题浪费 Review 时间。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 文档自动生成：</strong>所有人用 /changelog 和 /story。格式统一，不用手动维护。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>Claude Code 的插件系统是我觉得最被低估的部分。大家最开始接触这个工具的时候想的是"怎么让它更快地写出更多代码"。后来才明白，真正省力的是"让它能做的事变多"——让它能执行你写好的工具链。</p>
+
+<p>你自己能写。Claude 也能写。但你写完之后给 Claude 配一个快捷键，叫 <strong>/deploy</strong>，以后你只需要打四个字。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 Claude Code 不是一只猴子。它是一个可以装备武器的战士。你给它的武器越好，它打的怪越多。</strong>
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下篇预告：Claude Code + MCP——让 AI 连上你的数据库、邮件、消息队列，真正变成"你的全栈助手"</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 插件系统<br>适用对象：想定制 Claude Code 工作流的开发者 / 想给团队建立统一规范的 Tech Lead / 已经把 Claude Code 用得很熟想进阶的人<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

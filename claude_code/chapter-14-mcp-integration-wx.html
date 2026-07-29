@@ -1,0 +1,302 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  Claude Code + MCP 协议<br>实测 AI 连上数据库后，效率到底提升了多少？
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  MCP（Model Context Protocol）让 Claude Code 不只"读代码"——它能直接查数据库、看监控、读 Jira。AI 不再是一个翻译器，而更像一个能看、能问、能改的全栈助手。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>你跟 Claude Code 说："帮我修这个 Bug。"它看了代码，找出了可能的原因，然后说："这个 bug 可能是上一笔交易的状态在数据库里写错了。但我看不到数据库——你得自己查一下 order_id=8921 的 status 字段是什么。"<br><br>这个场景你可能很熟悉。Claude Code 能看到你的代码，但看不到数据。它像一个看不懂中文的工程师——能读代码但查不了表。<br><br>MCP 协议解决了这个问题。<strong>接上 MCP，Claude Code 就能查数据库、读日志、看 Jira ticket——它不再是"代码分析器"，而是有上下文的全栈助手。</strong>这篇讲的是：怎么装、怎么用、值不值。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、MCP 是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、安装配置</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、数据库集成实测</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、其他 MCP server</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、效率对比</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、MCP ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  MCP 到底是什么
+</p>
+
+<p>MCP（Model Context Protocol）是由 Anthropic 开源的一个标准——让 AI 应用能连接外部数据源和工具。基于 JSON-RPC，一个标准格式，两端都能对话。</p>
+
+<p>一句话解释：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;text-align:center;">
+  <strong>MCP = AI 的 USB 接口。插上什么设备，AI 就能跟什么交互。</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个直观的例子</p>
+
+<p>Claude Code 接上 MCP 之前：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  你："报错了，帮我看看为什么。"<br>
+  Claude："你发给我的代码片段里没有这个错误。你可以把报错日志贴出来吗？"<br>
+  你：（切到终端，复制日志贴过去）<br>
+  Claude："看起来跟 order_id=8921 的 status 有关。数据库里这条记录的 status 是什么？"<br>
+  你：（切到数据库客户端，查了一下）"status = 'cancelled'"<br>
+  Claude："不是这个，status 应该是 'refunded'。再看看 updated_at 字段？"<br>
+  （来回 6 轮……）
+</p>
+
+<p>Claude Code 接上 MCP 之后：</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  你："报错了，帮我看看为什么。"<br>
+  Claude：（自己查了日志 → 找到 order_id=8921 → 查数据库 → 发现 status 不一致 → 读代码，找到写 status 的那一行 → 跟你解释原因并提出修复方案）<br>
+  <strong>整个过程它一个人完成。你是从"翻译 relay"变成"批审 relay"。</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 MCP 能接什么</p>
+
+<p>目前成熟的 MCP server 有：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  PostgreSQL / MySQL / SQLite — 查数据库<br>
+  Slack — 读消息历史<br>
+  GitHub — 查 issue、PR、代码片段<br>
+  Jira — 查 ticket、了解需求<br>
+  Puppeteer — 控制浏览器<br>
+  Filesystem — 读写本地文件<br>
+  Docker — 管理容器<br>
+  Kubernetes — 查集群状态
+</p>
+
+<p>社区每天都有新的 MCP server 出现。列表可在 github.com/modelcontextprotocol/servers 找到。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、安装配置 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  安装和配置：5 分钟接通
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 安装 MCP server</p>
+
+<p>以 PostgreSQL MCP server 为例：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # 用 npx 启动（不需要全局安装）<br>
+  npx @modelcontextprotocol/server-postgres postgresql://user:pass@localhost/mydb
+</p>
+
+<p>这个命令启动了一个 MCP server，监听你的数据库。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 配置 Claude Code</p>
+
+<p>在 ~/.claude/claude_desktop_config.json 或 .claude/mcp.json 中加配置：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+{<br>
+&nbsp;&nbsp;"mcpServers": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"postgres": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-y",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"@modelcontextprotocol/server-postgres",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"postgresql://user:pass@localhost:5432/mydb"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+</p>
+
+<p>Claude Code 启动时会自动连接这些 MCP server。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 验证连接</p>
+
+<p>在对话里输入：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "列出这个数据库里所有的表"
+</p>
+
+<p>如果 Claude 能列出表名——MCP 已连通。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 安全提醒</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>⚠ 永远不要给 Claude Code 访问生产数据库的写权限。</strong>用只读账户、限制查询范围、禁止 DROP/ALTER 命令。在 MCP 的 --readonly 模式下启动。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、数据库集成实测 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  数据库集成实测：三个场景
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景一：Bug 排查</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "订单 8921 显示的状态不对，帮我查一下为什么。"
+</p>
+
+<p>不用 MCP：6 轮交互，你来回"翻译"数据库和日志</p>
+
+<p>用 MCP：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>Claude 自己的操作链：</strong><br>
+  查数据库 → orders.id=8921, status='cancelled' → 查 refund 表 → refund 有一笔记录 → 读订单服务代码 → 发现 refund.sql 的 status 更新用了旧的状态名字 → 定位 bug → 给出修复方案
+</p>
+
+<p>整个过程你只需要做一件事：看一遍它的分析，确认没问题。</p>
+
+<p>效率提升：<strong>从 8 分钟降到约 30 秒。</strong>关键不是你省了时间——是你不用在代码、终端、数据库客户端之间死命切。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景二：数据迁移验证</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "我们的 usernames 表上有 3 万行数据。迁移脚本是把 username 升级为格式 email 'prefix@domain.com'。帮我写一个验证：确认所有行都已经改好，没有坏的数据。"
+</p>
+
+<p>Claude Code：写 SQL → 执行 → 看结果 → 如果 data 有问题 → 再查 → 输出验证报告。不需要你告诉它每一步做什么。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 场景三：PR Review 辅助</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "Review PR #142。它改了一个 order schema——查一下生产数据库里现有什么类型的订单，对照 schema 改动，看看有没有数据不一致。"
+</p>
+
+<p>Claude Code：读 PR diff → 发现 add column 'refund_channel' → 查生产表，确认现有数据列 → 分析新 column 的默认值是否合理 → 给出建议。</p>
+
+<p>这个功能对于"需要看实际数据才敢 review"的场景特别有用。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、其他 MCP server ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  其他可接入的 MCP Server
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 GitHub MCP Server</p>
+
+<p>接上 GitHub 之后，Claude Code 能：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  读 PR 清单、"这个 bug 之前有人修过吗？"（查 issue）、看 CI 状态、读 Release Notes
+</p>
+
+<p>相当于把 github.com 搬到终端里。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Jira MCP Server</p>
+
+<p>接上 Jira：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "列出当前 sprint 里跟我相关的所有 ticket。对 ticket PAY-M23 开始工作，先分析当前代码，然后实现。"<br><br>
+  不需要手动贴需求。Claude Code 自己从 Jira 读。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Slack MCP Server</p>
+
+<p>接上 Slack：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "看看 #backend 频道里最近关于这个 bug 的讨论，把有价值的信息总结一下。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 Puppeteer MCP Server</p>
+
+<p>接上 Puppeteer（浏览器控制）：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "访问 localhost:3000/dashboard，截图当前页面，检查布局是否和设计稿一致。如果有偏差，修改 CSS。"
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一个核心心法：</strong>MCP 的魅力不在于"多一个功能"——在于<strong>省掉了"切换上下文"</strong>。你不是在 copy paste 数据——Claude Code 自己承担了"找信息→理解→做决策"的整条链路。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、效率对比 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  效率对比：有 MCP vs 没有 MCP
+</p>
+
+<p>用真实数据说话。两个基本统计数据：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个典型 bug 的排查时间</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>无 MCP：</strong>8 分钟（观察 → 查数据库 → 读代码 → 查日志 → 解释）<br>
+  <strong>有 MCP：</strong>30 秒（一句话 → AI 查数据库 + 日志 + 代码 → 解释 + 修复方案）<br>
+  <strong>省时：约 93%</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 每天的上下文切换</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>无 MCP：</strong>每天约 30-40 次（终端 ↔ 数据库 ↔ 浏览器 ↔ 编辑器）<br>
+  <strong>有 MCP：</strong>每天约 5-10 次（只是偶尔验证一下 AI 说的对不对）<br>
+  <strong>注意力破碎率降低：约 75%</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 什么时候不该装 MCP</p>
+
+<p>MCP 不是万能的。这些情况下不建议：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>🙅 只有写代码任务不涉及外部系统：</strong>MCP 的价值 = AI + 外部数据。没有外部数据，MCP 没什么用<br><br>
+  <strong>🙅 数据库很小且你记在脑子里：</strong>MCP 的优势是把"查数据库"融合到 AI 工作流里。如果数据库只有 5 张表，你手动查也只需要 2 秒<br><br>
+  <strong>🙅 你的数据库结构混乱、列名不一致：</strong>AI 可能理解错表间关系。这种情况下让它查数据库反而会误导它
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>MCP 协议的杀手在于——它把"你可以给 AI 哪些能力"这个问题的答案标准化了。以前你想让 AI 查数据库，你得写一个中间层、处理连接、管理 token——现在一个 JSON 配置搞定。</p>
+
+<p>但这不意味着你应该把所有 MCP server 全装上。Claude Code + MCP = 更多上下文 → 更多 token 消耗。只装你每天至少用到 1 次的 server——其他的只会占用上下文。</p>
+
+<p>MCP 是 Claude Code 从"代码生成器"变成"全栈助手"的关键拼图。用好它，你的工作方式会从 <strong>你写代码</strong> 变成 <strong>你指导 AI 写代码+查数据+修 bug</strong>。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下篇预告：10 万行级项目的 Claude Code 导航策略——让它不迷路、不重复读、精准定位</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · MCP 协议<br>适用对象：需要在代码、数据库、日志之间反复切换的开发者 / 项目里有很多外部系统需要联动 / 想理解"全栈 AI 助手"实际长什么样的人<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

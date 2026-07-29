@@ -1,0 +1,301 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  10 万行代码也不虚！<br>大项目里用 Claude Code 的精准导航策略
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  大项目里 Claude Code 最怕的不是代码多——是"找不到路"。读太多→ token 爆炸→迷糊。读太少→缺上下文→瞎改。这篇给出一套确定性的导航策略，让它在大项目里也精准如 GPS。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>15 篇文章快写完了，这篇把"大项目"这个问题单独拎出来讲。因为这才是 Claude Code 的真实战场。<strong>小项目里 AI 怎么写都对。大项目里，AI 写的代码要跟 10 万行已有的逻辑共存——这需要一套完全不同的策略。</strong><br><br>这篇不讲"怎么 prompt Claude Code"，讲的是：当项目大到 Claude Code 一次读不完的时候，你该给什么、不给什么，以及怎么让它"像人手导航一样找到正确位置后再操作"。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、问题根源</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、索引先行</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、按需深入</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、架构文档</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、金字塔式加载</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、实战案例</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、问题根源 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  大项目的核心问题不是"代码多"
+</p>
+
+<p>是 <strong>上下文和精度之间的矛盾。</strong></p>
+
+<p>给太多上下文 → token 爆了 → Claude Code 开始"忘掉"最初的约束 → 质量下降。</p>
+
+<p>给太少上下文 → 它只看到一个文件 → 不知道改了这行会影响什么 → 改完崩了。</p>
+
+<p>这不只是钱的问题——这是 Claude Code 在大项目里"不可用"的根本原因。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个真实的翻车案例</p>
+
+<p>10 万行的电商项目。我让 Claude Code：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  "在我们的结账流程里加一个收货地址验证。读所有相关文件。"
+</p>
+
+<p>它读了 38 个文件——包括支付、购物车、用户信息、地址管理、订单历史。<br>
+总上下文：约 7.2 万 token。<br>
+结果：生成的代码把验证逻辑写在了支付模块里——但正确的做法是写在地址管理模块里。<br>
+为什么？<strong>信息太多，它失去了对"哪一层负责什么"的判断力。</strong></p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 核心心法：</strong>大项目里的 Claude Code 不能用传统方式工作。你不能再"给一段需求、让它自己找代码"。你要像在黑暗中用手电筒——只照亮需要看的东西。多余的光反而让你看不清。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、索引先行 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  索引先行：生成项目地图
+</p>
+
+<p>不要一上来就让 Claude Code 读代码。先让它在"不读内容"的情况下生成一个层级地图。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 生成架构索引</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "分析 src/ 下的目录结构。每个目录给一个一句话职责描述。不要读文件内容——只看目录命名、入口文件（index.ts, main.ts 等）的 import 结构、package.json 的 scripts。输出为两层目录树。"
+</p>
+
+<p>这会产生类似：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  src/<br>
+  ├── api/              ← HTTP 请求封装、拦截器、错误处理<br>
+  ├── components/       ← React 组件（表单、卡片、导航）<br>
+  ├── hooks/            ← 自定义 hooks（useAuth、useCart）<br>
+  ├── services/         ← 业务逻辑（支付、用户、订单）<br>
+  ├── store/            ← Redux store、reducers、actions<br>
+  └── utils/            ← 工具函数（格式化、校验、常量）
+</p>
+
+<p><strong>把它存成 ARCHITECTURE_INDEX.md。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 生成依赖图（可选）</p>
+
+<p>在第二步，如果有 madge 或其他依赖分析工具：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  madge --image depgraph.png src/
+</p>
+
+<p>这张图很有用——它告诉你哪些模块相互依赖，哪些是孤岛。</p>
+
+<p>但关键是：<strong>索引生成只做一次。</strong>每次新对话不要重新生成。索引存到文件里，新对话从读 ARCHITECTURE_INDEX.md 开始。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、按需深入 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  按需深入：三层加载法
+</p>
+
+<p>有了地图之后，采用三层加载策略：</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 1 层：地图（索引）</p>
+
+<p>让 Claude Code 加载 ARCHITECTURE_INDEX.md。它只需要知道："哪里有什么"。这几百个 token 告诉它整个项目的骨架。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 2 层：相关模块的文件结构</p>
+
+<p>告诉它具体读哪个模块：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "我在 src/services/payment/ 里加一个退款功能。根据架构索引，这个目录下有 payment.ts、gateway.ts、webhook.ts。先扫描这些文件的函数签名和 export 清单。"
+</p>
+
+<p>这类似"飞到街区上空，看一眼楼顶的样子"——还没进楼，但知道每栋楼叫什么、几层。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 3 层：目标文件的内容</p>
+
+<p>最后再深入到具体文件的内容：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "读 src/services/payment/gateway.ts 的完整内容。这个文件包含三个支付渠道的接口定义。"
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>三层加载的优势：</strong><br>
+  第 1 层：500 tokens → 知道项目骨架<br>
+  第 2 层：2000 tokens → 知道支付模块有哪些文件、什么结构<br>
+  第 3 层：3000 tokens → 知道具体逻辑<br><br>
+  <strong>总计 ~5500 tokens</strong> — 完成了"找到正确位置→理解结构→实施改动"的全流程<br><br>
+  对比"读所有相关文件"：70000 tokens → 丢失关键信息 → 改错地方
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、架构文档 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  用 CLAUDE.md 降低每次的加载成本
+</p>
+
+<p>CLAUDE.md 是大项目导航的核心。它相当于一个永久加载的"导航指令"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 CLAUDE.md 里应该有什么</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  # ARCHITECTURE<br>
+  分层架构：API 层 → Services 层 → Data 层<br>
+  每层之间通过 interface 通信，不跨层调用<br><br>
+  # KEY RULES<br>
+  - 前端状态全在 Zustand store 里，不用 Context<br>
+  - API response 格式统一：{ data, error, meta }<br>
+  - 禁止在组件里直接调 API——必须走 services 层<br><br>
+  # FILE MAPPING<br>
+  - src/api/ ← HTTP 请求封装<br>
+  - src/services/ ← 所有业务逻辑（唯一改文件）<br>
+  - src/components/ ← UI 组件（不允许有业务逻辑）<br>
+  - src/store/ ← Zustand stores<br>
+  - src/utils/ ← 纯函数工具<br><br>
+  # COMMON PATTERNS<br>
+  - 新增功能：先在 services 加函数 → 再暴露 API → 最后做 UI<br>
+  - 错误处理：services 层统一截获，API 层只负责 transport<br>
+  - 测试：.test.ts 放在同级目录下
+</p>
+
+<p>CLAUDE.md 的内容控制在 500-800 token 内。它应该是"最浓缩的知识"——不是教程。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 关键：CLAUDE.md 要持续更新</p>
+
+<p>每次重构、每次加新模块、每次改了架构约定——同步更新 CLAUDE.md。过期了三周没更新 = 误导 Claude Code = 帮你生成不符合新规范的代码。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、金字塔式加载 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  金字塔式文件加载
+</p>
+
+<p>有一个关键问题：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "Claude Code 自己会读文件。为什么需要我来规划它该读什么？"
+</p>
+
+<p>因为 Claude Code 在读文件时是"看见什么读什么"——默认的搜索范围是全局。在大项目里，一个搜索可能返回 50 个文件，它全读了。</p>
+
+<p>你的 CLAUDE.md + 架构索引 + 显式文件约束 = 给它的"地图+导航指令"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 金字塔加载法</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>金字塔尖：</strong>CLAUDE.md（500 token，永久加载，每次对话都有）<br>
+  &nbsp;&nbsp;↓<br>
+  <strong>金字塔中：</strong>架构索引（800 token，读到"哪里有什么"）<br>
+  &nbsp;&nbsp;↓<br>
+  <strong>金字塔底：</strong>目标文件（3000 token，真正要改的代码）
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 例子：在 10 万行项目中加一个"用户头像上传"功能</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>传统方式：</strong>"在 src/ 下相关的文件里加一个用户头像上传功能"<br>
+  → 读 40 个文件 → 读了用户列表、评论、通知……→ token：65000 → 生成代码质量：中<br><br>
+  <strong>金字塔方式：</strong>"读 ARCHITECTURE_INDEX.md → 确认涉及 avatars 模块 → 只读 src/services/users/ 下 avatars 相关的文件 → 在 avatars 服务层加功能"<br>
+  → 读 5 个文件 → 精确定位 avatars → token：4800 → 生成代码质量：高
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 核心心法：</strong>不是让 Claude Code"自己探索"——是你指定它"读什么"。每次对话给的上下文越小、越精确——AI 在目标代码上的推理就越深、越准。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 六、实战案例 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  实战案例：一个中等复杂度的功能
+</p>
+
+<p>完整走一遍。需求：<strong>在 10 万行的电商项目里，加订单取消通知。</strong></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 1 步：确认入口（仅地图级）</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "根据 ARCHITECTURE_INDEX.md，订单取消通知涉及哪些模块？"<br><br>
+  Claude："orders（订单逻辑）、notifications（通知发送）、email（邮件模板）。orders 在 src/services/orders/，notifications 在 src/services/notifications/，email 在 src/utils/email/。"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 2 步：扫描相关模块（文件结构级）</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "扫描 src/services/orders/ 和 src/services/notifications/ 的文件结构——只看函数签名和 export 清单。"<br><br>
+  Claude 给出了 8 个文件的函数签名。它注意到 orders/cancel.ts 里有一个 cancelOrder() 函数——这是我们要加通知的地方。notifications/sender.ts 里有一个 sendNotification() ——这是用来发送通知的。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 第 3 步：深入目标文件</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "读 orders/cancel.ts 和 notifications/sender.ts 的完整内容。在 cancelOrder() 函数执行后插入通知发送逻辑。"<br><br>
+  Claude：读了 2 个文件（约 180 行）→ 理解了 cancelOrder 的返回值结构 → 理解了 sendNotification 需要的参数格式 → 写了 5 行映射代码 → 完成。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 数据总结</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>读文件数：</strong>3 个（架构索引 → 函数签名扫描 → 目标文件）<br>
+  <strong>总 token：</strong>~4800<br>
+  <strong>耗时：</strong>约 40 秒<br>
+  <strong>质量：</strong>一条通知逻辑正确插入，无多余改动<br><br>
+  对比全量扫描方式：读 30+ 文件、85000 token、花费 $1.20、生成的代码放错了文件。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>大项目里的 Claude Code 不是自动模式。它需要你在第一次把"地图"画好，之后变成自动驾驶。这个设置成本大概 15-20 分钟（生成架构索引 + 写 CLAUDE.md），但之后每次任务都能少走弯路。</p>
+
+<p>如果要用一句话总结这 15 篇文章：<strong>Claude Code 不是一个人类程序员——它是一个有强大推理引擎但需要精准导航的工具。给它太多context = 迷失方向。不给够 context = 瞎指挥。精准给 = 它才会变成你最有效率的队友。</strong></p>
+
+<p>AI 时代，写代码的速度不再是最主要的速度瓶颈。最慢的环节是 <strong>"搞清楚该在哪写什么"</strong>。这篇文章的策略就是为此设计的。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;text-align:center;">
+  <strong>💡 Claude Code 实战系列 15 篇全部完结。从安装配置到多模型流水线、自主执行、插件、MCP、大项目导航——整套工作流已经完整。感谢阅读。🚀</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 大项目导航<br>适用对象：维护 5 万行以上项目的开发者 / 觉得 Claude Code "大项目里越用越差"的人 / 想写 CLAUDE.md 但不知道放什么内容的 Tech Lead<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>

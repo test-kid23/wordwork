@@ -1,0 +1,239 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🧠 Claude Code 实战</span>
+</p>
+
+<!-- 大标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  我睡觉的时候 AI 在干嘛？<br>Claude Code 自主执行模式实测
+</p>
+
+<!-- 副标题 -->
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  /goal 和 /loop 是 Claude Code 最被低估的功能。你定目标、设约束，它自己循环执行"改 → 测 → 修"，直到全绿。很多人不敢用——怕它跑飞、怕烧钱。这篇实测告诉你什么时候该开、什么时候千万别碰。
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>你让 Claude Code 修一个 Bug。它改了 3 行代码。你点运行——测试挂了。你告诉它："测试挂了，修一下。"它改了 5 行代码。你又点运行——另一个测试挂了。你告诉它："还是挂了，再修。"它又改了 3 行……<br><br>这个循环重复了 5 次，花了你 10 分钟——你像个 relay runner，来回跑。而 Claude Code 明明可以自己跑完全程。/goal 和 /loop 就是干这个的。<br><br>但很多人不敢用。怕它跑飞了、怕烧钱、怕改了不该改的。这篇把自主执行讲透：<strong>什么时候开，什么时候千万别碰，以及怎么设护栏保证安全。</strong>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、/goal 是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、/loop 的机制</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、安全护栏</span>
+</p>
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、适用场景</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、翻车现场与反思</span>
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ===== 一、/goal ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  /goal 到底是什么
+</p>
+
+<p>/goal 是 Claude Code 的一个命令。它可以开启一个"目标模式"，让 AI 自己循环执行，直到目标达成或者达到回合限制。</p>
+
+<p>核心公式：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;text-align:center;">
+  <strong>目标（goal） + 迭代（loop） + 约束</strong>
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 用一个实例理解 /goal</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>/goal "写 8 个测试用例，覆盖订单退款的所有场景，跑完之后确保全绿"</strong>
+</p>
+
+<p>调用后发生了什么：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>第 1 轮：</strong>读 src/services/order.ts → 设计 8 个测试场景 → 生成测试代码 → 运行测试 → 12 个测试通过，3 个失败<br><br>
+  <strong>第 2 轮：</strong>分析失败原因 → 发现 mock 没覆盖回调函数 → 补 mock → 再跑 → 15 个全绿<br><br>
+  <strong>第 3 轮：</strong>全项目搜退款相关逻辑 → 发现 user/refunds 页面也有退款逻辑 → 补齐缺失的测试 → 跑 → 全绿<br><br>
+  <strong>第 4 轮：</strong>无新发现 → 输出报告 → <strong>目标达成，退出。</strong>
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  ✅ 全程不需要你插手。你只需在最后看一眼报告，确认改动没超出边界。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 二、/loop ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  /loop 的"试错 → 修 → 再试"机制
+</p>
+
+<p>如果 /goal 是"给你一个目标，你去实现"，/loop 就是"做完测试 → 看哪些挂了 → 修 → 再跑 → 全绿才停"。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /loop 的执行过程</p>
+
+<p>相当于自带了一个 TDD 闭环：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  写代码 → 跑测试 → 全部通过了吗？ → 没有 → 分析失败原因 → 修代码 → 再跑测试 → 直到全绿 → 退出
+</p>
+
+<p>这个过程可以用一个命令触发：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /loop "跑 npm test，任何失败的测试都要修到通过。最多 10 轮。不建新文件，不删已有的测试。"
+</p>
+
+<p>跟你手动 relay 的区别是：你不需要做中间那个"看日志→告诉它问题→等结果→再看日志"的循环。AI 自己做完了整个过程。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 /goal vs /loop 的区别</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>/goal：</strong>有创意性任务。比如"给我实现一个用户导出功能，跑完测试全绿"——因为实现路径不固定，它需要自己决策。<br><br>
+  <strong>/loop：</strong>更适合"修到全绿"这种机械流程——目标明确（测试全过），唯一不确定的是要修几轮。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 三、安全护栏 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  安全护栏：不让它跑飞
+</p>
+
+<p>给 /goal 一个白名单，和 5 公里半径的天空——然后放手。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 护栏一：设定回合数上限</p>
+
+<p><strong>永远不要不加 turn 上限。</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /goal "修好这 5 个失败的测试" <strong>--max-turns 10</strong>
+</p>
+
+<p>5 个失败→设 10 轮上限。如果 10 轮都没修好，说明问题比你预想的复杂——该你介入看了。</p>
+
+<p>经验值：N 个测试失败→设 N*2 轮上限。中等功能实现→设 15-20 轮上限。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 护栏二：限定操作范围</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  ❌ "/goal '改完这个模块'"——无范围约束，太危险
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  ✅ "/goal '给 src/services/order.ts 和 src/api/orders.ts 加测试，只动这两个文件和 test/ 目录。不改任何已有逻辑。最多 12 轮。'"
+</p>
+
+<p>好指令的三个特征：<strong>角色限定、范围限定、行为限定。</strong>把它像 GPS 地图一样标清楚边界——里面随便跑，出了边界就停。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 护栏三：加验证步骤</p>
+
+<p>每轮跑完之后再加一个显式验证：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  /goal "修所有测试到全绿。<strong>每轮之后输出'当前通过/失败数'。</strong>如果 5 轮后仍有两项以上失败，中止并输出失败原因汇总。"
+</p>
+
+<p>输出格式要求让你能在日志里快速浏览每一轮的状态，不需要逐行看。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 四、适用场景 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  适用场景：什么时候值得开
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">✅ 推荐用 /goal 或 /loop 的场景</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>🙆 修测试"修到全绿"</strong> — 目标非常明确，有一个二值化的判定（全过 or 不）。AI 不需要做创意决策，只是"找到了→修→再试→直到"。<br><br>
+  <strong>🙆 代码修复后，补相关测试</strong> — "给刚才改的 3 个函数加测试，保证全过，顺便测一下边界值"<br><br>
+  <strong>🙆 写完功能后做完整性检查</strong> — "检查以下 checklist：变量命名一致性、注释完整性、无 console.log。发现问题就自动修复。最多 5 轮。"<br><br>
+  <strong>🙆 代码迁移/格式转换</strong> — "把 src/utils/ 下 8 个文件的 CommonJS require 都改成 ES module import，确保能跑"
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">❌ 不要用 /goal 或 /loop 的场景</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>🙅 架构决策</strong> — "从 Redux 迁到 Zustand"——这是需要你每步确认的事，不要让它自己跑<br><br>
+  <strong>🙅 大范围修改</strong> — "重写整个支付模块"——范围太大，一次出错可能导致连锁反应<br><br>
+  <strong>🙅 无测试的项目</strong> — 没测试就没有判定标准。AI 不知道什么是"做好"——最后就是你第二天醒来，面对一个被改得面目全非的代码库<br><br>
+  <strong>🙅 涉及数据库迁移</strong> — "把所有表里的字段名改了"——AI 不会考虑数据的完整性。迁移让人类审
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">· · ·</p>
+
+<!-- ===== 五、翻车现场 ===== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  翻车现场：一次跑飞的值几美元
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 事故回放</p>
+
+<p>我有一次给了这个指令：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  ❌ /goal "补齐 src/ 下面所有缺少的测试。"
+</p>
+
+<p>没加 turn 上限。没限定范围。没说"不改逻辑"。</p>
+
+<p><strong>AI 的行为：</strong>读 63 个文件——发现 37 个没有测试——给 37 个文件都写了测试——其中 12 个测试挂了——它去修失败的测试——改到第 6 个测试时，它改了源码里的一个函数签名——然后所有调用这个函数的地方都报错了——它又去修那些报错的地方——循环往复。</p>
+
+<p>整个过程花了 34 轮，烧了不到 $4。</p>
+
+<p><strong>但问题不是钱。</strong>问题是它改了一些不该改的地方——它把 src/utils/logger.ts 里的 logger 函数签名改了，导致所有 import 了这个函数的地方全在报错。如果我不仔细审查日志，这个改动被提交上去，会在 CI 里炸掉。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 教训</p>
+
+<p>这 $4 的教训值 $400。从那以后我用 /goal 的三条铁律：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  <strong>1. card: never 不加 turn 上限</strong> — 除非你的任务是"审计"这个开源项目的架构（纯读不写），否则必须有上限<br><br>
+  <strong>2. card: always 限定"只读 + 只写"的文件清单</strong> — "/goal 加测试，只动 src/servives/order.ts 和 test/orders.test.ts"<br><br>
+  <strong>3. card: always 加"不改已有逻辑"的约束</strong> — 这条规则可以防止上述的"为了修测试改了源码"的问题
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 核心心法：</strong>/goal 和 /loop 是"确定性好"的任务才用。确定性 = 有测试判定成功/失败 + 有明确的文件范围 + 不需要创意决策。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>Claude Code 最好玩的地方是 /goal 模式——它会把"你可能要改两三天"的活变成"设置好参数然后去喝杯咖啡再回来看结果"的事情。</p>
+
+<p>但不是所有任务都适合。回到这篇文章的核心：<strong>确定性是好自主执行的前提。</strong>没测试的项目里不要开 /goal。没限定文件范围不要开 /goal。在不确定 AI 会改哪的时候不要开 /goal。</p>
+
+<p>护栏设好了，那就是你睡觉的时候 AI 在干活。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下篇预告：Claude Code 插件系统——用自己写的工具让它"能做的事"扩大 3 倍</strong>
+</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  Claude Code 实战系列 · 自主执行<br>适用对象：想解放双手的开发者 / 被"改完→测试挂→再改→再挂"折磨的人 / 敢于让 AI 在自己睡觉时写代码的冒险者<br>本系列更多文章可在公众号合集「Claude Code 实战」中查看
+</p>
+
+</body>
