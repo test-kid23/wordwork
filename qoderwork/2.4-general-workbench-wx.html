@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通用工作台</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;"><span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🖥️ QoderWork 系列 · 四大工作台</span></p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">丢了 50 份简历让它筛，30 秒排名出来<br>但我差点被一个细节坑了</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">通用工作台没有固定模板，给它什么样的任务它就拆成什么样的步骤。它像个实习生在干活——速度快，但所有结论都得你再审一遍。</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">📝 <strong style="color:#2b6cb0;">写在前面：</strong>四大工作台里，通用工作台是最难写清楚的一个。因为它没有一个固定的"用途"。写作工作台 = 写东西。幻灯片工作台 = 做 PPT。设计工作台 = 出网页。通用工作台 = 什么都干。没法用一句话概括它——这反而让它成为四个工作台里我用得最多的一个。因为它接的任务都是那种<strong>"必须干但不想干"</strong>的事：简历筛选、数据整理、文件归类、竞品对比、信息提取……这些活去找专业工具——要么贵，要么没有专门工具，要么工具操作太复杂。通用工作台就是一个 AI 实习生。不挑活，不偷懒，但所有结论都得自己再核对一遍。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、简历筛选</span>
+<span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、Excel数据分析</span>
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、竞品调研</span>
+<span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、边界与坑</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第一章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>场景一：50 份简历，30 秒排名</p>
+
+<p>这是我重点关注测试的场景。我一个做招聘的朋友，帮一家小公司招运营，邮箱里收了 50 份简历。她要手动看——大概要花半天。</p>
+
+<p>我把 50 份 PDF 简历全丢进通用工作台，写了一段指令：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">"帮我分析这些简历，按以下标准筛选排名：1. 有电商运营经验（加分）2. 有内容策划/文案能力（加分）3. 最近一份工作跟运营无关的（减分）4. 工作经验少于半年的放后面。每份做一个简短评价，说清楚为什么加分/减分。排名靠前的 10 个人单独列出来。"</p>
+
+<p>它花了 30 秒左右，出了结果。</p>
+
+<p>排名第一的是一份有 2 年淘宝运营经验 + 写过品牌公众号的简历。排名最后的是一个大四学生，简历只有一页，实习经历写的是"在瑞幸做过 2 个月兼职"。</p>
+
+<p>整体来看，它的排序逻辑是对的。但有一个细节差点坑了我：</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">❌ <strong>排名第三的简历，</strong>工作经验写的是"市场运营"，在我的指令里这不算电商运营。但 AI 把"市场运营"等同于"电商运营"给了加分。<br><br>我如果不是一个个看了——直接拿前 10 名发面试邀请——可能会漏掉真正合适的候选人，也可能会叫来一个经验不对口的人白花面试时间。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;"><strong>💡 通用工作台使用铁律：</strong>AI 做初筛，人做复审。它筛不掉的人留着筛，它选上的人也要再过一遍。把它当成帮省了 80% 时间的助理，不是替代人决策的老板。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第二章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>场景二：一个 Excel 的数据分析</p>
+
+<p>我找了一个真实的 Excel——2025 年的个人支出账单，大概 300 条记录，字段包括日期、类别、金额、备注。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">"帮我把这份支出数据按月汇总，做一个趋势分析。找出金额最高的 3 笔支出分别是什么。计算每个月餐饮、交通、娱乐各占总支出的比例，看看有没有哪个月某个类别异常高。"</p>
+
+<p>它先把数据读了一遍，然后：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 按月汇总了总支出</strong>——1 月最高（过年发红包），3 月最低（出差挂公司账）</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 标记了最高的 3 笔</strong>——一台新手机、一次牙科、过年红包</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 算出了每个月的类别占比</strong>——发现 7 月娱乐支出异常高</p>
+
+<p>第 3 点让我愣了一下——我完全不记得 7 月在娱乐上花了很多钱。翻回去看原始数据，发现 7 月有一笔 Steam 夏促买游戏的大额支出，被我备注成了"数码"，AI 把它归到了娱乐——<strong>它的归类是对的，我的备注写错了。</strong></p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;"><strong>💡 关键洞察：</strong>这就是 AI 做数据分析的一个隐性价值——它不会按错误的标签将错就错。它会用自己的理解重新归类，有时候比自己写的备注更准。</p>
+
+<p>当然也不是每次都准。餐饮分类里它把我在便利店买的东西也归成了餐饮——但实际可能是一瓶洗发水。如果要拿它做财务级别的数据分析——建议还是先把标签体系规范好。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第三章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>场景三：竞品调研简报</p>
+
+<p>我让通用工作台帮我做一个小项目：分析 5 个知识付费平台的定价策略。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">"分析以下 5 个平台的定价策略——得到、樊登读书、小报童、知识星球、极客时间。对比它们的收费模式、价格区间、会员权益、退款政策。做一张对比表，然后给出结论：如果你是用户，什么需求选哪个平台最划算。"</p>
+
+<p>我自己先花了 10 分钟去各平台搜集了最新的价格信息，粘贴进对话窗口里。然后让它分析。</p>
+
+<p>它出的结论挺有意思的：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">"年付费用户大多会在 7 天内退订——如果你只是好奇内容，先用免费的试听，别一上来就买年卡。"<br><br>"低价专栏（9.9-49 元）的教育意义 > 信息价值——适合小白了解一个领域，不适合从业者深耕。"<br><br>"知识星球更适合有明确 KOL 偏好的用户——你不是在买内容，你是在买跟那个人互动的机会。"</p>
+
+<p>这些结论不是它凭空想的——是我喂进去的价格数据和用户评价里推导出来的。所以准确度取决于我喂的数据质量。如果我造假数据，它出假结论。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;"><strong>🔍 顺便说一句：</strong>这个任务如果配合后面的浏览器自动化，可以做到完全自动化——AI 自己去各平台抓价格数据回来分析。这个我们后面单独讲。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第四章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>通用工作台的边界与容易踩的坑</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 最适合的任务类型</p>
+
+<p><span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">✅ 结构化数据处理（表格、列表、分类、排名）</span></p>
+
+<p><span style="background:#f3ebff;color:#6b46c1;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">✅ 信息提取和对比（"从这堆文件里找 XXX，整理成表格"）</span></p>
+
+<p><span style="background:#ebf4ff;color:#2b6cb0;font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin:2px 0;">✅ 重复性分析（"帮我把这 100 条记录按规则分类"）</span></p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 不太适合的任务</p>
+
+<p>❌ 创意性工作（写作、设计、头脑风暴——用专有工作台更合适）<br>❌ 需要实时数据的工作（它不会自动联网——除非开了浏览器连接器）<br>❌ 高度专业化的分析（财务审计、法律合同审查——AI 能辅助但不能替代专业意见）</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 一个容易踩的坑</p>
+
+<p>通用工作台偶尔会"自作主张地分类"。</p>
+
+<p>我试过一次，让它把 200 个文件按类型分类。其中有一个名为 "final-report-v3-final.docx" 的文件，它归到了"文档"文件夹。但同一目录下有一个 "final-report-v3.png"，它把 PNG 归到了"图片"——实际上这个 PNG 是报告里的配图，应该跟 docx 放在一起。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">❌ 它不理解文件之间的语义关联。它只看后缀名。<br><span style="color:#276749;">✅ 如果你有类似的场景——文件有逻辑关系、需要放在一起——在指令里明确说出来。</span></p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 结尾 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">这一篇到这儿</p>
+
+<p>通用工作台是四个工作台里最没有存在感的，但也是我用得最多的。因为它接的都是脏活累活——那些你做也行、但不想做的事。</p>
+
+<p>下一篇开始进入第三部分——浏览器操控和定时任务。这两个能力才是 QoderWork 跟所有 AI 工具拉开差距的地方。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;"><strong>🚀 下一篇：</strong>我让 QoderWork 同时打开 5 个京东页面，帮我对比扫地机器人——它真的在浏览器上自己点点点。</p>
+
+<p style="text-align:center;margin:16px 0;">
+<span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想用 AI 把脏活累活都丢出去的，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">QoderWork 系列 · 四大工作台<br>适用对象：职场人、自由职业者、自媒体博主、小型创业者<br>本系列更多文章可在公众号合集「QoderWork 实战」中查看</p>
+
+</body>
+</html>

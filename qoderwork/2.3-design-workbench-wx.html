@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计工作台</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;"><span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🖥️ QoderWork 系列 · 四大工作台</span></p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">说一句话，它给我生成了一个完整的产品官网<br>QoderWork 设计工作台实测</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">不用画图、不用写前端代码、不用找设计师。丢一句话，选个风格，3 分钟出一个可编辑的网页预览。</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">📝 <strong style="color:#2b6cb0;">写在前面：</strong>我从来没做过设计。别说设计，我的审美大概停留在 Windows XP 经典蓝绿桌面那个水平。所以我一开始对设计工作台是回避的——觉得"做网页设计"这件事跟我没关系。直到一个做宠物寄养的朋友让我帮他"弄个简单的主页"，我硬着头皮试了一下。结果：3 分钟，它生成了一个功能完整的宠物寄养平台首页——有导航栏、有 hero 大图区、有服务介绍、有价格表、有在线预约表单。关键是：<strong>这一页不是图片，是真实的 HTML + CSS 代码。</strong>可以直接在浏览器里打开、可以改文字和图片、可以让程序员接着开发。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、Code as Design</span>
+<span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、实测演示</span>
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、推到IDE开发</span>
+<span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、不适合的场景</span>
+<span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、最适合的用途</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第一章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>Code as Design：它不做图，它写网页</p>
+
+<p>设计工作台的核心思路跟市面上的 AI 设计工具不一样。</p>
+
+<p>别的工具（比如 Canva AI、稿定 AI）是生成一张静态图片——你拿到一个 PNG，好看但没法改。QoderWork 的设计工作台用的是 <strong>Code as Design</strong>——不生成图片，而是生成网页代码。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;"><strong>💡 这意味着什么？</strong><br><br>生成的产品页面——导航栏可以点、表单可以填、按钮有 hover 效果、页面可以在手机上自适应缩放。它不是一张"看起来像网页"的图片，它就是一个网页。</p>
+
+<p>而且因为它本质是代码，可以随时改。觉得导航栏颜色太深——跟它说"换成浅灰色"。觉得 hero 区的按钮太小——跟它说"放大 1.5 倍"。它直接在代码层面改，刷新预览就能看到效果。</p>
+
+<p>这个思路的好处：<strong>可以随时迭代。</strong>不像生成图片——改一个细节要重新生成一整张。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第二章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>实际演示：一个宠物寄养平台首页</p>
+
+<p>我朋友的宠物寄养业务叫"毛球家"，主打"家庭式寄养"——跟宠物医院寄养不一样，是在自己家里养别人的猫狗。他想有一个简单的官网，让顾客预约的时候能看到环境和服务。</p>
+
+<p>我的指令是这样写的：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">"帮我设计一个宠物寄养平台的首页。品牌叫'毛球家'，主打家庭式寄养。核心卖点：24小时陪护、每天遛狗2次、寄养环境是家庭住宅而非铁笼、提供每日视频反馈。面向养猫养狗的城市白领。风格：温馨、可爱但不幼稚、偏日系。需要包含：导航栏、hero区（大标题+预约按钮）、服务亮点区（3个核心卖点）、环境展示区（图片占位）、价格表、在线预约表单、页脚。"</p>
+
+<p>我选了"日系温馨"风格模板（内置 100+ 模板，选的时候有缩略图预览）。它花了大概 3 分钟生成。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:12px 0;">· · ·</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 优点</p>
+
+<p>✅ 色调对了——米白色底、浅木色调、圆角设计，看着确实有日系温馨那味<br>✅ 导航栏功能齐全——Logo、首页、服务、环境、价格、预约<br>✅ 表单是真实可填的——不算高级但能用<br>✅ 手机上打开也能自适应——不会出现电脑版在手机上挤成一团的情况</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 缺点</p>
+
+<p>❌ 环境展示区的图片是占位图（灰底+相机图标），不是真实图片<br>❌ 价格表里它瞎编了一个价格——"小猫 48 元/天 大狗 68 元/天"，我朋友实际收的更贵<br>❌ hero 区的标题文字太通用——"给宠物一个温暖的家"——这种文案我朋友说"太像宠物医院的广告了"<br>❌ 预约表单没有任何验证——填个"123"也能提交</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;"><strong>💡 关键认知：</strong>它不是"一键出成品"——<strong>它是"一键出可修改的草稿"。</strong></p>
+
+<p>我改了三处：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span></strong> 把价格改成实际收费<br><strong><span style="color:#8e44ad;">②</span></strong> 把 hero 标题改成"你的猫，不是住笼子的"（我朋友的原话）<br><strong><span style="color:#4A90D9;">③</span></strong> 让表单加了手机号验证</p>
+
+<p>改完大概 10 分钟。改完之后我发给我朋友，他回了一句"卧槽这我做的？"——我说不是你做的，是 AI 做的，你只负责改了三处。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第三章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>一键推到 Qoder IDE 继续开发</p>
+
+<p>设计工作台有一个很务实的衔接功能：生成的网页代码可以一键推送到 Qoder IDE。</p>
+
+<p>什么意思？如果你后期需要一个程序员来深化开发——比如加后端逻辑、接数据库、做用户系统——你不用从头写前端页面了。直接用 QoderWork 出的页面代码，在 Qoder IDE 里继续加功能。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;"><strong>💡 一句话记住：</strong>前期用 QoderWork 出原型→拿了第一个客户→赚了点钱→然后把原型推给程序员深加工。不用一开始就花几万块找人做网站，零成本先上线一个能演示的版本。</p>
+
+<p>这个对小型创业团队特别实用。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第四章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>什么情况不适合用设计工作台</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 复杂视觉设计</strong><br>插画、海报、品牌 VI、高质量产品图——这些它做不了。它的强项是网页布局和 UI 原型，不是平面设计。如果你需要一个精致的品牌海报，去找专业设计师或者用 Midjourney。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 交互复杂的 Web 应用</strong><br>它生成的是静态页面，有基础的表单和按钮交互，但要做一个含用户登录、数据看板、实时聊天、支付流程的完整产品——它做不出来。那是 Qoder 要做的事，不是 QoderWork。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 别拿它做的页面直接上线</strong><br>它生成的代码是"能看"级别，不是"生产"级别。性能优化、SEO 元标签、无障碍适配、安全防护——这些都没有。拿它做原型没问题，拿它直接当产品上线——你会被用户骂。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 第五章 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;"><span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>最适合的用途</p>
+
+<p>说了这么多限制，什么情况下它最值？</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 自由职业者/小团队的对外展示页</p>
+
+<p>不需要花几千块找人做官网，自己 10 分钟出一个。改改文案、换换图片，就能给客户一个体面的线上门面。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 产品原型验证</p>
+
+<p>有个产品 idea——先用设计工作台做个页面原型，拿给目标用户看。用户说不喜欢、不需要——及时止损，零成本。用户说不错——再决定要不要投入资源深开发。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">📌 活动落地页</p>
+
+<p>临时要做一个活动报名页、一个产品发布页、一个试用申请页——用设计工作台 5 分钟搞定。好过在 Word 里画表格发给别人填。</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- ==================== 结尾 ==================== -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">这一篇到这儿</p>
+
+<p>设计工作台不能替代设计师。但它让"不需要设计师"这件事成为了可能——前提是你的需求在它的能力边界之内。</p>
+
+<p>网页原型、产品主页、活动落地页、品牌介绍页——这些它能做得不错。海报、插画、复杂视觉——这些它做不了。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;"><strong>🚀 下一篇：</strong>QoderWork 里最像一个"实习生"的功能——你给它一堆文件，让它分析、整理、出报表，它真的会干。</p>
+
+<p style="text-align:center;margin:16px 0;">
+<span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想用 AI 零代码做网页、出原型的，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">QoderWork 系列 · 四大工作台<br>适用对象：职场人、自由职业者、自媒体博主、小型创业者<br>本系列更多文章可在公众号合集「QoderWork 实战」中查看</p>
+
+</body>
+</html>
