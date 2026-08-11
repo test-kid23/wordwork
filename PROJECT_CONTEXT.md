@@ -53,6 +53,8 @@ wordwork/
 │   │   ├── wx-beginner-03-tools.html      # 第3篇：这些AI工具全是免费的
 │   │   ├── wx-beginner-04-mindset.html    # 第4篇：AI时代不被替代的能力
 │   │   └── wx-beginner-05-nextstep.html   # 第5篇：用熟了Kimi和豆包，然后呢？
+│   ├── ai_concepts/             #  「一文讲清XX」硬核概念科普系列 🔥
+│   │   └── PLAN.md                     # 选题规划（8篇）
 │   ├── ai_learning/            #  AI 学习系列（入门向）
 │   │   ├── ai-beginner-guide.md              # AI 入门指南
 │   │   ├── advanced-ai-team-building-guide.md # 进阶：AI 团队搭建
@@ -139,6 +141,7 @@ wordwork/
 | 目录 | 系列主题 | 状态 |
 |------|---------|------|
 | `ai_road_wx/ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 6/6 篇 |
+| `ai_road_wx/ai_concepts/` | 「一文讲清XX」硬核概念科普 | 🔥 8篇待创作 |
 | `ai_road_wx/ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
 | `ai_road_wx/ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
 | `ai_road_wx/Published/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
@@ -341,7 +344,9 @@ Qoder 和腾讯混元流量不错 → 不是写完一篇就换话题，而是做
 
 ```
 流量层：小白入门系列（ai_beginner_wx/）
-  ↓ 文末挂进阶文章链接
+  ↓ 文末挂硬核科普链接
+概念层：硬核科普系列（ai_concepts/）——「一文讲清XX」
+  ↓ 文末挂工具深度链接
 粘性层：工具深度系列（codebuddy/、rag/、claude_code/）
   ↓ 文末挂体系化内容链接
 壁垒层：进阶之路系列（ai_road/、ai_road_wx/）
