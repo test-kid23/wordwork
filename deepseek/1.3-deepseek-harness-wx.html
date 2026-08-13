@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek Harness 开源：它终于有了自己的 Vibe Coding 入口</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 第 3 篇</span>
+</p>
+
+<!-- 大标题 + 副标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  DeepSeek Harness 开源<br>它终于有了自己的 Vibe Coding 入口
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  模型是大脑，Harness 是身体——这次 DeepSeek 把"壳"也开源了
+</p>
+
+<!-- 写在前面（蓝色左边框） -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>很多人问：DeepSeek 模型这么强，为什么没有一个像 Claude Code 那样的官方编程入口？每次都要借别人的壳（比如改 base_url 来接 DeepSeek）？<br><br>DeepSeek 给的答案不是"做一个 Claude Code 复刻"，而是更野的一步：<strong style="color:#2b6cb0;">直接把"壳"开源了。</strong><br><br>DeepSeek Harness（DSH）深夜发布，官方定位是 Agent 执行框架——不是新模型、不是 API 客户端，而是把模型接到文件系统、终端、网页、代码工具和其他 Agent 的"身体"。<br><br>这篇讲清楚三件事：<strong style="color:#2b6cb0;">Harness 到底是什么、5 分钟怎么跑起来、它和 Claude Code 的区别。</strong>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录标签 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、5 分钟上手</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、vs Claude Code</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、杀手锏</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、现实提醒</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、组合拳</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一、是什么 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  Harness 是什么：模型是大脑，Harness 是身体
+</p>
+
+<p>先纠正一个常见误解：<strong>Harness 不是模型。</strong></p>
+
+<p>它是运行 Agent 的"外壳"或"骨架"——负责组织上下文、调度工具调用、管理任务执行。模型负责"想"，Harness 负责"干"：</p>
+
+<p>🔹 读项目文件、定位代码 → 模型说"我要看这个文件" → Harness 去读</p>
+<p>🔹 修改代码、跑命令 → 模型说"这样改" → Harness 去执行</p>
+<p>🔹 报错了 → 模型说"再看一眼日志" → Harness 继续跑</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  本质区别一句话：<strong>没有 Harness，模型只能聊天；有了 Harness，模型才能干活。</strong>
+</p>
+
+<p>这套设计有一个很"DeepSeek"的特点：<strong>Everything is a plugin（一切皆插件）</strong>。Harness 建立在 Cordis 之上，模型适配器、工具注册、Session Log，甚至 Agent Loop 本身（驱动 Agent 不断"思考→行动→观察"的主循环）都是可替换插件。</p>
+
+<p>这意味着什么？<strong>别的框架的"功能"，在 Harness 里是"零件"。</strong>换模型、换工具、换循环逻辑，都不需要动主体。</p>
+
+<!-- 二、5 分钟上手 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  5 分钟跑起来：真没骗人
+</p>
+
+<p>上手门槛低得不像一个刚开源的框架。环境要求：Node.js（新版本）+ 一个 DeepSeek API Key。</p>
+
+<p>三步启动：</p>
+
+<p style="background:#1a1a2e;color:#e8e8e8;padding:12px 16px;border-radius:8px;font-family:Consolas,Menlo,monospace;font-size:13px;line-height:1.7;">
+  # 1. 安装并启动 Web UI<br>
+  npx @deepseek-ai/dsh web<br><br>
+  # 2. 浏览器打开 http://localhost:3574<br>
+  # 3. 填入 API Key（或配环境变量 DEEPSEEK_API_KEY），选择模型和 Agent Preset
+</p>
+
+<p><strong>npx @deepseek-ai/dsh web</strong> 一条命令，起的是一整个本地 Agent 工作台：可以在里面打开项目、让它读代码、改文件、跑命令、根据报错继续修——像把 Claude Code 的交互界面搬到了浏览器里。</p>
+
+<p>但 Web UI 只是其中一种形态。Harness 一共提供六种使用方式：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  🖥 <strong>Web UI</strong>：浏览器工作台 → 日常开发<br>
+  🖥 <strong>TUI</strong>：终端界面 → 命令行重度用户<br>
+  ⚙️ <strong>Headless</strong>：无界面脚本 → 自动化、CI/CD<br>
+  ⚙️ <strong>ACP</strong>：Agent Client Protocol → 接入外部 Agent 平台<br>
+  ⚙️ <strong>JSON-RPC</strong>：标准远程调用 → 服务端集成<br>
+  ⚙️ <strong>Python SDK</strong>：编程调用 → Python 生态
+</p>
+
+<p>一条命令就能跑，六种形态按需切换——这设计思路，是奔着"人人都能用、处处都能接"去的。</p>
+
+<!-- 三、vs Claude Code -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  它和 Claude Code 的区别：成品 vs 零件箱
+</p>
+
+<p>既然有了官方入口，很多人会拿它和 Claude Code 对比。这里说清楚定位差异：</p>
+
+<p><strong>Claude Code 是"封装好的产品"</strong>：开箱即用，交互、权限、体验都打磨好了，但内部逻辑是黑盒，不能改。</p>
+
+<p><strong>Harness 是"可组装的零件箱"</strong>：什么都给你零件，但"怎么组装"的自由度和工作量都在自己手上。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  📋 <strong>模型</strong>：Claude Code 绑定 Claude ｜ Harness 任意模型（适配器可换）<br>
+  📋 <strong>定制性</strong>：Claude Code 低，黑盒 ｜ Harness 高，一切皆插件<br>
+  📋 <strong>使用形态</strong>：Claude Code CLI 为主 ｜ Harness 六种形态<br>
+  📋 <strong>上手成本</strong>：Claude Code 极低 ｜ Harness 低（Web UI）到中等（自研插件）<br>
+  📋 <strong>适合人群</strong>：想拿来就用的人 ｜ 想深度控制 Agent 的人
+</p>
+
+<p>所以这不是"谁替代谁"的关系：<strong>Harness 想做的，是像 Linux 之于操作系统那样，成为 Agent 世界的底层框架。</strong>模型层已经开源，框架层也开源了，剩下的是生态。</p>
+
+<!-- 四、杀手锏 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  真正的杀手锏：多 Agent 编排与可观测性
+</p>
+
+<p>如果只是"又一个编程入口"，Harness 不值得单开一篇。它真正值得关注的是两个设计：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 多 Agent 编排</strong></p>
+<p>Harness 支持主 Agent 拆分子 Agent：主 Agent 接到任务后，可以分派给多个子 Agent 并行干活（一个查资料、一个写代码、一个跑测试），最后汇总结果。</p>
+<p>这不是"套壳聊天"，而是把复杂任务拆成流水线的能力。团队里的"AI 员工"从此可以分工协作。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> Session Log 可观测性</strong></p>
+<p>Harness 会把 Agent 的一举一动记录成 Session Log——模型当时看到了什么、调用了什么工具、拿到了什么结果，全部可回放。</p>
+<p>价值在出问题的时候：<strong>Agent 干砸了，能像复盘录像一样，一步步看它当时是怎么想的、哪一步走错了。</strong>这对生产环境审计和调试是刚需。</p>
+
+<!-- 五、现实提醒 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  现实提醒：这是 Developer Preview
+</p>
+
+<p>说完了亮点，说几句冷静话。</p>
+
+<p>Harness 目前是 <strong>Developer Preview（开发者预览版）</strong>，官方原文明确提示：<strong>后续迭代可能出现破坏兼容性的修改（breaking changes）。</strong>翻译一下：现在适合玩、适合研究、适合搭个人工作流，但别急着拿它支撑生产级业务，等版本稳定。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ⚠️ 另外，Harness 目前主要面向代码任务（读项目、改文件、跑命令），"多 Agent 编排 + 长任务"这些高阶能力还在快速演进中。<span style="color:#276749;">跟着版本迭代走，是现在最合理的姿势。</span>
+</p>
+
+<!-- 六、组合拳 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  组合拳怎么打：V4 Pro + Harness 的完整图景
+</p>
+
+<p>把这两天的事放在一起看，DeepSeek 的组合拳就很清晰了：</p>
+
+<p>🔹 <strong>V4 Pro 正式版</strong>：更强的模型（DeepSWE 12.8 → 62.7）</p>
+<p>🔹 <strong>双协议 API</strong>：接进一切现有生态（Claude Code 改两行配置就能用）</p>
+<p>🔹 <strong>Harness 开源</strong>：自己的 Agent 执行框架，从模型到框架全链路开源</p>
+
+<p>这三步合起来，DeepSeek 在讲的故事是：<strong>用开源把 Agent 技术栈的每一层都握在自己手里</strong>——模型层、协议层、框架层。这和当年 Linux + Apache + MySQL + PHP 组合拳的路线如出一辙。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 对普通用户最直接的收益：</strong>现在有一整套从模型到框架都开源、成本还低的 Agent 技术栈可以随便玩。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这篇是 <strong>DeepSeek 系列</strong>的第 3 篇，把 Harness 是什么讲完了。下一篇讲最实际的：<strong>V4-Pro / V4-Flash / Harness 怎么组合最省钱</strong>——个人、团队、高并发三种方案一次讲清。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：Pro / Flash / Harness 组合选型，一套配置省到底</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 跟着 DeepSeek 系列，用最低成本把模型接进 Agent 工作流，点个关注不错过。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · AI Agent 工作流<br>适用对象：开发者、AI 工具重度用户、想省钱接入顶级模型的人<br>本文基于 DeepSeek 官方公开信息，Harness 处于 Developer Preview 阶段，以官方仓库最新版本为准<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>

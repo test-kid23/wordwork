@@ -52,6 +52,7 @@ wordwork/
 ├── codebuddy/                   # CodeBuddy 深度使用系列 🔥 连载中 5 篇
 ├── rag/                         # RAG 私有知识库系列 🔥 连载中 4 篇
 ├── claude_code/                 # Claude Code 工作流系列 🔥 连载中 1 篇
+├── deepseek/                    # DeepSeek V4 + Harness 系列 🔥 新开系列
 ├── scene_ocp/                   # 一人公司 OCP 系列 📝 知识库已建，待创作
 ├── comfyui/                     # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
 ├── testengineer/                # 软件测试工程师技能与职业发展 📁 目录已建
@@ -87,6 +88,7 @@ wordwork/
 | CodeBuddy | `codebuddy/` | 5/19 篇 | CodeBuddy 深度使用与工作流构建 |
 | RAG | `rag/` | 4/19 篇 | 私有知识库从原理到企业级平台 |
 | Claude Code | `claude_code/` | 1/17 篇 | Claude Code 从入门到项目级应用 |
+| DeepSeek | `deepseek/` | 4/18 篇 | V4 Pro 0813 正式版 + Harness Agent 框架深度实战 |
 | 一人公司 OCP | `scene_ocp/` | 知识库 4 篇已建 / 正文 0/7 | AI 时代一人公司的认知、工具、实战与反思 |
 
 ### 规划中系列
@@ -104,7 +106,7 @@ wordwork/
 
 ## 内容深度关键词
 
-多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化 · 软件测试 · 职业发展 · 一人公司 · AI 自动化测试 · API/Web/移动端测试 · Playwright · Selenium · Appium · pytest · ComfyUI
+多模型协同 · AI Agent 工作流 · 私有知识库（RAG） · 本地部署大模型 · 流程风控 · Skills 机制 · MCP 协议 · Automation 自动化 · 向量数据库 · GGUF 量化 · 软件测试 · 职业发展 · 一人公司 · AI 自动化测试 · API/Web/移动端测试 · Playwright · Selenium · Appium · pytest · ComfyUI · DeepSeek V4 · DeepSeek Harness
 
 ---
 

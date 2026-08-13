@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深夜突袭：DeepSeek V4 Pro 正式版悄悄上线，Agent 能力暴涨 390%</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 第 1 篇</span>
+</p>
+
+<!-- 大标题 + 副标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  深夜突袭：DeepSeek V4 Pro 正式版悄悄上线<br>Agent 能力暴涨 390%
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  没有发布会、没有预告，一觉醒来模型就变了——这篇讲清楚它到底改了什么
+</p>
+
+<!-- 写在前面（蓝色左边框） -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>这几天 AI 圈最大的动静，不是哪家又发了新模型，而是一次<b>静默升级</b>：DeepSeek 的 V4 Pro 从"预览版"悄悄换成了"正式版 0813"，接口没变、价格暂时没涨（但 8 月 17 日起将采用峰谷定价），而官方自测的 Agent 能力数据涨了快 4 倍。<br><br>很多人第一反应是：真的假的？DeepSWE 从 12.8 涨到 62.7，涨幅 390%，是不是太夸张了？<br><br>这篇把这次升级讲透：发布过程发生了什么、模型本身改了啥、Agent 能力暴涨的真相，以及最关键的一件——<strong style="color:#2b6cb0;">现在该做什么。</strong>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录标签 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、深夜静默升级</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、不是换发动机</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、390% 的真相</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、接口大改</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、新价生效</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、现在做什么</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一、深夜静默升级 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  深夜的一场静默升级
+</p>
+
+<p>事情发生在前一天的深夜。</p>
+
+<p>没有任何预告，DeepSeek 官网的"模型 & 价格"页面悄然更新：模型名称从 <strong>deepseek-v4-pro-preview</strong> 变成了 <strong>deepseek-v4-pro-0813</strong>，定价保持不变。API 文档同步更新，模型参数、基准测试数据全部换新。</p>
+
+<p>最戏剧化的一幕是：官方随后发布了一份公告，但<strong>不到 24 小时又被撤回了</strong>。目前 API 文档中仍显示 0813 版本，官方公告却已从官网消失。</p>
+
+<p>这种"深夜发布、公告撤回"的操作在业界并不常见。有几种解读：</p>
+
+<p><strong>1️⃣ 版本校验还没完成</strong>——发现数据或兼容性问题，先撤下公告，修好再重新发布。</p>
+<p><strong>2️⃣ 刻意低调</strong>——后训练驱动的迭代，不需要像新架构那样大张旗鼓。</p>
+<p><strong>3️⃣ 渠道冲突</strong>——同期 Harness 开源抢了风头，公告策略临时调整。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  无论真实原因是什么，一个事实很清楚：<strong>DeepSeek V4 Pro 正式版已经上线，API 里填 deepseek-v4-pro 就会自动指向这个最新版本。</strong>
+</p>
+
+<!-- 二、不是换发动机 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  不是换发动机，是换调校
+</p>
+
+<p>先搞清楚一个关键事实：<strong>这次升级不是新架构，架构和参数量几乎没变。</strong></p>
+
+<p>V4 Pro 依然是：</p>
+<p>🔹 总参数 <strong>1.6T</strong>，MoE 架构，每 token 激活约 <strong>49B</strong></p>
+<p>🔹 上下文 <strong>1M token</strong>，最大输出 <strong>384K token</strong></p>
+<p>🔹 注意力采用 <strong>CSA（压缩稀疏注意力）+ HCA（高度压缩注意力）</strong> 的混合方案</p>
+
+<p>相比 V3.2，V4 系列在推理时的 FLOPs 降至约 <strong>27%</strong>，KV Cache 需求降至约 <strong>10%</strong>——这套架构从设计之初就是为"低成本大规模推理"服务的。</p>
+
+<p>那 0813 到底改了什么？答案是<strong>针对性后训练</strong>（post-training）。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  打个比方：发动机没换，但 ECU 程序、调校参数、训练数据都换了一轮。同样的硬件，跑出来的性能判若两车。
+</p>
+
+<p>具体到推理方式上，V4 Pro 提供了三档推理强度，通过 <strong>reasoning_effort</strong> 参数控制：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> none</strong> —— 非思考模式，直出结果。<br>适用：翻译、改写、格式化等低难度任务。</p>
+<p><strong><span style="color:#8e44ad;">②</span> high</strong> —— 深度思考，充分推理。<br>适用：复杂编程、数学、长文档分析。</p>
+<p><strong><span style="color:#4A90D9;">③</span> max</strong> —— 极致思考，长时间推理。<br>适用：最难的 Agent 任务、竞赛级问题。</p>
+
+<p>这一步的升级，直接反映在了 Agent 能力上。</p>
+
+<!-- 三、390% 的真相 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Agent 能力暴涨 390%：数字背后是什么
+</p>
+
+<p>官方给出了三组关键的内部基准对比（预览版 → 0813 正式版）：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  📊 <strong>DeepSWE</strong>（软件工程 Agent 任务）：12.8 → <strong>62.7</strong>（+390%）<br>
+  📊 <strong>NL2Repo</strong>（自然语言生成代码仓库）：38.5 → <strong>61.5</strong>（+60%）<br>
+  📊 <strong>DSBench-Hard</strong>（全栈高难度编码）：约 33 → <strong>67.2</strong>（约翻倍）
+</p>
+
+<p><strong>390% 的涨幅，翻译成人话是：上一版模型在"自主完成软件工程任务"这件事上几乎等于不会，这一版终于学会了。</strong>从 12.8 到 62.7，是从"不可用"到"勉强可用"再到"开始好用"的跨越。</p>
+
+<p>再来看第三方独立的 BenchLM 数据（V4 Pro 的 high 推理模式）：</p>
+
+<p>🔹 编程：SWE-bench Verified <strong>79.4%</strong>、LiveCodeBench COT <strong>89.8%</strong>、Codeforces Rating <strong>2919</strong></p>
+<p>🔹 推理：GPQA Diamond <strong>89.1%</strong></p>
+<p>🔹 长上下文：MRCR 1M token <strong>83.3%</strong></p>
+<p>🔹 智能体：BrowseComp <strong>80.4%</strong></p>
+<p>🔹 数学：HMMT <strong>94.0%</strong></p>
+
+<p>几个值得注意的点：</p>
+
+<p><strong>1️⃣ 编程能力是第一梯队。</strong>SWE-bench 79.4%、Codeforces 2919 分，这两个数字已经摸到闭源顶级模型的门槛。</p>
+
+<p><strong>2️⃣ 长上下文是杀手锏。</strong>1M token 下的 MRCR 83.3%，意味着把整本书、整个中型代码仓库直接喂进去，依然能精准检索并回答。</p>
+
+<p><strong>3️⃣ Agent 能力不只是"会写代码"。</strong>BrowseComp 80.4% 说明模型在"打开网页、找信息、给出结论"这类自主任务上同样能打。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ⚠️ 也要冷静：<strong>DeepSWE 是官方内部基准，外部复现数据有限。</strong>第三方实测中，有观点认为 Pro 相对上个月的 Flash（DeepSWE 54.4）提升幅度没有官方数字那么夸张。<br>
+  <span style="color:#276749;">✅ 正确的姿势：方向可信，幅度打折看。</span>
+</p>
+
+<!-- 四、接口大改 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  这次改动最大的其实是接口
+</p>
+
+<p>如果说模型能力是"软升级"，那接口就是"硬升级"——<strong>这次 V4 Pro 带来的最大实际变化，是 API 协议兼容性。</strong></p>
+
+<p>之前 DeepSeek 只提供 OpenAI 风格的 Chat Completions 接口。现在新增了两套协议：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> OpenAI Responses API</strong><br>base_url 用 https://api.deepseek.com/v1，用 client.responses.create() 直接调用。</p>
+<p><strong><span style="color:#8e44ad;">②</span> Anthropic API 协议</strong><br>base_url 用 https://api.deepseek.com，<strong>可以直接兼容 Claude Code 等基于 Anthropic 协议的工具。</strong></p>
+
+<p>这意味着什么？<strong>一大批基于 Anthropic 协议的生态工具，现在理论上只需要改 base_url 和 API Key，就能接到 DeepSeek 上跑。</strong></p>
+
+<p>对 Claude Code 用户来说，这是一件大事：不用换工具、不用改工作流，改两行配置就能用上 deepseek-v4-pro，费用直接降一个量级。</p>
+
+<p>标准 OpenAI Chat Completions 接口依然保留，model 填 deepseek-v4-pro 自动指向最新版本。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ⚠️ 一个需要留意的地方：DeepSeek 的 thinking 实现与 Claude 的 extended thinking 并不完全相同，流式输出时 reasoning_content 字段的格式有差异。<br>
+  <span style="color:#276749;">✅ 大厂 Agent 框架做了协议适配，但自研代码直接对接时，这块需要单独处理。</span>
+</p>
+
+<!-- 五、价格公布 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  价格没涨，但 8 月 17 日起新价生效
+</p>
+
+<p>这次上线，定价暂时维持旧价，但<strong>新价格已公布，将于 8 月 17 日 00:00 生效，采用峰谷定价</strong>：高峰时段（北京时间 9:00-12:00、14:00-18:00）为全价，其余为空闲时段，价格为高峰时段的一半。</p>
+
+<p><strong>当前旧价（截至 8 月 17 日 00:00 前）：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  💰 <strong>V4-Flash</strong>：输入 ¥1/M，缓存命中 ¥0.008/M，输出 ¥2/M，并发 2500<br>
+  💰 <strong>V4-Pro</strong>：输入 ¥3/M，缓存命中 ¥0.025/M，输出 ¥6/M，并发 500
+</p>
+
+<p><strong>新价（8 月 17 日 00:00 起生效）：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  📈 <strong>V4-Flash</strong>：输入（缓存命中）空闲 ¥0.05/M / 高峰 ¥0.10/M，输入（未命中）空闲 ¥1.5/M / 高峰 ¥3/M，输出空闲 ¥4.5/M / 高峰 ¥9/M<br>
+  📈 <strong>V4-Pro</strong>：输入（缓存命中）空闲 ¥0.15/M / 高峰 ¥0.30/M，输入（未命中）空闲 ¥4.5/M / 高峰 ¥9/M，输出空闲 ¥13.5/M / 高峰 ¥27/M
+</p>
+
+<p>官方原话（涨价预告）：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  "We plan to raise the overall pricing for DeepSeek API services in the near future, with a significant increase expected."<br><br>
+  （我们计划在近期上调 DeepSeek API 服务的整体定价，预计涨幅会相当大。）
+</p>
+
+<p><strong>这是明牌：涨价不是预告，而是已经公布了具体方案。</strong>新价高峰时段 Pro 输出涨到 ¥27/M（旧价 ¥6/M 的 4.5 倍），Flash 输出涨到 ¥9/M（旧价 ¥2/M 的 4.5 倍）；空闲时段相对温和（Pro ¥13.5/M，是旧价的 2.25 倍）。<strong>8 月 17 日生效之前，是最后的"低成本窗口期"。</strong></p>
+
+<p>叠加 Anthropic 协议兼容性，一个很现实的操作是：<strong>趁旧价还在，把现有 Claude 生态的工具链迁过来试用，在涨价前跑通、评估、锁定方案。</strong>涨价后，时间策略（把重活安排在空闲时段）会成为新的省钱命门。</p>
+
+<!-- 六、现在做什么 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  现在该做什么
+</p>
+
+<p>说了这么多，落地到行动上，建议分三步：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 先跑一个真实任务</strong><br>不用换工作流，直接用现有的 Claude Code 或 Codex，改 base_url 和 Key，拿手头一个真实的中型项目试一遍。重点看三件事：Agent 任务完成度、长上下文表现、high/max 推理档位下的输出质量。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 算一笔账</strong><br>拿过去一个月的真实用量，套用 V4-Pro 的价格表算一遍。如果每月 API 支出能省 50% 以上，迁移价值就非常大——尤其在官方涨价之前。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 盯住两个时间点</strong><br>一是 <strong>8 月 17 日 00:00 新价生效日</strong>（生效前是最后的低成本窗口期），二是 Harness 的迭代（DeepSeek 自己的 Agent 框架刚开源，属于开发者预览版，后续很可能快速演进）。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>模型还是那个模型，但调校换了、接口开了、Agent 能力翻了几倍。DeepSeek 明显在下一盘大棋——用最低的成本把模型接进一切现有的 Agent 生态。V4 Pro 正式版，就是这盘棋的关键落子。
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>这篇是 <strong>DeepSeek 系列</strong>的第 1 篇，重点讲清楚"V4 Pro 正式版到底改了什么"。下一篇会更硬核：<strong>双协议 API 实战——两行配置，把 Claude Code 接到 DeepSeek 上</strong>，会手把手演示迁移步骤，以及迁移时最容易踩的坑。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：双协议 API 实战，把 Claude Code 迁移到 DeepSeek</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想跟着 DeepSeek 系列，用最低成本把模型接进 Agent 工作流的，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · AI Agent 工作流<br>适用对象：开发者、AI 工具重度用户、想省钱接入顶级模型的人<br>本文价格基于 DeepSeek 官方公开信息（旧价截至 8 月 17 日 00:00，新价峰谷定价同期生效），请以官方页面为准<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>

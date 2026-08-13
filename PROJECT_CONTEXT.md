@@ -113,6 +113,12 @@ wordwork/
 ├── claude_code/                # Claude Code 工作流系列
 │   ├── OUTLINE.md
 │   └── claude_write_case01.md  # 首篇
+├── deepseek/                   # DeepSeek V4 + Harness 系列 🔥 连载中
+│   ├── OUTLINE.md                       # 大纲（18 篇规划：入门/实战/进阶/踩坑）
+│   ├── 1.1-deepseek-v4-pro-0813.md      # 第1篇：V4 Pro 正式版拆解（含 -wx.html）
+│   ├── 1.2-dual-protocol-api-claude-code.md  # 第2篇：双协议 API 迁移 Claude Code（含 -wx.html）
+│   ├── 1.3-deepseek-harness.md               # 第3篇：Harness 开源上手（含 -wx.html）
+│   ├── 1.4-selection-guide-pro-flash-harness.md  # 第4篇：三件套选型（含 -wx.html）
 │
 ├── scene_ocp/                  # 一人公司 OPC 系列 🏢
 │   ├── README.md               # 系列概览
@@ -151,6 +157,7 @@ wordwork/
 | `codebuddy/` | CodeBuddy 深度使用与能力挖掘 | 🔥 连载中，已写 5 篇 |
 | `rag/` | RAG 私有知识库搭建 | 🔥 连载中，已写 4 篇 |
 | `claude_code/` | Claude Code 深度使用与工作流 | 🔥 连载中，已写 1 篇 |
+| `deepseek/` | DeepSeek V4 + Harness 深度实战（0813 正式版 + Agent 框架开源） | 🔥 连载中，已写 4 篇（第一部分完结） |
 | `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
 | `ai_test_douyin/` | AI + 测试 抖音图文适配版 | 🔥 第1章 8 篇配文已适配，图片复用 XHS 卡片 |
 | `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库 4 篇已建，正文 0/7 待创作 |
