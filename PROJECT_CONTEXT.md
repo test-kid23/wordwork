@@ -120,6 +120,11 @@ wordwork/
 │   ├── 1.3-deepseek-harness.md               # 第3篇：Harness 开源上手（含 -wx.html）
 │   ├── 1.4-selection-guide-pro-flash-harness.md  # 第4篇：三件套选型（含 -wx.html）
 │
+├── workbuddy/                  # WorkBuddy 全场景 AI 工作台系列 🆕 连载中
+│   ├── OUTLINE.md                       # 系列大纲（四部分：入门/实战/进阶/踩坑）
+│   ├── PLAN.md                          # 首期创作计划（第一部分 5 篇）
+│   ├── 1.1-workbuddy-what-is-it.md      # 第1篇：WorkBuddy 是什么（含 -wx.html）
+│
 ├── scene_ocp/                  # 一人公司 OPC 系列 🏢
 │   ├── README.md               # 系列概览
 │   ├── PLAN.md                 # 详细选题规划（7 篇）
@@ -158,6 +163,7 @@ wordwork/
 | `rag/` | RAG 私有知识库搭建 | 🔥 连载中，已写 4 篇 |
 | `claude_code/` | Claude Code 深度使用与工作流 | 🔥 连载中，已写 1 篇 |
 | `deepseek/` | DeepSeek V4 + Harness 深度实战（0813 正式版 + Agent 框架开源） | 🔥 连载中，已写 4 篇（第一部分完结） |
+| `workbuddy/` | WorkBuddy 全场景 AI 工作台（面向不会写代码的普通人） | 🔥 新开系列，大纲已建，已写 1 篇 |
 | `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
 | `ai_test_douyin/` | AI + 测试 抖音图文适配版 | 🔥 第1章 8 篇配文已适配，图片复用 XHS 卡片 |
 | `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库 4 篇已建，正文 0/7 待创作 |
