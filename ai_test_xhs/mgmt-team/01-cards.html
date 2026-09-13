@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8年测试才发现技术不是瓶颈 · 小红书卡片 · 雾蓝石板（方案5）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e9edf0; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(22,34,43,0.10); }
+
+  /* ===== 封面卡（雾蓝渐变 + 柔光） ===== */
+  .card-cover { background:linear-gradient(150deg,#eef3f6 0%,#cfdde6 40%,#9db4c4 75%,#6f8a9c 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover::after { content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(520px 380px at 12% 8%, rgba(255,255,255,0.58), transparent 70%),
+      radial-gradient(460px 420px at 92% 88%, rgba(192,118,60,0.16), transparent 72%);
+  }
+  .card-cover .cover-badge { position:absolute; top:44px; left:56px; z-index:3; background:#c0763c; color:#fff; font-size:26px; font-weight:700; padding:12px 26px; border-radius:14px; letter-spacing:1px; }
+  .card-cover .tag { position:relative; z-index:2; background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); color:#3f6379; padding:12px 32px; border-radius:28px; font-size:36px; font-weight:700; margin-bottom:40px; }
+  .card-cover h1 { position:relative; z-index:2; font-size:88px; font-weight:900; color:#16222b; line-height:1.25; margin-bottom:26px; }
+  .card-cover .subtitle { position:relative; z-index:2; font-size:38px; color:#3a5c72; font-weight:400; line-height:1.5; }
+  .card-cover .cover-rule { position:relative; z-index:2; width:180px; height:6px; background:#c0763c; border-radius:3px; margin-top:36px; }
+  .card-cover .watermark { position:absolute; z-index:3; bottom:36px; right:56px; font-size:24px; color:rgba(22,34,43,0.28); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fbfcfd; padding:70px 76px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content.alt { background:#ffffff; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(63,99,121,0.10); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(22,34,43,0.12); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:38px; font-weight:800; color:#3f6379; margin-bottom:22px; padding-left:18px; border-left:6px solid #c0763c; line-height:1.35; }
+  .card-content .section-title.warn { color:#b0453c; border-left-color:#c98476; }
+
+  /* 对话盒（铺垫 → 翻车 → 顿悟） */
+  .dialog-box { background:#eef3f6; padding:44px 46px; border-radius:18px; }
+  .dialog-box .you-say { font-size:32px; color:#6c7b85; line-height:1.9; margin-bottom:24px; }
+  .dialog-box .boss-say { background:#fff; border-left:5px solid #c98476; padding:26px 32px; border-radius:12px; font-size:34px; color:#b0453c; font-weight:700; line-height:1.65; }
+  .dialog-box .aha { margin-top:24px; padding-top:22px; border-top:1px dashed #d6e0e7; font-size:32px; color:#3f6379; text-align:center; line-height:1.85; font-weight:700; }
+
+  /* 左右对比 */
+  .vs-row { display:flex; gap:20px; }
+  .vs-you { flex:1; background:#fbeeed; border:1.5px solid #eeccc8; border-radius:16px; padding:34px 28px; text-align:center; }
+  .vs-boss { flex:1; background:#e9f4f1; border:1.5px solid #b6dbd2; border-radius:16px; padding:34px 28px; text-align:center; }
+  .vs-label { font-size:27px; color:#b0453c; font-weight:800; margin-bottom:18px; line-height:1.4; }
+  .vs-boss .vs-label { color:#2f7d6a; }
+  .vs-content { font-size:26px; color:#6c7b85; line-height:1.75; }
+  .vs-content strong { color:#16222b; font-size:28px; }
+
+  /* 五条维度清单 */
+  .dim-list { display:flex; flex-direction:column; gap:16px; }
+  .dim-item { display:flex; align-items:flex-start; gap:20px; background:#fff; border:1.5px solid #d6e0e7; border-radius:14px; padding:24px 28px; box-shadow:0 2px 6px rgba(22,34,43,0.04); }
+  .card-content.alt .dim-item { background:#fbfcfd; }
+  .dim-no { flex-shrink:0; width:58px; height:58px; border-radius:14px; background:#e8eff4; color:#3f6379; font-size:28px; font-weight:900; display:flex; align-items:center; justify-content:center; }
+  .dim-body .dim-t { font-size:29px; font-weight:800; color:#16222b; line-height:1.4; margin-bottom:6px; }
+  .dim-body .dim-t em { font-style:normal; color:#c0763c; }
+  .dim-body .dim-d { font-size:23px; color:#6c7b85; line-height:1.6; }
+
+  /* 三列 */
+  .three-row { display:flex; gap:16px; }
+  .three-item { flex:1; background:linear-gradient(135deg,#e8eff4,#dde8ee); border-radius:16px; padding:34px 18px; text-align:center; }
+  .three-item .tnum { font-size:54px; font-weight:900; color:#c0763c; margin-bottom:14px; line-height:1; }
+  .three-item .tlabel { font-size:27px; font-weight:800; color:#16222b; margin-bottom:12px; }
+  .three-item .tdesc { font-size:21px; color:#6c7b85; line-height:1.7; }
+
+  /* 金句盒 */
+  .tip { background:linear-gradient(135deg,#eaf1f5,#dfeaf0); padding:40px 44px; border-radius:16px; font-size:32px; color:#3f6379; text-align:center; font-weight:700; line-height:1.8; }
+  .tip.amber { background:linear-gradient(135deg,#fdf3e6,#f8e6cd); color:#8f5a20; }
+  .tip.warn { background:rgba(176,69,60,0.06); border:1.5px dashed #e5b3aa; color:#b0453c; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef4f8 0%,#dae7ee 50%,#c2d5e0 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:46px; font-weight:900; color:#16222b; margin-bottom:26px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.7); padding:26px 44px; border-radius:18px; font-size:30px; color:#3f6379; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#3a5c72; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#3f6379; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(63,99,121,0.5); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(22,34,43,0.2); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(22,34,43,0.4); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(22,34,43,0.62); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#3f6379; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#33505f; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="cover-badge">🔥 真实血泪</div>
+    <div class="tag">💼 8年老测试 · 换维度</div>
+    <h1>8年测试才发现<br>技术不是瓶颈</h1>
+    <div class="subtitle">技术决定下限 · 维度决定上限<br>写给卡在执行层的第 5 年+</div>
+    <div class="cover-rule"></div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子故事 + 今天聊什么 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😮‍💨 先说个扎心的</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          写了8年测试，技术这块自认不差。<br>
+          脚本、框架、环境，同事有难题第一个找我。
+        </div>
+        <div class="boss-say">
+          可去年，我卡住了——<br>
+          不是学不动，是发现再往上走，<br>
+          技术给不了我答案了 💀
+        </div>
+        <div class="aha">
+          💡 因为我一直在解一道解不完的题：<br>我的产出，等于我的时间
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📌 今天聊一件事</div>
+      <div class="tip">
+        技术越好，越容易踩进同一个坑<br>——把"我多能干"，当成唯一的出路
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：我 vs 隔壁老哥 -->
+  <div class="card card-content alt">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🆚 我 vs 隔壁老哥</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">以前的我</div>
+          <div class="vs-content">
+            <strong>技术最强</strong><br>
+            一天最多干 8 小时<br>
+            能覆盖的就那么点事<br><br>
+            一个季度<br>
+            推不动一个项目
+          </div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">技术不如我的老哥</div>
+          <div class="vs-content">
+            <strong>带着 5 个人</strong><br>
+            力气花在让大家干活上<br>
+            同样一个季度<br><br>
+            推完我三年没推完的事
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        🎯 技术是把好刀，你只有一把<br>组织能力，是让每个人都拿到刀
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：5个换维度的瞬间 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">⚡ 8年，5个"换维度"瞬间</div>
+      <div class="dim-list">
+        <div class="dim-item">
+          <div class="dim-no">01</div>
+          <div class="dim-body">
+            <div class="dim-t">做完事 <em>→</em> 搭系统</div>
+            <div class="dim-d">做完 100 个用例，不如让团队能持续产出用例</div>
+          </div>
+        </div>
+        <div class="dim-item">
+          <div class="dim-no">02</div>
+          <div class="dim-body">
+            <div class="dim-t">我个人强 <em>→</em> 团队强</div>
+            <div class="dim-d">标准从"我多能打"，变成"我带的兵多能打"</div>
+          </div>
+        </div>
+        <div class="dim-item">
+          <div class="dim-no">03</div>
+          <div class="dim-body">
+            <div class="dim-t">技术语言 <em>→</em> 经营语言</div>
+            <div class="dim-d">跟老板说耗时多少毫秒，不如说能少赔多少钱</div>
+          </div>
+        </div>
+        <div class="dim-item">
+          <div class="dim-no">04</div>
+          <div class="dim-body">
+            <div class="dim-t">解决问题 <em>→</em> 定义问题</div>
+            <div class="dim-d">解决得快不如问得准，选错了题，技术再强也白搭</div>
+          </div>
+        </div>
+        <div class="dim-item">
+          <div class="dim-no">05</div>
+          <div class="dim-body">
+            <div class="dim-t">靠经验 <em>→</em> 靠方法论</div>
+            <div class="dim-d">经验在你脑子里，你走了就归零；方法论才能复制</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip">🎯 卡住你的从来不是技术<br>是你一直站在同一个位置看它</div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：三条路 + 不推荐的活法 -->
+  <div class="card card-content alt">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title warn">⚠️ 说句可能得罪人的</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          不是所有资深测试，都要去当经理。<br>
+          也不是只有升职，才算往前走。
+        </div>
+        <div class="boss-say">
+          但每个干到 5 年以上的人，<br>
+          都得换一次维度 💢
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🧭 三条路，挑一条走</div>
+      <div class="three-row">
+        <div class="three-item">
+          <div class="tnum">纵</div>
+          <div class="tlabel">纵向走</div>
+          <div class="tdesc">技术专家线<br>把深度做到<br>别人绕不过去</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">横</div>
+          <div class="tlabel">横向走</div>
+          <div class="tdesc">管理线<br>把组织能力<br>做成你的作品</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">斜</div>
+          <div class="tlabel">斜着走</div>
+          <div class="tdesc">效能 / 平台 / AI<br>做让所有人<br>变快的事</div>
+        </div>
+      </div>
+      <div class="tip warn" style="margin-top:24px">
+        ⚠️ 最怕的是一直站在原地<br>把同样的 8 年，过成 8 遍
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>技术决定下限<br>维度决定上限</h2>
+    <div class="golden">
+      你不是不努力<br>是时候换个角度看这份工作了
+    </div>
+    <div class="cta-ask">
+      💬 你工作几年了？<br>有没有过"技术到顶了"的感觉？<br>评论区聊聊～
+    </div>
+    <div class="save-tip">⭐ 收藏 · 下次觉得卡住了翻出来看看，可能不是能力问题</div>
+    <div class="hashtags">
+      #软件测试 #测试工程师 #职业发展 #职场瓶颈 #打工人
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '8年测试才发现技术不是瓶颈';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

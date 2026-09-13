@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书卡片 · 配色方案对比（7套）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#2b3238;padding:40px 24px;font-family:'Noto Sans SC',sans-serif;}
+  .page-head{max-width:1160px;margin:0 auto 36px;color:#e8eef0;}
+  .page-head h1{font-size:30px;font-weight:900;margin-bottom:12px;}
+  .page-head p{font-size:15px;color:#9fb0b6;line-height:1.9;}
+  .page-head code{background:rgba(255,255,255,0.09);padding:2px 8px;border-radius:5px;font-size:13px;}
+
+  .scheme{max-width:1160px;margin:0 auto 34px;border-radius:20px;padding:26px 30px 30px;box-shadow:0 6px 30px rgba(0,0,0,0.22);}
+  .scheme-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:20px;}
+  .scheme-head h2{font-size:21px;font-weight:900;}
+  .scheme-head .role{font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;}
+  .scheme-head .pick{font-size:12px;padding:5px 12px;border-radius:20px;font-weight:700;}
+  .swatches{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+  .sw{width:34px;height:34px;border-radius:9px;border:1px solid rgba(0,0,0,0.10);}
+
+  .mini-row{display:flex;gap:26px;flex-wrap:wrap;}
+  .mini{width:345.6px;height:460.8px;overflow:hidden;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.16);flex-shrink:0;}
+  .mini .card{width:1080px;height:1440px;transform:scale(0.32);transform-origin:top left;}
+
+  /* ===== 卡片结构（全部用 CSS 变量，换方案只换变量） ===== */
+  .card{position:relative;overflow:hidden;display:flex;flex-direction:column;}
+
+  .card-cover{background:var(--cover);justify-content:center;align-items:center;padding:48px 56px;text-align:center;}
+  .cover-badge{position:absolute;top:44px;left:56px;background:var(--badgeBg);color:var(--badgeText);font-size:26px;font-weight:700;padding:12px 26px;border-radius:14px;letter-spacing:1px;}
+  .card-cover .tag{background:var(--tagBg);color:var(--main);padding:12px 32px;border-radius:28px;font-size:36px;font-weight:700;margin-bottom:40px;}
+  .card-cover h1{font-size:88px;font-weight:900;color:var(--title);line-height:1.25;margin-bottom:26px;}
+  .card-cover .subtitle{font-size:38px;color:var(--sub);font-weight:400;line-height:1.5;}
+  .card-cover .cover-rule{width:180px;height:6px;background:var(--accent);border-radius:3px;margin-top:36px;}
+
+  .card-content{background:var(--card);padding:70px 76px;justify-content:space-evenly;}
+  .card-content .num{font-size:72px;font-weight:900;color:var(--num);position:absolute;top:40px;right:60px;line-height:1;}
+  .section-title{font-size:38px;font-weight:800;color:var(--main);margin-bottom:22px;padding-left:18px;border-left:6px solid var(--accent);line-height:1.35;}
+
+  .dialog-box{background:var(--dialog);padding:44px 46px;border-radius:18px;}
+  .dialog-box .you-say{font-size:32px;color:var(--weak);line-height:1.9;margin-bottom:24px;}
+  .dialog-box .boss-say{background:var(--cardAlt);border-left:5px solid var(--bad);padding:26px 32px;border-radius:12px;font-size:34px;color:var(--bad);font-weight:700;line-height:1.65;}
+  .dialog-box .aha{margin-top:24px;padding-top:22px;border-top:1px dashed var(--bd);font-size:32px;color:var(--main);text-align:center;line-height:1.85;font-weight:700;}
+
+  .vs-row{display:flex;gap:20px;}
+  .vs-you,.vs-boss{flex:1;border-radius:16px;padding:34px 28px;text-align:center;border:1.5px solid var(--bd);}
+  .vs-you{background:var(--badBg);border-color:var(--badBd);}
+  .vs-boss{background:var(--okBg);border-color:var(--okBd);}
+  .vs-label{font-size:27px;color:var(--bad);font-weight:800;margin-bottom:18px;line-height:1.4;}
+  .vs-boss .vs-label{color:var(--ok);}
+  .vs-content{font-size:26px;color:var(--weak);line-height:1.75;}
+  .vs-content strong{color:var(--title);font-size:28px;}
+
+  .tip{background:var(--tipBg);padding:40px 44px;border-radius:16px;font-size:32px;color:var(--tipText);text-align:center;font-weight:700;line-height:1.8;}
+  .tip.amber{background:var(--amberBg);color:var(--amberText);}
+
+  /* ===== 配色变量 ===== */
+  /* 方案1 Tech Indigo */
+  .s1{--bg:#e8ecf1;--card:#fafafd;--cardAlt:#ffffff;--cover:linear-gradient(150deg,#e0e7ff 0%,#c7d2fe 30%,#a5b4fc 65%,#818cf8 100%);
+    --title:#1e1b4b;--main:#6366f1;--accent:#8b5cf6;--sub:#4338ca;
+    --bad:#dc2626;--badBg:#fef2f2;--badBd:#fecaca;--ok:#059669;--okBg:#ecfdf5;--okBd:#a7f3d0;
+    --bd:#e2e8f0;--weak:#64748b;--num:rgba(99,102,241,0.10);--dialog:#f1f5f9;
+    --tagBg:rgba(255,255,255,0.55);--badgeBg:#6366f1;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#eef2ff,#e0e7ff);--tipText:#4338ca;
+    --amberBg:linear-gradient(135deg,#fef3c7,#fde68a);--amberText:#92400e;}
+  /* 方案2 Sketch Cream */
+  .s2{--bg:#EDE4D3;--card:#FFFBF0;--cardAlt:#FEF8F0;--cover:linear-gradient(150deg,#FBF3E2 0%,#F2E5CC 35%,#E7D6B8 70%,#D9C4A0 100%);
+    --title:#3D3021;--main:#5C4033;--accent:#E8856B;--sub:#7A6448;
+    --bad:#E57373;--badBg:#FEF0E1;--badBd:#F3D3C0;--ok:#43A047;--okBg:#E8F8ED;--okBd:#BFE3C8;
+    --bd:#E0D5C0;--weak:#8A7A63;--num:rgba(92,64,51,0.09);--dialog:#F5EEDF;
+    --tagBg:rgba(255,255,255,0.6);--badgeBg:#E8856B;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#F2F8EC,#E8F8ED);--tipText:#2F7A38;
+    --amberBg:linear-gradient(135deg,#FDF3E0,#F8E7C8);--amberText:#8A5A0B;}
+  /* 方案3 Deep Teal */
+  .s3{--bg:#e7edeb;--card:#fafcfb;--cardAlt:#ffffff;--cover:linear-gradient(150deg,#dff0ea 0%,#c2ded7 28%,#96c4b9 62%,#6aa89c 100%);
+    --title:#0e2a26;--main:#0f6b63;--accent:#b8770f;--sub:#1c544b;
+    --bad:#a8341f;--badBg:#fdf2ee;--badBd:#f0c9bb;--ok:#0f6b63;--okBg:#e9f5f2;--okBd:#b6dbd2;
+    --bd:#dbe9e5;--weak:#6b7b77;--num:rgba(15,107,99,0.10);--dialog:#eaf3f0;
+    --tagBg:rgba(255,255,255,0.6);--badgeBg:#b3402a;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#e9f5f2,#e2f0ec);--tipText:#0f6b63;
+    --amberBg:linear-gradient(135deg,#fdf6e7,#faeed2);--amberText:#8a5a0b;}
+  /* 方案4 Paper Ink 宣纸墨朱 */
+  .s4{--bg:#efeae1;--card:#fbf8f2;--cardAlt:#ffffff;--cover:linear-gradient(150deg,#fdf9f0 0%,#f0e8d8 40%,#e2d7c3 75%,#cfc2aa 100%);
+    --title:#262420;--main:#4a463d;--accent:#b23a2e;--sub:#5a5245;
+    --bad:#b23a2e;--badBg:#fbeceb;--badBd:#ecd0cc;--ok:#3b6b4f;--okBg:#eef4ef;--okBd:#c6dccd;
+    --bd:#e0d8c9;--weak:#7d7568;--num:rgba(59,58,52,0.08);--dialog:#f4efe4;
+    --tagBg:rgba(255,255,255,0.6);--badgeBg:#b23a2e;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#faf6ee,#f2ead9);--tipText:#4a463d;
+    --amberBg:linear-gradient(135deg,#fdf7e8,#f6ead0);--amberText:#8a6a1e;}
+  /* 方案5 Nordic Slate 雾蓝石板 */
+  .s5{--bg:#e9edf0;--card:#fbfcfd;--cardAlt:#ffffff;--cover:linear-gradient(150deg,#eef3f6 0%,#cfdde6 40%,#9db4c4 75%,#6f8a9c 100%);
+    --title:#16222b;--main:#3f6379;--accent:#c0763c;--sub:#3a5c72;
+    --bad:#b0453c;--badBg:#fbeeed;--badBd:#eeccc8;--ok:#2f7d6a;--okBg:#e9f4f1;--okBd:#b6dbd2;
+    --bd:#d6e0e7;--weak:#6c7b85;--num:rgba(63,99,121,0.10);--dialog:#eef3f6;
+    --tagBg:rgba(255,255,255,0.58);--badgeBg:#c0763c;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#eaf1f5,#dfeaf0);--tipText:#3f6379;
+    --amberBg:linear-gradient(135deg,#fdf3e6,#f8e6cd);--amberText:#8f5a20;}
+  /* 方案6 Moss Clay 苔绿陶土 */
+  .s6{--bg:#edefe6;--card:#fcfdf7;--cardAlt:#ffffff;--cover:linear-gradient(150deg,#f4f7e9 0%,#d9e2c4 40%,#a8bd8b 75%,#7d9663 100%);
+    --title:#242c1e;--main:#4f6b3c;--accent:#bd6b3c;--sub:#4a5c38;
+    --bad:#a8492f;--badBg:#fbeee8;--badBd:#eacebd;--ok:#4f7a3f;--okBg:#eef5e8;--okBd:#c3dbb2;
+    --bd:#dfe6d2;--weak:#6d7861;--num:rgba(79,107,60,0.10);--dialog:#f3f6ea;
+    --tagBg:rgba(255,255,255,0.6);--badgeBg:#bd6b3c;--badgeText:#fff;
+    --tipBg:linear-gradient(135deg,#f1f6e8,#e6efd9);--tipText:#4f6b3c;
+    --amberBg:linear-gradient(135deg,#fdf3e6,#f7e8ce);--amberText:#8f5a20;}
+  /* 方案7 Midnight Ink 夜色暗调 */
+  .s7{--bg:#10161a;--card:#1a2227;--cardAlt:#151c21;--cover:linear-gradient(150deg,#22343c 0%,#182528 45%,#0d1416 100%);
+    --title:#f0f5f3;--main:#7fd1b9;--accent:#e2b56a;--sub:#a8bfba;
+    --bad:#ff8a7a;--badBg:rgba(255,138,122,0.12);--badBd:rgba(255,138,122,0.32);
+    --ok:#7fd1b9;--okBg:rgba(127,209,185,0.12);--okBd:rgba(127,209,185,0.32);
+    --bd:rgba(255,255,255,0.10);--weak:#8ea3a0;--num:rgba(255,255,255,0.06);--dialog:rgba(255,255,255,0.05);
+    --tagBg:rgba(255,255,255,0.10);--badgeBg:#e2b56a;--badgeText:#10161a;
+    --tipBg:linear-gradient(135deg,rgba(127,209,185,0.14),rgba(127,209,185,0.07));--tipText:#7fd1b9;
+    --amberBg:linear-gradient(135deg,rgba(226,181,106,0.16),rgba(226,181,106,0.07));--amberText:#e2b56a;}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>小红书卡片 · 配色方案对比（7 套）</h1>
+  <p>
+    每套左侧是<b>封面卡</b>、右侧是<b>内容卡</b>（内容用的是《8年测试才发现技术不是瓶颈》真实文案）。<br>
+    方案 1-3 已登记进 <code>xhs_format_guide.md</code> §11.2；方案 4-7 是本次新设计，待你确认后登记。<br>
+    用法：说「用 XX 方案」即可，全篇卡片共用同一套变量，只换文案。
+  </p>
+</div>
+
+<div id="app"></div>
+
+<script>
+const SCHEMES = [
+  { k:'s1', name:'方案1 · Tech Indigo（科技靛蓝）', role:'技术科普 / 框架对比 / 底层原理', cls:'s1',
+    roleBg:'rgba(99,102,241,0.22)', roleColor:'#c7d2fe', pick:'✅ 已登记', pickColor:'#86efac',
+    sw:['#e8ecf1','#fafafd','#6366f1','#8b5cf6','#dc2626','#059669'],
+    bg:'#e8ecf1', fg:'#1e1b4b' },
+  { k:'s2', name:'方案2 · Sketch Cream（手绘奶油）', role:'入门教程 / 工具推荐 / 实操干货', cls:'s2',
+    roleBg:'rgba(232,133,107,0.25)', roleColor:'#FBE0D6', pick:'✅ 已登记', pickColor:'#86efac',
+    sw:['#EDE4D3','#FFFBF0','#5C4033','#E8856B','#E57373','#43A047'],
+    bg:'#EDE4D3', fg:'#3D3021' },
+  { k:'s3', name:'方案3 · Deep Teal × Amber（墨青 · 琥珀金）', role:'职场认知 / 团队管理 / 职业成长', cls:'s3',
+    roleBg:'rgba(184,119,15,0.25)', roleColor:'#F3DCA9', pick:'✅ 已登记', pickColor:'#86efac',
+    sw:['#e7edeb','#fafcfb','#0f6b63','#b8770f','#a8341f','#0f6b63'],
+    bg:'#e7edeb', fg:'#0e2a26' },
+  { k:'s4', name:'方案4 · Paper Ink（宣纸墨朱）', role:'心法认知 / 项目复盘 / 长期主义', cls:'s4',
+    roleBg:'rgba(178,58,46,0.25)', roleColor:'#F5CFC9', pick:'🆕 新设计', pickColor:'#FDE68A',
+    sw:['#efeae1','#fbf8f2','#4a463d','#b23a2e','#b23a2e','#3b6b4f'],
+    bg:'#efeae1', fg:'#262420' },
+  { k:'s5', name:'方案5 · Nordic Slate（雾蓝石板）', role:'数据指标 / 报告解读 / 横向评测', cls:'s5',
+    roleBg:'rgba(192,118,60,0.25)', roleColor:'#F2D6B8', pick:'🆕 新设计', pickColor:'#FDE68A',
+    sw:['#e9edf0','#fbfcfd','#3f6379','#c0763c','#b0453c','#2f7d6a'],
+    bg:'#e9edf0', fg:'#16222b' },
+  { k:'s6', name:'方案6 · Moss Clay（苔绿陶土）', role:'成长记录 / 习惯养成 / 个人故事', cls:'s6',
+    roleBg:'rgba(189,107,60,0.25)', roleColor:'#F5D8C2', pick:'🆕 新设计', pickColor:'#FDE68A',
+    sw:['#edefe6','#fcfdf7','#4f6b3c','#bd6b3c','#a8492f','#4f7a3f'],
+    bg:'#edefe6', fg:'#242c1e' },
+  { k:'s7', name:'方案7 · Midnight Ink（夜色暗调）', role:'深度长文 / 观点输出 / 视觉冲击', cls:'s7',
+    roleBg:'rgba(226,181,106,0.25)', roleColor:'#F3DFB4', pick:'⚠️ 特殊用途', pickColor:'#FCA5A5',
+    sw:['#10161a','#1a2227','#7fd1b9','#e2b56a','#ff8a7a','#7fd1b9'],
+    bg:'#10161a', fg:'#f0f5f3' }
+];
+
+const COVER = `
+  <div class="card card-cover">
+    <div class="cover-badge">🔥 真实血泪</div>
+    <div class="tag">💼 8年老测试 · 换维度</div>
+    <h1>8年测试才发现<br>技术不是瓶颈</h1>
+    <div class="subtitle">技术决定下限 · 维度决定上限<br>写给卡在执行层的第 5 年+</div>
+    <div class="cover-rule"></div>
+  </div>`;
+
+const CONTENT = `
+  <div class="card card-content">
+    <div class="num">01</div>
+    <div class="section">
+      <div class="section-title">😮‍💨 先说个扎心的</div>
+      <div class="dialog-box">
+        <div class="you-say">写了8年测试，技术这块自认不差。<br>脚本、框架、环境，同事有难题第一个找我。</div>
+        <div class="boss-say">可去年，我卡住了——<br>不是学不动，是发现再往上走，<br>技术给不了我答案了 💀</div>
+        <div class="aha">💡 因为我一直在解一道解不完的题：<br>我的产出，等于我的时间</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">🆚 我 vs 隔壁老哥</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">以前的我</div>
+          <div class="vs-content"><strong>技术最强</strong><br>一天最多干 8 小时<br>一个季度推不动一个项目</div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">隔壁老哥</div>
+          <div class="vs-content"><strong>带着 5 个人</strong><br>力气花在让大家干活上<br>推完我三年没推完的事</div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="tip amber">🎯 技术是把好刀，你只有一把<br>组织能力，是让每个人都拿到刀</div>
+    </div>
+  </div>`;
+
+document.getElementById('app').innerHTML = SCHEMES.map(s => `
+  <div class="scheme ${s.cls}" style="background:${s.bg};">
+    <div class="scheme-head" style="color:${s.fg};">
+      <h2>${s.name}</h2>
+      <span class="role" style="background:${s.roleBg};color:${s.roleColor};">${s.role}</span>
+      <span class="pick" style="background:rgba(0,0,0,0.10);color:${s.pickColor};">${s.pick}</span>
+      <div class="swatches">${s.sw.map(c => `<div class="sw" style="background:${c};"></div>`).join('')}</div>
+    </div>
+    <div class="mini-row">
+      <div class="mini">${COVER}</div>
+      <div class="mini">${CONTENT}</div>
+    </div>
+  </div>`).join('');
+</script>
+
+</body>
+</html>
