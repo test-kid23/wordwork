@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40人测试团队怎么排兵布阵 · 小红书卡片 · 雾蓝石板（方案5）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e9edf0; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(22,34,43,0.10); }
+
+  /* ===== 封面卡 ===== */
+  .card-cover { background:linear-gradient(150deg,#eef3f6 0%,#cfdde6 40%,#9db4c4 75%,#6f8a9c 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover::after { content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(520px 380px at 12% 8%, rgba(255,255,255,0.58), transparent 70%),
+      radial-gradient(460px 420px at 92% 88%, rgba(192,118,60,0.16), transparent 72%);
+  }
+  .card-cover .cover-badge { position:absolute; top:44px; left:56px; z-index:3; background:#c0763c; color:#fff; font-size:26px; font-weight:700; padding:12px 26px; border-radius:14px; letter-spacing:1px; }
+  .card-cover .tag { position:relative; z-index:2; background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); color:#3f6379; padding:12px 32px; border-radius:28px; font-size:34px; font-weight:700; margin-bottom:40px; }
+  .card-cover h1 { position:relative; z-index:2; font-size:88px; font-weight:900; color:#16222b; line-height:1.25; margin-bottom:26px; }
+  .card-cover .subtitle { position:relative; z-index:2; font-size:36px; color:#3a5c72; font-weight:400; line-height:1.55; }
+  .card-cover .cover-rule { position:relative; z-index:2; width:180px; height:6px; background:#c0763c; border-radius:3px; margin-top:36px; }
+  .card-cover .watermark { position:absolute; z-index:3; bottom:36px; right:56px; font-size:24px; color:rgba(22,34,43,0.28); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fbfcfd; padding:70px 76px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content.alt { background:#ffffff; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(63,99,121,0.10); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(22,34,43,0.12); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:38px; font-weight:800; color:#3f6379; margin-bottom:22px; padding-left:18px; border-left:6px solid #c0763c; line-height:1.35; }
+  .card-content .section-title.warn { color:#b0453c; border-left-color:#c98476; }
+
+  /* 对话盒 */
+  .dialog-box { background:#eef3f6; padding:44px 46px; border-radius:18px; }
+  .dialog-box .you-say { font-size:31px; color:#6c7b85; line-height:1.85; margin-bottom:22px; }
+  .dialog-box .boss-say { background:#fff; border-left:5px solid #c98476; padding:26px 32px; border-radius:12px; font-size:31px; color:#b0453c; font-weight:700; line-height:1.7; }
+  .dialog-box .aha { margin-top:22px; padding-top:20px; border-top:1px dashed #d6e0e7; font-size:31px; color:#3f6379; text-align:center; line-height:1.85; font-weight:700; }
+
+  /* 左右对比 */
+  .vs-row { display:flex; gap:20px; }
+  .vs-you { flex:1; background:#fbeeed; border:1.5px solid #eeccc8; border-radius:16px; padding:34px 30px; }
+  .vs-boss { flex:1; background:#e9f4f1; border:1.5px solid #b6dbd2; border-radius:16px; padding:34px 30px; }
+  .vs-label { font-size:27px; color:#b0453c; font-weight:800; margin-bottom:20px; text-align:center; line-height:1.4; }
+  .vs-boss .vs-label { color:#2f7d6a; }
+  .vs-content { font-size:24px; color:#6c7b85; line-height:1.8; }
+  .vs-content strong { color:#16222b; font-size:27px; }
+
+  /* 双栏并列 */
+  .dual-row { display:flex; gap:20px; }
+  .dual { flex:1; background:#e8eff4; border:1.5px solid #cfe0ea; border-radius:16px; padding:32px 30px; }
+  .dual.before { background:#f4f6f7; border-color:#dde4e8; }
+  .dual.after { background:#e9f4f1; border-color:#b6dbd2; }
+  .dual .du-icon { font-size:50px; text-align:center; margin-bottom:12px; line-height:1.1; }
+  .dual .du-title { font-size:28px; font-weight:800; color:#3f6379; text-align:center; margin-bottom:20px; line-height:1.35; }
+  .dual.before .du-title { color:#6c7b85; }
+  .dual.after .du-title { color:#2f7d6a; }
+  .dual .du-item { font-size:22px; color:#6c7b85; line-height:1.75; margin-bottom:14px; }
+  .dual .du-item:last-child { margin-bottom:0; }
+  .dual .du-item b { color:#3f6379; }
+
+  /* 三列 */
+  .three-row { display:flex; gap:16px; }
+  .three-item { flex:1; background:linear-gradient(135deg,#e8eff4,#dde8ee); border-radius:16px; padding:34px 20px; text-align:center; }
+  .three-item .tnum { font-size:52px; font-weight:900; color:#c0763c; margin-bottom:12px; line-height:1; }
+  .three-item .tlabel { font-size:26px; font-weight:800; color:#16222b; margin-bottom:16px; line-height:1.35; }
+  .three-item .tdesc { font-size:21px; color:#6c7b85; line-height:1.8; }
+
+  /* 2×2 网格 */
+  .boss-want { display:flex; flex-wrap:wrap; gap:16px; }
+  .want-item { flex:0 0 calc(50% - 8px); background:#fff; border:1.5px solid #d6e0e7; border-radius:14px; padding:28px 30px; display:flex; align-items:flex-start; gap:16px; box-shadow:0 2px 6px rgba(22,34,43,0.04); }
+  .card-content.alt .want-item { background:#fbfcfd; }
+  .wi-icon { font-size:38px; flex-shrink:0; line-height:1.2; }
+  .wi-body { font-size:22px; color:#6c7b85; line-height:1.65; }
+  .wi-body strong { display:block; font-size:26px; color:#3f6379; margin-bottom:6px; }
+
+  /* 金句盒 */
+  .tip { background:linear-gradient(135deg,#eaf1f5,#dfeaf0); padding:40px 44px; border-radius:16px; font-size:31px; color:#3f6379; text-align:center; font-weight:700; line-height:1.8; }
+  .tip.amber { background:linear-gradient(135deg,#fdf3e6,#f8e6cd); color:#8f5a20; }
+  .tip.warn { background:rgba(176,69,60,0.06); border:1.5px dashed #e5b3aa; color:#b0453c; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef4f8 0%,#dae7ee 50%,#c2d5e0 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:46px; font-weight:900; color:#16222b; margin-bottom:26px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.7); padding:26px 44px; border-radius:18px; font-size:29px; color:#3f6379; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#3a5c72; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#3f6379; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(63,99,121,0.5); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(22,34,43,0.2); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(22,34,43,0.4); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(22,34,43,0.62); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#3f6379; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#33505f; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="cover-badge">🗺️ 组织图谱</div>
+    <div class="tag">🧮 40 人的盘子怎么切</div>
+    <h1>40人测试团队<br>怎么排兵布阵</h1>
+    <div class="subtitle">业务 22 · 能力 11 · 效能 5 · 管理 2<br>分错了，半年都调不回来</div>
+    <div class="cover-rule"></div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">🧮 40 个人，分完还是不够用</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          我第一次排编制，<br>
+          花了三个晚上，<br>
+          改到第五版才勉强能看。
+        </div>
+        <div class="boss-say">
+          而且我清楚一件事：<br>
+          这个版本一旦定了，<br>
+          半年内很难再调回来。
+        </div>
+        <div class="aha">
+          💡 排编制不是分人头<br>是分「能力缺口」
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        分错组，调一次要半年<br>排之前先想清楚三件事：<br>谁背交付、谁沉能力、谁提效率
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：三层编制 -->
+  <div class="card card-content alt">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🧩 40 人分三层</div>
+      <div class="three-row">
+        <div class="three-item">
+          <div class="tnum">22</div>
+          <div class="tlabel">业务测试组</div>
+          <div class="tdesc">App 线 A　6 人<br>App 线 B　5 人<br>SaaS 线　6 人<br>私有化交付　5 人</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">11</div>
+          <div class="tlabel">能力中心</div>
+          <div class="tdesc">自动化组　5 人<br>性能组　3 人<br>安全组　2 人<br>测试架构师　1 人</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">5</div>
+          <div class="tlabel">效能组</div>
+          <div class="tdesc">工具平台　3 人<br>CI/CD　2 人<br><br>+ 管理线 2 人</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip">
+        业务组保交付<br>能力中心保沉淀<br>效能组保效率
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：为什么按业务线分 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">⚖️ 按技术栈分，还是按业务线分</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">❌ 按技术栈分</div>
+          <div class="vs-content">
+            前端归前端<br>
+            后端归后端<br>
+            App 归 App<br><br>
+            一个需求串三个组<br>
+            谁都不背交付责任<br>
+            出事互相甩锅
+          </div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">✅ 按业务线分</div>
+          <div class="vs-content">
+            一个人跟一条线<br>
+            从需求跟到上线<br><br>
+            节奏一致，责任清晰<br>
+            出事不用扯皮<br>
+            迭代也不用互相等
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        分组的本质不是分工<br>是让「责任」有唯一的主人
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：关键调整 -->
+  <div class="card card-content alt">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title">🔧 我做的一个反直觉调整</div>
+      <div class="dual-row">
+        <div class="dual before">
+          <div class="du-icon">😵</div>
+          <div class="du-title">调整前</div>
+          <div class="du-item">自动化组 <b>7 人</b></div>
+          <div class="du-item">回归一次要 <b>3 天</b></div>
+          <div class="du-item">报告靠手动截图</div>
+          <div class="du-item">脚本再全，还是靠人点</div>
+        </div>
+        <div class="dual after">
+          <div class="du-icon">🚀</div>
+          <div class="du-title">调整后</div>
+          <div class="du-item">自动化组 <b>5 人</b> + CI/CD <b>2 人</b></div>
+          <div class="du-item">提交自动触发</div>
+          <div class="du-item">门禁不过不许合并</div>
+          <div class="du-item">回归一次 <b>2 小时</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip">
+        从自动化里抽人搭流水线<br>被问「为什么」的时候<br>答案只有一句：地基不牢，跑得越快摔得越狠
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>编制不是按人头分<br>是按能力缺口分</h2>
+    <div class="golden">
+      人多的地方，不一定重要<br>缺人的地方，一定是短板
+    </div>
+    <div class="cta-ask">
+      💬 你们团队是按业务线分<br>还是按职能分？<br>评论区聊聊～
+    </div>
+    <div class="save-tip">⭐ 收藏 · 下次排编制翻出来对照一遍</div>
+    <div class="hashtags">
+      #测试团队 #团队建设 #组织设计 #研发效能 #测试管理
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '40人测试团队怎么排兵布阵';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>
