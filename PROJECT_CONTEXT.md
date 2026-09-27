@@ -42,140 +42,101 @@
 wordwork/
 ├── PROJECT_CONTEXT.md          # 本文件
 ├── README.md                   # 项目说明
+├── wx_format_guide.md          # 微信公众号排版规范
+├── csdn_format_guide.md        # CSDN 排版规范
+├── xhs_format_guide.md         # 小红书排版规范
+├── douyin_format_guide.md      # 抖音图文规范
 │
-├── ai_road_wx/                 # AI 进阶之路主目录
+├── ai_road_wx/                 # AI 进阶之路主目录（公众号深度长文）
 │   ├── ai_beginner_wx/         #  AI 小白入门系列（微信公众号）✅ 6篇完成
-│   │   ├── PLAN.md                     # 系列选题规划
-│   │   ├── README.md                   # 使用说明
-│   │   ├── wx-beginner-00-concepts.html   # 第0篇：大模型基础概念介绍
-│   │   ├── wx-beginner-01-scenarios.html  # 第1篇：5个打工人必备AI场景
-│   │   ├── wx-beginner-02-prompt.html     # 第2篇：普通人Prompt炼金术
-│   │   ├── wx-beginner-03-tools.html      # 第3篇：这些AI工具全是免费的
-│   │   ├── wx-beginner-04-mindset.html    # 第4篇：AI时代不被替代的能力
-│   │   └── wx-beginner-05-nextstep.html   # 第5篇：用熟了Kimi和豆包，然后呢？
-│   ├── ai_concepts/             #  「一文讲清XX」硬核概念科普系列 🔥
-│   │   └── PLAN.md                     # 选题规划（8篇）
-│   ├── ai_learning/            #  AI 学习系列（入门向）
-│   │   ├── ai-beginner-guide.md              # AI 入门指南
-│   │   ├── advanced-ai-team-building-guide.md # 进阶：AI 团队搭建
-│   │   ├── llama_cpp_deploy_guide.md          # llama.cpp 部署指南
-│   │   └── local-llm-gpu-guide.md             # 本地大模型 GPU 部署指南
-│   ├── ai_road/                #  AI 进阶之路系列（深度版，7 章）
-│   │   ├── chapter-01-cognitive-upgrade.md    # 认知升级
-│   │   ├── chapter-02-core-principles.md      # 核心原则
-│   │   ├── chapter-03-team-architectures.md   # 团队架构
-│   │   ├── chapter-04-workflow-engine.md      # 工作流引擎
-│   │   ├── chapter-05-advanced-ops.md         # 进阶运维
-│   │   ├── chapter-06-pitfalls.md             # 踩坑实录
-│   │   └── chapter-07-summary-action.md       # 总结与行动
+│   ├── ai_concepts/            #  「一文讲清XX」硬核概念科普系列（8篇待创作）
+│   ├── ai_learning/            #  AI 学习系列（入门向）✅ 4篇
+│   ├── ai_road/                #  AI 进阶之路系列（深度版，7章）✅
 │   ├── image/                  #  配图资源
-│   └── Published/              #  公众号适配版已发布内容
-│       ├── wx-01-pitfalls.md       # 踩坑篇
-│       ├── wx-02-main.md           # 正文核心
-│       ├── wx-03-studio.md         # AI Studio
-│       ├── wx-04-local-dev.md      # 本地开发
-│       ├── wx-05-ops.md            # 运维篇
-│       └── wx-06-action.md         # 行动篇
+│   └── Published/              #  公众号适配版已发布内容（6篇）
 │
-├── ai_test_csdn/               # AI 测试技术分享（CSDN 深度长文）🔥
-│   ├── README.md                       # 系列概览
-│   ├── OUTLINE.md                      # 完整大纲（三主线 + 两个子系列）
-│   ├── csdn-01-requests-ai-practice.md # 第1期：requests 核心编程与 AI 协作
-│   ├── csdn-02-playwright-ai-practice.md # 第2期：Playwright 核心编程与 AI 协作
-│   ├── csdn-03-ai-diagnosis-assertion.md # 第3期：AI 辅助失败诊断与智能断言
-│   ├── ai-test-platform-dev-outline.md # 平台开发系列大纲
-│   ├── selenium_webui/                 # 🆕 Selenium WebUI 自动化保姆级教程（6/12 篇）
-│   │   ├── csdn-selenium-00-overview.md        # 总篇：工具全景选型
-│   │   ├── csdn-selenium-01-env-setup.md       # 第0章：环境搭建
-│   │   ├── csdn-selenium-02-minimum-chain.md   # 第1章：最小可执行链路
-│   │   ├── csdn-selenium-03-locator-deep-1.md  # 第2章：元素定位（上）
-│   │   ├── csdn-selenium-04-locator-deep-2.md  # 第3章：元素定位（下）
-│   │   └── csdn-selenium-05-waits.md           # 第4章：等待机制
-│   └── appium_mobile/                 # 🆕 Appium App 自动化保姆级教程（6/12 篇）
-│       ├── csdn-appium-00-overview.md          # 总篇：App 自动化工具全景选型
-│       ├── csdn-appium-01-env-setup.md         # 第0章：Appium 3 环境搭建
-│       ├── csdn-appium-02-minimum-chain.md     # 第1章：最小可执行链路
-│       ├── csdn-appium-03-locator-deep.md      # 第2章：元素定位
-│       ├── csdn-appium-04-gestures.md          # 第3章：基础操作与手势
-│       └── csdn-appium-05-waits.md             # 第4章：等待与同步
+├── ai_test_csdn/               # AI 测试技术分享（CSDN 深度长文）
+│   ├── selenium_webui/         #  Selenium WebUI 自动化保姆级教程（6/12篇）
+│   └── appium_mobile/          #  Appium App 自动化保姆级教程（6/12篇）
 │
 ├── ai_test_xhs/                # AI + 测试 小红书系列（轻阅读向）
-│   ├── README.md               # 系列说明与选题规划
-│   ├── OUTLINE.md
-│   ├── rednote_account_plan.md # 账号规划
-│   ├── xhs-01~03 已写 3 篇
-│   └── xhs-04~13 规划 10 篇
+│   ├── mgmt-team/              #  测试管理类卡片（方案5 Nordic Slate）
+│   ├── daifabu/                #  代发布相关
+│   ├── apitestframwork/        #  API 测试框架笔记
+│   ├── ch5-data-extract/       #  数据提取章节
+│   ├── ch6-fixture/            #  测试夹具章节
+│   └── published/              #  已发布卡片（含 HTML/MD）
 │
-├── codebuddy/                  # CodeBuddy 深度使用系列
-│   └── 1.1~1.5 已写 5 篇（含 .md 与 -wx.html）
-├── rag/                        # RAG 私有知识库系列
-│   └── 1.1~1.4 已写 4 篇（含 .md 与 -wx.html）
-├── claude_code/                # Claude Code 工作流系列
-│   ├── OUTLINE.md
-│   └── claude_write_case01.md  # 首篇
-├── deepseek/                   # DeepSeek V4 + Harness 系列 🔥 连载中
-│   ├── OUTLINE.md                       # 大纲（18 篇规划：入门/实战/进阶/踩坑）
-│   ├── 1.1-deepseek-v4-pro-0813.md      # 第1篇：V4 Pro 正式版拆解（含 -wx.html）
-│   ├── 1.2-dual-protocol-api-claude-code.md  # 第2篇：双协议 API 迁移 Claude Code（含 -wx.html）
-│   ├── 1.3-deepseek-harness.md               # 第3篇：Harness 开源上手（含 -wx.html）
-│   ├── 1.4-selection-guide-pro-flash-harness.md  # 第4篇：三件套选型（含 -wx.html）
+├── ai_test_douyin/             # AI + 测试 抖音图文适配版（图片复用 XHS 卡片）
+│   └── published/
 │
-├── workbuddy/                  # WorkBuddy 全场景 AI 工作台系列 🆕 连载中
-│   ├── OUTLINE.md                       # 系列大纲（四部分：入门/实战/进阶/踩坑）
-│   ├── PLAN.md                          # 首期创作计划（第一部分 5 篇）
-│   ├── 1.1-workbuddy-what-is-it.md      # 第1篇：WorkBuddy 是什么（含 -wx.html）
+├── AIshare/                    # AI 好物 / 工具分享系列（公众号图文）🔥
+│   └── pub/
 │
-├── scene_ocp/                  # 一人公司 OPC 系列 🏢
-│   ├── README.md               # 系列概览
-│   ├── PLAN.md                 # 详细选题规划（7 篇）
-│   ├── ocp-knowledge-01-trend-data.md  # 知识库：趋势与数据
-│   ├── ocp-knowledge-02-cases.md       # 知识库：案例拆解
-│   ├── ocp-knowledge-03-tools.md       # 知识库：AI 工具链
-│   └── ocp-knowledge-04-painpoints.md  # 知识库：陷阱与痛点
+├── tietu/                      # 贴图系列 · 一图讲清（微信公众号图片化科普）🆕
+│   ├── README.md / OUTLINE.md  #  说明与大纲（首批 12 个选题池）
+│   ├── templates/              #  图卡 HTML 模板
+│   ├── published/              #  已发布成品（HTML + PNG）
+│   └── image/                  #  截图 / 素材
 │
-├── testengineer/               # 软件测试工程师技能与职业发展 📁 目录已建
+├── codebuddy/                  # CodeBuddy 深度使用系列（已写 5 篇）
+├── rag/                        # RAG 私有知识库系列（已写 4 篇）
+├── claude_code/                # Claude Code 工作流系列（已写 1 篇）
+├── deepseek/                   # DeepSeek V4 + Harness 系列（已写 4 篇）
+├── workbuddy/                  # WorkBuddy 全场景 AI 工作台系列（1.x–2.x 已发；2.6 小程序已起稿）
+├── qoder/                      # Qoder 阿里智能体编程平台系列
+├── qoderwork/                  # QoderWork 桌面 AI 办公助手系列
+├── qwenwork/                   # Qwen / 通义系列（新开）
+├── opc/                        # 一人公司 OPC 系列（原 scene_ocp）
+│   ├── opc_01_city(.md/.html)  #  一人公司·城市篇
+│   ├── opc_02_track(.md/.html) #  一人公司·赛道篇
+│   ├── opc_03_compliance(.md/.html) # 一人公司·合规篇
+│   ├── opc-knowledge-01~04     #  知识库：趋势/案例/工具/痛点
+│   └── opc资料.md / PLAN.md / README.md
 ├── personal_skill/             # 个人技术备忘（性能测试工具等）
-│   ├── cosbench.md
-│   └── vdbench.md
 │
-├── qoder/                      # Qoder 阿里智能体编程平台深度使用系列 🔥
-├── qoderwork/                  # QoderWork 桌面 AI 办公助手系列（面向非技术用户） 🖥️
 ├── comfyui/                    # ComfyUI 节点化 AI 视觉生成系列（待创作）🎨
 ├── hermes/                     # Hermes Agent 自我进化 AI 代理系列（待创作）
 ├── openclaw/                   # OpenClaw 本地优先个人 AI 助手系列（待创作）🦞
 ├── openhuman/                  # OpenHuman 个人 AI 超级智能系列（待创作）
-└── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
+├── llamacpp/                   # llama.cpp 本地部署大模型系列（待创作）
+│
+└── generated-images/           # AI 生成封面 / 配图素材库
 ```
 
 ## 各系列创作进度（跟随 AI 浪潮持续更新）
 
 | 目录 | 系列主题 | 状态 |
 |------|---------|------|
+| `ai_road_wx/` | AI 进阶之路主目录（公众号深度长文 + 小白入门 + 概念科普） | 🔥 进行中 |
 | `ai_road_wx/ai_beginner_wx/` | AI 小白入门系列（公众号）| ✅ 已完成 6/6 篇 |
-| `ai_road_wx/ai_concepts/` | 「一文讲清XX」硬核概念科普 | 🔥 8篇待创作 |
+| `ai_road_wx/ai_concepts/` | 「一文讲清XX」硬核概念科普 | 📝 8篇待创作 |
 | `ai_road_wx/ai_learning/` | AI 学习系列（入门向） | ✅ 已完成 4 篇 |
 | `ai_road_wx/ai_road/` | AI 进阶之路（深度版） | ✅ 已完成 7 章 |
 | `ai_road_wx/Published/` | AI 进阶之路（公众号适配版） | ✅ 已完成 6 篇 |
 | `ai_test_csdn/` | AI 测试技术分享（CSDN 正刊）| 🔥 已写 3 篇，主线三待启动 |
-| `ai_test_csdn/selenium_webui/` | Selenium WebUI 自动化保姆级教程 🆕 | 🔥 已写 6/12 篇（总篇+5章）|
-| `ai_test_csdn/appium_mobile/` | Appium App 自动化保姆级教程 🆕 | 🔥 已写 6/12 篇（总篇+5章）|
+| `ai_test_csdn/selenium_webui/` | Selenium WebUI 自动化保姆级教程 | 🔥 已写 6/12 篇 |
+| `ai_test_csdn/appium_mobile/` | Appium App 自动化保姆级教程 | 🔥 已写 6/12 篇 |
+| `ai_test_xhs/` | AI + 测试 小红书系列（mgmt-team / daifabu / published 等多栏目） | 🔥 连载中，已发布大量卡片 |
+| `ai_test_douyin/` | AI + 测试 抖音图文适配版 | 🔥 连载中，图片复用 XHS 卡片 |
+| `AIshare/` | AI 好物 / 工具分享（公众号图文）| 🔥 连载中，已写 10+ 篇（002–018）|
+| `tietu/` | 贴图系列 · 一图讲清（**微信公众号**图片化科普：工具科普 / 大模型对比 / 参数解读）| 🆕 新开，大纲已建，首批 12 个选题池，成品 0/12 |
 | `codebuddy/` | CodeBuddy 深度使用与能力挖掘 | 🔥 连载中，已写 5 篇 |
 | `rag/` | RAG 私有知识库搭建 | 🔥 连载中，已写 4 篇 |
 | `claude_code/` | Claude Code 深度使用与工作流 | 🔥 连载中，已写 1 篇 |
-| `deepseek/` | DeepSeek V4 + Harness 深度实战（0813 正式版 + Agent 框架开源） | 🔥 连载中，已写 4 篇（第一部分完结） |
-| `workbuddy/` | WorkBuddy 全场景 AI 工作台（面向不会写代码的普通人） | 🔥 新开系列，大纲已建，已写 1 篇 |
-| `ai_test_xhs/` | AI + 测试 小红书系列 | 🔥 连载中，已写 3 篇 |
-| `ai_test_douyin/` | AI + 测试 抖音图文适配版 | 🔥 第1章 8 篇配文已适配，图片复用 XHS 卡片 |
-| `scene_ocp/` | 一人公司 OPC 系列 | 📝 知识库 4 篇已建，正文 0/7 待创作 |
-| `testengineer/` | 软件测试工程师技能与职业发展 | 📁 目录已建，待创作 |
-| `personal_skill/` | 个人技术备忘 | 📝 积累中（2 篇） |
-| `qoder/` | Qoder 阿里智能体编程平台深度使用 | 📝 大纲已建，18 篇待创作 |
-| `qoderwork/` | QoderWork 桌面 AI 办公助手 | 📝 大纲已建，20 篇待创作 |
+| `deepseek/` | DeepSeek V4 + Harness 深度实战 | 🔥 连载中，已写 4 篇 |
+| `workbuddy/` | WorkBuddy 全场景 AI 工作台（面向不会写代码的普通人） | 🔥 连载中，1.x–2.x 已发，2.6 小程序已起稿 |
+| `qoder/` | Qoder 阿里智能体编程平台深度使用 | 📝 大纲已建，待创作 |
+| `qoderwork/` | QoderWork 桌面 AI 办公助手 | 📝 大纲已建，待创作 |
+| `qwenwork/` | Qwen / 通义系列（新开）| 📝 已开坑，1 篇（注册免费薅羊毛）|
+| `opc/` | 一人公司 OPC 系列（原 scene_ocp）| 📝 正文 opc_01~03 已写 3 篇 + 知识库 4 篇 |
+| `personal_skill/` | 个人技术备忘 | 📝 积累中 |
 | `comfyui/` | ComfyUI 节点化 AI 视觉生成 🎨 | 📁 目录已建，待创作 |
 | `hermes/` | Hermes Agent 自我进化 AI 代理 | 📁 目录已建，待创作 |
 | `openclaw/` | OpenClaw 本地优先个人 AI 助手 🦞 | 📁 目录已建，待创作 |
 | `openhuman/` | OpenHuman 个人 AI 超级智能 | 📁 目录已建，待创作 |
 | `llamacpp/` | llama.cpp 本地部署大模型 | 📁 目录已建，待创作 |
+| `generated-images/` | AI 生成封面 / 配图素材库 | 📁 素材沉淀 |
 
 ## 排版规范
 
@@ -186,17 +147,39 @@ wordwork/
 | 小红书 | `xhs_format_guide.md` | 纯文本 + emoji 排版，口语化短句，卡片式结构 |
 | 抖音 | `douyin_format_guide.md` | 图文配文规范，开篇炸场 + 节奏碎 + BGM 策略，图片复用小红书卡片 |
 
-## 微信公众号运营笔记（2026.06 补充，2026.07 冷启动期优化）
+## 微信公众号运营笔记（2026.06 补充，2026.07 冷启动期优化，2026.09 复盘更新）
 
-### 当前账号状态
+### 当前账号状态（截至 2026.09）
 
-- **粉丝数**：40
-- **主要流量来源**：「搜一搜」> 推荐
-- **关键发现**：「蹭热度/大厂新品」和「免费薅羊毛」类文章阅读量（72、103）远优于「干货/教程/个人见解」类（2-8）
+- **粉丝数**：120
+- **流量主**：已开通 ✅
+- **累计发文**：60+ 篇
+- **阅读表现**：整体呈「**一篇爆款吃掉大半流量 + 其余长尾偏冷**」的极端分布——近 30 天里 WorkBuddy 首篇 2067 阅读独占 60.30%，其余 60+ 篇大多在 100 以下，真正过 200 的仍是极少数。
+- **主要流量来源**：「搜一搜」> 推荐（与早期一致）
+- **历史关键发现（2026.07）**：「蹭热度/大厂新品」和「免费薅羊毛」类阅读量（72、103）远优于「干货/教程/个人见解」类（2-8）
   - 爆款案例：阿里 Qoder 系列（72）、腾讯混元免费（103）
   - 反例：Claude Code 是什么（4）、AI入门：用熟了Kimi和豆包然后呢（2）、日常深度分析（2-8）
-- **当前阶段**：账号冷启动期。
-- **核心策略**：不是不写干货，而是改变"带货"和"内容包装"方式。
+- **当前阶段判断**：已过冷启动（有了基础粉丝 + 流量主），进入「**靠单品爆款拉量、但缺乏可复制的稳定打法**」阶段。好消息是 WorkBuddy 方向已被数据验证（见下表），坏消息是流量高度集中在单篇，系列内其余长尾没跟上。
+- **核心策略**：把已验证的 WorkBuddy 方向做成**主力连载系列**（复刻「具体场景 + 手把手上手 + 结果交付」的标题与内容打法），同时用「大厂新品盘点/横评」承接中等流量；从「单篇蹭流量」转向「系列化沉淀 + 搜一搜长尾 + 跨平台引流」。
+
+### 📈 高阅读内容 TOP（近 30 天，2026.09 后台数据）
+
+| 排名 | 内容标题 | 阅读人数 | 占比 | 发布 |
+|------|---------|---------|------|------|
+| 1 | 下载了 WorkBuddy 不知道怎么用？15 分钟，我让它干完了第一单活 | **2067** | 60.30% | 09/04 |
+| 2 | 11 个 AI 同时给我做 PPT，第一次的效果让我想退款 | 267 | 7.79% | 08/28 |
+| 3 | 当下最火两款 AI Agent，OpenClaw & Hermes | 228 | 6.65% | 07/28 |
+| 4 | 不懂设计，我让 WorkBuddy 帮我出图——一张能用只要 10 分钟 | 122 | 3.56% | 09/17 |
+| 5 | 【WorkBuddy】3 小时的调研，现在 5 分钟搞 | 106 | 3.09% | 09/13 |
+| 6 | 【WorkBuddy】一个需求丢过去，5 个 AI 专家抢着干，还不加工资 | 104 | 3.03% | 09/08 |
+
+**数据结论（2026.09）：**
+
+1. **WorkBuddy 是当前唯一被验证能打的选题方向**——TOP6 里 4 篇是 WorkBuddy 系列，且首篇 2067 直接破圈（占比 60.3%）。
+2. **爆款靠「具体第一单活」而非泛泛介绍**——阅读第一的标题是「不知道怎么用？15 分钟，我让它干完了第一单活」，卖点是「上手 + 完成真实任务 + 可量化时间」，不是功能罗列。
+3. **「大厂新品横评/盘点」能承接中等流量**——11个AI做PPT（267）、OpenClaw&Hermes（228）属此类，可作为每次新模型的快速反应栏目。
+4. **系列内长尾偏弱**——同为 WorkBuddy 的第 4/5/6 篇只有 100 出头，说明**流量没在系列内沉淀**，需要靠合辑、文末互链、封面统一来把首篇的爆发力导给后续篇。
+5. **下一步打法**：WorkBuddy 做成固定连载（编号 + 统一封面 + 每篇挂合辑），每一篇都按「一个真实任务 → 手把手 → 结果截图/数据」来写，标题沿用「下载了 X 不知道怎么用？N 分钟，我让它干完了 Y」的成功句式变体。
 
 ---
 
