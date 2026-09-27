@@ -41,6 +41,7 @@
 | 015 | `aishare-015-qoder-ultimate-free-calls.html` | Qoder白送200次极致调用，Qwen3.7 Max 夜间2折 | 💰 薅羊毛 |
 | 016 | `aishare-016-waic-2026-news.html` | WAIC 2026干货速递（上）：AI不卷参数了，开始真干活了 | 📰 行业速递 · 7.17-18 |
 | 017 | `aishare-017-waic-2026-closing.html` | WAIC 2026下半场（下）：AI搞科研了、SAIL奖花落谁家 | 📰 行业速递 · 7.19-20 |
+| 018 | `aishare-018-free-agent-tools-2026.html` | 5家AI的免费额度我全薅了一遍，顺手让它们各写了贪吃蛇 | 💰 薅羊毛 · 合集 |
 
 
 ---
@@ -102,5 +103,7 @@ AIshare/
 └── aishare-015-qoder-ultimate-free-calls.html # Qoder编程工具200次极致调用+错峰折扣
 └── aishare-016-waic-2026-news.html            # WAIC 2026大会速递（上）· 7.17-18产业落地与硬件爆发
 └── aishare-017-waic-2026-closing.html          # WAIC 2026大会速递（下）· 7.19-20科研学术与闭幕
+└── aishare-018-free-agent-tools-2026.html      # 免费Agent合集（WorkBuddy/Qoder/千问办公/Trae）+ 贪吃蛇实测视频 + Claude Code×CC Switch×DeepSeek
 
 ```
+
