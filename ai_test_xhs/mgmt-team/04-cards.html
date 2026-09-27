@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测试团队怎么分组才不打架 · 小红书卡片 · 雾蓝石板（方案5）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e9edf0; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(22,34,43,0.10); }
+
+  /* ===== 封面卡 ===== */
+  .card-cover { background:linear-gradient(150deg,#eef3f6 0%,#cfdde6 40%,#9db4c4 75%,#6f8a9c 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover::after { content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(520px 380px at 12% 8%, rgba(255,255,255,0.58), transparent 70%),
+      radial-gradient(460px 420px at 92% 88%, rgba(192,118,60,0.16), transparent 72%);
+  }
+  .card-cover .cover-badge { position:absolute; top:44px; left:56px; z-index:3; background:#c0763c; color:#fff; font-size:26px; font-weight:700; padding:12px 26px; border-radius:14px; letter-spacing:1px; }
+  .card-cover .tag { position:relative; z-index:2; background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); color:#3f6379; padding:12px 32px; border-radius:28px; font-size:34px; font-weight:700; margin-bottom:40px; }
+  .card-cover h1 { position:relative; z-index:2; font-size:88px; font-weight:900; color:#16222b; line-height:1.25; margin-bottom:26px; }
+  .card-cover .subtitle { position:relative; z-index:2; font-size:36px; color:#3a5c72; font-weight:400; line-height:1.55; }
+  .card-cover .cover-rule { position:relative; z-index:2; width:180px; height:6px; background:#c0763c; border-radius:3px; margin-top:36px; }
+  .card-cover .watermark { position:absolute; z-index:3; bottom:36px; right:56px; font-size:24px; color:rgba(22,34,43,0.28); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fbfcfd; padding:70px 76px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content.alt { background:#ffffff; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(63,99,121,0.10); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(22,34,43,0.12); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:38px; font-weight:800; color:#3f6379; margin-bottom:22px; padding-left:18px; border-left:6px solid #c0763c; line-height:1.35; }
+  .card-content .section-title.warn { color:#b0453c; border-left-color:#c98476; }
+
+  /* 对话盒 */
+  .dialog-box { background:#eef3f6; padding:44px 46px; border-radius:18px; }
+  .dialog-box .you-say { font-size:31px; color:#6c7b85; line-height:1.85; margin-bottom:22px; }
+  .dialog-box .boss-say { background:#fff; border-left:5px solid #c98476; padding:26px 32px; border-radius:12px; font-size:31px; color:#b0453c; font-weight:700; line-height:1.7; }
+  .dialog-box .aha { margin-top:22px; padding-top:20px; border-top:1px dashed #d6e0e7; font-size:31px; color:#3f6379; text-align:center; line-height:1.85; font-weight:700; }
+
+  /* 左右对比 */
+  .vs-row { display:flex; gap:20px; }
+  .vs-you { flex:1; background:#fbeeed; border:1.5px solid #eeccc8; border-radius:16px; padding:34px 30px; }
+  .vs-boss { flex:1; background:#e9f4f1; border:1.5px solid #b6dbd2; border-radius:16px; padding:34px 30px; }
+  .vs-label { font-size:27px; color:#b0453c; font-weight:800; margin-bottom:20px; text-align:center; line-height:1.4; }
+  .vs-boss .vs-label { color:#2f7d6a; }
+  .vs-content { font-size:24px; color:#6c7b85; line-height:1.8; }
+  .vs-content strong { color:#16222b; font-size:27px; }
+
+  /* 双轮并列 */
+  .dual-row { display:flex; gap:20px; }
+  .dual { flex:1; background:#e8eff4; border:1.5px solid #cfe0ea; border-radius:16px; padding:32px 30px; }
+  .dual .du-icon { font-size:50px; text-align:center; margin-bottom:12px; line-height:1.1; }
+  .dual .du-title { font-size:29px; font-weight:800; color:#3f6379; text-align:center; margin-bottom:18px; }
+  .dual .du-item { font-size:22px; color:#6c7b85; line-height:1.75; margin-bottom:12px; }
+  .dual .du-item:last-child { margin-bottom:0; }
+  .dual .du-item b { color:#3f6379; }
+
+  /* 三列 */
+  .three-row { display:flex; gap:16px; }
+  .three-item { flex:1; background:linear-gradient(135deg,#e8eff4,#dde8ee); border-radius:16px; padding:32px 18px; text-align:center; }
+  .three-item .tnum { font-size:36px; font-weight:900; color:#c0763c; margin-bottom:14px; line-height:1; letter-spacing:2px; }
+  .three-item .tlabel { font-size:26px; font-weight:800; color:#16222b; margin-bottom:14px; line-height:1.35; }
+  .three-item .tdesc { font-size:21px; color:#6c7b85; line-height:1.75; }
+
+  /* 2×2 网格 */
+  .boss-want { display:flex; flex-wrap:wrap; gap:16px; }
+  .want-item { flex:0 0 calc(50% - 8px); background:#fff; border:1.5px solid #d6e0e7; border-radius:14px; padding:28px 30px; display:flex; align-items:flex-start; gap:16px; box-shadow:0 2px 6px rgba(22,34,43,0.04); }
+  .card-content.alt .want-item { background:#fbfcfd; }
+  .wi-icon { font-size:38px; flex-shrink:0; line-height:1.2; }
+  .wi-body { font-size:22px; color:#6c7b85; line-height:1.65; }
+  .wi-body strong { display:block; font-size:26px; color:#3f6379; margin-bottom:6px; }
+
+  /* 金句盒 */
+  .tip { background:linear-gradient(135deg,#eaf1f5,#dfeaf0); padding:40px 44px; border-radius:16px; font-size:31px; color:#3f6379; text-align:center; font-weight:700; line-height:1.8; }
+  .tip.amber { background:linear-gradient(135deg,#fdf3e6,#f8e6cd); color:#8f5a20; }
+  .tip.warn { background:rgba(176,69,60,0.06); border:1.5px dashed #e5b3aa; color:#b0453c; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef4f8 0%,#dae7ee 50%,#c2d5e0 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:46px; font-weight:900; color:#16222b; margin-bottom:26px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.7); padding:26px 44px; border-radius:18px; font-size:29px; color:#3f6379; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#3a5c72; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#3f6379; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(63,99,121,0.5); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(22,34,43,0.2); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(22,34,43,0.4); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(22,34,43,0.62); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#3f6379; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#33505f; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="cover-badge">🧩 组织设计</div>
+    <div class="tag">⚔️ 月更和季更的组抢人</div>
+    <h1>测试团队<br>怎么分组才不打架</h1>
+    <div class="subtitle">业务组 · 能力中心 · 效能组<br>一套从「抢人」到「排队」的混合制</div>
+    <div class="cover-rule"></div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子故事 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">⚔️ 复盘会开成了吵架会</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          做企业服务的组：<br>
+          「你把我的人抽走了，<br>
+          我这条线要延期。」
+        </div>
+        <div class="boss-say">
+          做消费端的组：<br>
+          「我这边更急，<br>
+          线上问题一天都不能等。」
+        </div>
+        <div class="aha">
+          💡 不是人的问题<br>是资源结构的问题
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title warn">📉 为什么一定会吵</div>
+      <div class="tip warn">
+        只要资源是「抢」来的<br>就一定会打架<br>谁嗓门大，谁先拿到人
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：混合制三个组 -->
+  <div class="card card-content alt">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🧩 混合制：三个组，三种活法</div>
+      <div class="three-row">
+        <div class="three-item">
+          <div class="tnum">01</div>
+          <div class="tlabel">业务测试组</div>
+          <div class="tdesc">嵌进业务线里<br>跟着迭代节奏走<br>第一责任是交付</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">02</div>
+          <div class="tlabel">能力中心</div>
+          <div class="tdesc">不跟具体项目<br>沉淀通用能力<br>谁需要谁排期预约</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">03</div>
+          <div class="tlabel">效能组</div>
+          <div class="tdesc">做工具和平台<br>把重复劳动<br>变成一键操作</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip">
+        业务组保交付<br>能力中心保沉淀<br>效能组保效率
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：实线虚线 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title">🪢 实线 + 虚线，两条线</div>
+      <div class="dual-row">
+        <div class="dual">
+          <div class="du-icon">🧑‍💻</div>
+          <div class="du-title">业务组的人</div>
+          <div class="du-item"><b>实线 →</b> 业务负责人<br>排期、绩效听他的</div>
+          <div class="du-item"><b>虚线 →</b> 能力中心<br>技术成长、能力评级听它的</div>
+          <div class="du-item"><b>结果：</b>贴得紧业务，技术不脱节</div>
+        </div>
+        <div class="dual">
+          <div class="du-icon">🏛️</div>
+          <div class="du-title">能力中心的人</div>
+          <div class="du-item"><b>实线 →</b> 测试经理<br>按需求统一排期</div>
+          <div class="du-item"><b>虚线 →</b> 业务线<br>理解场景、对齐目标</div>
+          <div class="du-item"><b>结果：</b>服务多条线，能力能沉淀</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        谁用你的产出，谁定优先级<br>谁养你的能力，谁管成长
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：避坑 -->
+  <div class="card card-content alt">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title warn">⚠️ 最容易踩的坑：能力中心变杂货铺</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">❌ 谁的活都接</div>
+          <div class="vs-content">
+            今天帮 A 写个脚本<br>
+            明天帮 B 搭个环境<br>
+            谁喊都答应<br>
+            年底一看，什么都没沉淀<br><br>
+            👉 忙了一整年，等于没建
+          </div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">✅ 设一道门槛</div>
+          <div class="vs-content">
+            只接能被 3 个以上业务<br>
+            复用的需求<br><br>
+            只服务一家的，<br>
+            让业务组自己解决<br><br>
+            👉 接得少，但沉淀得住
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip">
+        能力中心的 KPI，不是「接了多少活」<br>是「沉淀了多少能复用的东西」
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>好的组织结构<br>不是把人分开</h2>
+    <div class="golden">
+      是把「抢」变成「排队」<br>抢资源一定打架<br>排队才叫协作
+    </div>
+    <div class="cta-ask">
+      💬 你们团队是怎么分组的？<br>有没有遇到过两边抢人？<br>评论区聊聊～
+    </div>
+    <div class="save-tip">⭐ 收藏 · 下次要分团队时对照一下</div>
+    <div class="hashtags">
+      #团队管理 #组织架构 #测试管理 #研发效能 #技术管理
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '测试团队怎么分组才不打架';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>

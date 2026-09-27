@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从测试高手到测试经理的第一步 · 小红书卡片 · 雾蓝石板（方案5）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#e9edf0; padding:24px; font-family:'Noto Sans SC',sans-serif; }
+  .cards { display:flex; flex-direction:column; gap:16px; max-width:1080px; margin:0 auto; }
+  .card { width:1080px; height:1440px; border-radius:24px; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 4px 24px rgba(22,34,43,0.10); }
+
+  /* ===== 封面卡（雾蓝渐变 + 柔光） ===== */
+  .card-cover { background:linear-gradient(150deg,#eef3f6 0%,#cfdde6 40%,#9db4c4 75%,#6f8a9c 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:48px 56px; text-align:center; }
+  .card-cover::after { content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(520px 380px at 12% 8%, rgba(255,255,255,0.58), transparent 70%),
+      radial-gradient(460px 420px at 92% 88%, rgba(192,118,60,0.16), transparent 72%);
+  }
+  .card-cover .cover-badge { position:absolute; top:44px; left:56px; z-index:3; background:#c0763c; color:#fff; font-size:26px; font-weight:700; padding:12px 26px; border-radius:14px; letter-spacing:1px; }
+  .card-cover .tag { position:relative; z-index:2; background:rgba(255,255,255,0.6); backdrop-filter:blur(8px); color:#3f6379; padding:12px 32px; border-radius:28px; font-size:36px; font-weight:700; margin-bottom:40px; }
+  .card-cover h1 { position:relative; z-index:2; font-size:88px; font-weight:900; color:#16222b; line-height:1.25; margin-bottom:26px; }
+  .card-cover .subtitle { position:relative; z-index:2; font-size:38px; color:#3a5c72; font-weight:400; line-height:1.5; }
+  .card-cover .cover-rule { position:relative; z-index:2; width:180px; height:6px; background:#c0763c; border-radius:3px; margin-top:36px; }
+  .card-cover .watermark { position:absolute; z-index:3; bottom:36px; right:56px; font-size:24px; color:rgba(22,34,43,0.28); }
+
+  /* ===== 内容卡通用 ===== */
+  .card-content { background:#fbfcfd; padding:70px 76px; display:flex; flex-direction:column; position:relative; justify-content:space-evenly; }
+  .card-content.alt { background:#ffffff; }
+  .card-content .num { font-size:72px; font-weight:900; color:rgba(63,99,121,0.10); position:absolute; top:40px; right:60px; line-height:1; }
+  .card-content .watermark { position:absolute; bottom:36px; right:64px; font-size:20px; color:rgba(22,34,43,0.12); }
+  .card-content .section { margin-bottom:0; }
+  .card-content .section-title { font-size:38px; font-weight:800; color:#3f6379; margin-bottom:22px; padding-left:18px; border-left:6px solid #c0763c; line-height:1.35; }
+  .card-content .section-title.warn { color:#b0453c; border-left-color:#c98476; }
+
+  /* 对话盒（铺垫 → 翻车 → 顿悟） */
+  .dialog-box { background:#eef3f6; padding:44px 46px; border-radius:18px; }
+  .dialog-box .you-say { font-size:32px; color:#6c7b85; line-height:1.9; margin-bottom:24px; }
+  .dialog-box .boss-say { background:#fff; border-left:5px solid #c98476; padding:26px 32px; border-radius:12px; font-size:34px; color:#b0453c; font-weight:700; line-height:1.65; }
+  .dialog-box .aha { margin-top:24px; padding-top:22px; border-top:1px dashed #d6e0e7; font-size:32px; color:#3f6379; text-align:center; line-height:1.85; font-weight:700; }
+
+  /* 左右对比 */
+  .vs-row { display:flex; gap:20px; }
+  .vs-you { flex:1; background:#fbeeed; border:1.5px solid #eeccc8; border-radius:16px; padding:34px 28px; text-align:center; }
+  .vs-boss { flex:1; background:#e9f4f1; border:1.5px solid #b6dbd2; border-radius:16px; padding:34px 28px; text-align:center; }
+  .vs-label { font-size:27px; color:#b0453c; font-weight:800; margin-bottom:18px; line-height:1.4; }
+  .vs-boss .vs-label { color:#2f7d6a; }
+  .vs-content { font-size:26px; color:#6c7b85; line-height:1.75; }
+  .vs-content strong { color:#16222b; font-size:28px; }
+
+  /* 三列 */
+  .three-row { display:flex; gap:16px; }
+  .three-item { flex:1; background:linear-gradient(135deg,#e8eff4,#dde8ee); border-radius:16px; padding:34px 18px; text-align:center; }
+  .three-item .tnum { font-size:54px; font-weight:900; color:#c0763c; margin-bottom:14px; line-height:1; }
+  .three-item .tlabel { font-size:27px; font-weight:800; color:#16222b; margin-bottom:12px; }
+  .three-item .tdesc { font-size:21px; color:#6c7b85; line-height:1.7; }
+
+  /* 2×2 图标网格 */
+  .boss-want { display:flex; flex-wrap:wrap; gap:16px; }
+  .want-item { flex:0 0 calc(50% - 8px); background:#fff; border:1.5px solid #d6e0e7; border-radius:14px; padding:26px 28px; display:flex; align-items:flex-start; gap:16px; box-shadow:0 2px 6px rgba(22,34,43,0.04); }
+  .card-content.alt .want-item { background:#fbfcfd; }
+  .wi-icon { font-size:36px; flex-shrink:0; line-height:1.2; }
+  .wi-body { font-size:22px; color:#6c7b85; line-height:1.6; }
+  .wi-body strong { display:block; font-size:26px; color:#3f6379; margin-bottom:6px; }
+
+  /* 金句盒 */
+  .tip { background:linear-gradient(135deg,#eaf1f5,#dfeaf0); padding:40px 44px; border-radius:16px; font-size:32px; color:#3f6379; text-align:center; font-weight:700; line-height:1.8; }
+  .tip.amber { background:linear-gradient(135deg,#fdf3e6,#f8e6cd); color:#8f5a20; }
+  .tip.warn { background:rgba(176,69,60,0.06); border:1.5px dashed #e5b3aa; color:#b0453c; }
+
+  /* ===== CTA收尾卡 ===== */
+  .card-closing { background:linear-gradient(150deg,#eef4f8 0%,#dae7ee 50%,#c2d5e0 100%); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:64px 72px; text-align:center; position:relative; }
+  .card-closing h2 { font-size:46px; font-weight:900; color:#16222b; margin-bottom:26px; line-height:1.4; }
+  .card-closing .golden { background:rgba(255,255,255,0.7); padding:26px 44px; border-radius:18px; font-size:30px; color:#3f6379; margin-bottom:26px; line-height:1.7; font-weight:800; }
+  .card-closing .cta-ask { font-size:25px; color:#3a5c72; line-height:1.9; margin-bottom:20px; }
+  .card-closing .save-tip { font-size:26px; color:#3f6379; font-weight:700; margin-bottom:24px; }
+  .card-closing .hashtags { font-size:21px; color:rgba(63,99,121,0.5); line-height:2; }
+  .card-closing .watermark { position:absolute; bottom:40px; right:64px; font-size:20px; color:rgba(22,34,43,0.2); }
+
+  /* 下载按钮 / 工具条 */
+  .dl-btn { position:absolute; top:20px; right:20px; z-index:10; background:rgba(22,34,43,0.4); color:#fff; border:none; padding:10px 20px; border-radius:20px; font-size:22px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; backdrop-filter:blur(4px); }
+  .dl-btn:hover { background:rgba(22,34,43,0.62); }
+  .toolbar { position:sticky; top:8px; z-index:100; max-width:1080px; margin:0 auto 12px; display:flex; gap:12px; justify-content:center; }
+  .toolbar button { background:#3f6379; color:#fff; border:none; padding:12px 32px; border-radius:24px; font-size:22px; font-weight:700; cursor:pointer; font-family:'Noto Sans SC',sans-serif; transition:background 0.2s; }
+  .toolbar button:hover { background:#33505f; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">📥 一键下载全部卡片</button>
+</div>
+
+<div class="cards">
+
+  <!-- 卡1：封面 -->
+  <div class="card card-cover">
+    <div class="cover-badge">💼 带队实录</div>
+    <div class="tag">🧑‍💼 刚带团队那半年</div>
+    <h1>从测试高手<br>到测试经理的第一步</h1>
+    <div class="subtitle">别让自己，成为团队的天花板<br>写给第一次带人的你</div>
+    <div class="cover-rule"></div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+  <!-- 卡2：钩子故事 -->
+  <div class="card card-content">
+    <div class="num">01</div>
+
+    <div class="section">
+      <div class="section-title">😮‍💨 刚带团队那半年</div>
+      <div class="dialog-box">
+        <div class="you-say">
+          我以前是组里技术最强的那个。<br>
+          线上出问题，我一把抢过来，<br>
+          搞到凌晨两点，搞定，那叫一个爽。
+        </div>
+        <div class="boss-say">
+          可半年后我发现——<br>
+          组里最忙的是我，<br>
+          团队却一点没变强 💀
+        </div>
+        <div class="aha">
+          💡 因为我一直在做同一件事：<br>把活干完，而不是把人带出来
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📌 高手的肌肉记忆</div>
+      <div class="tip">
+        「有问题我自己上」<br>这句听起来很负责，<br>却是带团队最大的坑
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡3：KPI 换了 -->
+  <div class="card card-content alt">
+    <div class="num">02</div>
+
+    <div class="section">
+      <div class="section-title">🎯 你的 KPI 早就换了</div>
+      <div class="vs-row">
+        <div class="vs-you">
+          <div class="vs-label">当高手时</div>
+          <div class="vs-content">
+            <strong>我交付</strong><br>
+            我写得多、测得快<br>
+            一个人能顶三个<br><br>
+            👉 这是能力的上限
+          </div>
+        </div>
+        <div class="vs-boss">
+          <div class="vs-label">当经理后</div>
+          <div class="vs-content">
+            <strong>团队能交付</strong><br>
+            我不在，活照样跑<br>
+            团队能顶三十个<br><br>
+            👉 这才是管理的起点
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        一个人顶三个，是加法<br>团队能顶三十个，是乘法
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡4：三个反直觉转变 -->
+  <div class="card card-content">
+    <div class="num">03</div>
+
+    <div class="section">
+      <div class="section-title warn">⚠️ 三个反直觉的转变</div>
+      <div class="three-row">
+        <div class="three-item">
+          <div class="tnum">少</div>
+          <div class="tlabel">少写代码</div>
+          <div class="tdesc">手一伸出去<br>就有人没得练</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">多</div>
+          <div class="tlabel">多搭流程</div>
+          <div class="tdesc">你写一条规范<br>团队每天复用它</div>
+        </div>
+        <div class="three-item">
+          <div class="tnum">对</div>
+          <div class="tlabel">多对齐人</div>
+          <div class="tdesc">一半的问题<br>不在代码里，在预期里</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📌 说白了</div>
+      <div class="tip">
+        你的手，要从「做事」上收回来<br>放到「让人能做事」上
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡5：把手收回来的 4 个动作 -->
+  <div class="card card-content alt">
+    <div class="num">04</div>
+
+    <div class="section">
+      <div class="section-title">✋ 把手收回来的 4 个动作</div>
+      <div class="boss-want">
+        <div class="want-item">
+          <div class="wi-icon">🔥</div>
+          <div class="wi-body"><strong>忍住不抢</strong>他搞得慢，但那是他第一次搞。你抢一次，他就少一次</div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">📋</div>
+          <div class="wi-body"><strong>把步骤写下来</strong>你脑子里的经验写成 checklist，别人照着也能做</div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">🗣️</div>
+          <div class="wi-body"><strong>让他讲给你听</strong>讲一遍才是真会了；你做一遍，只有你会</div>
+        </div>
+        <div class="want-item">
+          <div class="wi-icon">🎯</div>
+          <div class="wi-body"><strong>交结果不交方法</strong>说清楚要什么，别规定怎么做。给边界，别给步骤</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tip amber">
+        你不是变闲了<br>你是在把「我会」<br>变成「我们会」
+      </div>
+    </div>
+
+    <div class="watermark">@Testkid</div>
+  </div>
+
+  <!-- 卡6：CTA收尾 -->
+  <div class="card card-closing">
+    <h2>高手把手伸出去<br>经理把手收回来</h2>
+    <div class="golden">
+      你一个人的产出，是加法<br>团队的产出，是乘法
+    </div>
+    <div class="cta-ask">
+      💬 你第一次带人的时候，<br>有没有过「忍不住自己上手」？<br>评论区聊聊～
+    </div>
+    <div class="save-tip">⭐ 收藏 · 下次又想抢活干的时候翻出来看看</div>
+    <div class="hashtags">
+      #测试管理 #技术管理 #职业转型 #团队管理 #职场成长
+    </div>
+    <div class="watermark">@Testkid · 2026</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  const ARTICLE = '从测试高手到测试经理的第一步';
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = '📥 下载';
+    btn.setAttribute('data-dl-btn', 'true');
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      btn.style.display = 'none';
+      const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+      btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    card.appendChild(btn);
+  });
+  async function downloadAll() {
+    const cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      const btn = cards[i].querySelector('[data-dl-btn]');
+      if (btn) btn.style.display = 'none';
+      const canvas = await html2canvas(cards[i], { scale: 2, useCORS: true, backgroundColor: null });
+      if (btn) btn.style.display = '';
+      const link = document.createElement('a');
+      link.download = `${ARTICLE}-${i + 1}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+</script>
+
+</body>
+</html>
