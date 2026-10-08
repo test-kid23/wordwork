@@ -1,0 +1,293 @@
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🚀 WorkBuddy 进阶教程</span>
+</p>
+
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  AI 只能一件一件干？<br>我同时丢 5 个任务，30 分钟干完一天的活
+</p>
+
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  WorkBuddy 并行编排 · 第 12 篇，讲清哪些活能一起干、怎么拆、怎么收
+</p>
+
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">读完这篇你能：</strong>分清 AI 的"并行"其实有两种，避免用错；学会开工前过三问，判断哪些活能一起干；拿到一套拆分标准和防撞车写法；提前避开并行最容易踩的三个坑——包括我自己真踩过的文件名覆盖。
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、两种并行</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、开工三问</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、怎么拆</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、怎么开</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、怎么收</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、三个坑</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、别并行</span>
+</p>
+
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<p>上一篇《一个人开了家"公司"》发出去之后，评论区问得最多的，不是"网站怎么搭的"，而是两个看起来很小的问题：<strong>"你怎么能同时开那么多任务？""几个任务一起跑，不会乱吗？"</strong></p>
+
+<p>第一个问的是操作，第二个问的是担心。我觉得这两个问题都问到了点子上——因为"并行"恰恰是 WorkBuddy 和聊天式 AI 最不一样的地方，但也是最容易被用歪的地方。</p>
+
+<p>所以这篇不介绍新场景，就把"并行"这一件事讲透：<strong>哪些活能一起干、怎么拆、怎么收尾、哪些坑我踩过。</strong></p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图1】</strong> 起因对照：评论区两个高频问题（打码）+ "我以为的并行 vs 实际的并行" 小示意<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-questions.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  先分清：AI 的"并行"有两种，别搞混
+</p>
+
+<p>很多人一说到并行，脑子里是"多开几个窗口"。但在 WorkBuddy 里，"并行"有两种完全不同的形态，用错了哪一种都不划算。</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#4A90D9;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ✉️ 第一种：任务级并行 —— 几件不相干的事，同时开几个任务
+</p>
+
+<p style="margin-top:10px;">比如我要做一个小站：要写内容、要做封面、要搭页面。这三件事互不依赖，谁先谁后都行。这时候我就新建三个任务，各写各的需求，让它们一起跑。</p>
+
+<p style="font-size:15px;font-weight:700;color:#fff;background:#8e44ad;padding:8px 12px;border-radius:6px;margin:12px 0 0 0;">
+  ✉️ 第二种：任务内并行 —— 一件事的内部，由专家团分工
+</p>
+
+<p style="margin-top:10px;">比如做一份系统调研（2.3 那篇），任务内部会被拆成"查竞品""看趋势""找缺口"几条子任务同时推进。这是任务内的并行，你不用管，挂了调研专家它自己会分。</p>
+
+<p>判断标准其实就一句话：</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 看你手里是"几件事"，还是"一件事的几个环节"。</strong><br>
+  几件事 → 任务级并行，自己开任务。<br>
+  一件事的几个环节 → 任务内并行，交给专家团。
+</p>
+
+<p>分清这一点，后面的操作就都顺了。</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图2】</strong> 对比拼图：左边 = 任务列表里多个任务同时进行；右边 = 单个任务内部的执行步骤日志<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-two-kinds-parallel.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  哪些活能一起干：开工前先过三问
+</p>
+
+<p>不是所有活都能并行。我一开始就吃过亏：把"先调研、再写稿"两件事同时开了，结果稿子跟调研结论对不上，基本重写。</p>
+
+<p>后来我定了三问，每条线开之前先过一遍：</p>
+
+<p><strong><span style="color:#4A90D9;">① 这条线要用到另一条线的产出吗？</span></strong><br>"先看竞品再定选题"——有前后依赖的，必须串行。硬要并行，等于让第二条线凭空猜。</p>
+
+<p><strong><span style="color:#8e44ad;">② 两条线会动同一批文件吗？</span></strong><br>两条线都要改同一个页面，那就不能并行。要么串行，要么改成各改各的文件。</p>
+
+<p><strong><span style="color:#4A90D9;">③ 中途需要我拍板吗？</span></strong><br>需要反复做判断的活（比如"这个风格对不对"），拆开做更顺；一口气铺开，你会来不及看。</p>
+
+<p>三问里只要有一条是"是"，这条线就别硬并。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一句话记住：</strong>并行省的是"等待"，不是"判断"。
+</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图3】</strong> 并行 / 串行判断清单（手写或表格截图）：三问 × 判断结果<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-can-or-cannot.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  怎么拆：拆到"每条都能单独验收"
+</p>
+
+<p>这是整篇最关键的一步。</p>
+
+<p>我见过不少人并行失败，不是工具不行，是<strong>拆得不对</strong>。他们把"帮我做个 AI 测评小站"复制三遍发给三个任务——那不是并行，那是三个人干同一件事。</p>
+
+<p>我的拆分三原则：</p>
+
+<p><strong><span style="color:#4A90D9;">① 每条能独立验收</span></strong><br>做完我一眼能看出行不行，不用等别的线。</p>
+
+<p><strong><span style="color:#8e44ad;">② 输入输出不重叠</span></strong><br>各写各的文件，各看各的目录。</p>
+
+<p><strong><span style="color:#4A90D9;">③ 每条都有明确交付物</span></strong><br>一个文件、一套图、一份表，而不是"一部分工作"。</p>
+
+<p>按这三条，"做个 AI 测评小站"应该拆成：</p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:14px;padding:10px 14px;border-radius:6px;margin:8px 0;">
+  ✅ <strong>内容线：</strong>写 3 篇测评初稿，输出到 content/ 目录，数据不确定的地方留【待实测】占位。
+</p>
+
+<p style="background:#f3ebff;color:#6b46c1;font-size:14px;padding:10px 14px;border-radius:6px;margin:8px 0;">
+  ✅ <strong>设计线：</strong>出 1 套公众号封面 + 头图模板，输出到 design/，风格要求"简洁、和工具截图搭"。
+</p>
+
+<p style="background:#ebf4ff;color:#2b6cb0;font-size:14px;padding:10px 14px;border-radius:6px;margin:8px 0;">
+  ✅ <strong>建站线：</strong>搭首页 + 列表 + 详情三个页面，输出到 site/，风格走黑白灰。
+</p>
+
+<p>三条线，三个目录，三个交付物，互不碰面。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">补一句：如果拆完发现其中一条是"先做 A 再做 B"，那它自己内部再串行，不要跟别的线混在一起。</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图4】</strong> 输入框截图：一条大需求拆成 3 条独立需求（红框标出各自的交付物与输出目录）<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-split-tasks.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  怎么开：一个任务一条线，各写各的目录
+</p>
+
+<p>拆完之后操作很简单，就是"新建任务 → 选工作空间 → 把需求写进去"，重复几遍。</p>
+
+<p>那天我一次开了 <strong>5 个任务</strong>：3 条主线（内容 / 设计 / 建站），外加 2 个顺手的小活（起一批标题、整理一份选题表）。因为小活本身很轻，加起来大概 <strong>30 多分钟</strong>全部跑完——而这几件事如果我自己一件一件做，怎么也得一天。</p>
+
+<p>但有两个细节特别重要，也是我踩出来的：</p>
+
+<p><strong><span style="color:#4A90D9;">① 需求里把输出目录写死。</span></strong></p>
+
+<p>这是防打架的前提。在每条需求后面加一句"所有文件输出到 xxx/ 目录"，几条线就不会往同一个地方扔文件。别小看这一句，我第一个坑就栽在这（下面会讲）。</p>
+
+<p><strong><span style="color:#8e44ad;">② 别贪多。</span></strong></p>
+
+<p>我固定同时最多开 <strong>3 条线</strong>。不是工具不让开更多，是<strong>我只有两只眼睛</strong>——三条线的产出同时回来，我还能一条条看完；五条线一起回来，我只能草草扫一眼，那就白做了。</p>
+
+<p>顺带说一句心理上的坑：并行刚开始跑那几分钟你会特别爽，觉得自己效率翻了好几倍。但真正费时间的部分在后面——<strong>验收</strong>。</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图5】</strong> 工作空间里多个任务同时运行中（任务列表面板）<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-parallel-running.png）</span>
+</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图6】</strong> 输出目录：三个独立文件夹（content / design / site）<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-output-folders.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  怎么收：先各自验收，再统一风格
+</p>
+
+<p>几条线都跑完之后，别急着把它们合到一起。我的顺序是：</p>
+
+<p><strong><span style="color:#4A90D9;">第一步，一条一条单独看。</span></strong><br>内容线看有没有瞎编、设计线看图能不能用、建站线点着逛一遍。哪条不行，单独退回去改，不影响其他条。</p>
+
+<p><strong><span style="color:#8e44ad;">第二步，再横向统一。</span></strong><br>三条线各自都合格，拼在一起却可能不像一套东西——配色不一处、语气不一处。这时候补一句话，让它按同一套规范再过一遍（我这个系列的规范就是"黑白灰、极简、不搞花哨"）。</p>
+
+<p><strong><span style="color:#4A90D9;">第三步，自己从头读一遍。</span></strong><br>这一步谁都替不了。</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图7】</strong> 三份交付物汇总预览（内容初稿 / 设计模板 / 可点的站）<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-deliverables.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  并行最容易踩的 3 个坑
+</p>
+
+<p>这三个我都真踩过，按顺序说。</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🔹 坑① 两条线写同一个文件名，后写的把先写的盖了</p>
+
+<p><strong>表现：</strong>设计线和建站线都生成了叫 index.html 的文件，我以为有两个，其实只剩一个。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>它们不知道彼此存在，同名就会覆盖，而且覆盖之后没有提示。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>需求里指定不同目录（design/、site/），或在文件名前加前缀。一句话的成本，收益最高。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🔹 坑② 有依赖的两条线硬并行，后面全返工</p>
+
+<p><strong>表现：</strong>调研结论还没出来就开始写稿，写完发现方向不对。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>并行只能省"等待"，省不了"依赖"。有前后关系的活并行，等于让 AI 猜。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>开工前过第 2 节那三问。有依赖的，串行做，或者先跑前一条。
+</p>
+
+<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:16px 0 8px 0;">🔹 坑③ 一口气开太多，你自己成了瓶颈</p>
+
+<p><strong>表现：</strong>五条线同时回来，你看了 20 分钟就烦了，最后每条都只扫一眼就收下。</p>
+
+<p style="background:#e8f4fd;padding:12px 14px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#2b6cb0;">真相：</strong>并行把 AI 的产出速度提上去了，可验收的速度还是你一个人的。产出变多、验收变快，质量就掉。
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-left:3px solid #8e44ad;color:#4a5568;font-size:14px;margin:10px 0;">
+  <strong style="color:#6b46c1;">解法：</strong>控制在 2–3 条线；或者分两批开，第一批验收完再开第二批。
+</p>
+
+<p style="background:#f7f8fa;padding:16px;border:2px dashed #cbd5e0;border-radius:8px;text-align:center;color:#718096;font-size:13px;margin:12px 0;">
+  🖼️ <strong>【配图8】</strong> 文件覆盖现场：同名文件列表 / 覆盖前后对比<br>
+  <span style="color:#a0aec0;font-size:12px;">（截图后替换此处为真实图片，命名 3.1-file-overwrite.png）</span>
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  什么时候别并行
+</p>
+
+<p>最后说句反话：并行不是越多越好，有三种情况我建议老老实实串行。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 任务本身很小</strong><br>五分钟能做完的事，拆分的时间比做的时间还长。
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 强依赖</strong><br>A 的产出就是 B 的输入，串起来。
+</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 需要边看边改</strong><br>比如调一篇文章的语气，你改一句它改一句，并行等于互相打断。
+</p>
+
+<p style="text-align:center;color:#4A90D9;font-weight:700;margin:12px 0;">
+  ⚡ 记住这个顺序：先问能不能拆，再问值不值得拆。
+</p>
+
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>用下来我的感受是：<strong>并行真正省下的不是时间，是"等待"。</strong></p>
+
+<p>以前做一件事，你得等上一件做完才能动手；现在几件不打架的事可以一起铺开，那段干等的时间就被压缩掉了。但"想清楚要做什么""判断做得好不好"这两件事，一件都没少，还是你自己的活。</p>
+
+<p>下一篇（3.2）讲另一个我用了很久的东西：<strong>把常用需求做成自己的专属专家</strong>——同一句话，不用再打第三遍。如果你也懒，那我们下篇见。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇：3.2 专属专家——把常用需求做成"我的智能体"</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2;margin:16px 0;">
+  📌 <strong>系列导航</strong><br>
+  🥇 第一次刷到这个系列，建议从这篇开始：<strong>1.2《下载了 WorkBuddy 却不知道说什么？15 分钟，我让它干完了第一单活》</strong>——全系列阅读最高的一篇，带你从零跑通第一个任务。<br>
+  ⬅️ 上一篇：2.6 用 WorkBuddy 做微信小程序<br>
+  ➡️ 下一篇：3.2 专属专家——把常用需求做成"我的智能体"<br>
+  📚 全部文章：公众号合集「WorkBuddy 实测」
+</p>
+
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想学会同时指挥好几个 AI 给你干活的，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  WorkBuddy 全场景 AI 工作台 · 进阶教程<br>适用对象：不会写代码、但想让 AI 同时推进多件事的人<br>本系列更多文章可在公众号合集「WorkBuddy 实测」中查看
+</p>
+
+</body>
