@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 行命令变成 1 次双击：DeepSeek 把 Agent 装进了桌面软件</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 工具实测篇</span>
+</p>
+
+<!-- 大标题 + 副标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  3 行命令变成 1 次双击<br>DeepSeek 把 Agent 装进了桌面软件
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  Harness v0.2 实测——免 Node 环境、免申请 API Key，插件和定时任务全搬进了图形界面
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>想试试 Agent，很多人卡在同一步：装环境。<br><br>Node.js 版本不对、npm 装不上、命令敲完不知道该访问哪个端口、打开浏览器一片白。对开发者只是几分钟的事，对不写代码的人，这就是终点——<strong style="color:#2b6cb0;">不是不想用，是进不去门</strong>。<br><br>DeepSeek 显然看懂了这件事：九月底的 Harness v0.2 预览版，直接把整套东西打成了 macOS 和 Windows 安装包。这篇重点讲三件事——门槛到底降了多少、插件与定时任务怎么用、预览版阶段必须提前知道的坑。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录标签 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、门槛变了</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、第一眼界面</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、插件管理页</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、定时任务</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、番茄钟实测</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、四项实验功能</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、路线图解读</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">八、三步与三坑</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  这次变的是门槛，不是能力
+</p>
+
+<p>先把时间线摆清。Harness 八月中旬开源时，标准用法是这样的：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;">
+  npx @deepseek-ai/dsh web
+</p>
+
+<p>这行命令背后藏着四个前提：机器上装了 Node.js、npm 能正常拉包、知道怎么开终端、看到端口后知道用浏览器打开。四项里卡住任何一项，流程就断了。</p>
+
+<p>九月底的 v0.2 把这条路换成：<strong>去官网下载安装包 → 双击安装 → 登录 → 选工作区</strong>。</p>
+
+<p><strong>三个关键减法：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 不用装 Node。</strong><br>桌面端内置完整运行环境，Windows 上也不需要单独配 Node 和 pnpm。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 不用申请 API Key。</strong><br>登录 DeepSeek 账号就能用账户余额跑任务，界面里能直接看余额和用量。对非开发者，这一步省掉的是最劝退的环节。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 不用开浏览器。</strong><br>它本身就是桌面应用，文件、代码、结果都在窗口里。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话记住：</strong>能力没变，可进入性变了。
+</p>
+
+<p>这件事的意义常被低估。Agent 产品真正的竞争对手不是别的 Agent，而是"装不起来"——用户流失最多的环节，永远在第一次启动之前。</p>
+
+<!-- 配图1 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图1】Harness 官网下载页截图（macOS / Windows 两个安装包入口）<br>
+  <span style="font-size:12px;">建议命名：2-2-download.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图1】这里过去是一段 npm 命令，现在是一个下载按钮</p>
+
+<!-- 二 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  装完第一眼：四个模式、一个工作区
+</p>
+
+<p>首次启动会走一遍引导，核心就两个动作：<strong>登录</strong>（DeepSeek 账号或填 API Key 都行）、<strong>选工作区</strong>。</p>
+
+<p>工作区就是它被允许读写的文件夹。这里给一条实操建议：<strong>专门建一个文件夹给它用</strong>，比如 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">D:\agent-workspace</span>，不要指到桌面、下载目录，更不要指到整个用户目录。原因后面"三个坑"里会说。</p>
+
+<p>进去之后看到的东西：中间是对话与任务执行过程，侧栏是文件预览、代码 diff、插件管理、余额与用量。</p>
+
+<p><strong>工作模式有四个：</strong></p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  🔹 <strong>标准</strong>：日常开发与文件处理，默认选它<br>
+  🔹 <strong>PTC</strong>：偏程序化、需要精确控制执行步骤的任务<br>
+  🔹 <strong>极简</strong>：任务单一、想省 token、要快<br>
+  🔹 <strong>创造</strong>：实验性，让它自己写插件、改插件
+</p>
+
+<p>模式不是"高级 / 低级"的关系，是"约束多 / 约束少"的关系。极简模式给它的自由度最小，跑得快、花钱少；创造模式放开权限，能改自己的插件，也最需要盯。</p>
+
+<!-- 配图2 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图2】桌面端主界面全景（中间执行过程、右侧文件与 diff 侧栏、模式切换入口）<br>
+  <span style="font-size:12px;">建议命名：2-2-main-ui.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图2】"看得见它在干什么"，是桌面端比命令行最直观的改进</p>
+
+<!-- 三 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  插件管理页：把"装插件"搬进界面
+</p>
+
+<p>Harness 的设计理念是"一切皆插件"——模型适配器、工具、会话、沙箱、界面本身，都可以换成插件。开源版里这件事得靠命令行和配置文件，v0.2 把它做成了界面：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  🔹 输入 <strong>npm 包名</strong>就能装，不用敲命令<br>
+  🔹 已装的插件可以停用、卸载<br>
+  🔹 每个插件能看介绍和来源
+</p>
+
+<p>官方给的数字是：<strong>约 60% 的用户在用第三方插件</strong>。这个比例不低，说明社区生态已经跑起来了——但同时也意味着，插件质量参差不齐。</p>
+
+<p>还有一个更激进的功能：<strong>创造模式</strong>。直接用自然语言描述需求，让它自己写一个插件或改一个现有插件，生成后即时生效、持久保存。等于把"扩展能力"这件事也交给模型自己做了——下一节会实际跑一遍，看它到底能做到什么程度。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ 看到名字眼熟的包就装<br>
+  ❌ 不看它申请什么能力<br>
+  <span style="color:#276749;">✅ 插件本质是跑在本机的代码，能读文件、能执行命令——装来源不明的包，等于给它同等权限。先看来源，再在独立工作区里试</span>
+</p>
+
+<!-- 配图3 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图3】插件管理页截图（已装插件列表 + 输入 npm 包名的安装框）<br>
+  <span style="font-size:12px;">建议命名：2-2-plugins.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图3】装插件从"查文档、敲命令、改配置"变成了一次输入</p>
+
+<!-- 四 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  自动化任务：AI 开始值班
+</p>
+
+<p>v0.2 内置了可按需开启的<strong>自动化任务</strong>插件。开了之后，可以把重复性工作设成定时任务，并且能看每次运行的记录、调整执行频率、修改任务指令。</p>
+
+<p>这是 Harness 从"我提问它回答"变成"它按点自己干活"的分界线。可落地的场景：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;">
+  🔹 每天早上把指定来源的行业信息汇总成一页纸<br>
+  🔹 每周固定时间跑一次依赖检查，出问题才叫人<br>
+  🔹 每月初把上月单据文件夹归档，生成索引台账<br>
+  🔹 每天定时跑日志，把异常行摘出来
+</p>
+
+<p><strong>但定时任务的风险比手动任务高一个量级</strong>：没人盯着，它按既定权限自己跑。所以设任务时遵守两条——<strong>先只读、后写入</strong>；写入类任务先让它在副本目录里跑一周，确认行为稳定再放开。</p>
+
+<!-- 五 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  一句话实测：5 分半，做出一个悬浮番茄钟
+</p>
+
+<p>官方给过一个很适合新手的玩法：让它自己写一个插件。我照着试了一遍。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;">
+  <strong>我输入的那句话：</strong>帮我写一个「番茄时钟」插件
+</p>
+
+<p>用时 <strong>5 分 24 秒</strong>。它回的结果是一行字："番茄时钟悬浮插件已做好、装好并验证通过。"</p>
+
+<p>我没有写一行代码，也没有手动装插件——<strong>装插件这一步是它自己做的</strong>（对比上一节手动输 npm 包名）。交付的东西就在桌面上：一个悬浮小窗，标题是 🍅 番茄时钟，顶部两个切换「专注 / 短休息」，中间 24:59 的大字倒计时，底部一个「开始专注」按钮。</p>
+
+<p>那五分钟里它干了什么，其实分四段：拆需求（要两档、要倒计时、要悬浮窗）→ 写插件代码 → 装进桌面端 → 自己跑一遍验证。最后那句"验证通过"是它自测的结论，不是我的。</p>
+
+<p><strong>我盯的四个验收点：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 计时是不是真的在走</strong>——不是画了个静态界面</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 两个档位是否按预期</strong>——专注 25 分钟、短休息 5 分钟</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 切换后倒计时是否正确重置</strong></p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 关掉窗口再打开，状态还在不在</strong></p>
+
+<p>前三条这版基本过关，第四条要看具体实现——这也是这类"现场生成的小工具"最常见的短板：界面像样了，状态持久化、多屏缩放、系统通知这些边角还没顾上。截图里的 24:59 是刚启动那一秒，原样贴出来，不做修饰。</p>
+
+<p><strong>这类活的能力边界在哪：</strong></p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  ✅ <strong>能做</strong>：界面类、单机状态类、交互明确的工具——计时器、便签、悬浮待办、简易计算面板<br>
+  ⚠️ <strong>难做</strong>：要账号体系、要后端数据、要大权限（麦克风、屏幕录制）的东西<br>
+  ❌ <strong>别指望</strong>：一次出成品级。图标、边界情况、异常处理，通常还要追加两三轮
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🎯 这个实测最值得记的一点：</strong>不是"5 分钟做了个番茄钟"，而是需求到工具之间的路被压平了。
+</p>
+
+<p>以前想到一个小工具，得先算一笔"值不值得为它学一门技术、装一套环境"的账；现在这笔账不用算了——先做出来用着，不好用再让它改。</p>
+
+<!-- 配图4 -->
+<img src="image/2-2-pomodoro-plugin.png" style="max-width:100%;border-radius:8px;border:1px solid #e2e8f0;display:block;margin:12px auto;">
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图4】一句话换来的成品：插件是它自己写好又自己装上的，我只提供了一个需求</p>
+
+<!-- 六 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  四项实验功能，现在能用到什么程度
+</p>
+
+<p>创造模式上一节已经跑过了，这里说剩下四项。v0.2 的插件页里挂了四项实验性功能，成熟度差别不小：</p>
+
+<p><strong>智能体团队</strong>：让多个 Agent 分工。方向对，但还处在早期——现在更稳的做法是自己用指令把任务拆开跑。</p>
+
+<p><strong>自动授权审核</strong>：给工具调用加一道确认机制。建议<strong>默认开着</strong>，尤其是涉及删文件、跑脚本、装依赖的动作。</p>
+
+<p><strong>自动化任务</strong>：前面讲过了，目前最实用的一项。</p>
+
+<p><strong>语音输入</strong>：本地语音识别包，基于 SenseVoice，下载体积约 <strong>1GB</strong>。好处是识别在本地跑，录音不出机器；代价是首次要占硬盘、老机器上会慢一点。开会记录、口述需求这类场景值得开。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一个判断：</strong>四项里只有"自动化任务"现在就能进日常工作流，其余三项建议先当试验田。
+</p>
+
+<!-- 配图5 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图5】自动化任务设置页（频率、指令、运行记录三块）<br>
+  <span style="font-size:12px;">建议命名：2-2-automation.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图5】运行记录这一栏最关键，出问题时只有它能还原它干了什么</p>
+
+<!-- 七 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  路线图：哪一步会真正改变用法
+</p>
+
+<p>官方提了六件事，按"落地后会改变什么"排一下：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 更强的沙箱与更高的安全性。</strong><br>这是地基。沙箱够硬，大家才敢让它跑更多命令、碰更多文件。现在很多人的用法还是"小活交给它、大活自己来"，卡的就是这一层。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 增强的智能体团队。</strong><br>从"我手动拆任务"变成"它自己组队"，这会直接决定复杂项目的上限。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 个性化长期记忆。</strong><br>跨会话不用重复交代背景。对每天用的人，这一条省下的是最烦的那部分重复劳动。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 浏览器与 GUI 自动化。</strong><br>我认为这是对普通用户影响最大的一条——大量真实工作发生在没有 API 的系统里（后台管理系统、老旧客户端、内部网页）。能操作界面，等于把可自动化的范围扩大一个数量级。</p>
+
+<p><strong><span style="color:#4A90D9;">⑤</span> 远程与移动访问。</strong><br>手机派活、回家看结果。听起来是便利功能，实际会改变"任务时长"的容忍度——长任务可以在通勤路上启动。</p>
+
+<p><strong><span style="color:#8e44ad;">⑥</span> 多人会话共享。</strong><br>团队协作的入口，适合把一套跑通的流程直接交接给同事。</p>
+
+<p>另外官方明确说过，会专门针对 Harness 环境调优模型——后续版本说明里"特定框架专项优化"这类表述，就是这个承诺的兑现方式。对使用方来说这意味着：<strong>升级 Harness 不只是拿新功能，还关系到模型效果</strong>。</p>
+
+<!-- 八 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  上手三步和三个坑
+</p>
+
+<p><strong>三步走：</strong></p>
+
+<p><span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第 1 步</span> <strong>下载安装</strong>，登录账号（或用 API Key），建一个专用工作区文件夹</p>
+
+<p><span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第 2 步</span> <strong>先给一个"看得见结果"的小活</strong>——整理一个文件夹、把一份 PDF 转成表格、给一段代码补测试。目的是摸清脾气，不是压榨性能</p>
+
+<p><span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:2px 8px;border-radius:6px;">📅 第 3 步</span> <strong>再上自动化任务</strong>，从只读类任务开始</p>
+
+<p><strong>三个坑：</strong></p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;color:#555;font-size:14px;line-height:2.2;margin:10px 0;">
+  <span style="color:#4A90D9;">☐</span> <strong>坑一：工作区指得太宽</strong>——指到用户主目录等于把整个账号的文件都交给它，专用文件夹是唯一正确做法<br>
+  <span style="color:#8e44ad;">☐</span> <strong>坑二：定时任务一上来就写入</strong>——无人值守 + 写权限 = 出问题没人拦，先只读跑一周<br>
+  <span style="color:#4A90D9;">☐</span> <strong>坑三：把预览版当稳定版用</strong>——官方明说会快速迭代、可能有不兼容改动，重要流程留手工兜底，别在关键节点前升级
+</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>从 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">npx</span> 到双击安装，看起来只是打包方式变了，实际是把一类人从"用不上"变成"用得上"。</p>
+
+<p>开源版服务的是愿意折腾的开发者；桌面版服务的是"我只想把活干完"的人。DeepSeek 八月先给前者，九月给后者——这一步走完，Harness 才算真正有了产品形态。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:16px;">门槛只是入场券，能不能真把活干掉是另一回事</strong>
+</p>
+
+<p>不过要把话说全：上面那个番茄钟，本质还是一个几百行的小工具——界面、计时、状态都在本地，没有依赖任何外部系统。真正的考验在完整项目：多文件、多依赖、跑起来还得跑对。</p>
+
+<p>下一篇讲那个更刺激的部分：一句话许愿，它自己把项目从零做出来。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  本文基于 Harness v0.2 预览版实测。功能入口、插件生态与路线图均以 DeepSeek 官方发布说明与客户端实际界面为准，预览版存在快速迭代带来的差异。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：一段话丢进去，它自己规划、写、跑、改——许愿式编程的边界在哪</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想拿到 Agent 工具的真实实测与踩坑记录，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · 工具实测<br>适用对象：不写代码但想用 Agent 的人、开发者、要把重复工作交出去的人<br>功能细节以 DeepSeek 官方发布说明与客户端实际版本为准<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>

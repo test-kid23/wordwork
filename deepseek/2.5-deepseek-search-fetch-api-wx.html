@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 个动作压成 2 个：DeepSeek 把自研搜索引擎做成了 API，千次 5 块钱</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 接口实战篇</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  7 个动作压成 2 个<br>DeepSeek 把搜索引擎做成了 API，千次 5 块钱
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  Search / Fetch 实战——参数怎么填、返回怎么读、11 月 1 日计费后账怎么算
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>给 Agent 接联网，过去是一件很碎的活：选搜索源、谈额度、写解析、处理反爬、清洗正文、去重、再塞给模型。七个动作环环相扣，每一环都能单独出问题，而且这一整套跟"模型有多聪明"毫无关系——纯粹是工程摩擦。<br><br>十月十七日，DeepSeek 把这条路砍成了两个接口调用：<strong style="color:#2b6cb0;">Search 按关键词搜，Fetch 抓单页正文</strong>，用自家搜索引擎，跟主 API 共用一个 Key、一个 Base URL。<br><br>三件事先记住：接口是给模型设计的（每条结果自带六百字摘要和权威分）；支持 <strong style="color:#2b6cb0;">site: / after:</strong> 这类语法；<strong style="color:#2b6cb0;">十一月一日零点起计费，千次五元，失败和空结果不收钱</strong>。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、卖的是什么</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、跑通最小例</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、五个参数</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、返回字段</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、搜索语法</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、换掉整条链路</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、账怎么算</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">八、踩坑清单</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  它卖的不是搜索，是"给模型看的搜索结果"
+</p>
+
+<p>传统搜索 API 返回的东西是给网页用的：一列标题加链接，加一句摘要。模型拿到之后还得自己判断哪条可信、哪条过时、哪条是营销软文——判断不了，只能全读。</p>
+
+<p>这两个接口从设计上就是给模型吃的：</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 传统搜索 API</strong><br>标题 + 链接 + 短摘要<br>没有质量信号，也没有正文
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 DeepSeek Search</strong><br>标题 + 链接 + <strong>短摘要 + 长摘要 + 正文</strong><br><strong>排序分 + 权威性分级 + 发布时间</strong>
+</p>
+
+<p>底层是 DeepSeek 自研引擎：千亿级网页索引、支持多语言、实时返回。官方特别提到对 <strong>SEO 作弊、GEO 操纵、低质 AIGC</strong> 有识别与过滤机制——这条不是技术细节，是使用体验的关键：结果里少一堆"AI 洗过的垃圾页"，模型的判断负担直接降一半。</p>
+
+<!-- 配图1 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图1】Search 接口返回的 JSON（重点框出 rerank_score、authority、summary 三个字段）<br>
+  <span style="font-size:12px;">建议命名：2-5-search-json.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图1】这三个字段是"要不要信这条结果"的全部依据</p>
+
+<!-- 二 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  两个接口，先跑通最小例子
+</p>
+
+<p>鉴权和主 API 完全一致，不用申请新 Key：<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">Authorization: Bearer &lt;Key&gt;</span>。</p>
+
+<p><strong>Search：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  curl https://api.deepseek.com/v1/tools/search \<br>
+  &nbsp;&nbsp;-H "Authorization: Bearer $DEEPSEEK_API_KEY" \<br>
+  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+  &nbsp;&nbsp;-d '{<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"query": "DeepSeek V4 模型 发布",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"count": 5,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;"need_content": true<br>
+  &nbsp;&nbsp;}'
+</p>
+
+<p><strong>Fetch：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  curl https://api.deepseek.com/v1/tools/fetch \<br>
+  &nbsp;&nbsp;-H "Authorization: Bearer $DEEPSEEK_API_KEY" \<br>
+  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+  &nbsp;&nbsp;-d '{"url": "https://example.com/article"}'
+</p>
+
+<p><strong>Python 版本：</strong></p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  KEY = {"Authorization": "Bearer sk-xxx"}<br><br>
+  r = requests.post(<br>
+  &nbsp;&nbsp;"https://api.deepseek.com/v1/tools/search",<br>
+  &nbsp;&nbsp;headers=KEY,<br>
+  &nbsp;&nbsp;json={"query": "DeepSeek 计费 lang:zh after:2026-10-01", "count": 10},<br>
+  )<br>
+  for item in r.json()["results"]:<br>
+  &nbsp;&nbsp;print(item["rerank_score"], item["authority"], item["title"])
+</p>
+
+<p>两个接口都是只读的，跑失败不会改任何东西——这让试错成本很低。</p>
+
+<!-- 三 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  Search 五个参数，只有两个真重要
+</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2;">
+  🔹 <strong>query</strong>（必填）：搜索词，1～128 个 Unicode 字符，支持语法<br>
+  🔹 <strong>count</strong>（默认 10）：1～50 条<br>
+  🔹 <strong>need_content</strong>（默认 false）：是否返回网页正文<br>
+  🔹 <strong>ori_question</strong>：用户原始问题，帮引擎理解意图，同样限 128 字符<br>
+  🔹 <strong>localization</strong>：传一个 IP，优先返回本地化结果
+</p>
+
+<p><strong>真正决定效果的是 query 和 need_content。</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> query 有两个隐性约束。</strong><br>128 个字符看着够用，但很多人习惯把整段需求粘进去——直接 400。正确用法是关键词式短语：<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">DeepSeek 计费 lang:zh after:2026-10-01</span>，而不是"帮我查一下最近计费调整是怎么回事"。后者的意图放进 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">ori_question</span>——但它同样限 128 字符，所以别指望拿来装长文。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> need_content 是省钱与省事的开关。</strong><br>默认 false，此时 content 恒为空字符串。想看正文必须显式打开。而打开之后返回体积会暴涨：十条结果每条带正文，可能就是几十万字符。</p>
+
+<p>所以在 Agent 里通常分两步——先用 <strong>false</strong> 拿摘要做筛选，挑出两三条，再对这几个 URL 单独调 Fetch 取正文。这样既省上下文，也省后面的模型 token。</p>
+
+<!-- 四 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  返回字段：三个分数决定要不要用
+</p>
+
+<p>一条结果的关键字段（节选）：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  {<br>
+  &nbsp;&nbsp;"rerank_score": 2.4,<br>
+  &nbsp;&nbsp;"title": "DeepSeek V4 模型发布",<br>
+  &nbsp;&nbsp;"snippet": "短摘要，100～200 字符",<br>
+  &nbsp;&nbsp;"summary": "长摘要，600～800 字符",<br>
+  &nbsp;&nbsp;"content": "正文，need_content=false 时为空",<br>
+  &nbsp;&nbsp;"date": "2026-06-01T00:00:00+00:00",<br>
+  &nbsp;&nbsp;"authority": 3<br>
+  }
+</p>
+
+<p><strong>三个字段值得设阈值：</strong></p>
+
+<p style="background:#ebf4ff;padding:12px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;line-height:2;">
+  <strong>rerank_score</strong> 0～3：综合相关性、权威性、时效性，<strong>≥1.5 算优质</strong><br>
+  <strong>authority</strong> 0～4（-1 未知）：<strong>≥3 为极权威</strong>，0～2 要交叉验证<br>
+  <strong>date</strong>：查价格、政策、版本号这类会变的东西，必须先看这一栏
+</p>
+
+<p><strong>还有两个字段的用法要分清：</strong>snippet 约 100～200 字符，给界面展示用；summary 约 600～800 字符，<strong>给模型读用</strong>。</p>
+
+<p>很多人接完接口抱怨"模型答得空"，原因就是把 snippet 喂进去了。六百字的 summary 才是设计给模型的输入。</p>
+
+<p>一个可抄的过滤逻辑：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  good = [r for r in resp["results"]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if r["rerank_score"] &gt;= 1.5 and r["authority"] &gt;= 3]
+</p>
+
+<p>如果过滤完只剩一两条，说明 query 太窄或题目太新——这时候该换关键词，而不是硬用。</p>
+
+<p><strong>一个公开观察值得记：</strong>有人拿同一篇航线首航新闻做过对比——发在省政府网站拿到 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">rerank_score</span> <strong>2.84</strong>，发在新闻门户 <strong>2.70</strong>，发在当事公司官网只有 <strong>0.58</strong>。内容一样，分值差五倍。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 这说明：</strong>这个分数评估的是"信源在该话题上的采信度"，不是"文章写得好不好"。对做内容、做品牌的人来说，这是第一次能直接看见 AI 怎么给信源打分——过去这套逻辑完全在黑盒里。
+</p>
+
+<!-- 五 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  被低估的部分是搜索语法
+</p>
+
+<p>这是这套接口最容易被跳过、但最能省事的部分。语法直接透传给搜索引擎，可以组合：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2;">
+  🔹 <strong>site:</strong> 只在指定站点找，如 <span style="font-size:13px;">DeepSeek site:github.com</span><br>
+  🔹 <strong>-site:</strong> 排除某站<br>
+  🔹 <strong>-</strong> 排除含某词的页面，如 <span style="font-size:13px;">DeepSeek -广告</span><br>
+  🔹 <strong>-"..."</strong> 排除含某短语的页面<br>
+  🔹 <strong>"..."</strong> 精确匹配短语<br>
+  🔹 <strong>lang:</strong> 限定语言，如 <span style="font-size:13px;">lang:zh,en</span><br>
+  🔹 <strong>after: / before:</strong> 限定发布日期区间
+</p>
+
+<p>组合起来就是一句话完成"范围 + 时间 + 语言"的限定：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;">
+  DeepSeek 模型 site:github.com OR site:huggingface.co lang:zh after:2025
+</p>
+
+<p><strong>三个最实用的组合：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 查会变的东西</strong>——<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">after:</span> 卡住时间，避免读到半年前的旧文</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 查官方口径</strong>——<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">site:</span> 限定官网或文档站，直接跳过二手解读</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 做竞品对比</strong>——<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">-site:</span> 排除自家站，<span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">-</span> 排除"招聘""招商"这类噪音页</p>
+
+<p>不写这些语法也能用，但加了之后，结果的<strong>整体质量分布会明显变好</strong>——这是最直接的体感差异。</p>
+
+<!-- 配图2 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图2】带语法与不带语法两次搜索的对比（同一 query，after: 前后结果的日期分布差异）<br>
+  <span style="font-size:12px;">建议命名：2-5-syntax-compare.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图2】同一句话，加一个 after: ，结果的新旧就被筛了一遍</p>
+
+<!-- 六 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  把整条链路换掉：7 个动作变 2 个
+</p>
+
+<p style="background:#fff5f5;padding:10px 14px;border-radius:6px;color:#c53030;font-size:14px;margin:8px 0;">
+  <strong>🔹 旧链路（7 步）</strong><br>选搜索源 → 谈额度 → 写解析器 → 处理反爬（代理、重试、UA）→ 清洗正文 HTML → 去重 → 拼进 prompt
+</p>
+
+<p style="background:#f3ebff;padding:10px 14px;border-radius:6px;color:#4a3a6e;font-size:14px;margin:8px 0;">
+  <strong>🔹 新链路（2 步）</strong><br>Search 拿候选 → Fetch 拿正文
+</p>
+
+<p>省掉的不只是代码量，而是三类长期维护负担：反爬策略会变、页面结构会变、额度要谈。这三件事现在都在对面。</p>
+
+<p><strong>三个能直接落地的场景：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 给本地 Agent 装联网工具。</strong><br>把两个接口注册成工具，模型自己决定什么时候搜。提示词里加一句约束："回答时效性问题前必须先搜，且只引用 authority ≥ 3 的结果"。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 资料汇总。</strong><br>Search 拿 20 条候选 → 按 rerank_score 取前 5 → 逐个 Fetch → 让模型交叉核对。这比"让模型自己一边搜一边读"稳得多，因为筛选和阅读被拆成了两步。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> RAG 的实时兜底。</strong><br>本地知识库没命中时，回落一次 Search。判断逻辑很简单：检索得分低于阈值就走联网，并在回答里标注"以下内容来自实时检索"。</p>
+
+<p><strong>和"Agent 自带搜索"的关系也要说清。</strong>在 Harness、Claude Code、Codex 里，工具调用已经会走服务端的 Search / Fetch——这部分现在不用自己接。所以两条路各有用处：想做自己的产品/工作流就直接调接口；只用现成 Agent 就享受内置能力，等 11 月 1 日之后它开始计费。</p>
+
+<!-- 配图3 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图3】一个实际接好的效果（Agent 联网检索后带来源标注的答案，或汇总表格）<br>
+  <span style="font-size:12px;">建议命名：2-5-agent-result.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图3】答案后面那几行来源，就是这两个接口实际干活的痕迹</p>
+
+<!-- 七 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  账怎么算：11 月 1 日起计费
+</p>
+
+<p>规则不复杂，但有几处容易看错：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;line-height:2;">
+  🔹 单价：<strong>5 元 / 1000 次成功请求</strong>，Search、Fetch 各算各的<br>
+  🔹 计费口径：只有 <strong>HTTP 200 且产生结果</strong>才计费<br>
+  🔹 不计费：请求失败、搜索无结果、超时<br>
+  🔹 count：只控制条数，<strong>不影响单价</strong>（1 条和 50 条一个价）<br>
+  🔹 限速：Search <strong>100 QPS</strong>、Fetch <strong>25 QPS</strong>，账号级、互相独立；Fetch 另有目标域名级限速<br>
+  🔹 生效时间：<strong>北京时间 2026 年 11 月 1 日 00:00</strong>
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 换算成日常单位：一次成功搜索 = 0.005 元。</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:2;">
+  🔹 一个 Agent 任务平均搜 3～5 次 → <strong>1.5～2.5 分钱</strong><br>
+  🔹 一天跑 100 个这类任务 → 约 <strong>1.5～2.5 元</strong><br>
+  🔹 一天 1 万次调用的重度场景 → <strong>50 元</strong>
+</p>
+
+<p>跟模型费用比，这个量级基本可以忽略——一次带长上下文的模型调用，往往就比它贵。</p>
+
+<p><strong>免费窗口要留个记号：</strong>在 Harness、Claude Code、Codex 里通过服务端工具调用触发的 Search / Fetch，目前不计费，11 月 1 日零点开始按上表收费。这也是"什么时候上生产"的实际分界线：之前是免费试运行，之后每一笔都在账上。</p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;border:1px solid #fed7d7;color:#9b2c2c;font-size:14px;">
+  ❌ 把"模型权重开源"理解成"搜索也免费"<br>
+  <span style="color:#276749;">✅ 权重是宽松许可开源；搜索接口是商业服务，按次收费——两件事</span>
+</p>
+
+<p><strong>什么时候该自建？</strong>三个信号：调用量稳定在每天十万次以上（自建摊薄成本）、有强定制需求（私有索引、内部文档）、对可用性有硬要求（不能接受单一供应商）。在这三条之外，买比自己搭划算。</p>
+
+<!-- 八 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  踩坑清单与重试策略
+</p>
+
+<p>官方错误码是 OpenAI 兼容格式，按处理方式分三类：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2;">
+  🔹 <strong>400</strong> 请求不合法（count 越界、query 超 128 字符）→ 改请求，别重试<br>
+  🔹 <strong>401 / 402</strong> Key 无效 / 余额不足 → 修凭证或充值<br>
+  🔹 <strong>403</strong> Fetch 被安全策略拒绝 → 换 URL，别重试<br>
+  🔹 <strong>404</strong> Fetch 拿不到可用内容 → 不计费，换源<br>
+  🔹 <strong>408 / 429 / 5xx</strong> 超时 / 限流 / 服务端 → <strong>退避后重试</strong><br>
+  🔹 <strong>413</strong> 请求体过大 → 改请求
+</p>
+
+<p><strong>四条实操经验：</strong></p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 404 很常见，并且不收费。</strong><br>目标站反爬、内容全靠 JS 渲染、正文抽不出来，都会落到这一档。批量抓取要预留失败率，别假设 100% 成功。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 429 有两个来源。</strong><br>账号级 QPS 打满，或者 Fetch 撞上目标域名的限速。后者更隐蔽——总 QPS 没超，但某个站的请求被拦。批量场景按域名分桶、错开时间。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> Fetch 的 URL 不能带用户名密码</strong>，长度上限 8192。带认证的页面抓不了，这是设计如此。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> need_content 慎用在大 count 上。</strong><br>count 50 加正文，单次响应可能几十万字符，很容易把模型上下文和账单一起打爆。</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>把搜索单独拿出来卖，这件事的意义比"多了两个接口"大。</p>
+
+<p>过去搜索是产品的功能，现在它成了基础设施的一部分，和模型、框架并列——三者拼起来，才是"Agent 能干活"的完整条件：<strong>模型负责想，框架负责动手，搜索负责知道当下发生了什么。</strong></p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:15px;">对开发者，短期是省事<br>对内容站点，是个新变量<br>对做 Agent 的人，只有一句提醒</strong>
+</p>
+
+<p>省事在于：少写一堆解析、少维护一套反爬。新变量在于：进来的流量会越来越多是"机器在查资料"，而不是"人在浏览"。提醒在于：<strong>11 月 1 日之前把该压测的压测完</strong>，之后每一次成功请求都开始记账。</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  本文参数、返回结构、错误码、限速与计费口径均以 DeepSeek API 官方文档为准（文档当前标注 Search 100 QPS / Fetch 25 QPS，社群早期流传的 5 QPS 口径已不适用）；计费自北京时间 2026 年 11 月 1 日 00:00 起生效。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：五小时故障、七天全额退款，和一个到现在还没发布的模型</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想把 Agent 的联网能力自己接起来、又不想踩坑的，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · 接口实战<br>适用对象：做 Agent / RAG 的开发者、要自己接联网检索的团队<br>参数、限速与价格以 DeepSeek API 官方文档为准<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>
