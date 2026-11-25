@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>官方公开 7 组提示词：不用写代码，一句话给 Agent 装上新零件</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 手工实操篇</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  官方公开 7 组提示词<br>不用写代码，一句话给 Agent 装上新零件
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  创造模式实操——7 个案例各是什么、三条能直接抄的指令、装完要过的五道关
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>给 Agent 加功能，过去只有两条路：等官方更新，或者自己写插件。<br><br>第一条路要等，第二条路要会。绝大多数人卡在第二条——不是不会写 JS，是不知道一个插件该长什么样、接口怎么接、装在哪、怎么自检。<br><br>十一月二日，DeepSeek 把这条路铺到了脚下：官方公开 7 组中英文提示词，覆盖 3D 场景、可视化教具、设计工作台、视频剪辑台这些案例。要做的只有三件事——打开创造模式、粘进去、按发送。<br><br>但有个前提得先说清：<strong style="color:#2b6cb0;">创造模式不是新功能</strong>，它八月就跟着 Harness 发布了。这次新给的是"配方"——把别人试出来的提示词摊开给你看。配方能复现，demo 不能。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、为什么是现在</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、7 组的成分</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、三步跑通</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、三条可抄指令</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、五道验收关</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、四个坑</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、什么别让它写</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">八、官方市场</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  不是新功能，但到了该学的时候
+</p>
+
+<p>先把时间线摆正，免得被"重磅上线"这类说法带偏。</p>
+
+<p><strong>八月十三日</strong>，Harness 开源，设计理念是"一切皆插件"——模型适配器、工具、界面、甚至 Agent 循环本身都能换。创造模式就在那时候有了：用自然语言描述需求，让它自己写插件、装进客户端、即时生效。</p>
+
+<p><strong>十一月二日</strong>，官方放出一支一分半的演示视频和 7 组提示词。功能没变，变的是<strong>信息差</strong>——以前得自己想明白"怎么描述才能让它写出能跑的插件"，现在有人把答案打印出来了。</p>
+
+<p><strong>十一月七日</strong>，一批开发者吐槽插件兼容性：DSH 一升级，插件轻则失效、重则让客户端起不来。Harness 负责人当天回应，说兼容性在持续改进，并提到<strong>官方插件市场</strong>正在路上。</p>
+
+<p><strong>十一月十日</strong>，官方披露平台日活突破 154 万，同时启动<strong>插件开发者 Token 激励计划</strong>。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 四件事连起来看：</strong>前三个月解决的是"能不能装"，这个月解决的是"值不值得装"。有人用、有回报、有市场，插件这件事才真正立起来。
+</p>
+
+<p>所以现在学，不算早，也不算晚。</p>
+
+<!-- 二 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  7 组提示词，各是什么货色
+</p>
+
+<p>官方给的七个案例，难度和用途差得很远。按"上手难度"和"适不适合先抄"排一下：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  🔹 <strong>用量 / 成本仪表盘</strong>　难度 ★　<strong>第一个抄这个</strong><br>
+  🔹 <strong>海报设计工作台</strong>　难度 ★★　想出片选它<br>
+  🔹 <strong>论文阅读器</strong>（保留原版式）　难度 ★★　常读论文的选它<br>
+  🔹 <strong>像素风主题</strong>　难度 ★★　好玩，别在主力环境试<br>
+  🔹 <strong>Transformer 3D 可视化</strong>　难度 ★★★　<strong>最出片</strong><br>
+  🔹 <strong>多轨视频剪辑台</strong>　难度 ★★★★　别当第一个<br>
+  🔹 <strong>3D 地标馆</strong>（铁塔 / 长城 / 紫禁城）　难度 ★★★★　吃显卡
+</p>
+
+<p><strong>先抄仪表盘。</strong>十一月官方自己新增了一个实验性统计插件，能看上下文占用、缓存命中、工具耗时——说明这类需求是真需求，而且它最容易验对错（数字对不对一眼就知道）。</p>
+
+<p><strong>Transformer 可视化最值得发。</strong>把注意力机制、层与层的数据流做成能转能点的 3D 模型，说服力最强——它同时证明了"能写 UI"和"能讲清抽象概念"。</p>
+
+<p><strong>3D 地标馆别当第一个。</strong>它不是难在提示词，是难在机器——三个城市级场景，集显笔记本会明显掉帧，容易让人误判成"插件写得差"。</p>
+
+<!-- 三 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  三步跑通，五分钟上手
+</p>
+
+<p><strong>第一步：确认版本。</strong>创造模式在 0.2 之后的版本里都有，但为了效果建议升到最新。十月十七日那次更新要求 ≥ 0.2.1-rc.1 才能吃到模型的完整适配，低于这个版本，生成质量会打折。</p>
+
+<p><strong>第二步：建一个专用工作区。</strong>新建空文件夹，比如 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">D:\dsh-lab</span>，专门给实验用。原因在第六节——插件是本机代码，权限等同于你自己。别在放合同、放代码仓库的目录里跑未知插件。</p>
+
+<p><strong>第三步：切创造模式，粘提示词，发送。</strong>模式切换在界面上，选"创造"。它会自己读插件 SDK 文档、写代码、打包、安装、自检，整个过程在对话区可见。</p>
+
+<p>官方提示词库（中英文各一套）：</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:13px;line-height:1.9;">
+  https://cdn.deepseek.com/harness/dsh-creator-mode-prompt-collection-en.html
+</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一个必须注意的点：</strong>官方给的是英文提示词，直接粘也能跑，但产出常带英文界面。想让它出中文界面，在末尾加一句"所有界面文案用简体中文"即可。
+</p>
+
+<!-- 四 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  三条可以直接抄的指令
+</p>
+
+<p>下面三条不是官方原文，是按官方思路改的：换了参数、加了验收标准、把界面语言固定成中文。官方那版是给"看演示"用的，这三条是给"自己用"用的。</p>
+
+<p><strong>指令一：用量看板（三十秒见效）</strong></p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:13px;line-height:1.9;">
+  帮我做一个「用量看板」插件，悬浮在窗口右侧，要求：<br>
+  1. 显示今天和本周的 token 用量、缓存命中率、估算花费<br>
+  2. 每 30 秒自动刷新，数据从本地会话记录里读<br>
+  3. 深色底、浅色字，数字用等宽字体<br>
+  4. 只读，不写任何文件，不调用任何外部接口<br>
+  5. 所有文案用简体中文<br><br>
+  做完后告诉我：它读了哪些文件、怎么算的命中率、刷新失败会怎样。
+</p>
+
+<p><strong>验收点</strong>：数字会不会动；关掉重开还在不在；读的文件是不是只在会话目录里。</p>
+
+<p><strong>指令二：Transformer 3D 可视化（出片用）</strong></p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #8e44ad;color:#555;font-size:13px;line-height:1.9;">
+  做一个「Transformer 解剖台」插件，用 3D 展示一层 Transformer 的前向过程：<br>
+  1. 输入一句话后，能看到 token 化 → 位置编码 → 注意力 → 前馈 的动画流程<br>
+  2. 鼠标可拖动旋转、滚轮缩放，点击某一层能看到该层的张量形状<br>
+  3. 注意力权重用连线粗细表示<br>
+  4. 单文件实现，零外部依赖，不加载网络字体和贴图<br>
+  5. 界面中文<br><br>
+  做完先自己跑一遍，确认能正常拖拽和点击，再交给我。
+</p>
+
+<p><strong>验收点</strong>：随便输一句话能不能跑通；拖动会不会卡死；断网还能不能用（零外部依赖的意义就在这）。</p>
+
+<p><strong>指令三：自己的小窗（每天要看的三件事）</strong></p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:13px;line-height:1.9;">
+  做一个「今日三件事」小窗插件，常驻桌面角落：<br>
+  1. 显示三条待办，可直接点勾选完成<br>
+  2. 每天零点自动清空勾选状态，内容保留<br>
+  3. 支持快捷键呼出和隐藏<br>
+  4. 数据存本地文件，路径放在插件自己的数据目录<br>
+  5. 界面中文，极简风格<br><br>
+  做完告诉我数据存在哪个文件、换机器怎么迁移。
+</p>
+
+<p><strong>验收点</strong>：勾选后重开是否还在；零点是否真的重置；数据文件位置是否可预期（能不能备份）。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🎯 三条的共同点：都写清了"怎么算做完"。</strong>创造模式靠自检闭环工作，不给验收标准，它就只能靠猜。
+</p>
+
+<!-- 五 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  装完要过五道关
+</p>
+
+<p>插件装上只是开始，能不能用是另一回事。按这五条过一遍：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;line-height:2.1;">
+  🔹 <strong>持久化</strong>：关掉客户端重开 → 数据没了、设置恢复默认都没通过<br>
+  🔹 <strong>权限边界</strong>：看它读了哪些目录 → 读了工作区之外的文件就有问题<br>
+  🔹 <strong>升级兼容</strong>：下次 DSH 升级后重开 → 起不来、报错都算没通过<br>
+  🔹 <strong>卸载干净</strong>：停用并卸载 → 残留文件、设置项还在都算不干净<br>
+  🔹 <strong>异常提示</strong>：断网 / 删数据文件后重开 → 静默失败、白屏最危险
+</p>
+
+<p>第三条要特别留意。十一月七日那波吐槽，核心就是这一点：DSH 源码页一直标着"会有破坏性更新"，版本一升，插件可能不只是不能用，还会把客户端带崩。官方承诺的插件市场就是为了解决它——但市场还没上线，现在只能自己留个心眼。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 实用做法：</strong>装新插件前，把插件目录整个复制一份到别处；升级 DSH 后如果起不来，把这份复制回去，至少能恢复工作环境。
+</p>
+
+<!-- 六 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  四个真实的坑
+</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 插件就是本机代码。</strong><br>它能读文件、能执行命令、能联网。装来源不明的插件，等于给了它同样的权限。判断标准：官方提示词库里的、社区长期维护的、能看清源码的，优先；来路不明的，只在隔离目录里试。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 一次生成 ≠ 视频里的效果。</strong><br>官方自己在发布说明里写了：视频里部分案例经过多轮对话微调，单次生成可能和演示有细微差异。翻译过来就是——别拿演示当标准。第一次跑出来丑一点、少个功能，很正常，追加两轮通常能补上。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 改动越深，升级越容易挂。</strong><br>只加一个侧边面板的插件，升级后大概率还能用；改了整个界面主题、替换主循环的，挂掉的概率极高。想稳就做"加法"（多一个窗口），别做"替换"（换掉原来的东西）。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 别在主力工作区跑实验。</strong><br>既为了数据安全，也为了排查方便——插件出问题时，干净的工作区能让问题定性快得多。</p>
+
+<!-- 配图4 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图4】一次真实的翻车现场（插件装上后报错，或客户端启动失败）<br>
+  <span style="font-size:12px;">建议命名：2-6-fail.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图4】这张比成功截图更有用——它告诉读者升级前该备份什么</p>
+
+<!-- 七 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  什么活值得让它写，什么别
+</p>
+
+<p><strong>值得的：</strong></p>
+
+<p style="background:#ebf4ff;padding:12px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;line-height:2;">
+  ✅ 自己每天要重复三次以上的动作——查状态、拼格式、算个数<br>
+  ✅ 一次性看板——项目周期内看数据，用完就扔<br>
+  ✅ 教学与演示——把抽象概念做成能转能点的东西<br>
+  ✅ 内部小工具——只有自己用，不需要文档、不需要协作
+</p>
+
+<p><strong>别让它写的：</strong></p>
+
+<p style="background:#fff5f5;padding:12px 14px;border-radius:8px;color:#9b2c2c;font-size:14px;line-height:2;">
+  ❌ 多人共用的工具——兼容性、权限、升级都是坑<br>
+  ❌ 涉及敏感数据的——插件权限太大，出了问题说不清<br>
+  ❌ 需要长期维护的——单文件、少注释，三个月后自己都读不懂<br>
+  ❌ 对稳定性要求高的——预览版客户端 + 实验性功能，双重不稳定
+</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 一句话判断：</strong>这个工具如果坏了，会不会耽误正事？会，就别用插件扛。
+</p>
+
+<!-- 八 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  往后看：官方插件市场意味着什么
+</p>
+
+<p>十一月七日 Harness 负责人的回应里，有一句信息量很大的话：插件兼容性和版本管理在持续改进，<strong>官方插件市场</strong>是关键一步。</p>
+
+<p>对普通用户，这意味着以后装插件会像装 App：有审核、有版本、有一键更新，不用再自己去 npm 里翻包、也不怕升级把客户端搞崩。</p>
+
+<p>对会写插件的人，十一月十日的 Token 激励计划是第一批变现口——写得好有人用，能换回 Token。这条路能走多远，取决于官方市场什么时候真的上线。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>⚠️ 一句传闻层面的判断：</strong>有分析认为，如果 Harness 出带官方插件市场的重大版本，就意味着 V4.1 Pro 正式版不远了。这只是推测，官方从未给过时间表，当参考可以，别当排期依据。
+</p>
+
+<!-- 配图1 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图1】创造模式入口 + 官方提示词库页面（并排或上下拼一张）<br>
+  <span style="font-size:12px;">建议命名：2-6-entry.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图1】左边选模式，右边抄提示词，这就是全部操作门槛</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>创造模式真正改变的不是"AI 能不能写代码"——那件事早就有答案了。</p>
+
+<p>它改变的是<strong>"想要一个小工具"到"手上有一个小工具"之间那段路的长度</strong>。以前这段路要走"值不值得学、值不值得做"两道算术题；现在这段路是五分钟、一次粘贴。</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:15px;">但插件不是软件产品<br>它是"给自己用的东西"</strong><br><br>
+  <span style="font-size:13px;opacity:0.9;">够用、能改、随时能扔，才是它的正确形态</span>
+</p>
+
+<p>把它当产品用，就会在第一次升级崩溃时学到教训。</p>
+
+<!-- 配图2 / 配图3 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图2】跑出来的看板 / 可视化效果（最好是能看出数据在动的画面）<br>
+  <span style="font-size:12px;">建议命名：2-6-result.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图2】从一句话到能用的面板，中间只隔了五分钟</p>
+
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图3】插件管理页（已装插件列表 + 停用 / 卸载入口）<br>
+  <span style="font-size:12px;">建议命名：2-6-plugins.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图3】卸载按钮的位置要记住——试错的第一步是能撤干净</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  本文时点：十一月二日官方公开提示词、十一月七日插件兼容性反馈、十一月十日日活与激励计划。功能细节以 DeepSeek 官方客户端与发布说明为准，预览版存在快速迭代带来的差异。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：宕机 5 小时，赔掉 7 天账单——比故障更值得看的是"没发布"那个模型</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想拿到更多可抄的 Agent 实操指令，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · 手工实操<br>适用对象：不写代码但想给 Agent 加功能的人、独立开发者、被重复操作困住的人<br>功能细节以 DeepSeek 官方客户端与发布说明为准<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>

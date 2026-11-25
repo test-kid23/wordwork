@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>别信跑分：3 个活、1 张表、6 块钱，自己验一遍 1017 值不值得换</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Helvetica,Arial,sans-serif;font-size:15px;color:#333;line-height:1.85;max-width:680px;margin:0 auto;background:#fff;padding:20px;">
+
+<!-- 分类标签 -->
+<p style="text-align:center;margin-bottom:0;">
+  <span style="display:inline-block;background:#f0f0f0;color:#666;font-size:12px;padding:3px 14px;border-radius:12px;">🤖 DeepSeek 系列 · 自测工具篇</span>
+</p>
+
+<!-- 标题 -->
+<p style="font-size:22px;font-weight:800;color:#1a1a2e;text-align:center;margin:12px 0 6px 0;">
+  别信跑分：3 个活、1 张表<br>自己验一遍新模型值不值得换
+</p>
+<p style="text-align:center;color:#888;font-size:14px;margin-bottom:24px;">
+  一套可以照抄的对照测法——任务、表格、脚本、判断线，全给齐
+</p>
+
+<!-- 写在前面 -->
+<p style="background:#e8f4fd;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#4a5568;font-size:14px;line-height:1.8;">
+  📝 <strong style="color:#2b6cb0;">写在前面：</strong>每次模型更新，公告里都是一堆数字：某基准涨了 11 分，成本降了六成，超越某某旗舰。<br><br>看完还是不知道该不该换。因为那些分数是别人任务集上的分数，跟手上这摊活没关系——我们的活是改一个跑不通的脚本、把一份会议记录压成三百字、查一下某个产品这三个月有没有涨价。<br><br>判断"要不要换"只有一条路：<strong style="color:#2b6cb0;">拿自己的三个活跑一遍，看三列数字</strong>。这篇不长篇分析，直接给一套测法：三个任务、一张六列表、一段能跑的脚本、三条判断线，以及四个最常见的误测。
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 目录 -->
+<p style="text-align:center;margin-bottom:8px;">
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">一、三个事实</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">二、榜单帮不上忙</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">三、三个任务</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">四、一张表</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">五、脚本</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">六、别人的结果</span>
+  <span style="background:#ebf4ff;color:#2b6cb0;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">七、三条判断线</span>
+  <span style="background:#f3ebff;color:#6b46c1;font-size:12px;padding:3px 10px;border-radius:10px;margin:2px;">八、四个误测</span>
+</p>
+
+<!-- 粗分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 一 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">1</span>
+  先把三个事实钉死
+</p>
+
+<p>省掉铺垫，只留结论：</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 成本下降不在单价上。</strong><br>模型名 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">deepseek-flash</span> 没变，价格表也没动（空闲：输入未命中 1 元/百万 token、命中 0.02、输出 4）。降的是<strong>用量</strong>——同一件事吐的字少了，账单自然下来。官方口径是"缩短任务运行时间与输出长度"，官方之外的权威媒体转述为"多场景 Token 消耗降低超五成"。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 分数涨在哪要看清。</strong><br>涨得最猛的是动手类：终端操作、程序逆向、多模态 Agent；知识问答类涨得相对少。这一版的取向很清楚——<strong>把事做完</strong>，而不是把题答对。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 框架要跟着升。</strong><br>官方点名针对 DeepSeek Harness、腾讯 CodeBuddy、WorkBuddy 做了优化，Harness 要求 0.2.1-rc.1 以上。框架不升，模型的新能力吃不满。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>💡 三句话之外的东西，都不用背。剩下的靠实测。</strong>
+</p>
+
+<!-- 二 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">2</span>
+  榜单为什么帮不上忙
+</p>
+
+<p>不是分数造假，是三个错配：</p>
+
+<p><strong>错配一：任务不一样。</strong><br>榜单跑的是标准化题目，我们的活是"这份表格里的金额为什么对不上"。前者有唯一答案，后者要判断。</p>
+
+<p><strong>错配二：框架不一样。</strong><br>同一个模型在不同 Agent 框架里表现会有可见差距——官方自己都在给特定框架做优化。别人的分数是在他们的壳里跑出来的。</p>
+
+<p><strong>错配三：取的是上限。</strong><br>演示与榜单展示的是"最好能到哪"，不是"平均能到哪"。官方那几个案例都是精挑的，拿它当日常产出预期，落差会很大。</p>
+
+<p>所以别问"它多少分"，问"<strong>我这三个活，它能不能一次交对</strong>"。</p>
+
+<!-- 三 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">3</span>
+  测试包：三个任务，覆盖三种能力
+</p>
+
+<p>挑任务的原则只有一条：<strong>结果能一眼判对错。</strong>判断不了的活（写文案、做设计），测不出模型差异，只会测出自己的心情。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin:12px 0;">
+  <strong>任务 A ｜ 压缩类：把长文压成能用的三百字</strong><br><br>
+  <strong>输入：</strong>一份 8000 字左右的会议记录或制度文件，指令——<br>
+  <span style="color:#2b6cb0;">"把这份记录压成 300 字以内的摘要。要求：① 保留所有明确的决定和时间节点；② 列出三条待办，每条注明负责人；③ 原文没写的信息不要补，缺就标'未明确'。"</span>
+</p>
+
+<p><strong>判对错的标准（30 秒能验完）：</strong></p>
+
+<p>有没有编造原文没有的数字或人名（编了直接判失败）；关键决定漏没漏；待办有没有负责人。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin:12px 0;">
+  <strong>任务 B ｜ 改代码：修三个 bug，补三个测试</strong><br><br>
+  <strong>输入：</strong>一段故意埋了三个坑的 Python 函数——时区用本地时间、除法没判零、循环边界差一。指令——<br>
+  <span style="color:#6b46c1;">"这个函数有三个问题：时区处理、除零、边界。修好，并补三个能跑过的测试，用 pytest 写法。"</span>
+</p>
+
+<p><strong>判对错的标准：</strong></p>
+
+<p>pytest 能不能一次跑过；修的是不是那三个问题（有没有顺手改坏别处）；测试是不是真的会失败（把修复回滚，测试应该红）。</p>
+
+<p style="background:#f7f8fa;padding:14px 16px;border-radius:8px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin:12px 0;">
+  <strong>任务 C ｜ 联网类：查一件会变的事，给来源</strong><br><br>
+  <strong>输入：</strong><br>
+  <span style="color:#2b6cb0;">"用搜索查一下 DeepSeek API 的 Search / Fetch 接口现在怎么收费，只要最近三个月的信息。输出 300 字以内，附三个可点开的来源链接。"</span>
+</p>
+
+<p><strong>判对错的标准：</strong></p>
+
+<p>三条链接能不能打开；日期在三个月内；数字和链接里的原文对得上（最容易翻车的一项——它可能引用半年前的旧价）。</p>
+
+<p>三个任务各自对应一种能力：<strong>长文理解、代码修改、联网核实</strong>。覆盖了日常八成以上的活。</p>
+
+<!-- 配图1 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图1】三个任务的输入截图（三段指令，直接看到话术）<br>
+  <span style="font-size:12px;">建议命名：2-3-tasks.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图1】三段指令可以直接抄，重点在"怎么算成功"那半句</p>
+
+<!-- 四 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">4</span>
+  一张表，只记六列
+</p>
+
+<p>跑完不要凭感觉，填表：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;line-height:2;">
+  🔹 <strong>任务</strong>：A 压缩 / B 改代码 / C 联网<br>
+  🔹 <strong>一次交付？</strong>✅ 或 ❌<br>
+  🔹 <strong>返工轮次</strong>：0 / 1 / 2 …<br>
+  🔹 <strong>耗时（秒）</strong><br>
+  🔹 <strong>输出 token</strong><br>
+  🔹 <strong>花费（元）</strong>
+</p>
+
+<p><strong>六列的道理：</strong></p>
+
+<p><strong>一次交付</strong>是质量线——能不能不用人返工；<strong>返工轮次</strong>比"交付与否"更细，两轮以内算可接受；<strong>耗时</strong>决定它能不能进日常工作流（超过三分钟的任务，人就会走神去干别的）；<strong>输出 token</strong> 是成本的真身，比单价重要；<strong>花费</strong>最后算，别一开始就算，容易把自己绕进去。</p>
+
+<p style="background:#f3ebff;padding:12px 14px;border-radius:8px;border:1px solid #d4b8f0;color:#4a3a6e;font-size:14px;margin:12px 0;">
+  <strong>💡 一个关键动作：</strong>把这套结果存档，标上日期和模型版本号。因为旧版本调不回来了——模型名没变，底层已经换人。这套测试的真正用法不是"新旧对比"，而是<strong>建基线</strong>：今天存一份，下次更新再跑一遍，两份表放一起，差异就出来了。
+</p>
+
+<p>这一步做完，以后每次更新都不需要看公告也能判断。</p>
+
+<!-- 五 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">5</span>
+  脚本：一次跑完，自动出表
+</p>
+
+<p>把三个任务存成三个 txt，跑这段脚本，直接输出 CSV：</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #ccc;color:#555;font-size:12.5px;line-height:1.9;">
+  import csv, time, requests<br><br>
+  BASE&nbsp;&nbsp;= "https://api.deepseek.com"<br>
+  KEY&nbsp;&nbsp;&nbsp;= "sk-xxx"&nbsp;&nbsp;# 换成自己的<br>
+  MODEL = "deepseek-flash"<br><br>
+  # 空闲时段价格（元 / 百万 token）：命中 0.02、未命中 1、输出 4<br>
+  P_HIT, P_MISS, P_OUT = 0.02, 1.0, 4.0<br><br>
+  def run(task_text):<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;t0 = time.time()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;r = requests.post(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f"{BASE}/chat/completions",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers={"Authorization": f"Bearer {KEY}"},<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;json={"model": MODEL,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"messages": [{"role": "user", "content": task_text}]},<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout=600,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;dt = time.time() - t0<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;r.raise_for_status()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;d = r.json()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;u = d["usage"]<br><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;hit&nbsp;&nbsp;= u.get("prompt_cache_hit_tokens", 0)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;miss = u.get("prompt_cache_miss_tokens",<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max(u.get("prompt_tokens", 0) - hit, 0))<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;cost = (hit * P_HIT + miss * P_MISS + u["completion_tokens"] * P_OUT) / 1e6<br><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;return {"sec": round(dt, 1),<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"out_tokens": u["completion_tokens"],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cost": round(cost, 4),<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"text": d["choices"][0]["message"]["content"]}<br><br>
+  rows = []<br>
+  for name in ["A_压缩", "B_改代码", "C_联网"]:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;task = open(f"tasks/{name}.txt", encoding="utf-8").read()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;res = run(task)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;open(f"out/{name}.md", "w", encoding="utf-8").write(res["text"])<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;rows.append([name, res["sec"], res["out_tokens"], res["cost"]])<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;print(name, res["sec"], "s", res["out_tokens"], "tok", res["cost"], "元")
+</p>
+
+<p><strong>几点说明：</strong></p>
+
+<p><span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">prompt_cache_hit_tokens</span> 与 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">prompt_cache_miss_tokens</span> 是缓存计费的两个口径，<strong>命中与未命中差 50 倍</strong>，所以必须分开算，否则成本会算得离谱。</p>
+
+<p>输出写到 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">out/</span> 目录，人工再过一遍判断"一次交付"。想跨版本对比，把 CSV 改名存档（如 <span style="background:#f7f8fa;padding:1px 5px;border-radius:4px;font-size:13px;">result-20261103.csv</span>），下次同名任务再跑一次。</p>
+
+<p>整段跑完的实际花费通常在一块钱以内——三个任务，各跑一次。</p>
+
+<!-- 配图2 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图2】终端跑完的输出（三行耗时 / token / 花费）+ 生成的 CSV 截图<br>
+  <span style="font-size:12px;">建议命名：2-3-run-log.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图2】三行跑完，表就有了；存档名记得带版本号</p>
+
+<!-- 六 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">6</span>
+  别人跑出来的三组结果
+</p>
+
+<p>自己跑之前，可以先看别人的结果建立预期。三组都有公开出处，也都标了局限。</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #4A90D9;color:#555;font-size:14px;margin:10px 0;">
+  <strong>① 160 字提示词 → 78KB 单文件赛车游戏，不到 6 分钟</strong><br><br>
+  产物：78,568 字节、2,739 行、零外部依赖、零图片素材；换浏览器复验能开局、能计分、撞车能结算。<br><br>
+  <strong>参考价值：</strong>这类"看得见"的活，它在速度和完整度上都够用。注意这是"官方提示词 + 特定题材"的结果，不是随便许愿就能复现。
+</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #8e44ad;color:#555;font-size:14px;margin:10px 0;">
+  <strong>② 两个 3D 项目，合计约 6 元</strong><br><br>
+  一组公开测试做了古代开封 3D 探索场景和网页赛车，都是一次性完成，合计花费约 6 元。评语里同时给了短板：人物还是多边形方块，放大经不起推敲。<br><br>
+  <strong>参考价值：</strong>单个项目的真实成本是几块钱，这个量级值得拿它做原型。
+</p>
+
+<p style="background:#f7f8fa;padding:12px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;margin:10px 0;">
+  <strong>③ 精确复刻会翻车</strong><br><br>
+  同一批测试里，复刻埃菲尔铁塔时环境细节（广场、行人、塞纳河）给得很足，唯独铁塔本身"看着不太对"。<br><br>
+  <strong>参考价值：</strong>擅长氛围，不擅长精确复刻。有严格参照物的活，别指望一次成型。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;margin:14px 0;">
+  <strong>🎯 三组合起来给的是一个边界：</strong>能自己验证对错的活（游戏能不能玩、场景能不能转），它很强；要人判断像不像、好不好的活，它一般。
+</p>
+
+<!-- 七 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#4A90D9;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">7</span>
+  测完怎么判断：三条线
+</p>
+
+<p><strong>第一条：质量线（先看这个）</strong></p>
+
+<p style="background:#ebf4ff;padding:12px 14px;border-radius:8px;color:#2b6cb0;font-size:14px;line-height:2;">
+  ✅ 3 个任务一次交付 3 个 → <strong>换，别犹豫</strong><br>
+  ✅ 2 个 → 换，剩下的那个单独看<br>
+  ⚠️ 1 个 → 先别整体切，只在新任务上试<br>
+  ❌ 0 个 → 不是模型问题，是任务没描述清楚，重写指令再测
+</p>
+
+<p><strong>第二条：成本线（跟自己的基线比）</strong></p>
+
+<p>同任务花费降 20% 以上 → 有实感，值得推；持平 → 看质量有没有涨，涨了就换；涨 30% 以上 → 先查是不是档位调高了、上下文变长了、缓存失效了（见下一节）。</p>
+
+<p><strong>第三条：速度线</strong></p>
+
+<p>同类任务比基线快 20% → 能明显感觉到；差不多 → 别为速度换，为质量换。</p>
+
+<p>三条线打完，结论一般会自己浮出来。真正难判断的是"三条线互相打架"——质量涨了但成本也涨了。这时候看一件事：<strong>涨的那部分钱，是不是换来了一次交付率的提升。</strong>少返工一轮，省下的时间远超那点 token 钱。</p>
+
+<!-- 八 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;margin:24px 0 12px 0;">
+  <span style="color:#fff;background:#8e44ad;font-size:14px;padding:2px 8px;border-radius:6px;margin-right:6px;">8</span>
+  四个常见误测
+</p>
+
+<p>这一节比前面所有内容都重要。很多人测完说"没感觉"，基本都是这四条之一。</p>
+
+<p><strong><span style="color:#4A90D9;">①</span> 拿 max 档跟默认档比。</strong><br>档位调高，思考链变长，token 直接翻几倍。结果就是"新模型又贵又慢"——贵慢是真的，但不是模型的问题，是档位的问题。对比时把档位固定住。</p>
+
+<p><strong><span style="color:#8e44ad;">②</span> 改了 prompt 前缀，缓存全失效。</strong><br>缓存命中 0.02、未命中 1，差 50 倍。前面加一句"你是资深分析师"，整段前缀变新，缓存归零，成本立刻虚高。对比测试期间，<strong>任务文本一个字都别动</strong>。</p>
+
+<p><strong><span style="color:#4A90D9;">③</span> 任务太简单，天花板效应。</strong><br>让两版模型都做"把这段翻译成英文"，都能做对，看不出差别，于是得出"没变化"。任务要有难度梯度——至少要有一个会失败的任务，否则测的是自己的题目太软。</p>
+
+<p><strong><span style="color:#8e44ad;">④</span> 只跑一次。</strong><br>输出长度本身有波动，跑一次就下结论，是在测方差。每个任务至少跑两次——<strong>如果两次之间差得比两版之间还多，说明这个任务测不出东西</strong>。</p>
+
+<!-- 配图3 -->
+<p style="background:#fafafa;border:1px dashed #d0d0d0;border-radius:8px;padding:20px 12px;text-align:center;color:#999;font-size:13px;margin:12px 0;">
+  🖼️ 【配图3】一次"看似没区别"的误测（两版输出几乎一致，且任务很简单）<br>
+  <span style="font-size:12px;">建议命名：2-3-bad-test.png</span>
+</p>
+<p style="text-align:center;color:#aaa;font-size:12px;margin:6px 0 16px 0;">【图3】输出一样不代表模型一样，可能只是题目太软</p>
+
+<!-- 分隔线 -->
+<p style="text-align:center;color:#ccc;font-size:12px;margin:16px 0;">━━━━━━━━━━━━━━</p>
+
+<!-- 结尾 -->
+<p style="font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin:24px 0 12px 0;">写在最后</p>
+
+<p>公告可以看，但别拿它做决定。</p>
+
+<p>一个模型值不值得换，答案不在任何榜单里，就在自己那三个活、那张六列表里。花一块钱、半小时，得到的是往后半年每次更新都能复用的判断能力——这套东西一旦建起来，就再也不用等别人测了。</p>
+
+<p style="background:#4A90D9;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong style="font-size:16px;">能答准的只有一句：这批活，它一次交付了几个</strong>
+</p>
+
+<p style="background:#f7f8fa;padding:10px 14px;border-left:3px solid #ccc;color:#555;font-size:14px;">
+  测试包、脚本与价格口径均可直接复用；价格以 DeepSeek 官方页面为准（空闲时段：缓存命中 0.02 元、未命中 1 元、输出 4 元 / 百万 token），峰谷规则以官方说明为准。
+</p>
+
+<p style="background:#8e44ad;color:#fff;padding:14px 16px;border-radius:8px;text-align:center;margin:14px 0;">
+  <strong>🚀 下一篇预告：7 个动作压成 2 个，搜索引擎成了 API，账怎么算</strong>
+</p>
+
+<!-- 关注引导 -->
+<p style="text-align:center;margin:16px 0;">
+  <span style="display:inline-block;background:#f3ebff;color:#6b46c1;font-size:14px;padding:6px 18px;border-radius:6px;border:1px solid #d4bcef;"><strong>📢 想要这套测试包和后续的实测数据，点个关注。</strong></span>
+</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-6px 0 14px 0;">关注公众号 TestFuture，每个关注都很珍贵 ✨</p>
+
+<!-- 页脚 -->
+<p style="text-align:center;color:#aaa;font-size:12px;margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;line-height:2;">
+  DeepSeek 系列 · 自测工具<br>适用对象：要判断模型要不要换的开发者、技术负责人、重度用户<br>价格与规格以 DeepSeek 官方页面为准，脚本按官方接口字段编写<br>本系列更多文章可在公众号合集「DeepSeek 实战」中查看
+</p>
+
+</body>
+</html>
